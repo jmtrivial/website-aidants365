@@ -1,0 +1,10 @@
+<h2>Toutes les fiches</h2>
+{% if fiche_list %}
+    <ul>
+    {% for fiche in fiche_list %}
+        <li><a href="/fichier/fiches/{{ fiche.id }}/">{{ fiche }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Pas de fiche disponible.</p>
+{% endif %}
