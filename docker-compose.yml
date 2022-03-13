@@ -1,0 +1,23 @@
+version: '2.2'
+
+services:
+  web:
+    build: ./web
+    command: python manage.py runserver 0.0.0.0:8080
+    volumes:
+      - ./web/:/usr/src/app/
+    ports:
+      - 8080:8080
+    env_file:
+      - ./.env.dev
+  db:
+    image: postgres:13.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=hello_django
+      - POSTGRES_PASSWORD=hello_django
+      - POSTGRES_DB=hello_django_dev
+
+volumes:
+  postgres_data:

@@ -18,11 +18,9 @@ class FicheForm(forms.ModelForm):
             'lesplus': forms.Textarea(),
             'en_savoir_plus': forms.Textarea(),
         }
-    
-    
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         instance = kwargs.get("instance")
         if instance:
             self.fields['mots_cles_str'].initial = ", ".join(x.nom for x in instance.mots_cles.all())
-    

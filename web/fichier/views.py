@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle
@@ -6,9 +5,9 @@ from django.shortcuts import get_object_or_404, render
 from .forms import FicheForm
 from django.db.models import Count, Q
 
+
 def index(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')[:5]
-
 
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
     categories = Categorie.objects.annotate(fiche_count=Count('fiche_categorie1') + Count('fiche_categorie2') + Count('fiche_categorie3')).order_by("nom")
@@ -17,9 +16,10 @@ def index(request):
     motcles = MotCle.objects.annotate(fiche_count=Count('fiche'))
     categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche'))
 
-    context = {'fiche_list': latest_fiche_list, "nb_fiches": Fiche.objects.count(), "niveaux": niveaux, 
-                "categories": categories, "auteurs": auteurs, "themes": themes, "motcles": motcles, "categories_libres": categories_libres }
+    context = {'fiche_list': latest_fiche_list, "nb_fiches": Fiche.objects.count(), "niveaux": niveaux,
+               "categories": categories, "auteurs": auteurs, "themes": themes, "motcles": motcles, "categories_libres": categories_libres}
     return render(request, 'fiches/index.html', context)
+
 
 def index_fiches(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')
@@ -31,33 +31,38 @@ def detail(request, id):
     fiche = get_object_or_404(Fiche, pk=id)
     return render(request, 'fiches/detail.html', {'fiche': fiche})
 
+
 def index_niveau(request, id):
     niveau = get_object_or_404(Niveau, pk=id)
     fiches = Fiche.objects.filter(niveau=niveau)
-    return render(request, 'fiches/index_par_critere.html', { "critere": "du niveau", "critere_nom": str(niveau), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere": "du niveau", "critere_nom": str(niveau), "fiche_list": fiches})
+
 
 def index_categorie(request, id):
     categorie = get_object_or_404(Categorie, pk=id)
     fiches = Fiche.objects.filter(Q(categorie1=categorie) | Q(categorie2=categorie) | Q(categorie3=categorie))
-    return render(request, 'fiches/index_par_critere.html', { "critere": "du catégorie", "critere_nom": str(categorie), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere": "du catégorie", "critere_nom": str(categorie), "fiche_list": fiches})
+
 
 def index_auteur(request, id):
     auteur = get_object_or_404(Auteur, pk=id)
     fiches = Fiche.objects.filter(auteur=auteur)
-    return render(request, 'fiches/index_par_critere.html', { "critere": "de l'auteur", "critere_nom": auteur.nom, "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere": "de l'auteur", "critere_nom": auteur.nom, "fiche_list": fiches})
 
 
 def index_categorie_libre(request, id):
     categorie_libre = get_object_or_404(CategorieLibre, pk=id)
     fiches = Fiche.objects.filter(categories_libres=categorie_libre)
-    return render(request, 'fiches/index_par_critere.html', { "critere": "de la catégorie libre", "critere_nom": str(categorie_libre), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere": "de la catégorie libre", "critere_nom": str(categorie_libre), "fiche_list": fiches})
+
 
 def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
-    return render(request, 'fiches/index_par_critere.html', { "critere": "du thème", "critere_nom": str(theme), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere": "du thème", "critere_nom": str(theme), "fiche_list": fiches})
+
 
 def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)
-    return render(request, 'fiches/index_par_critere.html', { "critere": "du mot-clé", "critere_nom": str(motcle), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere": "du mot-clé", "critere_nom": str(motcle), "fiche_list": fiches})

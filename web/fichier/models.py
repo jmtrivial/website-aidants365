@@ -8,16 +8,15 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-
 class Niveau(models.Model):
-    ordre = models.IntegerField(verbose_name="Numéro", unique=True) 
+    ordre = models.IntegerField(verbose_name="Numéro", unique=True)
     code = models.CharField(verbose_name="Code", max_length=4, unique=True)
     nom = models.CharField(verbose_name="Nom", max_length=64)
     description = models.CharField(verbose_name="Description", max_length=256, blank=True, null=True)
 
     class Meta:
         verbose_name = "Niveau"
-        verbose_name_plural ="Niveaux"
+        verbose_name_plural = "Niveaux"
 
     def __str__(self):
         return " ".join(["{:02d}".format(self.ordre), self.code])
@@ -28,10 +27,11 @@ class TypeCategorie(models.Model):
 
     class Meta:
         verbose_name = "Type de catégorie"
-        verbose_name_plural ="Types de catégorie"
+        verbose_name_plural = "Types de catégorie"
 
     def __str__(self):
         return self.nom
+
 
 class Categorie(models.Model):
     code = models.CharField(verbose_name="Code de la catégorie", max_length=4, unique=True)
@@ -40,10 +40,11 @@ class Categorie(models.Model):
 
     class Meta:
         verbose_name = "Catégorie"
-        verbose_name_plural ="Catégories"
+        verbose_name_plural = "Catégories"
 
     def __str__(self):
         return self.code
+
 
 class Auteur(models.Model):
     code = models.CharField(verbose_name="Code auteur", max_length=3)
@@ -51,20 +52,22 @@ class Auteur(models.Model):
 
     class Meta:
         verbose_name = "Auteur"
-        verbose_name_plural ="Auteurs"
+        verbose_name_plural = "Auteurs"
 
     def __str__(self):
         return self.code
+
 
 class CategorieLibre(models.Model):
     nom = models.CharField(verbose_name="Nom de la catégorie libre", max_length=64)
 
     class Meta:
         verbose_name = "Catégorie libre"
-        verbose_name_plural ="Catégories libres"
+        verbose_name_plural = "Catégories libres"
 
     def __str__(self):
         return self.nom
+
 
 class MotCleManager(models.Manager):
     def create_or_new(self, mc):
@@ -73,7 +76,7 @@ class MotCleManager(models.Manager):
         if qs.exists():
             return qs.first(), False
         return MotCle.objects.create(nom=mc), True
-    
+
     def comma_to_qs(self, motcles_str):
         final_ids = []
         if motcles_str != "":
@@ -83,6 +86,7 @@ class MotCleManager(models.Manager):
         qs = self.get_queryset().filter(id__in=final_ids).distinct()
         return qs
 
+
 class MotCle(models.Model):
     nom = models.CharField(verbose_name="Mot-clé", max_length=64)
 
@@ -90,22 +94,21 @@ class MotCle(models.Model):
 
     class Meta:
         verbose_name = "Mot-clé"
-        verbose_name_plural ="Mot-clés"
+        verbose_name_plural = "Mot-clés"
 
     def __str__(self):
         return self.nom
+
 
 class Theme(models.Model):
     nom = models.CharField(verbose_name="Thème", max_length=64)
 
     class Meta:
         verbose_name = "Thème"
-        verbose_name_plural ="Thèmes"
+        verbose_name_plural = "Thèmes"
 
     def __str__(self):
         return self.nom
-
-
 
 
 class Fiche(models.Model):
@@ -118,17 +121,17 @@ class Fiche(models.Model):
     categories_libres = models.ManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True)
 
     auteur = models.ForeignKey(Auteur, verbose_name="Auteur", on_delete=models.RESTRICT)
-    numero = models.IntegerField(verbose_name="Numéro", default = 9999)
+    numero = models.IntegerField(verbose_name="Numéro", default=9999)
     titre_fiche = models.CharField(verbose_name="Titre de la fiche", max_length=256)
     sous_titre = models.CharField(verbose_name="Sous-titre", max_length=256, blank=True)
 
     date_creation = models.DateField(verbose_name="Date de création", default=timezone.now)
     date_derniere_modification = models.DateField(verbose_name="Dernière modification", default=timezone.now)
 
-    # chapeau
+    # chapeau
     url = models.URLField(verbose_name="Adresse", max_length=1024, blank=True)
 
-    # uniquement si biblio
+    # uniquement si biblio
     titre = models.CharField(verbose_name="Titre de l'ouvrage", max_length=1024, blank=True)
     auteurs = models.CharField(verbose_name="Auteurs", max_length=1024, blank=True)
     date_publication = models.DateField(verbose_name="Date de publication", blank=True, null=True)
@@ -138,11 +141,10 @@ class Fiche(models.Model):
     # uniquement si site
     partenaires = models.CharField(verbose_name="Partenaires", max_length=1024, blank=True, null=True)
 
-
     themes = models.ManyToManyField(Theme, verbose_name="Thèmes", blank=True)
     mots_cles = models.ManyToManyField(MotCle, verbose_name="Mots-clés", blank=True)
 
-    # corps
+    # corps
     presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True)
 
     # uniquement si site
@@ -156,10 +158,9 @@ class Fiche(models.Model):
     en_savoir_plus = models.CharField(verbose_name="En savoir plus", max_length=1024, blank=True)
     fiches_connexes = models.ManyToManyField("self", verbose_name="Fiches connexes", blank=True)
 
-
     class Meta:
         verbose_name = "Fiche"
-        verbose_name_plural ="Fiches"
+        verbose_name_plural = "Fiches"
         ordering = ["auteur", "numero"]
 
     def __str__(self):
@@ -170,7 +171,7 @@ class Fiche(models.Model):
             nouveau_numero = 1
         else:
             nouveau_numero = Fiche.objects.all().filter(auteur=auteur).exclude(numero=9999).aggregate(models.Max('numero'))['numero__max']
-            if nouveau_numero == None:
+            if nouveau_numero is None:
                 nouveau_numero = 1
             else:
                 nouveau_numero += 1
@@ -178,10 +179,11 @@ class Fiche(models.Model):
 
 
 @receiver(pre_save, sender=Fiche)
-def my_callback(sender, instance, **kwargs):
+def my_callback_pre_save(sender, instance, **kwargs):
     if instance.date_derniere_modification == instance.__original_date_derniere_modification:
         instance.date_derniere_modification = timezone.now()
 
+
 @receiver(post_init, sender=Fiche)
-def my_callback(sender, instance, *args, **kwargs):
+def my_callback_post_save(sender, instance, *args, **kwargs):
     instance.__original_date_derniere_modification = instance.date_derniere_modification

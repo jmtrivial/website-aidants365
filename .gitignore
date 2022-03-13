@@ -1,3 +1,5 @@
 __pycache__
 db.sqlite3
 warning.log
+.env.prod
+.env.prod.db
