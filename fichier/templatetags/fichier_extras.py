@@ -7,6 +7,11 @@ def nomenclature(value):
     return str(value)
 
 @register.filter
+def number_xxxx(value):
+    return "{:04d}".format(value)
+
+
+@register.filter
 def affiche_si_existe(value, arg):
     if value:
         return "<strong>" + arg + "&nbsp;:</strong> " + value

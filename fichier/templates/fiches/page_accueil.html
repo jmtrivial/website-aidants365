@@ -1,0 +1,39 @@
+{% extends "fiches/page.html" %}
+
+{% block content %}
+    <div id="entete" class="block">
+    {% block entete %}
+    {% endblock %}
+    </div>
+
+    <div class="column">
+        <div class="block">
+            {% block gauche1 %}
+            {% endblock %}
+        </div>
+        <div class="block">
+            {% block gauche2 %}
+            {% endblock %}
+        </div>
+        <div class="block">
+            {% block gauche3 %}
+            {% endblock %}
+        </div>
+    </div>
+
+    <div class="column">
+        <div class="block">
+            {% block droite1 %}
+            {% endblock %}
+        </div>
+        <div class="block">
+            {% block droite2 %}
+            {% endblock %}
+        </div>
+        <div class="block">
+            {% block droite3 %}
+            {% endblock %}
+        </div>
+    </div>
+
+{% endblock %}

@@ -7,5 +7,11 @@ app_name = "fichier"
 urlpatterns = [
     path('', views.index, name='index'),
     path('fiches/', views.index_fiches, name='index_fiches'),
-    path('fiches/<int:id>/', views.detail, name='detail'),
+    path('fiche/<int:id>/', views.detail, name='detail'),
+    path('niveau/<int:id>/', views.index_niveau, name='index_niveau'),
+    path('categorie/<int:id>/', views.index_categorie, name='index_categorie'),
+    path('auteur/<int:id>/', views.index_auteur, name='index_auteur'),
+    path('categorie_libre/<int:id>/', views.index_categorie_libre, name='index_categorie_libre'),
+    path('theme/<int:id>/', views.index_theme, name='index_theme'),
+    path('motcle/<int:id>/', views.index_motcle, name='index_motcle'),
 ]

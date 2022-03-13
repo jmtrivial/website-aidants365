@@ -1,23 +1,19 @@
-{% extends "fiches/page_accueil.html" %}
+{% extends "fiches/page.html" %}
 
 
 {% block title %}
-Le fichier Aidants365
-{% endblock %}
-
-{% block entete %}
-Toutes les fiches
+Le fichier Aidants365 — les fiches {{ critere }} {{ critere_nom }}
 {% endblock %}
 
 {% block content %}
     <div class="block" id="entete">
-        <h1>Toutes les fiches</h1>
+        <h1>Toutes les fiches {{ critere }} {{ critere_nom }}</h1>
     </div>
     <div class="block">
         {% if fiche_list %}
         <ul>
         {% for fiche in fiche_list %}
-            <li><a href="/fichier/fiches/{{ fiche.id }}/">{{ fiche }}</a></li>
+            <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
         {% endfor %}
         </ul>
     {% else %}

@@ -1,0 +1,152 @@
+body {
+    background: rgb(204,204,204);  
+}
+
+page {
+    font-family: Times, "Times New Roman", Georgia, serif;
+}
+
+page .internal {
+    font-weight: inherit;
+    text-decoration: none;
+    color: inherit;
+}
+
+page .internal:hover {
+    color: #2a6098;
+    text-decoration: underline;
+}
+
+page h1 {
+    font-size: 22pt;
+    margin: 0;
+}
+
+page h1 small { 
+    font-weight: normal; 
+    font-size: 16pt;
+}
+
+
+page li {
+    margin: 0cm;
+}
+
+page .nomenclature {
+    font-size: 16pt;
+    margin: 0;
+}
+
+
+page #contenu_page {
+    width: 17cm;
+    height: 26.7cm; 
+    margin: 1.5cm 2cm;
+    overflow: hidden;
+    position: relative;
+}
+
+
+page #entete .gauche {
+    width: 68%;
+    float: left;
+    font-style: italic;
+}
+page #entete .droite {
+    width: 32%;
+    float: right;
+}
+
+page #principal {
+    clear: both;
+}
+
+
+page #chapeau, page #pied {
+    background: #c5ccd4;
+    border: 0.1cm solid #2a6098;
+    border-radius: 0.05cm;
+    padding: 0;
+}
+page #chapeau ul, page #pied ul {
+    padding: 0;
+    margin: 0.2cm;
+    list-style-position: inside;
+}
+
+page p, ul {
+    margin: 0.5em;
+}
+
+page li>p {
+    margin: 0;
+}
+
+page #principal {
+    display: flex;
+	flex-direction: column;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 0;
+    top: 4.2cm;
+}
+
+page #principal>div {
+    flex-grow: auto;
+}
+
+#actions {
+    right: 0;
+    position: absolute;
+}
+
+#actions button {
+    cursor: pointer;
+}
+
+/* mise en page A4 */
+  page {
+    background: white;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 0.5cm;
+    box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+    overflow: hidden;
+  }
+  page[size="A4"] {  
+    width: 21cm;
+    height: 29.7cm; 
+  }
+  page[size="A4"][layout="landscape"] {
+    width: 29.7cm;
+    height: 21cm;  
+  }
+  page[size="A3"] {
+    width: 29.7cm;
+    height: 42cm;
+  }
+  page[size="A3"][layout="landscape"] {
+    width: 42cm;
+    height: 29.7cm;  
+  }
+  page[size="A5"] {
+    width: 14.8cm;
+    height: 21cm;
+  }
+  page[size="A5"][layout="landscape"] {
+    width: 21cm;
+    height: 14.8cm;  
+  }
+  @media print {
+    body, html {
+        margin: 0;
+        padding: 0;
+    }
+    body, page {
+      margin: 0;
+      box-shadow: 0;
+    }
+    #actions {
+        display: none;
+    }
+  }

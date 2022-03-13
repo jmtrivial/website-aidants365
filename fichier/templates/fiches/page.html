@@ -5,8 +5,24 @@
     
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block css %}
+    {% endblock %}
 </head>
 <body>
-  {% block content %}<!-- default content text (typically empty) -->{% endblock %}
+  <div id="full_content">
+    <div id="menubar">
+      <ul>
+        <li><a href="{% url 'fichier:index' %}">Accueil</a></li>
+        <li><a href="">À propos</a></li>
+      </ul>
+    </div>
+    <div id="content">
+    {% block content %}{% endblock %}
+  </div>
+  </div>
+  <div id="footer">
+    <p>Projet Aidants 365 — copyright Dominique Chevallier-Wixler et Jean-Marie Favreau, 2022</p>
+    <p><a href="{% url 'admin:index' %}">Administration</a></p>
+  </div>
 </body>
 </html>
