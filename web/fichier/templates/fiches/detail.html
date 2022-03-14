@@ -15,7 +15,9 @@ Projet365 — {{ fiche.titre_fiche }}
 
 {% block content %}
 <div id="actions">
-    <button href="{% url 'admin:index' %}fichier/fiche/{{ fiche.id }}/change/">éditer</button>
+    {% if user.is_authenticated %}
+    <a href="{% url 'admin:index' %}fichier/fiche/{{ fiche.id }}/change/"><button>éditer</button></a>
+    {% endif %}
     <button onclick="window.print()">pdf</button>
 </div>
 <page size="A4">
