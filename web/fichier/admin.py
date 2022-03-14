@@ -20,6 +20,13 @@ class FicheAdmin(admin.ModelAdmin):
     save_on_top = True
     search_fields = ['titre_fiche']
 
+    list_display = ("niveau", "categorie1", "auteur", "numero", "titre_fiche", "custom_link")
+
+
+    @admin.display(empty_value='???', description='Lien')
+    def custom_link(self, obj):
+        return mark_safe(f'<a href="{obj.get_absolute_url()}">voir la fiche</a>')
+
 
     fields = (("niveau", "categorie1"),
               ("categorie2", "categorie3", "categories_libres"),
