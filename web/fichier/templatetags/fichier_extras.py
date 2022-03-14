@@ -21,6 +21,17 @@ def affiche_si_existe(value, arg):
         return ""
 
 
+@register.simple_tag
+def affiche_bloc_si_existe(value, name1, name2):
+    if value:
+        if name2:
+            return "<p><strong>" + name1 + " " + name2 + "&nbsp;:</strong> " + value + "</p>";
+        else:
+            return "<p><strong>" + name1 + "&nbsp;:</strong> " + value + "</p>";
+    else:
+        return ""
+
+
 @register.filter
 def inside_si_existe(value, arg):
     if value:

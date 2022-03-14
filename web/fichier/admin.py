@@ -44,12 +44,19 @@ class FicheAdmin(admin.ModelAdmin):
               "themes",
               "mots_cles_str",
               "presentation",
+              "problematique",
               "plan_du_site",
+              "detail_focus",
               "focus",
               "reserves",
               "lesplus",
               "en_savoir_plus",
               "fiches_connexes", )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(FicheAdmin, self).get_form(request, obj, **kwargs)
+        form.base_fields['auteur'].initial = Auteur.get_connected_auteur(request.user)
+        return form
 
     def mots_cles_list(self, obj):
         mots_cles_list = ", ".join([f"<a href='/fiches/?mots_cles__nom={x.nom}'>{x.nom}</a>" for x in obj.mots_cles.all()])

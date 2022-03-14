@@ -4,6 +4,7 @@ from django.utils import timezone
 from django.db.models.signals import pre_save, post_init
 from django.dispatch import receiver
 from django.urls import reverse
+from django.contrib.auth.models import User
 
 import logging
 logger = logging.getLogger(__name__)
@@ -50,6 +51,16 @@ class Categorie(models.Model):
 class Auteur(models.Model):
     code = models.CharField(verbose_name="Code auteur", max_length=3)
     nom = models.CharField(verbose_name="Nom complet", max_length=64)
+    compte = models.ForeignKey(User, verbose_name="Compte utilisateur correspondant", on_delete=models.SET_NULL, blank=True, null=True)
+
+
+    def get_connected_auteur(user):
+        result = Auteur.objects.filter(compte = user)
+        if not result:
+            return None
+        else:
+            return result[0]
+
 
     class Meta:
         verbose_name = "Auteur"
@@ -148,8 +159,12 @@ class Fiche(models.Model):
     # corps
     presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True)
 
+    problematique = RichTextField(verbose_name="Problématique", config_name='main_ckeditor', blank=True)
+
     # uniquement si site
     plan_du_site = RichTextField(verbose_name="Plan du site", config_name='main_ckeditor', blank=True)
+
+    detail_focus = models.CharField(verbose_name="Détail du focus (placé après le mot \"Focus\")", max_length=1024, blank=True)
 
     focus = RichTextField(verbose_name="Focus", config_name='main_ckeditor', blank=True)
 
