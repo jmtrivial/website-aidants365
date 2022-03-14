@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from django.http import HttpResponseRedirect
 
 from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie
 from .forms import FicheForm
@@ -15,6 +16,10 @@ admin.site.register(MotCle)
 
 class FicheAdmin(admin.ModelAdmin):
     form = FicheForm
+
+    save_on_top = True
+    search_fields = ['titre_fiche']
+
 
     fields = (("niveau", "categorie1"),
               ("categorie2", "categorie3", "categories_libres"),
@@ -58,6 +63,26 @@ class FicheAdmin(admin.ModelAdmin):
         obj.mots_cles.add(*mots_cles_qs)
 
         obj.save()
+    
+    def render_change_form(self, request, context, *args, **kwargs):
+        """We need to update the context to show the button."""
+        context.update({'show_save_and_view': True})
+        return super().render_change_form(request, context, *args, **kwargs)
+
+    def response_post_save_change(self, request, obj):
+        """This method is called by `self.changeform_view()` when the form
+        was submitted successfully and should return an HttpResponse.
+        """
+        # Check that you clicked the button `_save_and_view`
+        if '_save_and_view' in request.POST:
+            view_url = obj.get_absolute_url()
+            
+            # And redirect
+            return HttpResponseRedirect(view_url)
+        else:
+            # Otherwise, use default behavior
+            return super().response_post_save_change(request, obj)
+        
 
 
 admin.site.register(Fiche, FicheAdmin)

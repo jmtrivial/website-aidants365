@@ -3,6 +3,7 @@ from ckeditor.fields import RichTextField
 from django.utils import timezone
 from django.db.models.signals import pre_save, post_init
 from django.dispatch import receiver
+from django.urls import reverse
 
 import logging
 logger = logging.getLogger(__name__)
@@ -176,6 +177,10 @@ class Fiche(models.Model):
             else:
                 nouveau_numero += 1
         return nouveau_numero
+    
+    def get_absolute_url(self):
+        return reverse('fichier:detail', kwargs={'id' : self.pk})
+
 
 
 @receiver(pre_save, sender=Fiche)
