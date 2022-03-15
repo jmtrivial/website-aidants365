@@ -11,11 +11,11 @@ Le fichier Aidants365
 {% endblock %}
 
 {% block gauche1 %}
-<h2>Dernières fiches</h2>
+<h2>Les 5 dernières fiches</h2>
 {% if fiche_list %}
     <ul>
     {% for fiche in fiche_list %}
-        <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
+        <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
     {% endfor %}
     </ul>
     <div>Voir les <a href="{% url 'fichier:index' %}">{{ nb_fiches }} fiches</a> du fichier</div>

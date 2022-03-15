@@ -10,6 +10,8 @@ Toutes les fiches
 {% endblock %}
 
 {% block content %}
+{% load fichier_extras %}
+
     <div class="block" id="entete">
         <h1>Toutes les fiches</h1>
     </div>
@@ -22,7 +24,7 @@ Toutes les fiches
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
             <ul>
             {% for fiche in niveau.list %}
-                <li><a href="{% url 'fichier:index_detail' fiche.id %}">{{ fiche }}</a></li>
+                <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index_detail' fiche.id %}">{{ fiche }}</a></li>
             {% endfor %}
             </ul>
 

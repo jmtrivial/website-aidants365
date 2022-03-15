@@ -9,6 +9,7 @@
         <div id="entete">
             <div class="gauche">
                 <p class="nomenclature">
+                    {{ fiche.niveau.couleur | carre_colore }}
                     <a class="internal" href="{% url 'fichier:index' %}">Projet365</a> — 
                     <a class="internal" href="{% url 'fichier:index_niveau' fiche.niveau.id %}">{{ fiche.niveau }}</a>
                     <a class="internal" href="{% url 'fichier:index_categorie' fiche.categorie1.id %}">{{ fiche.categorie1 }}</a>

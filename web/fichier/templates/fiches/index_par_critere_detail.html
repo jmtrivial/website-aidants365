@@ -26,23 +26,22 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 {% endblock %}
 
 {% block gauche1 %}
+        {% load fichier_extras %}
         {% if fiche_list %}
  
-
         {% regroup fiche_list|dictsort:"niveau.applicable" by niveau.get_applicable_display as niveau_list %}
-
 
         {% for niveau in niveau_list %}
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
             <ul>
             {% for fiche_local in niveau.list %}
-                {% if fichier_local.id == fichier.id %}
+                {% if fiche_local.id == fiche.id %}
                     {% with "fichier:index_"|add:critere_name as template_name %}
-                    <li><a href="{% url template_name critere.id %}" style="font-weight: bold">{{ fiche_local }}</a></li>
+                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id %}" style="font-weight: bold">{{ fiche_local }}</a></li>
                     {% endwith %}
                 {% else %}
                     {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
-                    <li><a href="{% url template_name critere.id fiche_local.id %}">{{ fiche_local }}</a></li>
+                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id fiche_local.id %}">{{ fiche_local }}</a></li>
                     {% endwith %}
                 {% endif %}
             {% endfor %}

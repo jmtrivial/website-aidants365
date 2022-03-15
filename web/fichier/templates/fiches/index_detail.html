@@ -26,18 +26,19 @@ Le fichier Aidants365 — les fiches
 {% endblock %}
 
 {% block gauche1 %}
+        {% load fichier_extras %}
         {% if fiche_list %}
  
         {% regroup fiche_list|dictsort:"niveau.applicable" by niveau.get_applicable_display as niveau_list %}
 
         {% for niveau in niveau_list %}
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
-            <ul>
+            <ul>{{ fichier_local.id }} {{ fichier.id }}
             {% for fiche_local in niveau.list %}
-                {% if fichier_local.id == fichier.id %}
-                    <li><a href="{% url 'fichier:index' %}" style="font-weight: bold">{{ fiche_local }}</a></li>
+                {% if fiche_local.id == fiche.id %}
+                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index' %}" style="font-weight: bold">{{ fiche_local }}</a></li>
                 {% else %}
-                    <li><a href="{% url 'fichier:detail' fiche_local.id %}">{{ fiche_local }}</a></li>
+                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index_detail' fiche_local.id %}">{{ fiche_local }}</a></li>
                 {% endif %}
             {% endfor %}
             </ul>

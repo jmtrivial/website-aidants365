@@ -6,6 +6,7 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 {% endblock %}
 
 {% block content %}
+    {% load fichier_extras %}
     <div class="block" id="entete">
         <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }}</h1>
     </div>
@@ -20,7 +21,7 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
             <ul>
             {% for fiche in niveau.list %}
                 {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
-                <li><a href="{% url template_name critere.id fiche.id %}">{{ fiche }}</a></li>
+                <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id fiche.id %}">{{ fiche }}</a></li>
                 {% endwith %}
             {% endfor %}
             </ul>
