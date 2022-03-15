@@ -18,7 +18,7 @@ class FicheAdmin(admin.ModelAdmin):
     form = FicheForm
 
     save_on_top = True
-    search_fields = ['titre_fiche']
+    search_fields = ("niveau__nom", "categorie1__nom", "auteur__nom", "niveau__code", "categorie1__code", "auteur__code", "numero", "titre_fiche", )
 
     list_display = ("__str__", "niveau", "categorie1", "auteur", "numero", "titre_fiche", "custom_link")
 
