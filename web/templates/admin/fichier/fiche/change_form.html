@@ -9,7 +9,11 @@
     <script type="text/javascript">
       // raccourcis pour sauver
       function save_and_view(){
-              document.getElementById('save_and_exit').click();
+              {% if add %}
+              document.getElementById('save_continue').click();
+              {% else %}
+                document.getElementById('save_and_exit').click();
+              {% endif %}
       }
       shortcut.add("Meta+S", save_and_view);
       shortcut.add("Ctrl+S", save_and_view);
