@@ -167,9 +167,9 @@ class Fiche(models.Model):
     focus = RichTextField(verbose_name="Focus", config_name='main_ckeditor', blank=True)
 
     # pied de page
-    reserves = models.CharField(verbose_name="Réserves", max_length=1024, blank=True)
-    lesplus = models.CharField(verbose_name="Les plus", max_length=1024, blank=True)
-    en_savoir_plus = models.CharField(verbose_name="En savoir plus", max_length=1024, blank=True)
+    reserves = RichTextField(verbose_name="Réserves", config_name='main_ckeditor', blank=True)
+    lesplus = RichTextField(verbose_name="Les plus", config_name='main_ckeditor', blank=True)
+    en_savoir_plus = RichTextField(verbose_name="En savoir plus", config_name='main_ckeditor', blank=True)
     fiches_connexes = models.ManyToManyField("self", verbose_name="Fiches connexes", blank=True)
 
     class Meta:

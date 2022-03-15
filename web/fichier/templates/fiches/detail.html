@@ -15,9 +15,7 @@ Projet365 — {{ fiche.titre_fiche }}
 
 {% block content %}
 <div id="actions">
-    {% if user.is_authenticated %}
     <a href="{% url 'admin:index' %}fichier/fiche/{{ fiche.id }}/change/"><button>éditer</button></a>
-    {% endif %}
     <button onclick="window.print()">pdf</button>
 </div>
 <page size="A4">
@@ -34,7 +32,7 @@ Projet365 — {{ fiche.titre_fiche }}
             </div>
             <div class="droite">
                 <strong>Catégorie</strong><br />
-                <a class="internal" href="{% url 'fichier:index_niveau' fiche.niveau.id %}">{{ fiche.niveau }}</a> <a class="internal" href="{% url 'fichier:index_categorie' fiche.categorie1.id %}">{{ fiche.categorie1 }}</a>{% if fiche.categorie2 %}, <a class="internal" href="{% url 'fichier:index_categorie' fiche.categorie2.id %}">{{ fiche.categorie2 }}</a>{% endif %}{% if fiche.categorie3 %}, <a class="internal" href="{% url 'fichier:index_categorie' fiche.categorie3.id %}">{{ fiche.categorie3 }}</a>{% endif %}{% for cl in fiche.categories_libres.all %}, <a class="internal" href="{% url 'fichier:index_categorie_libre' cl.id %}">{{ cl }}</a>{% endfor %}<br />
+                <a class="internal" href="{% url 'fichier:index_niveau' fiche.niveau.id %}">{{ fiche.niveau.code }}</a>, <a class="internal" href="{% url 'fichier:index_categorie' fiche.categorie1.id %}">{{ fiche.categorie1 }}</a>{% if fiche.categorie2 %}, <a class="internal" href="{% url 'fichier:index_categorie' fiche.categorie2.id %}">{{ fiche.categorie2 }}</a>{% endif %}{% if fiche.categorie3 %}, <a class="internal" href="{% url 'fichier:index_categorie' fiche.categorie3.id %}">{{ fiche.categorie3 }}</a>{% endif %}{% for cl in fiche.categories_libres.all %}, <a class="internal" href="{% url 'fichier:index_categorie_libre' cl.id %}">{{ cl }}</a>{% endfor %}<br />
                 <strong>Auteur</strong><br />
                 <a class="internal" href="{% url 'fichier:index_auteur' fiche.auteur.id %}">{{ fiche.auteur.nom }}</a><br />
                 <strong>Date création</strong><br />

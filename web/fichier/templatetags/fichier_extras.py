@@ -16,7 +16,10 @@ def number_xxxx(value):
 @register.filter
 def affiche_si_existe(value, arg):
     if value:
-        return "<strong>" + arg + "&nbsp;:</strong> " + value
+        if value.startswith("<p>"):
+            return "<p><strong>" + arg + "&nbsp;:</strong> " + value[3:]
+        else:
+            return "<strong>" + arg + "&nbsp;:</strong> " + value
     else:
         return ""
 

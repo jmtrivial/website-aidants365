@@ -71,11 +71,14 @@ page #chapeau, page #pied {
 page #chapeau ul, page #pied ul {
     padding: 0;
     margin: 0.2cm;
-    list-style-position: inside;
 }
 
 page p, ul {
     margin: 0.5em;
+}
+
+page #chapeau li, page #pied li {
+    margin-left: 0.7em;
 }
 
 page li>p {
