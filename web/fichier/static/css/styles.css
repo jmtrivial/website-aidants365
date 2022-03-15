@@ -97,6 +97,7 @@ body {
 
 #content {
     margin-top: 3.2em;
+    position: relative;
 }
 
 /* mise en page classique */
@@ -105,6 +106,18 @@ body {
     float: left;
     width: 50%;
 }
+
+.column_small {
+    float: left;
+    width: 30%;
+}
+
+.column_large {
+    float: left;
+    width: 70%;
+    position: relative;
+}
+
 .block {
     margin: 0.5em;
     background: #fff;

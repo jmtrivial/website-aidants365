@@ -35,41 +35,77 @@ def detail(request, id):
 def index_niveau(request, id):
     niveau = get_object_or_404(Niveau, pk=id)
     fiches = Fiche.objects.filter(niveau=niveau)
-    return render(request, 'fiches/index_par_critere.html', {"critere": "du niveau", "critere_nom": str(niveau), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere_name": "niveau", "critere": niveau, "critere_human": "du niveau", "critere_nom": str(niveau), "fiche_list": fiches})
+
+
+def index_niveau_detail(request, id1, id2):
+    niveau = get_object_or_404(Niveau, pk=id1)
+    fiche = get_object_or_404(Fiche, pk=id2)
+    fiches = Fiche.objects.filter(niveau=niveau)
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "niveau", "critere": niveau, "critere_human": "du niveau", "critere_nom": str(niveau), "fiche_list": fiches, "fiche": fiche})
 
 
 def index_categorie(request, id):
     categorie = get_object_or_404(Categorie, pk=id)
     fiches = Fiche.objects.filter(Q(categorie1=categorie) | Q(categorie2=categorie) | Q(categorie3=categorie))
-    return render(request, 'fiches/index_par_critere.html', {"critere": "du catégorie", "critere_nom": str(categorie), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere_name": "categorie", "critere": categorie, "critere_human": "du catégorie", "critere_nom": str(categorie), "fiche_list": fiches})
+
+
+def index_categorie_detail(request, id1, id2):
+    categorie = get_object_or_404(Categorie, pk=id1)
+    fiche = get_object_or_404(Fiche, pk=id2)
+    fiches = Fiche.objects.filter(Q(categorie1=categorie) | Q(categorie2=categorie) | Q(categorie3=categorie))
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "categorie", "critere": categorie, "critere_human": "de la catégorie", "critere_nom": str(categorie), "fiche_list": fiches, "fiche": fiche})
 
 
 def index_auteur(request, id):
     auteur = get_object_or_404(Auteur, pk=id)
     fiches = Fiche.objects.filter(auteur=auteur)
-    return render(request, 'fiches/index_par_critere.html', {"critere": "de l'auteur", "critere_nom": auteur.nom, "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere_name": "auteur", "critere": auteur, "critere_human": "de l'auteur", "critere_nom": auteur.nom, "fiche_list": fiches})
+
+
+def index_auteur_detail(request, id1, id2):
+    auteur = get_object_or_404(Auteur, pk=id1)
+    fiche = get_object_or_404(Fiche, pk=id2)
+    fiches = Fiche.objects.filter(auteur=auteur)
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "auteur", "critere": auteur, "critere_human": "de l'auteur", "critere_nom": str(auteur), "fiche_list": fiches, "fiche": fiche})
 
 
 def index_categorie_libre(request, id):
     categorie_libre = get_object_or_404(CategorieLibre, pk=id)
     fiches = Fiche.objects.filter(categories_libres=categorie_libre)
-    return render(request, 'fiches/index_par_critere.html', {"critere": "de la catégorie libre", "critere_nom": str(categorie_libre), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere_name": "categorie_libre", "critere": categorie_libre, "critere_human": "de la catégorie libre", "critere_nom": str(categorie_libre), "fiche_list": fiches})
+
+
+def index_categorie_libre_detail(request, id1, id2):
+    categorie_libre = get_object_or_404(CategorieLibre, pk=id1)
+    fiche = get_object_or_404(Fiche, pk=id2)
+    fiches = Fiche.objects.filter(categorie_libre=categorie_libre)
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "categorie_libre", "critere": categorie_libre, "critere_human": "de la catégorie libre", "critere_nom": str(categorie_libre), "fiche_list": fiches, "fiche": fiche})
 
 
 def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
-    return render(request, 'fiches/index_par_critere.html', {"critere": "du thème", "critere_nom": str(theme), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere_name": "theme", "critere": theme, "critere_human": "du thème", "critere_nom": str(theme), "fiche_list": fiches})
 
 
 def index_theme_detail(request, id1, id2):
     theme = get_object_or_404(Theme, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
     fiches = Fiche.objects.filter(themes=theme)
-    return render(request, 'fiches/index_par_critere_detail.html', {"critere": "du thème", "critere_nom": str(theme), "fiche_list": fiches, "fiche": fiche})
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "theme", "critere": theme, "critere_human": "du thème", "critere_nom": str(theme), "fiche_list": fiches, "fiche": fiche})
 
 
 def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)
-    return render(request, 'fiches/index_par_critere.html', {"critere": "du mot-clé", "critere_nom": str(motcle), "fiche_list": fiches})
+    return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle, "critere_human": "du mot-clé", "critere_nom": str(motcle), "fiche_list": fiches})
+
+
+def index_motcle_detail(request, id1, id2):
+    motcle = get_object_or_404(MotCle, pk=id1)
+    fiche = get_object_or_404(Fiche, pk=id2)
+    fiches = Fiche.objects.filter(mots_cles=motcle)
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "motcle", "critere": motcle, "critere_human": "du mot-clé", "critere_nom": str(motcle), "fiche_list": fiches, "fiche": fiche})
+

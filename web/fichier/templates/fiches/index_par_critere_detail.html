@@ -1,0 +1,45 @@
+{% extends "fiches/page_block_fiche.html" %}
+
+
+
+{% block entete_header %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+<script src="{% static 'js/shortcut.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+    function save_and_view(){
+        document.getElementById('edit_button').click()
+    }
+    shortcut.add("Meta+E", save_and_view);
+    shortcut.add("Ctrl+E", save_and_view);
+</script>
+{% endblock %}
+
+
+{% block title %}
+Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
+{% endblock %}
+
+{% block entete %}
+    <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }}</h1>
+{% endblock %}
+
+{% block gauche1 %}
+        {% if fiche_list %}
+        <ul>
+        {% for fiche_local in fiche_list %}
+            {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
+            
+            <li><a href="{% url template_name critere.id fiche_local.id %}" {% if fichier_local.id == fichier.id %}style="font-weight: bold"{% endif %}>{{ fiche_local }}</a></li>
+            {% endwith %}
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Pas de fiche disponible.</p>
+    {% endif %}
+{% endblock %}
+
+{% block droite %}
+{% include "fiches/affichage_fiche.html" with details="yes" %}
+{% endblock %}

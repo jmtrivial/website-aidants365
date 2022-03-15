@@ -2,18 +2,20 @@
 
 
 {% block title %}
-Le fichier Aidants365 — les fiches {{ critere }} {{ critere_nom }}
+Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 {% endblock %}
 
 {% block content %}
     <div class="block" id="entete">
-        <h1>Toutes les fiches {{ critere }} {{ critere_nom }}</h1>
+        <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }}</h1>
     </div>
     <div class="block">
         {% if fiche_list %}
         <ul>
         {% for fiche in fiche_list %}
-            <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
+            {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
+            <li><a href="{% url template_name critere.id fiche.id %}">{{ fiche }}</a></li>
+            {% endwith %}
         {% endfor %}
         </ul>
     {% else %}
