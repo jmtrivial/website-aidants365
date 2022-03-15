@@ -1,14 +1,81 @@
 {% extends "admin/change_form.html" %}
 
-{% block extrahead %}
+{% block footer %}
 	{{ block.super }}
+    {% load fichier_extras %}
+    {% set_listes_categories_modifieurs_champs %}
     {% load static %}
     <script src="{% static 'js/shortcut.js' %}" type="text/javascript"></script>
     <script type="text/javascript">
-		function save_and_view(){
-            document.getElementById('save_and_exit').click()
-		}
-		shortcut.add("Meta+S", save_and_view);
-		shortcut.add("Ctrl+S", save_and_view);
+      // raccourcis pour sauver
+      function save_and_view(){
+              document.getElementById('save_and_exit').click();
+      }
+      shortcut.add("Meta+S", save_and_view);
+      shortcut.add("Ctrl+S", save_and_view);
+
+      // on cache les propriétés suivant les catégories choisies
+      function is_biblio() {
+        for (let i = 1; i <= 3; i++) {
+          let e = document.querySelectorAll("#id_categorie" + i + " option:checked")[0].getAttribute("value");
+          if (document.categories_bibio.includes(e))
+            return true;
+        }
+
+        return false;
+      }
+      function is_site() {
+        for (let i = 1; i <= 3; i++) {
+          let e = document.querySelectorAll("#id_categorie" + i + " option:checked")[0].getAttribute("value");
+          if (document.categories_site.includes(e))
+            return true;
+        }
+
+        return false;
+      }
+
+      function set_visible(list_fields, visible) {
+        list_fields.forEach(function(item, index, array) {
+          field = ".field-" + item;
+          var els = document.querySelectorAll(field);
+          for (var x = 0; x < els.length; x++)
+            if (visible)
+              els[x].style.display = 'block';
+            else
+              els[x].style.display = 'none';
+        });
+      }
+
+      function update_visible_fields() {        
+        let biblio_fields = ["titre", "auteurs", "date_publication", "editeur", "format_bibl"];
+        let site_fields = ["plan_du_site"];
+        set_visible(biblio_fields, is_biblio());
+        set_visible(site_fields, is_site());
+      }
+
+      for (let i = 1; i <= 3; i++) {
+        let selectElement = document.getElementById("id_categorie" + i);
+
+        selectElement.addEventListener('change', (event) => {
+          update_visible_fields();
+        });
+      }
+
+
+      function ready(callback){
+        // in case the document is already rendered
+        if (document.readyState!='loading') callback();
+        // modern browsers
+        else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+        // IE <= 8
+        else document.attachEvent('onreadystatechange', function(){
+            if (document.readyState=='complete') callback();
+        });
+      }
+
+      ready(function(){
+        update_visible_fields();
+      });
+
     </script>
 {% endblock %}

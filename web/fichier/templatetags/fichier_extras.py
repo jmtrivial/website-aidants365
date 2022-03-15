@@ -1,4 +1,6 @@
 from django import template
+from django.utils.safestring import mark_safe
+from fichier.models import Categorie
 
 register = template.Library()
 
@@ -57,3 +59,16 @@ def virgule_ou_vide(value):
         return ", " + value
     else:
         return ""
+
+
+@register.simple_tag
+def set_listes_categories_modifieurs_champs():
+    result = "<script type=\"text/javascript\">\n"
+    result += "document.categories_bibio = ["
+    result += ", ".join(["\"" + str(x[0]) + "\"" for x in Categorie.objects.filter(is_biblio=True).values_list('id')])
+    result += "];\n"
+    result += "document.categories_site = ["
+    result += ", ".join(["\"" + str(x[0]) + "\"" for x in Categorie.objects.filter(is_site=True).values_list('id')])
+    result += "];\n"
+    result += "</script>\n"
+    return mark_safe(result)

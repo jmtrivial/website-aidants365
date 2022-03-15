@@ -39,6 +39,8 @@ class Categorie(models.Model):
     code = models.CharField(verbose_name="Code de la catégorie", max_length=4, unique=True)
     nom = models.CharField(verbose_name="Nom de la catégorie", max_length=64)
     type_categorie = models.ForeignKey(TypeCategorie, verbose_name="Type de la catégorie", on_delete=models.SET_NULL, blank=True, null=True)
+    is_biblio = models.BooleanField(verbose_name="Nécessite les champs de bibliographie", default=False)
+    is_site = models.BooleanField(verbose_name="Nécessite les champs de site internet", default=False)
 
     class Meta:
         verbose_name = "Catégorie"
