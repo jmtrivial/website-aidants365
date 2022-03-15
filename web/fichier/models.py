@@ -23,7 +23,6 @@ class Niveau(models.Model):
     description = models.CharField(verbose_name="Description", max_length=256, blank=True, null=True)
     applicable = models.CharField(max_length=1, choices=Applicabilite.choices, default=Applicabilite.B)
 
-
     def couleur(self):
         if self.applicable == Niveau.Applicabilite.A:
             return "#fdfbe9"

@@ -114,4 +114,3 @@ def index_motcle_detail(request, id1, id2):
     fiche = get_object_or_404(Fiche, pk=id2)
     fiches = Fiche.objects.filter(mots_cles=motcle)
     return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "motcle", "critere": motcle, "critere_human": "du mot-clé", "critere_nom": str(motcle), "fiche_list": fiches, "fiche": fiche})
-
