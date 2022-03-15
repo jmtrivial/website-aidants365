@@ -86,7 +86,7 @@ def index_categorie_libre(request, id):
 def index_categorie_libre_detail(request, id1, id2):
     categorie_libre = get_object_or_404(CategorieLibre, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
-    fiches = Fiche.objects.filter(categorie_libre=categorie_libre)
+    fiches = Fiche.objects.filter(categories_libres=categorie_libre)
     return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "categorie_libre", "critere": categorie_libre, "critere_human": "de la catégorie libre", "critere_nom": str(categorie_libre), "fiche_list": fiches, "fiche": fiche})
 
 
