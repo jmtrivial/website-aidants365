@@ -29,10 +29,15 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
         {% if fiche_list %}
         <ul>
         {% for fiche_local in fiche_list %}
-            {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
-            
-            <li><a href="{% url template_name critere.id fiche_local.id %}" {% if fichier_local.id == fichier.id %}style="font-weight: bold"{% endif %}>{{ fiche_local }}</a></li>
-            {% endwith %}
+            {% if fichier_local.id == fichier.id %}
+                {% with "fichier:index_"|add:critere_name as template_name %}
+                <li><a href="{% url template_name critere.id %}" style="font-weight: bold">{{ fiche_local }}</a></li>
+                {% endwith %}
+            {% else %}
+                {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
+                <li><a href="{% url template_name critere.id fiche_local.id %}">{{ fiche_local }}</a></li>
+                {% endwith %}
+            {% endif %}
         {% endfor %}
         </ul>
     {% else %}
