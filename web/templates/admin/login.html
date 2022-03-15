@@ -1,0 +1,9 @@
+{% extends "admin/login.html" %}
+
+{% block content %}
+
+{{ block.super }}
+
+<a href="{% url 'fichier:accueil' %}">&lt; retour à l'accueil</a>
+
+{% endblock %}
