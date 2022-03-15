@@ -22,11 +22,9 @@ class FicheAdmin(admin.ModelAdmin):
 
     list_display = ("niveau", "categorie1", "auteur", "numero", "titre_fiche", "custom_link")
 
-
     @admin.display(empty_value='???', description='Lien')
     def custom_link(self, obj):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir la fiche</a>')
-
 
     fields = (("niveau", "categorie1"),
               ("categorie2", "categorie3", "categories_libres"),
@@ -77,7 +75,7 @@ class FicheAdmin(admin.ModelAdmin):
         obj.mots_cles.add(*mots_cles_qs)
 
         obj.save()
-    
+
     def render_change_form(self, request, context, *args, **kwargs):
         """We need to update the context to show the button."""
         context.update({'show_save_and_view': True})
@@ -90,13 +88,12 @@ class FicheAdmin(admin.ModelAdmin):
         # Check that you clicked the button `_save_and_view`
         if '_save_and_view' in request.POST:
             view_url = obj.get_absolute_url()
-            
+
             # And redirect
             return HttpResponseRedirect(view_url)
         else:
             # Otherwise, use default behavior
             return super().response_post_save_change(request, obj)
-        
 
 
 admin.site.register(Fiche, FicheAdmin)

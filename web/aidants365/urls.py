@@ -7,7 +7,6 @@ from django.conf import settings
 from django.shortcuts import redirect
 
 
-
 urlpatterns = [
     path('', lambda req: redirect('fichier/')),
     path('fichier/', include('fichier.urls')),

@@ -62,6 +62,13 @@ def index_theme(request, id):
     return render(request, 'fiches/index_par_critere.html', {"critere": "du thème", "critere_nom": str(theme), "fiche_list": fiches})
 
 
+def index_theme_detail(request, id1, id2):
+    theme = get_object_or_404(Theme, pk=id1)
+    fiche = get_object_or_404(Fiche, pk=id2)
+    fiches = Fiche.objects.filter(themes=theme)
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere": "du thème", "critere_nom": str(theme), "fiche_list": fiches, "fiche": fiche})
+
+
 def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)

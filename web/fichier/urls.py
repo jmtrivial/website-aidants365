@@ -13,5 +13,6 @@ urlpatterns = [
     path('auteur/<int:id>/', views.index_auteur, name='index_auteur'),
     path('categorie_libre/<int:id>/', views.index_categorie_libre, name='index_categorie_libre'),
     path('theme/<int:id>/', views.index_theme, name='index_theme'),
+    path('theme/<int:id>/<int:id>/', views.index_theme_detail, name='index_theme_detail'),
     path('motcle/<int:id>/', views.index_motcle, name='index_motcle'),
 ]

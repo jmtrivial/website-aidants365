@@ -53,14 +53,12 @@ class Auteur(models.Model):
     nom = models.CharField(verbose_name="Nom complet", max_length=64)
     compte = models.ForeignKey(User, verbose_name="Compte utilisateur correspondant", on_delete=models.SET_NULL, blank=True, null=True)
 
-
     def get_connected_auteur(user):
-        result = Auteur.objects.filter(compte = user)
+        result = Auteur.objects.filter(compte=user)
         if not result:
             return None
         else:
             return result[0]
-
 
     class Meta:
         verbose_name = "Auteur"
@@ -192,10 +190,9 @@ class Fiche(models.Model):
             else:
                 nouveau_numero += 1
         return nouveau_numero
-    
-    def get_absolute_url(self):
-        return reverse('fichier:detail', kwargs={'id' : self.pk})
 
+    def get_absolute_url(self):
+        return reverse('fichier:detail', kwargs={'id': self.pk})
 
 
 @receiver(pre_save, sender=Fiche)
