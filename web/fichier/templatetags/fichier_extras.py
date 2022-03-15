@@ -11,6 +11,11 @@ def nomenclature(value):
 
 
 @register.filter
+def carre_colore(value):
+    return mark_safe("<div class=\"carre\" style=\"background-color: " + value + "\"> </div>")
+
+
+@register.filter
 def number_xxxx(value):
     return "{:04d}".format(value)
 

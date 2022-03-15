@@ -1,5 +1,6 @@
 {% extends "fiches/page_blocks_colonnes.html" %}
 
+{% load fichier_extras %}
 
 {% block title %}
 Le fichier Aidants365
@@ -48,7 +49,8 @@ Le fichier Aidants365
     <ul>
     {% for niveau in niveaux %}
         <li>
-            {% if niveau.fiche_count %}    
+            {{ niveau.couleur | carre_colore }}
+            {% if niveau.fiche_count %}
             <a href="{% url 'fichier:index_niveau' niveau.id %}">{{ niveau }}</a> ({{ niveau.fiche_count }})
             {% else %}
             <span class="not_available">{{ niveau }}</span>

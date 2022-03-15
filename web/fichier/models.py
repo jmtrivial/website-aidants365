@@ -11,10 +11,26 @@ logger = logging.getLogger(__name__)
 
 
 class Niveau(models.Model):
+
+    class Applicabilite(models.TextChoices):
+        A = 'A', "Théorique"
+        B = 'B', "Intermédiaire"
+        C = 'C', "Pratique"
+
     ordre = models.IntegerField(verbose_name="Numéro", unique=True)
     code = models.CharField(verbose_name="Code", max_length=4, unique=True)
     nom = models.CharField(verbose_name="Nom", max_length=64)
     description = models.CharField(verbose_name="Description", max_length=256, blank=True, null=True)
+    applicable = models.CharField(max_length=1, choices=Applicabilite.choices, default=Applicabilite.B)
+
+
+    def couleur(self):
+        if self.applicable == Niveau.Applicabilite.A:
+            return "#fdfbe9"
+        elif self.applicable == Niveau.Applicabilite.B:
+            return "#d22439"
+        else:
+            return "#67b43f"
 
     class Meta:
         verbose_name = "Niveau"
