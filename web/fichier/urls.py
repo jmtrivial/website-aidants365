@@ -6,6 +6,7 @@ app_name = "fichier"
 
 urlpatterns = [
     path('', views.accueil, name='accueil'),
+    path('rechercher/', views.rechercher, name='rechercher'),
     path('fiches/', views.index, name='index'),
     path('fiches/<int:id>/', views.index_detail, name='index_detail'),
     path('fiche/<int:id>/', views.detail, name='detail'),

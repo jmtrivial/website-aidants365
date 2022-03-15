@@ -1,0 +1,39 @@
+{% extends "fiches/page.html" %}
+
+
+{% block title %}
+Le fichier Aidants365
+{% endblock %}
+
+{% block entete %}
+Toutes les fiches
+{% endblock %}
+
+{% block content %}
+{% load fichier_extras %}
+
+    <div class="block" id="entete">
+        <h1>Recherche</h1>
+    </div>
+    <div class="block{% if recherche == None %} recherche_vide{% endif %} boite_recherche">
+        <form action="{% url 'fichier:rechercher' %}" class="form-inline" method="get">
+            <input name="search" type="" class="form-control" value="{% if recherche != None %}{{ recherche }}{% endif %}" autofocus>
+            <button type="submit">Rechercher</button>
+       </form>
+
+        
+    {% if recherche != None %}
+        {% if results|length > 0 %}
+            <h2>Résultats de {{ recherche }}</h2>
+            <ul>
+            {% for fiche in results %}
+                <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
+            {% endfor %}
+            </ul>
+        {% else %} 
+            <p>Aucun résultat pour la recherche « <strong>{{ recherche }}</strong> ».</p>
+        {% endif %}
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

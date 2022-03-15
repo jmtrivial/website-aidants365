@@ -211,6 +211,36 @@ class Fiche(models.Model):
     def get_absolute_url(self):
         return reverse('fichier:detail', kwargs={'id': self.pk})
 
+    def rechercher(search_text):
+        from django.contrib.postgres.search import SearchVector
+        from django.contrib.postgres.search import SearchQuery
+
+        search_vectors = SearchVector('presentation', weight='A', config='french') + \
+            SearchVector('problematique', weight='A', config='french') + \
+            SearchVector('plan_du_site', weight='A', config='french') + \
+            SearchVector('focus', weight='A', config='french') + \
+            SearchVector('auteur__code', weight='D', config='french') + \
+            SearchVector('auteur__nom', weight='D', config='french') + \
+            SearchVector('niveau__nom', weight='B', config='french') + \
+            SearchVector('categorie1__nom', weight='B', config='french') + \
+            SearchVector('categorie2__nom', weight='B', config='french') + \
+            SearchVector('categorie3__nom', weight='B', config='french') + \
+            SearchVector('niveau__code', weight='B', config='french') + \
+            SearchVector('categorie1__code', weight='B', config='french') + \
+            SearchVector('categorie2__code', weight='B', config='french') + \
+            SearchVector('categorie3__code', weight='B', config='french') + \
+            SearchVector('categories_libres', weight='C', config='french') + \
+            SearchVector('titre_fiche', weight='A', config='french') + \
+            SearchVector('sous_titre', weight='A', config='french') + \
+            SearchVector('titre', weight='D', config='french') + \
+            SearchVector('editeur', weight='D', config='french') + \
+            SearchVector('auteurs', weight='D', config='french') + \
+            SearchVector('partenaires', weight='D', config='french') + \
+            SearchVector('reserves', weight='C', config='french') + \
+            SearchVector('lesplus', weight='C', config='french') + \
+            SearchVector('en_savoir_plus', weight='C', config='french')
+        return Fiche.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text, config='french'))
+
 
 @receiver(pre_save, sender=Fiche)
 def my_callback_pre_save(sender, instance, **kwargs):

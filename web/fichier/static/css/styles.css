@@ -1,5 +1,6 @@
 html {
     height: 100%;
+    font-family: Helvetica, Arial, sans-serif;
 }
 
 body {
@@ -68,23 +69,31 @@ body {
     z-index: 1;
 }
 
-#menubar>ul {
-    display: block;
-    height: 100%;
+#menubar>div {
     margin: auto;
     max-width: 1400px;
+    height: 100%;
+    padding: 0;
 }
-#menubar>ul>li {
+
+#menubar ul {
+    height: 100%;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+#menubar ul>li {
     display: block;
     height: 100%;
     float: left;
 }
 
-#menubar>ul>li:hover {
+#menubar ul>li:hover {
     background: #2a6098;
 }
 
-#menubar>ul>li>a {
+#menubar ul>li>a {
     text-decoration: none;
     color: inherit;
     display: inline-block;
@@ -141,4 +150,45 @@ body {
     border-radius: 0.1em;
     box-shadow: 0 0 0.1em rgba(0,0,0,0.2);
     border: 1px solid rgba(0,0,0,0.2);
+}
+
+.recherche_vide {
+    height: 8em;
+    margin-top: 5em;
+    padding-top: 5em;
+}
+
+.boite_recherche form input, .boite_recherche form button {
+    font-size: 130%;
+}
+
+#recherche_barre {
+    float: right;
+    height: 100%;
+}
+#recherche_barre input {
+    margin-top: 0.2em;
+    display: inline-block;    
+    background: #4b7098;
+    border: 1px solid #2a6098;
+    color: #fff;
+    padding: 0.2em 0.5em;
+    border-radius: 0.5em;
+}
+#recherche_barre input:hover, #recherche_barre input:focus {
+    border: 1px solid #3d8ac6;
+}
+
+#recherche_barre button {
+    margin-top: 0.4em;
+    display: inline-block;
+    border: 1px solid #2a6098;
+    background: #204b75;
+    padding: 0.2em 0.5em;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 0.6em;
+}
+#recherche_barre button:hover {
+    background: #204b75;
 }

@@ -11,10 +11,17 @@
 <body>
   <div id="full_content">
     <div id="menubar">
-      <ul>
-        <li><a href="{% url 'fichier:accueil' %}">Accueil</a></li>
-        <li><a href="{%url 'admin:fichier_fiche_add' %}">+ créer une fiche</a></li>
-      </ul>
+      <div>
+        <ul>
+          <li><a href="{% url 'fichier:accueil' %}">Accueil</a></li>
+          <li><a href="{%url 'admin:fichier_fiche_add' %}">+ créer une fiche</a></li>
+        </ul>
+
+      <form id="recherche_barre" action="{% url 'fichier:rechercher' %}" class="form-inline" method="get">
+        <input name="search" type="" class="form-control">
+        <button type="submit">Rechercher</button>
+      </form>
+    </div>
     </div>
     <div id="content">
     {% block content %}{% endblock %}
