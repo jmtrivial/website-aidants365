@@ -13,9 +13,9 @@ logger = logging.getLogger(__name__)
 class Niveau(models.Model):
 
     class Applicabilite(models.TextChoices):
-        A = 'A', "Théorique"
-        B = 'B', "Intermédiaire"
-        C = 'C', "Pratique"
+        A = 'A', "théorique"
+        B = 'B', "intermédiaire"
+        C = 'C', "pratique"
 
     ordre = models.IntegerField(verbose_name="Numéro", unique=True)
     code = models.CharField(verbose_name="Code", max_length=4, unique=True)

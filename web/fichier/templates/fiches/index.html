@@ -1,136 +1,35 @@
-{% extends "fiches/page_blocks_colonnes.html" %}
+{% extends "fiches/page.html" %}
 
-{% load fichier_extras %}
 
 {% block title %}
 Le fichier Aidants365
 {% endblock %}
 
 {% block entete %}
-<h1>Accueil du fichier Aidants365</h1>
+Toutes les fiches
 {% endblock %}
 
-{% block gauche1 %}
-<h2>Dernières fiches</h2>
-{% if fiche_list %}
-    <ul>
-    {% for fiche in fiche_list %}
-        <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
-    {% endfor %}
-    </ul>
-    <div>Voir les <a href="{% url 'fichier:index_fiches' %}">{{ nb_fiches }} fiches</a> du fichier</div>
-{% else %}
-    <p>Pas de fiche disponible.</p>
-{% endif %}
-{% endblock %}
+{% block content %}
+    <div class="block" id="entete">
+        <h1>Toutes les fiches</h1>
+    </div>
+    <div class="block">
+        {% if fiche_list %}
+        {% regroup fiche_list|dictsort:"niveau.applicable" by niveau.get_applicable_display as niveau_list %}
 
-{% block droite3 %}
-<h2>Auteurs</h2>
-{% if auteurs %}
-    <ul>
-    {% for auteur in auteurs %}
-        <li>
-            {% if auteur.fiche_count %}    
-            <a href="{% url 'fichier:index_auteur' auteur.id %}">{{ auteur }}</a> ({{ auteur.fiche_count }})
-            {% else %}
-            <span class="not_available">{{ auteur }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de fiche disponible.</p>
-{% endif %}
-{% endblock %}
 
-{% block droite1 %}
-<h2>Niveaux</h2>
-{% if niveaux %}
-    <ul>
-    {% for niveau in niveaux %}
-        <li>
-            {{ niveau.couleur | carre_colore }}
-            {% if niveau.fiche_count %}
-            <a href="{% url 'fichier:index_niveau' niveau.id %}">{{ niveau }}</a> ({{ niveau.fiche_count }})
-            {% else %}
-            <span class="not_available">{{ niveau }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de niveau disponible.</p>
-{% endif %}
-{% endblock %}
+        {% for niveau in niveau_list %}
+            <h2>Fiches de niveau {{ niveau.grouper }}</h2>
+            <ul>
+            {% for fiche in niveau.list %}
+                <li><a href="{% url 'fichier:index_detail' fiche.id %}">{{ fiche }}</a></li>
+            {% endfor %}
+            </ul>
 
-{% block droite2 %}
-<h2>Catégories</h2>
-{% if categories %}
-    <h3>Catégories principales</h3>
-    <ul>
-    {% for categorie in categories %}
-        <li>
-            {% if categorie.fiche_count %}    
-            <a href="{% url 'fichier:index_categorie' categorie.id %}">{{ categorie }}</a> ({{ categorie.fiche_count }})
-            {% else %}
-            <span class="not_available">{{ categorie }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de catégorie disponible.</p>
-{% endif %}
-{% if categories_libres %}
-    <h3>Catégories libres</h3>
-    <ul>
-        {% for cl in categories_libres %}
-            <li>
-                {% if cl.fiche_count %}    
-                <a href="{% url 'fichier:index_categorie_libre' cl.id %}">{{ cl }}</a> ({{ cl.fiche_count }})
-                {% else %}
-                <span class="not_available">{{ cl }}</span>
-                {% endif %}
-            </li>
         {% endfor %}
-        </ul>
-{% endif %}
-{% endblock %}
-
-{% block gauche3 %}
-<h2>Mots-clés</h2>
-{% if motcles %}
-    <ul>
-    {% for motcle in motcles %}
-        <li>
-            {% if motcle.fiche_count %}    
-            <a href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a> ({{ motcle.fiche_count }})
-            {% else %}
-            <span class="not_available">{{ motcle }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de mot-clé disponible.</p>
-{% endif %}
-{% endblock %}
-
-{% block gauche2 %}
-<h2>Thèmes</h2>
-{% if themes %}
-    <ul>
-    {% for theme in themes %}
-        <li>
-            {% if theme.fiche_count %}    
-            <a href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a> ({{ theme.fiche_count }})
-            {% else %}
-            <span class="not_available">{{ theme }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de thème disponible.</p>
-{% endif %}
+    {% else %}
+        <p>Pas de fiche disponible.</p>
+    {% endif %}
+    </div>
+</div>
 {% endblock %}

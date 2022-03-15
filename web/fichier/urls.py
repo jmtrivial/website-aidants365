@@ -5,8 +5,9 @@ from . import views
 app_name = "fichier"
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('fiches/', views.index_fiches, name='index_fiches'),
+    path('', views.accueil, name='accueil'),
+    path('fiches/', views.index, name='index'),
+    path('fiches/<int:id>/', views.index_detail, name='index_detail'),
     path('fiche/<int:id>/', views.detail, name='detail'),
     path('niveau/<int:id>/', views.index_niveau, name='index_niveau'),
     path('niveau/<int:id1>/<int:id2>/', views.index_niveau_detail, name='index_niveau_detail'),

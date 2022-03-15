@@ -18,7 +18,7 @@
 
 
 {% block title %}
-Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
+Le fichier Aidants365 — les fiches
 {% endblock %}
 
 {% block entete %}
@@ -28,22 +28,16 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 {% block gauche1 %}
         {% if fiche_list %}
  
-
         {% regroup fiche_list|dictsort:"niveau.applicable" by niveau.get_applicable_display as niveau_list %}
-
 
         {% for niveau in niveau_list %}
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
             <ul>
             {% for fiche_local in niveau.list %}
                 {% if fichier_local.id == fichier.id %}
-                    {% with "fichier:index_"|add:critere_name as template_name %}
-                    <li><a href="{% url template_name critere.id %}" style="font-weight: bold">{{ fiche_local }}</a></li>
-                    {% endwith %}
+                    <li><a href="{% url 'fichier:index' %}" style="font-weight: bold">{{ fiche_local }}</a></li>
                 {% else %}
-                    {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
-                    <li><a href="{% url template_name critere.id fiche_local.id %}">{{ fiche_local }}</a></li>
-                    {% endwith %}
+                    <li><a href="{% url 'fichier:detail' fiche_local.id %}">{{ fiche_local }}</a></li>
                 {% endif %}
             {% endfor %}
             </ul>

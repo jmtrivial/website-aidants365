@@ -6,7 +6,7 @@ from .forms import FicheForm
 from django.db.models import Count, Q
 
 
-def index(request):
+def accueil(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')[:5]
 
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
@@ -18,13 +18,19 @@ def index(request):
 
     context = {'fiche_list': latest_fiche_list, "nb_fiches": Fiche.objects.count(), "niveaux": niveaux,
                "categories": categories, "auteurs": auteurs, "themes": themes, "motcles": motcles, "categories_libres": categories_libres}
+    return render(request, 'fiches/accueil.html', context)
+
+
+def index(request):
+    latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')
+    context = {'fiche_list': latest_fiche_list}
     return render(request, 'fiches/index.html', context)
 
 
-def index_fiches(request):
-    latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')
-    context = {'fiche_list': latest_fiche_list}
-    return render(request, 'fiches/index_fiches.html', context)
+def index_detail(request, id):
+    fiche = get_object_or_404(Fiche, pk=id)
+    fiche_list = Fiche.objects.filter()
+    return render(request, 'fiches/index_detail.html', {'fiche': fiche, 'fiche_list': fiche_list})
 
 
 def detail(request, id):
