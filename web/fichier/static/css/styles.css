@@ -163,10 +163,16 @@ ul {
 .column_large {
     float: left;
     width: 70%;
+}
+
+.document {
     position: relative;
 }
 
-
+.resserre {
+    margin: 0;
+    padding: 0;
+}
 
 .block {
     margin: 0.5em;
@@ -260,6 +266,10 @@ ul {
     columns: 3;
 }
 
+.cols4 {
+    columns: 4;
+}
+
 .suite {
     text-align: right;
 }
@@ -273,7 +283,7 @@ ul {
     font-weight: bold;
     vertical-align: top;
     border-radius: 0.2em;
-    margin-right: 0.5em;
+    margin-left: 0.5em;
 }
 
 .visu {
@@ -293,3 +303,30 @@ ul {
     padding: 0.2em 0.5em;
     border-radius: 0.3em;
 }
+
+table {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+}
+
+table th, table td {
+    padding: 0.2em 1em;
+}
+
+table thead th {
+    background: #eee;
+}
+
+table th {
+    background: #f5f5f5;
+}
+
+table td {
+    background: #fbfbfb;
+}
+
+table th:first-child {
+    text-align: left;
+}
+

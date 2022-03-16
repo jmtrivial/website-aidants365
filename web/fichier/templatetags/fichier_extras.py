@@ -1,6 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
-from fichier.models import Categorie
+from fichier.models import Categorie, Niveau
 
 register = template.Library()
 
@@ -80,3 +80,18 @@ def set_listes_categories_modifieurs_champs():
     result += "];\n"
     result += "</script>\n"
     return mark_safe(result)
+
+
+@register.simple_tag
+def get_carre_colore_A():
+    return carre_colore(Niveau.couleur_A)
+
+
+@register.simple_tag
+def get_carre_colore_B():
+    return carre_colore(Niveau.couleur_B)
+
+
+@register.simple_tag
+def get_carre_colore_C():
+    return carre_colore(Niveau.couleur_C)

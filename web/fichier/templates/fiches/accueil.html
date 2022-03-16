@@ -15,8 +15,45 @@ Le fichier Aidants365
 {% endblock %}
 
 {% block entete %}
-<h1>Accueil du fichier Aidants 365</h1>
+<div class="column_large"><h1>Accueil du fichier Aidants 365</h1>
 <p>Vous retrouvez sur ce tableau de bord un accès aux <a href="{% url 'fichier:index' %}">{{ nbfichestotal }} fiches</a> via leurs différents niveaux, catégories, thèmes ou mots-clés.</p>
+</div>
+<div class="column_small">
+    <div class="column">
+        <h2 class="resserre">Niveaux</h2>
+        <ul>
+            {% for niveau in niveaux %}
+                <li>
+                    {{ niveau.couleur | carre_colore }}
+                    {% if niveau.fiche_count %}
+                    <a href="{% url 'fichier:index_niveau' niveau.id %}">{{ niveau }}</a> <span class="fiche_count">{{ niveau.fiche_count }}</span>
+                    {% else %}
+                    <span class="not_available">{{ niveau }}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+    </div>
+    <div class="column">
+        <h2 class="resserre">Auteurs</h2>
+        {% if auteurs %}
+    <ul>
+    {% for auteur in auteurs %}
+        <li>
+            {% if auteur.fiche_count %}    
+            <a href="{% url 'fichier:index_auteur' auteur.id %}">{{ auteur }}</a> <span class="fiche_count">{{ auteur.fiche_count }}</span>
+            {% else %}
+            <span class="not_available">{{ auteur }}</span>
+            {% endif %}
+        </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Pas de fiche disponible.</p>
+    {% endif %}
+    </div>
+</div>
+<div style="clear: both"></div>
 {% endblock %}
 
 {% block gauche1 %}
@@ -33,49 +70,12 @@ Le fichier Aidants365
 {% endif %}
 {% endblock %}
 
-{% block droite3 %}
-<h2>Auteurs</h2>
-{% if auteurs %}
-    <ul class="cols3">
-    {% for auteur in auteurs %}
-        <li>
-            {% if auteur.fiche_count %}    
-            <a href="{% url 'fichier:index_auteur' auteur.id %}">{{ auteur }}</a> <span class="fiche_count">{{ auteur.fiche_count }}</span>
-            {% else %}
-            <span class="not_available">{{ auteur }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de fiche disponible.</p>
-{% endif %}
-{% endblock %}
+
 
 {% block droite1 %}
-<h2>Les niveaux</h2>
-{% if niveaux %}
-    <ul class="cols3">
-    {% for niveau in niveaux %}
-        <li>
-            {{ niveau.couleur | carre_colore }}
-            {% if niveau.fiche_count %}
-            <a href="{% url 'fichier:index_niveau' niveau.id %}">{{ niveau }}</a> <span class="fiche_count">{{ niveau.fiche_count }}</span>
-            {% else %}
-            <span class="not_available">{{ niveau }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de niveau disponible.</p>
-{% endif %}
-{% endblock %}
-
-{% block droite2 %}
 {% if categories %}
 <h2>Les {{ nbcategories }} principales catégories générales</h2>
-<ul class="cols3">
+<ul class="cols4">
     {% for categorie in categories %}
         <li>
             {% if categorie.fiche_count %}    
@@ -108,7 +108,7 @@ Le fichier Aidants365
 {% endif %}
 {% endblock %}
 
-{% block gauche3 %}
+{% block gauche2 %}
 <h2>Les {{ nbmotcles }} principaux mots-clés</h2>
 {% if motcles %}
     <ul class="cols3">
@@ -128,7 +128,7 @@ Le fichier Aidants365
 {% endif %}
 {% endblock %}
 
-{% block gauche2 %}
+{% block droite2 %}
 <h2>Les {{ nbthemes }} principaux thèmes</h2>
 {% if themes %}
     <ul class="cols3">

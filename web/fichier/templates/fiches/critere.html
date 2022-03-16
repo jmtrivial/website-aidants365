@@ -35,12 +35,29 @@ Aidants 365 — Liste des {{ critere_human }}
         {% endif %}
         </div>
     <div class="block">
-        <ul>
+        <p>On retrouve dans le tableau ci-dessous le nombre de fiches  de chaque niveau (théorique, intermédiaire, pratique), ainsi que le nombre total de fiches par {{ nom_humain }}.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>{{ nom_humain }}</th>
+                    <th>{% get_carre_colore_A %} théorique</th>
+                    <th>{% get_carre_colore_B %} intermédiaire</th>
+                    <th>{% get_carre_colore_C %} pratique</th>
+                    <th>total</th>
+                </tr>
+            </thead>
+            <tbody>
         {% for element in elements %}
             {% with "fichier:index_"|add:critere_name as template_name %}
-            <li><a href="{% url template_name element.id %}">{{ element.description_longue }}</a> <span class="fiche_count">{{element.fiche_count }}</span></li>
+            <tr><th><a href="{% url template_name element.id %}">{{ element.description_longue }}</a></th> 
+                <td>{{element.fiche_count_A}}</td>
+                <td>{{element.fiche_count_B}}</td>
+                <td>{{element.fiche_count_C}}</td>
+                <td>{{element.fiche_count }}</td> 
+            </tr>
             {% endwith %}
         {% endfor %}
-        </ul>
+        </tbody>
+        </table>
     </div>
 {% endblock %}

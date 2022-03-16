@@ -17,6 +17,10 @@ class Niveau(models.Model):
         B = 'B', "intermédiaire"
         C = 'C', "pratique"
 
+    couleur_A = "#fdfbe9"
+    couleur_B = "#d22439"
+    couleur_C = "#67b43f"
+
     ordre = models.IntegerField(verbose_name="Numéro", unique=True)
     code = models.CharField(verbose_name="Code", max_length=4, unique=True)
     nom = models.CharField(verbose_name="Nom", max_length=64)
@@ -25,11 +29,11 @@ class Niveau(models.Model):
 
     def couleur(self):
         if self.applicable == Niveau.Applicabilite.A:
-            return "#fdfbe9"
+            return Niveau.couleur_A
         elif self.applicable == Niveau.Applicabilite.B:
-            return "#d22439"
+            return Niveau.couleur_B
         else:
-            return "#67b43f"
+            return Niveau.couleur_C
 
     class Meta:
         verbose_name = "Niveau"
