@@ -128,7 +128,7 @@ def index_auteur_detail(request, id1, id2):
     fiche = get_object_or_404(Fiche, pk=id2)
     fiches = Fiche.objects.filter(auteur=auteur)
     return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "auteur", "critere": auteur,
-                                                                    "critere_human": "de l'auteur", "critere_nom": str(auteur),
+                                                                    "critere_human": "de l'auteur", "critere_nom": auteur.nom,
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
