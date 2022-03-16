@@ -77,3 +77,4 @@ def set_listes_categories_modifieurs_champs():
     result += "];\n"
     result += "</script>\n"
     return mark_safe(result)
+

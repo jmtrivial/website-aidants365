@@ -49,6 +49,9 @@ class TypeCategorie(models.Model):
     def __str__(self):
         return self.nom
 
+    def description_longue(self):
+        return self.nom
+
 
 class Categorie(models.Model):
     code = models.CharField(verbose_name="Code de la catégorie", max_length=4, unique=True)
@@ -63,6 +66,9 @@ class Categorie(models.Model):
 
     def __str__(self):
         return self.code
+
+    def description_longue(self):
+        return self.code + " — " + self.nom
 
 
 class Auteur(models.Model):
@@ -93,6 +99,9 @@ class CategorieLibre(models.Model):
         verbose_name_plural = "Catégories libres"
 
     def __str__(self):
+        return self.nom
+
+    def description_longue(self):
         return self.nom
 
 
@@ -126,6 +135,9 @@ class MotCle(models.Model):
     def __str__(self):
         return self.nom
 
+    def description_longue(self):
+        return self.nom
+
 
 class Theme(models.Model):
     nom = models.CharField(verbose_name="Thème", max_length=64)
@@ -136,6 +148,10 @@ class Theme(models.Model):
 
     def __str__(self):
         return self.nom
+
+    def description_longue(self):
+        return self.nom
+
 
 
 class Fiche(models.Model):

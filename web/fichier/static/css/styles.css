@@ -27,6 +27,10 @@ a:hover {
     color: #122b43;
 }
 
+ul {
+    padding: 0 1.5em;
+}
+
 #full_content {
     width: 100%;
     flex-grow: 1;
@@ -101,7 +105,8 @@ a:hover {
     float: left;
 }
 
-#menubar ul>li:hover {
+#menubar ul>li:hover, #menubar .bouton:hover,
+#menubar ul>li.actif {
     background: #2a6098;
 }
 
@@ -114,6 +119,28 @@ a:hover {
     padding: 0 1em;
     line-height: 2.5em;
     cursor: pointer;
+}
+
+#menubar .espace-gauche {
+    margin-left: 3em;
+}
+
+#menubar .bouton {
+    border: 1px solid #3d8ac6;
+    height: auto;
+    margin-top: 0.5em;
+    border-radius: 0.75em;
+    line-height: 1.5em;
+    background: transparent;
+    color: #fff;
+    cursor: pointer;
+    font-size: inherit;
+    display: inline-block;
+}
+#menubar .bouton a, #menubar .bouton span {
+    line-height: 1.5em;
+    height: 1.5em;
+    text-align: center;
 }
 
 #content {
@@ -164,6 +191,7 @@ a:hover {
     border: 1px solid rgba(0,0,0,0.2);
 }
 
+
 .recherche_vide {
     height: 8em;
     margin-top: 5em;
@@ -179,30 +207,24 @@ a:hover {
     height: 100%;
 }
 #recherche_barre input {
-    margin-top: 0.2em;
-    display: inline-block;    
-    background: #4b7098;
-    border: 1px solid #2a6098;
-    color: #fff;
-    padding: 0.2em 0.5em;
-    border-radius: 0.5em;
-}
-#recherche_barre input:hover, #recherche_barre input:focus {
     border: 1px solid #3d8ac6;
-}
-
-#recherche_barre button {
-    margin-top: 0.4em;
-    display: inline-block;
-    border: 1px solid #2a6098;
-    background: #204b75;
-    padding: 0.2em 0.5em;
+    height: auto;
+    margin-top: 0.5em;
+    border-radius: 0.75em;
+    line-height: 1.5em;
+    background: transparent;
     color: #fff;
     cursor: pointer;
-    margin-right: 0.6em;
+    font-size: inherit;
+    display: inline-block;
+    padding: 0 1em;
 }
-#recherche_barre button:hover {
-    background: #204b75;
+#recherche_barre input:hover, #recherche_barre input:focus {
+    background: #2a6098;
+}
+
+#menubar button.bouton {
+    padding: 0 1em;
 }
 
 .messagelist .success {
@@ -232,4 +254,42 @@ a:hover {
 
 .messagelist li a {
     color: #122b43;
+}
+
+.cols3 {
+    columns: 3;
+}
+
+.suite {
+    text-align: right;
+}
+
+.fiche_count {
+    background: #dfdede;
+    display: inline-block;
+    padding: 0.1em 0.4em 0.2em 0.4em;
+    border-top: 1px solid #fff;
+    font-size: 70%;
+    font-weight: bold;
+    vertical-align: top;
+    border-radius: 0.2em;
+    margin-right: 0.5em;
+}
+
+.visu {
+    background: #dfecf6;
+    padding: 0.2em 0.5em;
+    border-radius: 0.3em;
+}
+
+.visu:hover {
+    text-decoration: none;
+    background: #89b8db;
+}
+
+.active_visu {
+    background: #204b75;
+    color: #fff;
+    padding: 0.2em 0.5em;
+    border-radius: 0.3em;
 }

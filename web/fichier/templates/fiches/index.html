@@ -1,16 +1,28 @@
 {% extends "fiches/page.html" %}
 
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "fiches" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
 
 {% block title %}
-Le fichier Aidants365
+Le fichier Aidants365 — toutes les fiches
 {% endblock %}
+
+
+
 
 {% block entete %}
 Toutes les fiches
 {% endblock %}
 
 {% block content %}
-{% load fichier_extras %}
+
 
     <div class="block" id="entete">
         <h1>Toutes les fiches</h1>

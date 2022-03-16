@@ -1,0 +1,46 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with critere_name_pluriel as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Aidants 365 — Liste des {{ critere_human }}
+{% endblock %}
+
+{% block content %}
+    {% load fichier_extras %}
+    <div class="block" id="entete">
+        <h1>{{ titre }} {{ visu }}</h1>
+        Trier par&nbsp;:
+        {% if visu_code == "basic" %} 
+            <span class="active_visu">nombre de fiches</span>
+        {% else %}
+            {% with "fichier:"|add:critere_name_pluriel as template_name %}
+            <a class="visu" href="{% url template_name %}">nombre de fiches</a>
+            {% endwith %}
+        {% endif %}
+        {% if visu_code == "alpha" %} 
+            <span class="active_visu">ordre alphabétique</span>
+        {% else %}
+            {% with "fichier:"|add:critere_name_pluriel|add:"_alpha" as template_name %}
+            <a class="visu" href="{% url template_name %}">ordre alphabétique</a>
+            {% endwith %}
+        {% endif %}
+        </div>
+    <div class="block">
+        <ul>
+        {% for element in elements %}
+            {% with "fichier:index_"|add:critere_name as template_name %}
+            <li><a href="{% url template_name element.id %}">{{ element.description_longue }}</a> <span class="fiche_count">{{element.fiche_count }}</span></li>
+            {% endwith %}
+        {% endfor %}
+        </ul>
+    </div>
+{% endblock %}
