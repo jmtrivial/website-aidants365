@@ -330,3 +330,95 @@ table th:first-child {
     text-align: left;
 }
 
+#liste_entrees .block  {
+    overflow-y: auto;
+    height: 100%;
+}
+
+#suite_page {
+    display: flex;
+}
+
+#menubar #rechercher_petit {
+    display: none;
+    margin-left: 1em;
+    float: right;
+}
+
+
+@media only screen and (max-width: 1400px) {
+    #entete .column_small {
+        width: 40%;
+    }
+    
+    #entete .column_large {
+        width: 60%;
+    }
+}
+
+
+
+
+@media only screen and (max-width: 1200px) {
+
+    #content > .column_large, #content  > .column_small {
+        width: 100%;
+    }
+
+
+    #menubar #rechercher_petit {
+        display: inline-block;
+        margin-right: 0.5em;
+    }
+    
+    #menubar #recherche_barre {
+        display: none;
+    }
+
+    #menubar ul {
+        width: 100%;
+    }
+
+    #menubar ul>li>a {
+        padding: 0 0.5em;
+    }
+}
+
+@media only screen and (max-width: 1000px) {
+    #content > .column {
+        width: 100%;
+    }
+    #content .column_large, #content  .column_small {
+        width: 100%;
+    }
+
+    #liste_entrees .block  {
+        max-height: 10em;
+        margin-bottom: 1em;
+    }
+
+    #suite_page {
+        display: block;
+    }
+
+
+    #ajouter_fiche span {
+        display: none;
+    }
+    #menubar ul {
+        width: 100%;
+    }
+    #menubar ul>li>a {
+        padding: 0 0.3em;
+    }
+    #menubar .bouton, #menubar #rechercher_petit {
+        margin-left: 0.2em;
+        margin-right: 0.2em;
+        padding: 0 !important;
+    }
+    #menubar .bouton a {
+        padding: 0 0.5em;
+    }
+
+}
+

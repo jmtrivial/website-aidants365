@@ -18,7 +18,8 @@
           <li {% if active_page == "categories" %}class="actif"{% endif %}><a href="{% url 'fichier:categories' %}">Catégories</a></li>
           <li {% if active_page == "themes" %}class="actif"{% endif %}><a href="{% url 'fichier:themes' %}">Thèmes</a></li>
           <li {% if active_page == "motscles" %}class="actif"{% endif %}><a href="{% url 'fichier:motscles' %}">Mots-clés</a></li>
-          <li class="bouton espace-gauche"><a href="{%url 'admin:fichier_fiche_add' %}">+ créer une fiche</a></li>
+          <li class="bouton espace-gauche" id="ajouter_fiche"><a href="{%url 'admin:fichier_fiche_add' %}" title="créer une fiche">+<span> créer une fiche</span></a></li>
+          <li class="bouton" id="rechercher_petit"><a href="{% url 'fichier:rechercher' %}" title="rechercher une fiche">🔍</a></li>
         </ul>{% endblock %}
 
       <form id="recherche_barre" action="{% url 'fichier:rechercher' %}" class="form-inline" method="get">
@@ -43,5 +44,6 @@
     <p>Projet Aidants 365 — copyright Dominique Chevallier-Wixler et Jean-Marie Favreau, 2022</p>
     <p><a href="{% url 'admin:index' %}">Administration</a></p>
   </div>
+  {% block footer_js %}{% endblock %}
 </body>
 </html>

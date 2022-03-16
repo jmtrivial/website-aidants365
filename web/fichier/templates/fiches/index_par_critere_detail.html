@@ -37,11 +37,11 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
             {% for fiche_local in niveau.list %}
                 {% if fiche_local.id == fiche.id %}
                     {% with "fichier:index_"|add:critere_name as template_name %}
-                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id %}" style="font-weight: bold">{{ fiche_local }}</a></li>
+                    <li id="fiche{{ fiche_local.id }}">{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id %}#fiche{{ fiche_local.id }}" style="font-weight: bold">{{ fiche_local }}</a></li>
                     {% endwith %}
                 {% else %}
                     {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
-                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id fiche_local.id %}">{{ fiche_local }}</a></li>
+                    <li id="fiche{{ fiche_local.id }}">{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id fiche_local.id %}">{{ fiche_local }}</a></li>
                     {% endwith %}
                 {% endif %}
             {% endfor %}
@@ -57,4 +57,12 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 
 {% block droite %}
 {% include "fiches/affichage_fiche.html" with details="yes" %}
+{% endblock %}
+
+{% block footer_js %}
+            <script>
+                console.log("#fiche{{ fiche.id }}");
+                document.getElementById("fiche{{ fiche.id }}").scrollIntoView();
+                document.getElementById("suite_page").scrollIntoView();
+            </script>
 {% endblock %}

@@ -36,7 +36,7 @@ Toutes les fiches
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
             <ul>
             {% for fiche in niveau.list %}
-                <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index_detail' fiche.id %}">{{ fiche }}</a></li>
+                <li id="fiche{{ fiche.id }}">{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index_detail' fiche.id %}">{{ fiche }}</a></li>
             {% endfor %}
             </ul>
 

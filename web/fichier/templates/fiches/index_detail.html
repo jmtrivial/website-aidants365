@@ -36,9 +36,9 @@ Le fichier Aidants365 — les fiches
             <ul>{{ fichier_local.id }} {{ fichier.id }}
             {% for fiche_local in niveau.list %}
                 {% if fiche_local.id == fiche.id %}
-                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index' %}" style="font-weight: bold">{{ fiche_local }}</a></li>
+                    <li id="fiche{{ fiche_local.id }}">{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index' %}#fiche{{ fiche_local.id }}" style="font-weight: bold">{{ fiche_local }}</a></li>
                 {% else %}
-                    <li>{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index_detail' fiche_local.id %}">{{ fiche_local }}</a></li>
+                    <li id="fiche{{ fiche_local.id }}">{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index_detail' fiche_local.id %}">{{ fiche_local }}</a></li>
                 {% endif %}
             {% endfor %}
             </ul>
@@ -53,4 +53,12 @@ Le fichier Aidants365 — les fiches
 
 {% block droite %}
 {% include "fiches/affichage_fiche.html" with details="yes" %}
+{% endblock %}
+
+{% block footer_js %}
+            <script>
+                console.log("#fiche{{ fiche.id }}");
+                document.getElementById("fiche{{ fiche.id }}").scrollIntoView();
+                document.getElementById("suite_page").scrollIntoView();
+            </script>
 {% endblock %}
