@@ -153,7 +153,6 @@ class Theme(models.Model):
         return self.nom
 
 
-
 class Fiche(models.Model):
     # entête
 
