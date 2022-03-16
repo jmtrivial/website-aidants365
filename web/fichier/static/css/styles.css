@@ -291,6 +291,7 @@ ul {
     background: #dfecf6;
     padding: 0.2em 0.5em;
     border-radius: 0.3em;
+    line-height: 1.2em;
 }
 
 .visu:hover {
@@ -303,6 +304,7 @@ ul {
     color: #fff;
     padding: 0.2em 0.5em;
     border-radius: 0.3em;
+    line-height: 1.2em;
 }
 
 table {
@@ -422,4 +424,3 @@ table th:first-child {
     }
 
 }
-
