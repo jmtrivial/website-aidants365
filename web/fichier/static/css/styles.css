@@ -1,6 +1,6 @@
 html {
     height: 100%;
-    font-family: Helvetica, Arial, sans-serif;
+    font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
 }
 
 body {
@@ -203,4 +203,30 @@ a:hover {
 }
 #recherche_barre button:hover {
     background: #204b75;
+}
+
+.messagelist .success {
+    background: #01a129;
+}
+.messagelist .warning {
+    background: #975709;
+} 
+.messagelist .error {
+    color: #a30d0d;
+
+}
+.messagelist {
+    margin: 1em 0;
+    padding: 0;
+}
+
+.messagelist li {
+    display: block;
+    margin: 0;
+    padding: 1em;
+    color: #fff;
+}
+
+.messagelist li a {
+    color: #122b43;
 }
