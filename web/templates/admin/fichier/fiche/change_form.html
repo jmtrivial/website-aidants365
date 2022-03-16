@@ -37,6 +37,15 @@
 
         return false;
       }
+      function is_film() {
+        for (let i = 1; i <= 3; i++) {
+          let e = document.querySelectorAll("#id_categorie" + i + " option:checked")[0].getAttribute("value");
+          if (document.categories_film.includes(e))
+            return true;
+        }
+
+        return false;
+      }
 
       function set_visible(list_fields, visible) {
         list_fields.forEach(function(item, index, array) {
@@ -52,9 +61,11 @@
 
       function update_visible_fields() {        
         let biblio_fields = ["titre", "auteurs", "annee_publication", "editeur", "format_bibl", "quatrieme_de_couverture", "collection"];
+        let film_fields = ["realisateurs", "annee_film", "diffusion", "duree", "production"];
         let site_fields = ["plan_du_site"];
         set_visible(biblio_fields, is_biblio());
         set_visible(site_fields, is_site());
+        set_visible(film_fields, is_film());
       }
 
       for (let i = 1; i <= 3; i++) {

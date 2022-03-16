@@ -38,6 +38,11 @@
                     {{ fiche.date_publication | affiche_si_existe:"Date de publication" | inside_si_existe:"li" }}
                     {{ fiche.editeur | affiche_si_existe:"Éditeur" | inside_si_existe:"li" }}
                     {{ fiche.format_bibl | affiche_si_existe:"Format" | inside_si_existe:"li" }}
+                    {{ fiche.realisateurs | affiche_si_existe:"Réalisateurs" | inside_si_existe:"li" }}
+                    {{ fiche.annee_film | affiche_si_existe:"Année de production" | inside_si_existe:"li" }}
+                    {{ fiche.diffusion | affiche_si_existe:"Diffusion" | inside_si_existe:"li" }}
+                    {{ fiche.duree | affiche_si_existe:"Durée" | inside_si_existe:"li" }}
+                    {{ fiche.production | affiche_si_existe:"Production" | inside_si_existe:"li" }}
                     {{ fiche.partenaires | affiche_si_existe:"Partenaires" | inside_si_existe:"li" }}
                     {% if fiche.themes.all %}
                     <li><strong>Thèmes&nbsp;:</strong>

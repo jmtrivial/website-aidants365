@@ -75,5 +75,8 @@ def set_listes_categories_modifieurs_champs():
     result += "document.categories_site = ["
     result += ", ".join(["\"" + str(x[0]) + "\"" for x in Categorie.objects.filter(is_site=True).values_list('id')])
     result += "];\n"
+    result += "document.categories_film = ["
+    result += ", ".join(["\"" + str(x[0]) + "\"" for x in Categorie.objects.filter(is_film=True).values_list('id')])
+    result += "];\n"
     result += "</script>\n"
     return mark_safe(result)
