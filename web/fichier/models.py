@@ -161,7 +161,7 @@ class Fiche(models.Model):
     # uniquement si biblio
     titre = models.CharField(verbose_name="Titre de l'ouvrage", max_length=1024, blank=True)
     auteurs = models.CharField(verbose_name="Auteurs", max_length=1024, blank=True)
-    annee_publication = models.IntegerField(verbose_name="Année de publication", blank=True, null=True, default = 2022)
+    annee_publication = models.IntegerField(verbose_name="Année de publication", blank=True, null=True, default=2022)
     editeur = models.CharField(verbose_name="Éditeur", max_length=1024, blank=True)
     format_bibl = models.CharField(verbose_name="Format", max_length=1024, blank=True)
 
