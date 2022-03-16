@@ -168,7 +168,7 @@ class Fiche(models.Model):
     sous_titre = models.CharField(verbose_name="Sous-titre", max_length=256, blank=True)
 
     date_creation = models.DateField(verbose_name="Date de création", default=timezone.now)
-    date_derniere_modification = models.DateField(verbose_name="Dernière modification", default=timezone.now)
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     # chapeau
     url = models.URLField(verbose_name="Adresse", max_length=1024, blank=True)
@@ -178,6 +178,7 @@ class Fiche(models.Model):
     auteurs = models.CharField(verbose_name="Auteurs", max_length=1024, blank=True)
     annee_publication = models.IntegerField(verbose_name="Année de publication", blank=True, null=True, default=2022)
     editeur = models.CharField(verbose_name="Éditeur", max_length=1024, blank=True)
+    collection = models.CharField(verbose_name="Collection", max_length=1024, blank=True)
     format_bibl = models.CharField(verbose_name="Format", max_length=1024, blank=True)
 
     # uniquement si site
@@ -190,6 +191,9 @@ class Fiche(models.Model):
     presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True)
 
     problematique = RichTextField(verbose_name="Problématique", config_name='main_ckeditor', blank=True)
+
+    # uniquement si biblio
+    quatrieme_de_couverture = RichTextField(verbose_name="Quatrième de couverture", config_name='main_ckeditor', blank=True)
 
     # uniquement si site
     plan_du_site = RichTextField(verbose_name="Plan du site", config_name='main_ckeditor', blank=True)
@@ -232,6 +236,7 @@ class Fiche(models.Model):
 
         search_vectors = SearchVector('presentation', weight='A', config='french') + \
             SearchVector('problematique', weight='A', config='french') + \
+            SearchVector('quatrieme_de_couverture', weight='A', config='french') + \
             SearchVector('plan_du_site', weight='A', config='french') + \
             SearchVector('focus', weight='A', config='french') + \
             SearchVector('auteur__code', weight='D', config='french') + \
@@ -250,6 +255,7 @@ class Fiche(models.Model):
             SearchVector('titre', weight='D', config='french') + \
             SearchVector('editeur', weight='D', config='french') + \
             SearchVector('auteurs', weight='D', config='french') + \
+            SearchVector('collection', weight='D', config='french') + \
             SearchVector('partenaires', weight='D', config='french') + \
             SearchVector('reserves', weight='C', config='french') + \
             SearchVector('lesplus', weight='C', config='french') + \
