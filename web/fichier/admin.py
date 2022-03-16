@@ -35,7 +35,7 @@ class FicheAdmin(admin.ModelAdmin):
               "url",
               "titre",
               "auteurs",
-              "date_publication",
+              "annee_publication",
               "editeur",
               "format_bibl",
               "partenaires",
