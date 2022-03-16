@@ -218,6 +218,9 @@ a:hover {
 .messagelist {
     margin: 1em 0;
     padding: 0;
+    box-shadow: 0 0 0.1em rgba(0,0,0,0.1);
+    border-radius: 0.2em;
+    overflow: hidden;
 }
 
 .messagelist li {
