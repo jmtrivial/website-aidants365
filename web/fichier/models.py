@@ -185,8 +185,8 @@ class Fiche(models.Model):
     # uniquement si film
     realisateurs = models.CharField(verbose_name="Réalisateur(s)", max_length=1024, blank=True)
     annee_film = models.IntegerField(verbose_name="Année de production", blank=True, null=True, default=2022)
-    diffusion = models.IntegerField(verbose_name="Diffusion", blank=True, null=True)
-    duree = models.CharField(verbose_name="Réalisateur(s)", max_length=32, blank=True)
+    diffusion = models.CharField(verbose_name="Diffusion", max_length=1024, blank=True, null=True)
+    duree = models.CharField(verbose_name="Durée", max_length=32, blank=True)
     production = models.CharField(verbose_name="Production", max_length=1024, blank=True)
 
     # uniquement si site
