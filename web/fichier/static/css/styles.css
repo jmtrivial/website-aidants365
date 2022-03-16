@@ -13,6 +13,20 @@ body {
     flex-direction: column;
 }
 
+a {
+    text-decoration: none;
+    color: #2a6098;
+}
+
+a:visited {
+    color: #204b75;    
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #122b43;
+}
+
 #full_content {
     width: 100%;
     flex-grow: 1;
@@ -45,11 +59,9 @@ body {
     max-width: 1400px;
 }
 #footer p a {
-    color: inherit;
+    color: #3d8ac6;
 }
-#footer p a:hover {
-    text-decoration: none;
-}
+
 
 /* menu */
 
