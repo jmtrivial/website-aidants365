@@ -135,7 +135,7 @@ Le fichier Aidants365
     {% for theme in themes %}
         <li>
             {% if theme.fiche_count %}    
-            <a href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a> <span class="fiche_count">{{ theme.fiche_count }})</span>
+            <a href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a> <span class="fiche_count">{{ theme.fiche_count }}</span>
             {% else %}
             <span class="not_available">{{ theme }}</span>
             {% endif %}

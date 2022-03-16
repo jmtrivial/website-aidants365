@@ -20,7 +20,7 @@ class FicheAdmin(admin.ModelAdmin):
     save_on_top = True
     search_fields = ("niveau__nom", "categorie1__nom", "auteur__nom", "niveau__code", "categorie1__code", "auteur__code", "numero", "titre_fiche", )
 
-    list_display = ("__str__", "niveau", "categorie1", "auteur", "numero", "titre_fiche", "custom_link")
+    list_display = ("__str__", "niveau", "categorie1", "auteur", "numero", "titre_fiche", "date_derniere_modification", "custom_link")
 
     @admin.display(empty_value='???', description='Lien')
     def custom_link(self, obj):
