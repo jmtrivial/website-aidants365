@@ -417,8 +417,35 @@ table th:first-child {
     #menubar .bouton a {
         padding: 0 0.5em;
     }
-
+    
 }
+
+@media only screen and (max-width: 800px) {
+    .cols3 {
+        columns: 2;
+    }
+
+    .cols4 {
+        columns: 3;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .cols3 {
+        columns: 1;
+    }
+
+    .cols4 {
+        columns: 2;
+    }
+}
+
+@media only screen and (max-width: 400px) {
+    .cols4 {
+        columns: 1;
+    }
+}
+
 
 @media 
 only screen and (max-width: 760px),
