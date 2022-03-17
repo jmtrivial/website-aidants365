@@ -82,13 +82,18 @@ page li>p {
     margin: 0;
 }
 
+
+page #contenu_page {
+    display: flex;
+	flex-direction: column;
+    justify-content: space-between;
+}
+
 page #principal {
     display: flex;
 	flex-direction: column;
     justify-content: space-between;
-    position: absolute;
-    bottom: 0;
-    top: 4.2cm;
+    flex-grow: 2;
 }
 
 page #principal>div {
