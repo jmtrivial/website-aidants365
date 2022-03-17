@@ -12,3 +12,9 @@ class FicheForm(forms.ModelForm):
         localized_fields = ('date_creation', 'date_derniere_modification',)
 
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        instance = kwargs.get("instance")
+        if not instance:
+            self.fields['utiliser_suivant'].initial = True

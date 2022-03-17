@@ -19,6 +19,10 @@
       shortcut.add("Ctrl+S", save_and_view);
 
       // on cache les propriétés suivant les catégories choisies
+      function is_numero_visible() {
+        let e = document.getElementById("id_utiliser_suivant");
+        return !(e.checked);
+      }
       function is_biblio() {
         for (let i = 1; i <= 3; i++) {
           let e = document.querySelectorAll("#id_categorie" + i + " option:checked")[0].getAttribute("value");
@@ -59,6 +63,25 @@
         });
       }
 
+      function set_enable(list_fields, enable) {
+        list_fields.forEach(function(item, index, array) {
+          field = ".field-" + item + " input";
+          var els = document.querySelectorAll(field);
+          for (var x = 0; x < els.length; x++)
+            if (enable)
+              els[x].removeAttribute("disabled");
+            else
+            els[x].setAttribute("disabled", 'disabled');
+            field = ".field-" + item;
+          els = document.querySelectorAll(field);
+          for (var x = 0; x < els.length; x++)
+            if (enable)
+              els[x].style.opacity = 1;
+            else
+              els[x].style.opacity = 0.2;
+        });
+      }
+
       function update_visible_fields() {        
         let biblio_fields = ["titre", "auteurs", "annee_publication", "editeur", "format_bibl", "quatrieme_de_couverture", "collection"];
         let film_fields = ["realisateurs", "annee_film", "diffusion", "duree", "production"];
@@ -66,6 +89,9 @@
         set_visible(biblio_fields, is_biblio());
         set_visible(site_fields, is_site());
         set_visible(film_fields, is_film());
+
+        let numero_fields = ["numero.fieldBox"];
+        set_enable(numero_fields, is_numero_visible());
       }
 
       for (let i = 1; i <= 3; i++) {
@@ -74,8 +100,12 @@
         selectElement.addEventListener('change', (event) => {
           update_visible_fields();
         });
-      }
 
+      }
+      let selectElement = document.getElementById("id_utiliser_suivant");
+      selectElement.addEventListener('change', (event) => {
+        update_visible_fields();
+      });
 
       function ready(callback){
         // in case the document is already rendered
