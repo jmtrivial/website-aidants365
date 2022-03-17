@@ -95,9 +95,9 @@ def index_categorie_detail(request, id1, id2):
 
 def categories(request):
     categories = Categorie.objects.filter().annotate(fiche_count=Count('fiche_categorie1') + Count('fiche_categorie2') + Count('fiche_categorie3')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
+        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
+        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
+        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
         order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie",
@@ -106,9 +106,9 @@ def categories(request):
 
 def categories_alpha(request):
     categories = Categorie.objects.filter().annotate(fiche_count=Count('fiche_categorie1') + Count('fiche_categorie2') + Count('fiche_categorie3')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),)) + Count(Case(When(Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
+        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
+        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
+        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
         order_by("code")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie",
