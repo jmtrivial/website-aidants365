@@ -7,11 +7,20 @@ from .forms import FicheForm
 
 admin.site.register(Niveau)
 admin.site.register(TypeCategorie)
-admin.site.register(CategorieLibre)
 admin.site.register(Categorie)
 admin.site.register(Auteur)
-admin.site.register(Theme)
-admin.site.register(MotCle)
+
+
+class CategorieLibreAdmin(admin.ModelAdmin):
+    search_fields = ('nom', )
+
+
+class ThemeAdmin(admin.ModelAdmin):
+    search_fields = ('nom', )
+
+
+class MotCleAdmin(admin.ModelAdmin):
+    search_fields = ('nom', )
 
 
 class FicheAdmin(admin.ModelAdmin):
@@ -25,6 +34,8 @@ class FicheAdmin(admin.ModelAdmin):
     @admin.display(empty_value='???', description='Lien')
     def custom_link(self, obj):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir la fiche</a>')
+
+    autocomplete_fields = ['categories_libres', 'themes', 'fiches_connexes', 'mots_cles']
 
     fields = (("niveau", "categorie1"),
               ("categorie2", "categorie3", "categories_libres"),
@@ -45,7 +56,7 @@ class FicheAdmin(admin.ModelAdmin):
               "production",
               "partenaires",
               "themes",
-              "mots_cles_str",
+              "mots_cles",
               "presentation",
               "problematique",
               "quatrieme_de_couverture",
@@ -67,18 +78,10 @@ class FicheAdmin(admin.ModelAdmin):
         return mark_safe(mots_cles_list)
 
     def save_model(self, request, obj, form, change):
-        mots_cles_str = form.cleaned_data.get('mots_cles_str')
-        mots_cles_qs = MotCle.objects.comma_to_qs(mots_cles_str)
         utiliser_suivant = form.cleaned_data.get('utiliser_suivant')
-
-        if not obj.id:
-            obj.save()
 
         if utiliser_suivant:
             obj.numero = Fiche.get_numero_suivant(form.cleaned_data.get('auteur'))
-
-        obj.mots_cles.clear()
-        obj.mots_cles.add(*mots_cles_qs)
 
         obj.save()
 
@@ -102,4 +105,7 @@ class FicheAdmin(admin.ModelAdmin):
             return super().response_post_save_change(request, obj)
 
 
+admin.site.register(MotCle, MotCleAdmin)
+admin.site.register(Theme, ThemeAdmin)
+admin.site.register(CategorieLibre, CategorieLibreAdmin)
 admin.site.register(Fiche, FicheAdmin)
