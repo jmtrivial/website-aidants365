@@ -1,7 +1,7 @@
 html {
     height: 100%;
     font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 body {
@@ -28,9 +28,6 @@ a:hover {
     color: #122b43;
 }
 
-ul {
-    padding: 0 1.5em;
-}
 
 #full_content {
     width: 100%;
@@ -183,6 +180,11 @@ ul {
     box-shadow: 0 0 0.1em rgba(0,0,0,0.1);
 }
 
+.block ul {
+    list-style: none;
+    padding: 0 0.5em;
+}
+
 #full_content {
     margin: auto;
     max-width: 1400px;
@@ -311,6 +313,7 @@ table {
     width: 80%;
     margin: auto;
     text-align: center;
+    overflow-x: auto;
 }
 
 table th, table td {
@@ -412,7 +415,7 @@ table th:first-child {
         width: 100%;
     }
     #menubar ul>li>a {
-        padding: 0 0.3em;
+        padding: 0 0.5em;
     }
     #menubar .bouton, #menubar #rechercher_petit {
         margin-left: 0.2em;
@@ -423,4 +426,47 @@ table th:first-child {
         padding: 0 0.5em;
     }
 
+}
+
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+	/* Force table to not be like tables anymore */
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr { border: 1px solid #ccc; }
+	
+	td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+
+	td:nth-of-type(1):before { content: "théorique"; }
+	td:nth-of-type(2):before { content: "intermédiaire"; }
+	td:nth-of-type(3):before { content: "pratique"; }
+	td:nth-of-type(4):before { content: "total"; }
 }
