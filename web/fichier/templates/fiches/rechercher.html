@@ -1,6 +1,14 @@
 {% extends "fiches/page.html" %}
 
 
+{% block entete_menu %}
+{% with "rechercher" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
 {% block title %}
 Le fichier Aidants365
 {% endblock %}

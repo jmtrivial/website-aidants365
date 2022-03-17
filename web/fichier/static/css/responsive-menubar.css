@@ -1,0 +1,44 @@
+#menubar {
+    overflow: hidden;
+}
+  
+
+#menubar .icon {
+    display: none;
+    height: auto;
+}
+
+#menubar.responsive .icon:hover {
+    background: #122b43;
+}
+
+  
+@media screen and (max-width: 800px) {
+    #menubar.responsive {
+        height: auto;
+    }
+    #menubar li:not(:first-child) {display: none;}
+    #menubar li.icon {
+        float: right;
+        display: block;
+    }
+
+    #menubar.responsive {position: relative;}
+    #menubar.responsive .icon {
+        position: absolute;
+        right: 0;
+        top: 0;
+    }
+    #menubar.responsive li {
+        float: none;
+        display: block;
+    }
+    #menubar.responsive a {
+        text-align: left;
+    }
+    #menubar.responsive li.bouton {
+        display: inline-block;
+        margin: 0.5em;
+        
+    }
+}
