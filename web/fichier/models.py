@@ -181,14 +181,14 @@ class Fiche(models.Model):
     # uniquement si biblio
     titre = models.CharField(verbose_name="Titre de l'ouvrage", max_length=1024, blank=True)
     auteurs = models.CharField(verbose_name="Auteur(s)", max_length=1024, blank=True)
-    annee_publication = models.IntegerField(verbose_name="Année de publication", blank=True, null=True, default=2022)
+    annee_publication = models.IntegerField(verbose_name="Année de publication", blank=True, null=True)
     editeur = models.CharField(verbose_name="Éditeur", max_length=1024, blank=True)
     collection = models.CharField(verbose_name="Collection", max_length=1024, blank=True)
     format_bibl = models.CharField(verbose_name="Format", max_length=1024, blank=True)
 
     # uniquement si film
     realisateurs = models.CharField(verbose_name="Réalisateur(s)", max_length=1024, blank=True)
-    annee_film = models.IntegerField(verbose_name="Année de production", blank=True, null=True, default=2022)
+    annee_film = models.IntegerField(verbose_name="Année de production", blank=True, null=True)
     diffusion = models.CharField(verbose_name="Diffusion", max_length=1024, blank=True, null=True)
     duree = models.CharField(verbose_name="Durée", max_length=32, blank=True)
     production = models.CharField(verbose_name="Production", max_length=1024, blank=True)
