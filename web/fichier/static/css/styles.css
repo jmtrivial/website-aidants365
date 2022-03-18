@@ -345,7 +345,20 @@ table th:first-child {
     display: flex;
 }
 
+.card_edit, .card_edit:visited {
+    background: #aaa;
+    font-size: 50%;
+    padding: 0.1em 0.5em;
+    border-radius: 0.5em;
+    color: #fff;
+    vertical-align: text-top;
+}
 
+.card_edit:hover {
+    background: #3d8ac6;
+    text-decoration: none;
+    color: #fff;
+}
 
 @media only screen and (max-width: 1400px) {
     #entete .column_small {

@@ -21,12 +21,13 @@
 Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 {% endblock %}
 
+{% load fichier_extras %}
+
 {% block entete %}
-    <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }}</h1>
+    <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }}  <a class="card_edit" href="{% url 'admin:index' %}fichier/{{ critere_name | enlever_tiret_bas }}/{{ critere.id }}/change/">éditer</a></h1>
 {% endblock %}
 
 {% block gauche1 %}
-        {% load fichier_extras %}
         {% if fiche_list %}
  
         {% regroup fiche_list|dictsort:"niveau.applicable" by niveau.get_applicable_display as niveau_list %}

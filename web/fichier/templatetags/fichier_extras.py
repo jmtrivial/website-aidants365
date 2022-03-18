@@ -6,6 +6,10 @@ register = template.Library()
 
 
 @register.filter
+def enlever_tiret_bas(value):
+    return value.replace("_", "")
+
+@register.filter
 def nomenclature(value):
     return str(value)
 
