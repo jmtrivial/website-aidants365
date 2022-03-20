@@ -1,14 +1,14 @@
 {% load fichier_extras %}
 {% if liens %}
-<div id="actions">
-    {% if details %} <a href="{% url 'fichier:detail' fiche.id %}"><button>plein écran</button></a> {% endif %}
-    <a href="{% url 'admin:index' %}fichier/fiche/{{ fiche.id }}/change/" id="edit_button"><button>éditer (ctrl-e)</button></a>
-    <a href="{% url 'fichier:detail_pdf' fiche.id %}"><button>pdf</button></a>
-</div>
 {% endif %}
 <div id="message_responsive">La présentation des fiches sur petits écrans type smartphone pourrait ne pas être conforme à la <a href="{% url 'fichier:detail_pdf' fiche.id %}">présentation finale en pdf</a>. Affichage à titre informatif.</div>
 <page size="A4">
-    <div id="contenu_page">
+    <div id="actions">
+        {% if details %} <a href="{% url 'fichier:detail' fiche.id %}"><button>plein écran</button></a> {% endif %}
+        <a href="{% url 'admin:index' %}fichier/fiche/{{ fiche.id }}/change/" id="edit_button"><button>éditer (ctrl-e)</button></a>
+        <a href="{% url 'fichier:detail_pdf' fiche.id %}"><button>pdf</button></a>
+    </div>
+      <div id="contenu_page">
         <div id="haut">
             <div id="entete">
                 <div class="gauche">

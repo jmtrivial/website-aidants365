@@ -98,8 +98,11 @@ page #contenu_page {
 }
 
 #actions {
-    right: 0;
-    position: absolute;
+    float: right;
+    margin-top: .5em;
+    margin-right: .5em;
+    position: relative;
+    z-index: 1000;
 }
 
 #actions button {
