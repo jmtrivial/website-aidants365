@@ -5,6 +5,11 @@ from django.shortcuts import get_object_or_404, render
 from .forms import FicheForm
 from django.db.models import Count, Q, Case, When, IntegerField
 
+from django.views.generic import DetailView
+
+from django_weasyprint import WeasyTemplateResponseMixin
+from django_weasyprint.views import WeasyTemplateResponse
+
 
 def accueil(request):
     nbfiches = 5
@@ -260,3 +265,17 @@ def rechercher(request):
             results = Fiche.rechercher(recherche)
 
     return render(request, 'fiches/rechercher.html', {'results': results, 'recherche': recherche})
+
+
+class FicheViewPDF(WeasyTemplateResponseMixin, DetailView):
+
+    template_name = 'fiches/detail_pdf.html'
+
+    model = Fiche
+
+    def get_pdf_filename(self):
+        from django.utils import timezone
+        return '{nom} {at}.pdf'.format(
+            nom=str(self.get_object()),
+            at=str(self.get_object().date_derniere_modification.strftime("%d-%m-%Y %H:%M:%S")),
+        )

@@ -8,8 +8,9 @@ WORKDIR /usr/src/app/
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# install psycopg2 dependencies
-RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev
+# install dependencies
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev pango zlib-dev jpeg-dev openjpeg-dev g++ libffi-dev fontconfig msttcorefonts-installer
+RUN update-ms-fonts
 
 # install dependencies
 RUN pip install --upgrade pip

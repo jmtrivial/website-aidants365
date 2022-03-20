@@ -1,0 +1,62 @@
+page {
+    margin: 0 auto;
+    margin-bottom: 0.5cm;
+    box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
+
+}
+
+/* responsive */
+  @media only screen and (max-width: 21cm) {
+    page h1 {
+        font-size: calc(95vw / 21 * 22 * 0.0352777778); /* 1 point	= 0.0352777778 cm */
+    }
+    
+    page h1 small { 
+        font-size: calc(95vw / 21 * 16 * 0.0352777778);
+    }
+        
+    page .nomenclature {
+        font-size: calc(95vw / 21 * 16 * 0.0352777778);
+    }
+    
+    
+    page #contenu_page {
+        width: calc(95vw / 21 * 17);
+        height: calc(95vw / 21 * 26.7); 
+        margin: calc(95vw / 21 * 1.5) calc(95vw / 21 * 2);
+    }
+    
+    
+    
+    page #chapeau, page #pied {
+        border: calc(95vw / 21 * 0.1) solid #2a6098;
+        border-radius: calc(95vw / 21 * 0.05);
+    }
+    page #chapeau ul, page #pied ul {
+        margin: calc(95vw / 21 * 0.2);
+    }
+    
+    page p, ul {
+        margin: calc(95vw / 21 * 0.5);
+    }
+    
+    page #chapeau li, page #pied li {
+        margin-left: calc(95vw / 21 * 0.7);
+    }
+    
+    .column_large page {
+        margin-top: calc(95vw / 21 * 2.5);
+    }
+
+    page {
+        margin-bottom: calc(95vw / 21 * 0.5);
+        box-shadow: 0 0 calc(95vw / 21 * 0.5) rgba(0,0,0,0.5);
+        font-size: calc(95vw / 21 * 12 * 0.0352777778);
+      }
+      page[size="A4"] {  
+        width: 95vW;
+        height: calc(95vw / 21 * 29.7); 
+    }
+    
+}
+

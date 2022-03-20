@@ -1,0 +1,5 @@
+body {
+    width: 21cm;
+}
+
+@page { size: A4; margin: 0 }
