@@ -23,10 +23,5 @@ Projet365 — {{ fiche.titre_fiche }}
 {% endblock %}
 
 {% block content %}
-    <div id="actions">
-        {% if details %} <a href="{% url 'fichier:detail' fiche.id %}"><button>plein écran</button></a> {% endif %}
-        <a href="{% url 'admin:index' %}fichier/fiche/{{ fiche.id }}/change/" id="edit_button"><button>éditer (ctrl-e)</button></a>
-        <a href="{% url 'fichier:detail_pdf' fiche.id %}"><button>pdf</button></a>
-    </div>
     {% include "fiches/affichage_fiche.html" with liens="yes" %}
 {% endblock %}

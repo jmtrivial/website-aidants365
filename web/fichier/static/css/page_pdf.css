@@ -2,4 +2,8 @@ body {
     width: 21cm;
 }
 
+#message_responsive {
+    display: none;
+}
+
 @page { size: A4; margin: 0 }

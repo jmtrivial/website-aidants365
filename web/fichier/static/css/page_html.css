@@ -7,6 +7,21 @@ page {
 
 /* responsive */
   @media only screen and (max-width: 21cm) {
+    #message_responsive {
+        display: block;
+        background: #E50;
+        color: #fff;
+        box-shadow: 0 0 0.2cm rgba(0,0,0,0.2);
+        padding: 1em;
+        margin: 0.7em;
+        border-radius: .2em;
+
+    }
+    #message_responsive a {
+        color: inherit;
+        font-weight: bold;
+    }
+    
     page h1 {
         font-size: calc(95vw / 21 * 22 * 0.0352777778); /* 1 point	= 0.0352777778 cm */
     }

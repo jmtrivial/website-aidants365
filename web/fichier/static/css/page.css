@@ -156,3 +156,7 @@ page #contenu_page {
     }
   }
 
+  #message_responsive {
+    display: none;
+  }
+
