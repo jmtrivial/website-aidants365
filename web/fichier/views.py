@@ -10,7 +10,11 @@ from django.views.generic import DetailView
 from django_weasyprint import WeasyTemplateResponseMixin
 from django_weasyprint.views import WeasyTemplateResponse
 
+from django.contrib.auth.decorators import login_required
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+@login_required
 def accueil(request):
     nbfiches = 5
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')[:5]
@@ -47,23 +51,27 @@ def accueil(request):
     return render(request, 'fiches/accueil.html', context)
 
 
+@login_required
 def index(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')
     context = {'fiche_list': latest_fiche_list}
     return render(request, 'fiches/index.html', context)
 
 
+@login_required
 def index_detail(request, id):
     fiche = get_object_or_404(Fiche, pk=id)
     fiche_list = Fiche.objects.filter()
     return render(request, 'fiches/index_detail.html', {'fiche': fiche, 'fiche_list': fiche_list})
 
 
+@login_required
 def detail(request, id):
     fiche = get_object_or_404(Fiche, pk=id)
     return render(request, 'fiches/detail.html', {'fiche': fiche})
 
 
+@login_required
 def index_niveau(request, id):
     niveau = get_object_or_404(Niveau, pk=id)
     fiches = Fiche.objects.filter(niveau=niveau)
@@ -72,6 +80,7 @@ def index_niveau(request, id):
                                                              "fiche_list": fiches})
 
 
+@login_required
 def index_niveau_detail(request, id1, id2):
     niveau = get_object_or_404(Niveau, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
@@ -81,6 +90,7 @@ def index_niveau_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
+@login_required
 def index_categorie(request, id):
     categorie = get_object_or_404(Categorie, pk=id)
     fiches = Fiche.objects.filter(Q(categorie1=categorie) | Q(categorie2=categorie) | Q(categorie3=categorie))
@@ -89,6 +99,7 @@ def index_categorie(request, id):
                                                              "fiche_list": fiches})
 
 
+@login_required
 def index_categorie_detail(request, id1, id2):
     categorie = get_object_or_404(Categorie, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
@@ -98,6 +109,7 @@ def index_categorie_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
+@login_required
 def categories(request):
     categories = Categorie.objects.filter().annotate(fiche_count=Count(Case(When(Q(fiche_categorie1__isnull=False) | Q(fiche_categorie2__isnull=False) | Q(fiche_categorie3__isnull=False), then=1), output_field=IntegerField(),))). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -109,6 +121,7 @@ def categories(request):
                                                    "visu_code": "basic", "visu": "triées par nombre total de fiches"})
 
 
+@login_required
 def categories_alpha(request):
     categories = Categorie.objects.filter().annotate(fiche_count=Count(Case(When(Q(fiche_categorie1__isnull=False) | Q(fiche_categorie2__isnull=False) | Q(fiche_categorie3__isnull=False), then=1), output_field=IntegerField(),))). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -120,6 +133,7 @@ def categories_alpha(request):
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
+@login_required
 def index_auteur(request, id):
     auteur = get_object_or_404(Auteur, pk=id)
     fiches = Fiche.objects.filter(auteur=auteur)
@@ -128,6 +142,7 @@ def index_auteur(request, id):
                                                              "fiche_list": fiches})
 
 
+@login_required
 def index_auteur_detail(request, id1, id2):
     auteur = get_object_or_404(Auteur, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
@@ -137,6 +152,7 @@ def index_auteur_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
+@login_required
 def index_categorie_libre(request, id):
     categorie_libre = get_object_or_404(CategorieLibre, pk=id)
     fiches = Fiche.objects.filter(categories_libres=categorie_libre)
@@ -145,6 +161,7 @@ def index_categorie_libre(request, id):
                                                              "fiche_list": fiches})
 
 
+@login_required
 def index_categorie_libre_detail(request, id1, id2):
     categorie_libre = get_object_or_404(CategorieLibre, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
@@ -154,6 +171,7 @@ def index_categorie_libre_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
+@login_required
 def categories_libres(request):
     categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche')). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -165,6 +183,7 @@ def categories_libres(request):
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches"})
 
 
+@login_required
 def categories_libres_alpha(request):
     categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche')). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -176,6 +195,7 @@ def categories_libres_alpha(request):
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
+@login_required
 def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
@@ -184,6 +204,7 @@ def index_theme(request, id):
                                                              "critere_nom": str(theme), "fiche_list": fiches})
 
 
+@login_required
 def index_theme_detail(request, id1, id2):
     theme = get_object_or_404(Theme, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
@@ -193,6 +214,7 @@ def index_theme_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
+@login_required
 def themes(request):
     themes = Theme.objects.filter().annotate(fiche_count=Count('fiche')). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -204,6 +226,7 @@ def themes(request):
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches"})
 
 
+@login_required
 def themes_alpha(request):
     themes = Theme.objects.filter().annotate(fiche_count=Count('fiche')). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -215,6 +238,7 @@ def themes_alpha(request):
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
+@login_required
 def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)
@@ -223,6 +247,7 @@ def index_motcle(request, id):
                                                              "fiche_list": fiches})
 
 
+@login_required
 def index_motcle_detail(request, id1, id2):
     motcle = get_object_or_404(MotCle, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
@@ -232,6 +257,7 @@ def index_motcle_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
+@login_required
 def motscles(request):
     motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche')). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -243,6 +269,7 @@ def motscles(request):
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches"})
 
 
+@login_required
 def motscles_alpha(request):
     motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche')). \
         annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
@@ -254,6 +281,7 @@ def motscles_alpha(request):
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
+@login_required
 def rechercher(request):
 
     results = None
@@ -267,7 +295,7 @@ def rechercher(request):
     return render(request, 'fiches/rechercher.html', {'results': results, 'recherche': recherche})
 
 
-class FicheViewPDF(WeasyTemplateResponseMixin, DetailView):
+class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
 
     template_name = 'fiches/detail_pdf.html'
 

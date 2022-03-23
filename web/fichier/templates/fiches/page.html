@@ -59,7 +59,12 @@
   </div>
   <div id="footer">
     <p>Projet Aidants 365 — copyright Dominique Chevallier-Wixler et Jean-Marie Favreau, 2022</p>
-    <p><a href="{% url 'admin:index' %}">Administration</a></p>
+    <ul>
+        <li><a href="{% url 'admin:index' %}">administration</a></li>
+        {% if user.is_authenticated %}
+        <li><a href="{% url 'logout' %}?next=/">déconnexion</a></li>
+      {% endif %}
+    </ul>
   </div>
   {% block footer_js %}{% endblock %}
 </body>

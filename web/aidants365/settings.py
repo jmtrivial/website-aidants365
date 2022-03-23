@@ -169,3 +169,5 @@ CKEDITOR_CONFIGS = {
         'language': 'fr',
     },
 }
+
+LOGIN_REDIRECT_URL = "/"

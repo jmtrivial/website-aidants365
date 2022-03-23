@@ -55,13 +55,21 @@ a:hover {
     font-size: 80%;
     color: #ccc;
 }
-#footer p {
+#footer p, #footer ul {
     margin: auto;
     margin-top: 0.8em;
     max-width: 1400px;
 }
-#footer p a {
+#footer a {
     color: #3d8ac6;
+}
+#footer ul {
+    list-style-type: none;
+    padding: 0;
+}
+#footer li {
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -147,6 +155,10 @@ a:hover {
 }
 
 /* mise en page classique */
+.column-middle {
+    margin: auto;
+    width: 50%;
+}
 
 .column {
     float: left;
@@ -431,6 +443,11 @@ table th:first-child {
     .cols4 {
         columns: 3;
     }
+
+    .column-middle {
+        width: 100%;
+    }
+    
 }
 
 @media only screen and (max-width: 600px) {
