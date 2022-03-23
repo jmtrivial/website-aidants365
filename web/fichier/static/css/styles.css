@@ -66,6 +66,7 @@ a:hover {
 #footer ul {
     list-style-type: none;
     padding: 0;
+    text-align: right;
 }
 #footer li {
     margin: 0;
