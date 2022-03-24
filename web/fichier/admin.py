@@ -73,7 +73,6 @@ class FicheAdmin(admin.ModelAdmin):
         form.base_fields['auteur'].initial = Auteur.get_connected_auteur(request.user)
         return form
 
-
     def save_model(self, request, obj, form, change):
         utiliser_suivant = form.cleaned_data.get('utiliser_suivant')
 
