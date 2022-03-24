@@ -8,7 +8,6 @@ from django.shortcuts import redirect
 from django.contrib.auth import views as auth_views
 
 
-
 urlpatterns = [
     path('', lambda req: redirect('fichier/')),
     path('fichier/', include('fichier.urls')),
