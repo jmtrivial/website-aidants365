@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 
-from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie
+from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie, EntreeGlossaire
 from .forms import FicheForm
 
 admin.site.register(Niveau)
@@ -109,3 +109,5 @@ admin.site.register(MotCle, MotCleAdmin)
 admin.site.register(Theme, ThemeAdmin)
 admin.site.register(CategorieLibre, CategorieLibreAdmin)
 admin.site.register(Fiche, FicheAdmin)
+
+admin.site.register(EntreeGlossaire)

@@ -5,6 +5,7 @@ from django.db.models.signals import pre_save, post_init
 from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 
 import logging
 logger = logging.getLogger(__name__)
@@ -273,6 +274,19 @@ class Fiche(models.Model):
             SearchVector('lesplus', weight='C', config='french') + \
             SearchVector('en_savoir_plus', weight='C', config='french')
         return Fiche.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text, config='french'))
+
+
+class EntreeGlossaire(models.Model):
+
+
+    class Meta:
+        verbose_name = "Entrée du glossaire"
+        verbose_name_plural = "Entrées du glossaire"
+
+    entree = models.CharField(verbose_name="Entrée", max_length=64)
+    formes_alternatives = ArrayField(models.CharField(max_length=64, blank=True, null=True), verbose_name="Formes alternatives (pluriels, abréviations, etc)", size=8)
+
+    definition = RichTextField(verbose_name="Définition", config_name='main_ckeditor', blank=True)
 
 
 @receiver(pre_save, sender=Fiche)
