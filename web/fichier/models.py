@@ -110,28 +110,8 @@ class CategorieLibre(models.Model):
         return self.nom
 
 
-class MotCleManager(models.Manager):
-    def create_or_new(self, mc):
-        mc = mc.strip()
-        qs = self.get_queryset().filter(nom__iexact=mc)
-        if qs.exists():
-            return qs.first(), False
-        return MotCle.objects.create(nom=mc), True
-
-    def comma_to_qs(self, motcles_str):
-        final_ids = []
-        if motcles_str != "":
-            for mc in motcles_str.split(','):
-                obj, created = self.create_or_new(mc)
-                final_ids.append(obj.id)
-        qs = self.get_queryset().filter(id__in=final_ids).distinct()
-        return qs
-
-
 class MotCle(models.Model):
     nom = models.CharField(verbose_name="Mot-clé", max_length=64)
-
-    objects = MotCleManager()
 
     class Meta:
         verbose_name = "Mot-clé"

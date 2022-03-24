@@ -73,9 +73,6 @@ class FicheAdmin(admin.ModelAdmin):
         form.base_fields['auteur'].initial = Auteur.get_connected_auteur(request.user)
         return form
 
-    def mots_cles_list(self, obj):
-        mots_cles_list = ", ".join([f"<a href='/fiches/?mots_cles__nom={x.nom}'>{x.nom}</a>" for x in obj.mots_cles.all()])
-        return mark_safe(mots_cles_list)
 
     def save_model(self, request, obj, form, change):
         utiliser_suivant = form.cleaned_data.get('utiliser_suivant')
