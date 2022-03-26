@@ -301,13 +301,13 @@ class EntreeGlossaire(models.Model):
 
         for f in Fiche.objects.filter():
             for t in f.get_descriptions():
-                if re.search('\[%s\]' % e_html, str(t)):
+                if re.search(r'\[%s\]' % e_html, str(t)):
                     result.append(f)
                     break
                 else:
                     found = False
                     for fa in fa_html:
-                        if re.search('\[%s\]' % fa, str(t)):
+                        if re.search(r'\[%s\]' % fa, str(t)):
                             result.append(f)
                             found = True
                             break
