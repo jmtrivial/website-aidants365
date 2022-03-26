@@ -383,6 +383,10 @@ table th:first-child {
     font-size: 80%;
 }
 
+.glossaire {
+    text-decoration: underline dotted #975709;
+}
+
 @media only screen and (max-width: 1200px) {
 
     #content > .column_large, #content  > .column_small {

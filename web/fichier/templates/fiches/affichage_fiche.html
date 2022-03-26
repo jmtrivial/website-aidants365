@@ -69,9 +69,9 @@
         </div>
         <div id="pied">
             <ul>
-                {{ fiche.reserves | affiche_si_existe:"Réserves" | inside_si_existe:"li" }}
-                {{ fiche.lesplus | affiche_si_existe:"Les plus" | inside_si_existe:"li" }}
-                {{ fiche.en_savoir_plus | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" }}
+                {{ fiche.reserves | ajouter_glossaire | affiche_si_existe:"Réserves" | inside_si_existe:"li" }}
+                {{ fiche.lesplus | ajouter_glossaire | affiche_si_existe:"Les plus" | inside_si_existe:"li" }}
+                {{ fiche.en_savoir_plus | ajouter_glossaire | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" }}
                 {% if fiche.fiches_connexes.all %}
                 <li><strong>Fiches connexes&nbsp;:</strong>
                 {% for connexe in fiche.fiches_connexes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:detail' connexe.id %}">{{ connexe.nom }}</a>{% endfor %}

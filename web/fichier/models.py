@@ -283,17 +283,33 @@ class EntreeGlossaire(models.Model):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
     def ajouter_liens(self, text):
-        return re.sub(r'([ \.;" ,!\?])%s([ \.;" ,!\?])' % self.entree.translate(EntreeGlossaire.table), r'\1<a href="/fichier/glossaire/%s/">%s</a>\2' % (str(self.id), self.entree), text)
+        result = re.sub(r'([ \.;" ,!\?])(%s)([ \.;" ,!\?])' % self.entree.translate(EntreeGlossaire.table), r'\1<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\2</a>\3' % str(self.id), text)
+
+        if self.formes_alternatives:
+            for fa in self.formes_alternatives:
+                result = re.sub(r'([ \.;" ,!\?])(%s)([ \.;" ,!\?])' % fa.translate(EntreeGlossaire.table), r'\1<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\2</a>\3' % str(self.id), result)
+
+        return result
 
     def matching_fiches(self):
         result = []
         e_html = self.entree.translate(EntreeGlossaire.table)
+        fa_html = [fa.translate(EntreeGlossaire.table) for fa in self.formes_alternatives]
 
         for f in Fiche.objects.filter():
             for t in f.get_descriptions():
                 if re.search(r'[ \.;" ,!\?]%s[ \.;" ,!\?]' % e_html, str(t)):
                     result.append(f)
                     break
+                else:
+                    found = False
+                    for fa in fa_html:
+                        if re.search(r'[ \.;" ,!\?]%s[ \.;" ,!\?]' % fa, str(t)):
+                            result.append(f)
+                            found = True
+                            break
+                    if found:
+                        break
 
         return result
 
