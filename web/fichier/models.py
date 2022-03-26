@@ -294,7 +294,10 @@ class EntreeGlossaire(models.Model):
     def matching_fiches(self):
         result = []
         e_html = self.entree.translate(EntreeGlossaire.table)
-        fa_html = [fa.translate(EntreeGlossaire.table) for fa in self.formes_alternatives]
+        if self.formes_alternatives:
+            fa_html = [fa.translate(EntreeGlossaire.table) for fa in self.formes_alternatives]
+        else:
+            fa_html = []
 
         for f in Fiche.objects.filter():
             for t in f.get_descriptions():
