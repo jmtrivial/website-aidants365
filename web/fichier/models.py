@@ -283,11 +283,11 @@ class EntreeGlossaire(models.Model):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
     def ajouter_liens(self, text):
-        result = re.sub(r'([ \.;" ,!\?])(%s)([ \.;" ,!\?])' % self.entree.translate(EntreeGlossaire.table), r'\1<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\2</a>\3' % str(self.id), text)
+        result = re.sub(r'\[(%s)\]' % self.entree.translate(EntreeGlossaire.table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), text)
 
         if self.formes_alternatives:
             for fa in self.formes_alternatives:
-                result = re.sub(r'([ \.;" ,!\?])(%s)([ \.;" ,!\?])' % fa.translate(EntreeGlossaire.table), r'\1<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\2</a>\3' % str(self.id), result)
+                result = re.sub(r'\[(%s)\]' % fa.translate(EntreeGlossaire.table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), result)
 
         return result
 
@@ -301,13 +301,13 @@ class EntreeGlossaire(models.Model):
 
         for f in Fiche.objects.filter():
             for t in f.get_descriptions():
-                if re.search(r'[ \.;" ,!\?]%s[ \.;" ,!\?]' % e_html, str(t)):
+                if re.search('\[%s\]' % e_html, str(t)):
                     result.append(f)
                     break
                 else:
                     found = False
                     for fa in fa_html:
-                        if re.search(r'[ \.;" ,!\?]%s[ \.;" ,!\?]' % fa, str(t)):
+                        if re.search('\[%s\]' % fa, str(t)):
                             result.append(f)
                             found = True
                             break
