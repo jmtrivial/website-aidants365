@@ -32,10 +32,10 @@ Glossaire
 
     <div class="block" id="entete">
         <a id="edit_button" href="{% url 'admin:index' %}fichier/entreeglossaire/{{ entree.id }}/change/"><button>éditer (ctrl+e)</button></a>
-        <h1><a href="{% url 'fichier:entree_glossaire' entree.id %}">{{ entree }}</a>
+        <h1>{{ entree }}</h1>
             {% if entree.formes_alternatives %} 
-            <span class="formes-alternatives">({% for alt in entree.formes_alternatives %}{% if not forloop.first %}, {% endif %}{{ alt }}{% endfor %})</span>
-            {% endif %}</h1>
+        <p><strong>{% if entree.formes_alternatives|length > 1 %}Formes alternatives{% else %}Forme alternative{% endif %}&nbsp;:</strong> {% for alt in entree.formes_alternatives %}{% if not forloop.first %}, {% endif %}{{ alt }}{% endfor %}</p>
+            {% endif %}
     </div>
     <div class="block">
             <h2>Définition</h2>

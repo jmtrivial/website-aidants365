@@ -21,6 +21,8 @@ def accueil(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')[:5]
     nbfiches = latest_fiche_list.count()
 
+    nbentreesglossaire = EntreeGlossaire.objects.count()
+
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
 
     nbcategories = 9
@@ -47,7 +49,8 @@ def accueil(request):
                "auteurs": auteurs,
                "themes": themes, "nbthemes": nbthemes,
                "motcles": motcles, "nbmotcles": nbmotcles,
-               "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres
+               "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
+               "nbentreesglossaire": nbentreesglossaire
                }
     return render(request, 'fiches/accueil.html', context)
 
