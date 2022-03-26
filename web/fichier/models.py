@@ -5,7 +5,7 @@ from django.db.models.signals import pre_save, post_init
 from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
-from django.contrib.postgres.fields import ArrayField
+from django_better_admin_arrayfield.models.fields import ArrayField
 
 import logging
 logger = logging.getLogger(__name__)
@@ -278,15 +278,20 @@ class Fiche(models.Model):
 
 class EntreeGlossaire(models.Model):
 
-
     class Meta:
         verbose_name = "Entrée du glossaire"
         verbose_name_plural = "Entrées du glossaire"
 
+    def __str__(self):
+        return self.entree
+
     entree = models.CharField(verbose_name="Entrée", max_length=64)
-    formes_alternatives = ArrayField(models.CharField(max_length=64, blank=True, null=True), verbose_name="Formes alternatives (pluriels, abréviations, etc)", size=8)
+    formes_alternatives = ArrayField(models.CharField(max_length=64, blank=True), verbose_name="Formes alternatives (pluriels, abréviations, etc)", blank=True, null=True)
 
     definition = RichTextField(verbose_name="Définition", config_name='main_ckeditor', blank=True)
+
+    def get_absolute_url(self):
+        return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
 
 @receiver(pre_save, sender=Fiche)

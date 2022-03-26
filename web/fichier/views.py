@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle
+from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire
 from django.shortcuts import get_object_or_404, render
 from .forms import FicheForm
 from django.db.models import Count, Q, Case, When, IntegerField
@@ -294,6 +294,20 @@ def rechercher(request):
             results = Fiche.rechercher(recherche)
 
     return render(request, 'fiches/rechercher.html', {'results': results, 'recherche': recherche})
+
+
+@login_required
+def glossaire(request):
+    entrees = EntreeGlossaire.objects.order_by('entree')
+    context = {'entrees': entrees}
+    return render(request, 'fiches/index_entree_glossaire.html', context)
+
+
+@login_required
+def entree_glossaire(request, id):
+    entree = get_object_or_404(EntreeGlossaire, pk=id)
+    context = {'entree': entree}
+    return render(request, 'fiches/entree_glossaire.html', context)
 
 
 class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):

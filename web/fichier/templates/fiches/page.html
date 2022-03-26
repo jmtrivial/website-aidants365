@@ -22,8 +22,10 @@
           <li {% if active_page == "categories" %}class="actif"{% endif %}><a href="{% url 'fichier:categories' %}">Catégories</a></li>
           <li {% if active_page == "themes" %}class="actif"{% endif %}><a href="{% url 'fichier:themes' %}">Thèmes</a></li>
           <li {% if active_page == "motscles" %}class="actif"{% endif %}><a href="{% url 'fichier:motscles' %}">Mots-clés</a></li>
+          <li {% if active_page == "glossaire" %}class="actif"{% endif %}><a href="{% url 'fichier:glossaire' %}">Glossaire</a></li>
           <li class="onglet_rechercher {% if active_page == "rechercher" %}actif{% endif %}"><a href="{% url 'fichier:rechercher' %}">Rechercher</a></li>
-          <li class="bouton espace-gauche" id="ajouter_fiche"><a href="{%url 'admin:fichier_fiche_add' %}" title="créer une fiche">+ créer une fiche</a></li>
+          <li class="bouton espace-gauche" id="ajouter_fiche"><a href="{%url 'admin:fichier_fiche_add' %}" title="créer une fiche">+ fiche</a></li>
+          <li class="bouton" id="ajouter_entree_glossaire"><a href="{%url 'admin:fichier_entreeglossaire_add' %}" title="créer une entrée de glossaire">+ entrée glossaire</a></li>
           <li class="icon"><a href="javascript:void(0);" onclick="switchMenuBar()">
             &#9776;
           </a></li>
