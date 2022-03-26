@@ -143,6 +143,7 @@ a:hover {
     cursor: pointer;
     font-size: inherit;
     display: inline-block;
+    margin-right: 0.5em;
 }
 #menubar .bouton a, #menubar .bouton span {
     line-height: 1.5em;
@@ -375,6 +376,11 @@ table th:first-child {
 
 #menubar .onglet_rechercher {
     display: none;
+}
+
+.formes-alternatives {
+    color: #777;
+    font-size: 80%;
 }
 
 @media only screen and (max-width: 1200px) {
