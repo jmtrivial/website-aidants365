@@ -138,4 +138,5 @@ class EntreeGlossaireAdmin(admin.ModelAdmin, DynamicArrayMixin):
             # Otherwise, use default behavior
             return super().response_post_save_change(request, obj)
 
+
 admin.site.register(EntreeGlossaire, EntreeGlossaireAdmin)

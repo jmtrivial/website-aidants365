@@ -38,7 +38,20 @@ Glossaire
             {% endif %}</h1>
     </div>
     <div class="block">
-            {{ entree.definition }}
+            <h2>Définition</h2>
+            {{ entree.definition | safe }}
     </div>
-</div>
+    {% with entree.matching_fiches as list_fiches %}
+    {% if list_fiches %}
+    <div class="block">
+        <h2>Fiches faisant mention de cette entrée</h2>
+    <ul>
+        {% for fiche in entree.matching_fiches %}
+            <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+
 {% endblock %}

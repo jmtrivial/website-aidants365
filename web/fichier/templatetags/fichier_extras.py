@@ -1,6 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
-from fichier.models import Categorie, Niveau
+from fichier.models import Categorie, Niveau, EntreeGlossaire
 
 register = template.Library()
 
@@ -100,3 +100,12 @@ def get_carre_colore_B():
 @register.simple_tag
 def get_carre_colore_C():
     return carre_colore(Niveau.couleur_C)
+
+
+@register.filter
+def ajouter_glossaire(texte):
+    result = texte
+
+    for e in EntreeGlossaire.objects.filter():
+        result = e.ajouter_liens(result)
+    return result

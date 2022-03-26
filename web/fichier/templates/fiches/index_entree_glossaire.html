@@ -36,7 +36,7 @@ Glossaire
                 <span class="formes-alternatives">({% for alt in entree.formes_alternatives %}{% if not forloop.first %}, {% endif %}{{ alt }}{% endfor %})</span>
                 {% endif %}
             </h2>
-            {{ entree.definition }}
+            {{ entree.definition | safe }}
         {% endfor %}
     {% else %}
         <p>Pas d'entée de glossaire disponible.</p>

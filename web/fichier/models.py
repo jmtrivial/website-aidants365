@@ -6,6 +6,8 @@ from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django_better_admin_arrayfield.models.fields import ArrayField
+import re
+import html.entities
 
 import logging
 logger = logging.getLogger(__name__)
@@ -226,6 +228,11 @@ class Fiche(models.Model):
         verbose_name_plural = "Fiches"
         ordering = ["auteur", "numero"]
 
+    def get_descriptions(self):
+        return [self.presentation, self.problematique, self.quatrieme_de_couverture,
+                self.plan_du_site, self.focus,
+                self.reserves, self.lesplus, self.en_savoir_plus]
+
     def __str__(self):
         return " ".join(map(str, [self.niveau, self.categorie1, self.auteur, "{:04d}".format(self.numero), self.titre_fiche]))
 
@@ -278,6 +285,8 @@ class Fiche(models.Model):
 
 class EntreeGlossaire(models.Model):
 
+    table = {k: '&{};'.format(v) for k, v in html.entities.codepoint2name.items()}
+
     class Meta:
         verbose_name = "Entrée du glossaire"
         verbose_name_plural = "Entrées du glossaire"
@@ -292,6 +301,21 @@ class EntreeGlossaire(models.Model):
 
     def get_absolute_url(self):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
+
+    def ajouter_liens(self, text):
+        return re.sub(r'([ \.;" ,!\?])%s([ \.;" ,!\?])' % self.entree.translate(EntreeGlossaire.table), r'\1<a href="/fichier/glossaire/%s/">%s</a>\2' % (str(self.id), self.entree), text)
+
+    def matching_fiches(self):
+        result = []
+        e_html = self.entree.translate(EntreeGlossaire.table)
+
+        for f in Fiche.objects.filter():
+            for t in f.get_descriptions():
+                if re.search(r'[ \.;" ,!\?]%s[ \.;" ,!\?]' % e_html, str(t)):
+                    result.append(f)
+                    break
+
+        return result
 
 
 @receiver(pre_save, sender=Fiche)
