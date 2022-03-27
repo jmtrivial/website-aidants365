@@ -279,8 +279,8 @@ class EntreeGlossaire(models.Model):
     def __str__(self):
         return self.entree
 
-    entree = models.CharField(verbose_name="Entrée", max_length=64)
-    formes_alternatives = ArrayField(models.CharField(max_length=64, blank=True), verbose_name="Formes alternatives (pluriels, abréviations, etc)", blank=True, null=True)
+    entree = models.CharField(verbose_name="Entrée", max_length=128)
+    formes_alternatives = ArrayField(models.CharField(max_length=128, blank=True), verbose_name="Formes alternatives (pluriels, abréviations, etc)", blank=True, null=True)
 
     definition = RichTextField(verbose_name="Définition", config_name='main_ckeditor', blank=True)
 
