@@ -112,17 +112,8 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% block gauche2 %}
 <h2>Les {{ nbmotcles }} principaux mots-clés</h2>
 {% if motcles %}
-    <ul class="cols3">
-    {% for motcle in motcles %}
-        <li>
-            {% if motcle.fiche_count %}    
-            <a href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a> <span class="fiche_count">{{ motcle.fiche_count }}</span>
-            {% else %}
-            <span class="not_available">{{ motcle }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
+    {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" %}    
+
     <div class="suite">Voir <a href="{% url 'fichier:motscles' %}">tous les mots-clés ▸</a></div>
 {% else %}
     <p>Pas de mot-clé disponible.</p>
