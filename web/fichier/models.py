@@ -12,6 +12,7 @@ import html.entities
 import logging
 logger = logging.getLogger(__name__)
 
+table = {k: '&{};'.format(v) for k, v in html.entities.codepoint2name.items()}
 
 class Niveau(models.Model):
 
@@ -234,6 +235,9 @@ class Fiche(models.Model):
         from django.contrib.postgres.search import SearchVector
         from django.contrib.postgres.search import SearchQuery
 
+        if not search_text:
+            return None
+
         search_vectors = SearchVector('presentation', weight='A', config='french') + \
             SearchVector('problematique', weight='A', config='french') + \
             SearchVector('quatrieme_de_couverture', weight='A', config='french') + \
@@ -260,12 +264,11 @@ class Fiche(models.Model):
             SearchVector('reserves', weight='C', config='french') + \
             SearchVector('lesplus', weight='C', config='french') + \
             SearchVector('en_savoir_plus', weight='C', config='french')
-        return Fiche.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text, config='french'))
+        return Fiche.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text.translate(table), config='french'))
 
 
 class EntreeGlossaire(models.Model):
 
-    table = {k: '&{};'.format(v) for k, v in html.entities.codepoint2name.items()}
 
     class Meta:
         verbose_name = "Entrée du glossaire"
@@ -283,19 +286,19 @@ class EntreeGlossaire(models.Model):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
     def ajouter_liens(self, text):
-        result = re.sub(r'\[(%s)\]' % self.entree.translate(EntreeGlossaire.table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), text)
+        result = re.sub(r'\[(%s)\]' % self.entree.translate(table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), text)
 
         if self.formes_alternatives:
             for fa in self.formes_alternatives:
-                result = re.sub(r'\[(%s)\]' % fa.translate(EntreeGlossaire.table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), result)
+                result = re.sub(r'\[(%s)\]' % fa.translate(table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), result)
 
         return result
 
     def matching_fiches(self):
         result = []
-        e_html = self.entree.translate(EntreeGlossaire.table)
+        e_html = self.entree.translate(table)
         if self.formes_alternatives:
-            fa_html = [fa.translate(EntreeGlossaire.table) for fa in self.formes_alternatives]
+            fa_html = [fa.translate(table) for fa in self.formes_alternatives]
         else:
             fa_html = []
 
