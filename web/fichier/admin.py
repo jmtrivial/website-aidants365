@@ -169,5 +169,5 @@ class EntreeCalendrierAdmin(admin.ModelAdmin):
             # Otherwise, use default behavior
             return super().response_post_save_change(request, obj)
 
-admin.site.register(EntreeCalendrier, EntreeCalendrierAdmin)
 
+admin.site.register(EntreeCalendrier, EntreeCalendrierAdmin)

@@ -352,7 +352,6 @@ class EntreeCalendrier(models.Model):
         return e.ephemeride()
 
 
-
 @receiver(pre_save, sender=Fiche)
 def my_callback_pre_save(sender, instance, **kwargs):
     if instance.date_derniere_modification == instance.__original_date_derniere_modification:

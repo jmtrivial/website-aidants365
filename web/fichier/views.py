@@ -18,6 +18,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .utils import Calendrier, Ephemeride
 
+
 def annoter_class_nuage(objects):
     nb_max = 5
     nb = objects.aggregate(Max("fiche_count"))["fiche_count__max"]

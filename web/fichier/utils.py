@@ -5,10 +5,11 @@ from datetime import datetime as dtime, date, time
 import datetime
 from django.utils.translation import gettext as _
 
+
 class Ephemeride:
 
-    def __init__(self, date=None, url="", empty=True):
-        self.date = date
+    def __init__(self, d=None, url="", empty=True):
+        self.date = d
         self.empty = empty
         self.url = url
 
@@ -30,8 +31,7 @@ class Ephemeride:
 
     def ephemeride(self):
         if self.empty:
-            return self._ephemeride(url="/admin/fichier/entreecalendrier/add/?date=" + \
-                    str(self.day()) + '/' + str(self.month()) + '/' + str(self.year()))
+            return self._ephemeride(url="/admin/fichier/entreecalendrier/add/?date=" + str(self.day()) + '/' + str(self.month()) + '/' + str(self.year()))
         else:
             return self._ephemeride(url=self.url)
 
@@ -59,23 +59,23 @@ class Calendrier(LocaleHTMLCalendar):
                 event_html = '<a class="day missing-day" href="/admin/fichier/entreecalendrier/add/?date=' + \
                     str(day) + '/' + str(themonth) + '/' + str(theyear) + \
                     '">' + str(day) + "</a>"
-    
+
             return '<td class="%s">%s</td>' % (self.cssclasses[weekday], event_html)
- 
+
     def formatweek(self, theyear, themonth, theweek, events):
         """
         Return a complete week as a table row.
         """
         s = ''.join(self.formatday(theyear, themonth, d, wd, events) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
- 
+
     def formatmonth(self, theyear, themonth, withyear=True):
         """
         Return a formatted month as a table.
         """
- 
+
         events = self.events.filter(date__year=theyear, date__month=themonth)
- 
+
         v = []
         a = v.append
         a('<table border="0" cellpadding="0" cellspacing="0" class="month">')
