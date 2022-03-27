@@ -1,0 +1,52 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "calendrier" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Le fichier Aidants365 — Calendrier {{ entree.date }}
+{% endblock %}
+
+
+
+
+{% block entete %}
+Glossaire
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="block" id="entete">
+        <h1><a href="{% url 'fichier:calendrier' %}">Calendrier</a>&nbsp;: {{ entree.date }} <a class="card_edit" href="{% url 'admin:index' %}fichier/entreecalendrier/{{ entree.id }}/change/">éditer</a></h1>
+    </div>
+    <div class="block">
+        {% if entree.themes.all %}
+        <strong>Thèmes&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
+        {% endif %}
+        {% if entree.motscles.all %}
+        <strong>Mots-clés&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
+        {% endif %}
+
+        <h2>Notes</h2>
+        {{ entree.notes|safe }}
+
+        {% if entree.fiches_associees.all %}
+        <h2>Fiches associées</h2>
+        <ul>
+        {% for associee in entree.fiches_associees.all %}
+            <li><a class="internal" href="{% url 'fichier:detail' associee.id %}">{{ associee }}</a></li>
+        {% endfor %}
+        </li>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

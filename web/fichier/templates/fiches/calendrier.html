@@ -1,0 +1,34 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "calendrier" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Le fichier Aidants365 — Calendrier
+{% endblock %}
+
+
+
+
+{% block entete %}
+Glossaire
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="block" id="entete">
+        <h1>Calendrier</h1>
+    </div>
+    <div class="block">
+        {{ calendrier.annee_courante | safe }}
+    </div>
+</div>
+{% endblock %}

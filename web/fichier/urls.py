@@ -38,4 +38,6 @@ urlpatterns = [
     path('motcle/<int:id1>/<int:id2>/', views.index_motcle_detail, name='index_motcle_detail'),
     path('glossaire/', views.glossaire, name='glossaire'),
     path('glossaire/<int:id>/', views.entree_glossaire, name='entree_glossaire'),
+    path('calendrier/', views.calendrier, name='calendrier'),
+    path('calendrier/<int:id>/', views.entree_calendrier, name='entree_calendrier'),
 ]

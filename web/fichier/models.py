@@ -325,6 +325,28 @@ class EntreeGlossaire(models.Model):
         return result
 
 
+class EntreeCalendrier(models.Model):
+
+    class Meta:
+        verbose_name = "Entrée du calendrier"
+        verbose_name_plural = "Entrées du calendrier"
+
+    date = models.DateField()
+
+    themes = models.ManyToManyField(Theme, verbose_name="Thèmes associées", blank=True)
+    motscles = models.ManyToManyField(MotCle, verbose_name="Mots-clés associées", blank=True)
+
+    notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True)
+
+    fiches_associees = models.ManyToManyField(Fiche, verbose_name="Fiches associées", blank=True)
+
+    def get_absolute_url(self):
+        return reverse('fichier:entree_calendrier', kwargs={'id': self.pk})
+
+    def __str__(self):
+        return str(self.date)
+
+
 @receiver(pre_save, sender=Fiche)
 def my_callback_pre_save(sender, instance, **kwargs):
     if instance.date_derniere_modification == instance.__original_date_derniere_modification:

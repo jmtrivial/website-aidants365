@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 
-from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie, EntreeGlossaire
+from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie, EntreeGlossaire, EntreeCalendrier
 from .forms import FicheForm
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
@@ -139,3 +139,35 @@ class EntreeGlossaireAdmin(admin.ModelAdmin, DynamicArrayMixin):
 
 
 admin.site.register(EntreeGlossaire, EntreeGlossaireAdmin)
+
+
+class EntreeCalendrierAdmin(admin.ModelAdmin):
+    search_fields = ('notes', )
+
+    @admin.display(empty_value='???', description='Lien')
+    def custom_link(self, obj):
+        return mark_safe(f'<a href="{obj.get_absolute_url()}">voir l\'entrée</a>')
+
+    autocomplete_fields = ['themes', 'motscles', 'fiches_associees']
+
+    def render_change_form(self, request, context, *args, **kwargs):
+        """We need to update the context to show the button."""
+        context.update({'show_save_and_view': True})
+        return super().render_change_form(request, context, *args, **kwargs)
+
+    def response_post_save_change(self, request, obj):
+        """This method is called by `self.changeform_view()` when the form
+        was submitted successfully and should return an HttpResponse.
+        """
+        # Check that you clicked the button `_save_and_view`
+        if '_save_and_view' in request.POST:
+            view_url = obj.get_absolute_url()
+
+            # And redirect
+            return HttpResponseRedirect(view_url)
+        else:
+            # Otherwise, use default behavior
+            return super().response_post_save_change(request, obj)
+
+admin.site.register(EntreeCalendrier, EntreeCalendrierAdmin)
+

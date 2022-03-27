@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire
+from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeCalendrier
 from django.shortcuts import get_object_or_404, render
 from .forms import FicheForm
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value
@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
+from .utils import Calendrier
 
 def annoter_class_nuage(objects):
     nb_max = 5
@@ -353,6 +354,21 @@ def entree_glossaire(request, id):
     entree = get_object_or_404(EntreeGlossaire, pk=id)
     context = {'entree': entree}
     return render(request, 'fiches/entree_glossaire.html', context)
+
+
+@login_required
+def calendrier(request):
+    entrees = EntreeCalendrier.objects
+    ca = Calendrier(entrees, 0, 'fr_FR.UTF-8')
+    context = {'calendrier': ca}
+    return render(request, 'fiches/calendrier.html', context)
+
+
+@login_required
+def entree_calendrier(request, id):
+    entree = get_object_or_404(EntreeCalendrier, pk=id)
+    context = {'entree': entree}
+    return render(request, 'fiches/entree_calendrier.html', context)
 
 
 class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):

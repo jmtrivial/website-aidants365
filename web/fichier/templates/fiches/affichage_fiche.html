@@ -75,7 +75,7 @@
                 {{ fiche.en_savoir_plus | ajouter_glossaire | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" }}
                 {% if fiche.fiches_connexes.all %}
                 <li><strong>Fiches connexes&nbsp;:</strong>
-                {% for connexe in fiche.fiches_connexes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:detail' connexe.id %}">{{ connexe.nom }}</a>{% endfor %}
+                {% for connexe in fiche.fiches_connexes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:detail' connexe.id %}">{{ connexe }}</a>{% endfor %}
                 </li>
                 {% endif %}
             </ul>

@@ -422,6 +422,18 @@ a.nuage-5-5, a.nuage-4-4:visited {
     color: #081827;
 }
 
+a.day {
+    display: block;
+    background: #fff;
+    font-weight: bold;
+}
+
+a.missing-day {
+    background: transparent;
+    font-weight: normal;
+    color: red;
+}
+
 @media only screen and (max-width: 1200px) {
 
     #content > .column_large, #content  > .column_small {
