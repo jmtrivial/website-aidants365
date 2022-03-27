@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 table = {k: '&{};'.format(v) for k, v in html.entities.codepoint2name.items()}
 
+
 class Niveau(models.Model):
 
     class Applicabilite(models.TextChoices):
@@ -268,7 +269,6 @@ class Fiche(models.Model):
 
 
 class EntreeGlossaire(models.Model):
-
 
     class Meta:
         verbose_name = "Entrée du glossaire"
