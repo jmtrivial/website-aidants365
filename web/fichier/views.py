@@ -44,7 +44,7 @@ def accueil(request):
     nbthemes = themes.count()
 
     nbmotcles = 20
-    motcles = MotCle.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbmotcles]
+    motcles = MotCle.objects.annotate(fiche_count=Count('fiche')).order_by("nom")[:nbmotcles]
     motcles = annoter_class_nuage(motcles)
     nbmotcles = motcles.count()
 

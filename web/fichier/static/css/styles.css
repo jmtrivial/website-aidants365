@@ -397,27 +397,27 @@ table th:first-child {
     margin: auto;
 }
 
-.nuage-1-5, .nuage-0-4:visited {
+a.nuage-1-5, a.nuage-0-4:visited {
     font-size: 80%;
     color: #6089af;
 }
 
-.nuage-2-5, .nuage-1-4:visited {
+a.nuage-2-5, a.nuage-1-4:visited {
     font-size: 100%;
     color: #2f5980;
 }
 
-.nuage-3-5, .nuage-2-4:visited {
+a.nuage-3-5, a.nuage-2-4:visited {
     font-size: 130%;
     color: #16395a;
 }
 
-.nuage-4-5, .nuage-3-4:visited {
+a.nuage-4-5, a.nuage-3-4:visited {
     font-size: 190%;
     color: #0d253b;
 }
 
-.nuage-5-5, .nuage-4-4:visited {
+a.nuage-5-5, a.nuage-4-4:visited {
     font-size: 250%;
     color: #081827;
 }
