@@ -4,7 +4,7 @@ from calendar import LocaleHTMLCalendar
 from datetime import datetime as dtime, date, time
 import datetime
 from django.utils.translation import gettext as _
-
+import locale
 
 class Ephemeride:
 
@@ -43,6 +43,27 @@ class Calendrier(LocaleHTMLCalendar):
 
     def annee_courante(self):
         return self.formatyear(2022, 1)
+
+    def formatmonthname(self, theyear, themonth, withyear=True):
+        """
+        Return a month name as a table row.
+        """
+        month_name = ["", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" ]
+        if withyear:
+            s = '%s %s' % (month_name[themonth], theyear)
+        else:
+            s = '%s' % month_name[themonth]
+        return '<tr><th colspan="7" class="%s">%s</th></tr>' % (
+            self.cssclass_month_head, s)
+
+    def formatweekday(self, day):
+        """
+        Return a weekday name as a table header.
+        """
+        day_abbr = ["Lun", "Ma", "Mer", "Je", "Ven", "Sam", "Di"]
+
+        return '<th class="%s">%s</th>' % (
+            self.cssclasses_weekday_head[day], day_abbr[day])
 
     def formatday(self, theyear, themonth, day, weekday, events):
         """
