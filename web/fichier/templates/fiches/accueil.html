@@ -114,7 +114,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% if motcles %}
     {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" %}    
 
-    <div class="suite">Voir <a href="{% url 'fichier:motscles' %}">tous les mots-clés ▸</a></div>
+    <div class="suite">Voir <a href="{% url 'fichier:motscles_nuage' %}">tous les mots-clés ▸</a></div>
 {% else %}
     <p>Pas de mot-clé disponible.</p>
 {% endif %}
