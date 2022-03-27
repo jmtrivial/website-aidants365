@@ -1,6 +1,8 @@
 from django import template
 from django.utils.safestring import mark_safe
 from fichier.models import Categorie, Niveau, EntreeGlossaire
+import re
+
 
 register = template.Library()
 
@@ -108,4 +110,7 @@ def ajouter_glossaire(texte):
 
     for e in EntreeGlossaire.objects.filter():
         result = e.ajouter_liens(result)
+
+    result = re.sub(r'\[([^\]<>]*)\]', r'<a class="glossaire-creer" title="ajouter « \1 » au glossaire" href="/admin/fichier/entreeglossaire/add/?entree=\1">\1</a>', result)
+
     return result

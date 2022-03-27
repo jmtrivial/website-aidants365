@@ -383,8 +383,12 @@ table th:first-child {
     font-size: 80%;
 }
 
-.glossaire {
+.glossaire, .glossaire-creer {
     text-decoration: underline dotted #975709;
+}
+
+.glossaire-creer {
+    color: #F00 !important;
 }
 
 @media only screen and (max-width: 1200px) {
