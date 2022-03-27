@@ -6,6 +6,7 @@ import datetime
 from django.utils.translation import gettext as _
 import locale
 
+
 class Ephemeride:
 
     def __init__(self, d=None, url="", empty=True):
@@ -48,7 +49,7 @@ class Calendrier(LocaleHTMLCalendar):
         """
         Return a month name as a table row.
         """
-        month_name = ["", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" ]
+        month_name = ["", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
         if withyear:
             s = '%s %s' % (month_name[themonth], theyear)
         else:
