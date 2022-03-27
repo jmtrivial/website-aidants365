@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django_better_admin_arrayfield.models.fields import ArrayField
 import re
 import html.entities
+from django.utils.html import strip_tags
+from django.utils.text import Truncator
 
 import logging
 logger = logging.getLogger(__name__)
@@ -285,12 +287,15 @@ class EntreeGlossaire(models.Model):
     def get_absolute_url(self):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
+    def ajouter_liens_entree(self, text, entree):
+        return re.sub(r'\[(%s)\]' % entree.translate(table), r'<a title="%s" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % (Truncator(strip_tags(self.definition)).words(64), str(self.id)), text)
+
     def ajouter_liens(self, text):
-        result = re.sub(r'\[(%s)\]' % self.entree.translate(table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), text)
+        result = self.ajouter_liens_entree(text, self.entree)
 
         if self.formes_alternatives:
             for fa in self.formes_alternatives:
-                result = re.sub(r'\[(%s)\]' % fa.translate(table), r'<a title="voir dans le glossaire" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % str(self.id), result)
+                result = self.ajouter_liens_entree(result, fa)
 
         return result
 
