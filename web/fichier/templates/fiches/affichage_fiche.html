@@ -19,7 +19,8 @@
                         <a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{{ fiche.categorie1 }}</a>
                         <a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{{ fiche.auteur }}</a>
                         {{ fiche.numero  | number_xxxx }}</p>
-                    <h1>{{ fiche.titre_fiche }}<br> <small>{{ fiche.sous_titre }}</small> </h1>
+                    <h1>{{ fiche.titre_fiche }}</h1>
+                    <h2>{{ fiche.sous_titre }}</h2>
                 </div>
                 <div class="droite">
                     <strong>Catégorie</strong><br />

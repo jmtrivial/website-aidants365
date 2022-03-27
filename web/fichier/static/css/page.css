@@ -21,11 +21,14 @@ page .internal:hover {
 page h1 {
     font-size: 22pt;
     margin: 0;
+    padding: 0;
 }
 
-page h1 small { 
+page h2 { 
     font-weight: normal; 
     font-size: 16pt;
+    margin: 0;
+    padding: 0;
 }
 
 
@@ -49,6 +52,7 @@ page #contenu_page {
 page #entete {
     display: flex;
     flex-grow: 0;
+    margin-bottom: 0.2em;
 }
 
 page #entete .gauche {
@@ -56,6 +60,7 @@ page #entete .gauche {
     float: left;
     font-style: italic;
     border: 0;
+    padding-right: 0.2em;
 }
 page #entete .droite {
     width: 32%;
