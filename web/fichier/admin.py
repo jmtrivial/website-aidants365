@@ -77,6 +77,9 @@ class FicheAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         utiliser_suivant = form.cleaned_data.get('utiliser_suivant')
 
+        if not obj.id:
+            obj.save()
+
         if utiliser_suivant:
             obj.numero = Fiche.get_numero_suivant(form.cleaned_data.get('auteur'))
 

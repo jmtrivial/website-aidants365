@@ -67,18 +67,12 @@
         list_fields.forEach(function(item, index, array) {
           field = ".field-" + item + " input";
           var els = document.querySelectorAll(field);
-          for (var x = 0; x < els.length; x++)
-            if (enable)
-              els[x].removeAttribute("disabled");
-            else
-            els[x].setAttribute("disabled", 'disabled');
-            field = ".field-" + item;
           els = document.querySelectorAll(field);
           for (var x = 0; x < els.length; x++)
             if (enable)
-              els[x].style.opacity = 1;
+              els[x].style.visibility = "visible";
             else
-              els[x].style.opacity = 0.2;
+              els[x].style.visibility = "hidden";
         });
       }
 
