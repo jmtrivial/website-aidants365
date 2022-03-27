@@ -288,7 +288,7 @@ class EntreeGlossaire(models.Model):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
     def ajouter_liens_entree(self, text, entree):
-        return re.sub(r'\[(%s)\]' % entree.translate(table), r'<a title="%s" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % (Truncator(strip_tags(self.definition)).words(64), str(self.id)), text)
+        return re.sub(r'\[(%s)\]' % entree.translate(table), r'<a title="%s" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % (Truncator(strip_tags(self.definition)).words(64), str(self.id)), text, flags=re.I)
 
     def ajouter_liens(self, text):
         result = self.ajouter_liens_entree(text, self.entree)
@@ -309,13 +309,13 @@ class EntreeGlossaire(models.Model):
 
         for f in Fiche.objects.filter():
             for t in f.get_descriptions():
-                if re.search(r'\[%s\]' % e_html, str(t)):
+                if re.search(r'\[%s\]' % e_html, str(t), flags=re.I):
                     result.append(f)
                     break
                 else:
                     found = False
                     for fa in fa_html:
-                        if re.search(r'\[%s\]' % fa, str(t)):
+                        if re.search(r'\[%s\]' % fa, str(t), flags=re.I):
                             result.append(f)
                             found = True
                             break
