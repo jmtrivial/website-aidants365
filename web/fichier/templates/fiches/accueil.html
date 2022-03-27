@@ -110,7 +110,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% endblock %}
 
 {% block gauche2 %}
-<h2>Les {{ nbmotcles }} principaux mots-clés</h2>
+<h2>Nuage de mots-clés</h2>
 {% if motcles %}
     {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" %}    
 

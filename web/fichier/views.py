@@ -43,10 +43,8 @@ def accueil(request):
     themes = Theme.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbthemes]
     nbthemes = themes.count()
 
-    nbmotcles = 20
-    motcles = MotCle.objects.annotate(fiche_count=Count('fiche')).order_by("nom")[:nbmotcles]
+    motcles = MotCle.objects.annotate(fiche_count=Count('fiche')).order_by("nom")
     motcles = annoter_class_nuage(motcles)
-    nbmotcles = motcles.count()
 
     nbcategorieslibres = 9
     categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbcategorieslibres]
@@ -57,7 +55,7 @@ def accueil(request):
                "categories": categories, "nbcategories": nbcategories,
                "auteurs": auteurs,
                "themes": themes, "nbthemes": nbthemes,
-               "motcles": motcles, "nbmotcles": nbmotcles,
+               "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
                "nbentreesglossaire": nbentreesglossaire
                }
