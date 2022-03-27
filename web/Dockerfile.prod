@@ -23,7 +23,7 @@ RUN flake8 --ignore=E501,F401 .
 
 # install dependencies
 COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+RUN pip wheel --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
 
 
 #########
@@ -51,7 +51,7 @@ RUN apk update && apk add libpq fontconfig msttcorefonts-installer python3-dev g
 RUN update-ms-fonts
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
-RUN pip install --no-cache /wheels/*
+RUN pip install /wheels/*
 
 # copy entrypoint.prod.sh
 COPY ./entrypoint.prod.sh .
