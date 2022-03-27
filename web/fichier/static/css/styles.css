@@ -167,6 +167,11 @@ a:hover {
     width: 50%;
 }
 
+.column3 {
+    float: left;
+    width: 33%;
+}
+
 .column_small {
     float: left;
     width: 30%;
@@ -522,7 +527,46 @@ a.missing-day {
     .cols4 {
         columns: 1;
     }
+    .column3 {
+        width: 100%;
+    }
 }
+
+.ephemeride {
+    display: block;
+    width: 6em;
+    margin: auto;
+}
+.ephemeride a {
+    padding: 1em 0;
+    display: block;
+    box-shadow: 0 0 0.2em rgba(0,0,0,0.3);
+    border-radius: 0.2em;
+}
+
+.ephemeride a:hover {
+    text-decoration: none;
+    color: #000;
+    background: #fdfdfd;
+    box-shadow: 0 0 0.1em rgba(0,0,0,0.3);
+}
+
+.ephemeride div {
+    width: 100%;
+    text-align: center;
+}
+.ephemeride .jour_semaine {
+    color: #222;
+}
+.ephemeride .jour {
+    color: #c00;
+    font-size: 250%;
+}
+.ephemeride .mois {
+    color: #222;
+    font-variant: small-caps;    
+}
+
 
 
 @media 

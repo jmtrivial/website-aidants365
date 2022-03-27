@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from .forms import FicheForm
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value
 from decimal import Decimal
+from django.utils import timezone
 
 from django.views.generic import DetailView
 
@@ -15,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import Calendrier
+from .utils import Calendrier, Ephemeride
 
 def annoter_class_nuage(objects):
     nb_max = 5
@@ -51,6 +52,12 @@ def accueil(request):
     categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbcategorieslibres]
     nbcategorieslibres = categories_libres.count()
 
+    entrees_calendriers = EntreeCalendrier.objects.filter(date=timezone.now())
+    if entrees_calendriers.count() == 0:
+        entree_calendrier = Ephemeride(timezone.now())
+    else:
+        entree_calendrier = entrees_calendriers[0]
+
     context = {'fiche_list': latest_fiche_list, 'nbfiches': nbfiches,
                "nbfichestotal": Fiche.objects.count(), "niveaux": niveaux,
                "categories": categories, "nbcategories": nbcategories,
@@ -58,7 +65,8 @@ def accueil(request):
                "themes": themes, "nbthemes": nbthemes,
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
-               "nbentreesglossaire": nbentreesglossaire
+               "nbentreesglossaire": nbentreesglossaire,
+               "entree_calendrier": entree_calendrier
                }
     return render(request, 'fiches/accueil.html', context)
 

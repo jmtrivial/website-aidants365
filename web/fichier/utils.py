@@ -3,7 +3,37 @@
 from calendar import LocaleHTMLCalendar
 from datetime import datetime as dtime, date, time
 import datetime
-from .models import EntreeCalendrier
+from django.utils.translation import gettext as _
+
+class Ephemeride:
+
+    def __init__(self, date=None, url="", empty=True):
+        self.date = date
+        self.empty = empty
+        self.url = url
+
+    def day(self):
+        return self.date.day
+
+    def month(self):
+        return self.date.month
+
+    def year(self):
+        return self.date.year
+
+    def _ephemeride(self, url):
+        return "<div class=\"ephemeride\"><a href=\"" + url + "\"> \
+            <div class=\"jour_semaine\">" + _(self.date.strftime("%A")) + "</div> \
+            <div class=\"jour\">" + str(self.date.day) + "</div> \
+            <div class=\"mois\">" + _(self.date.strftime("%B")) + "</div> \
+            </a></div>"
+
+    def ephemeride(self):
+        if self.empty:
+            return self._ephemeride(url="/admin/fichier/entreecalendrier/add/?date=" + \
+                    str(self.day()) + '/' + str(self.month()) + '/' + str(self.year()))
+        else:
+            return self._ephemeride(url=self.url)
 
 
 class Calendrier(LocaleHTMLCalendar):

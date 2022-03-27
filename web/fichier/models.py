@@ -10,6 +10,7 @@ import re
 import html.entities
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
+from .utils import Ephemeride
 
 import logging
 logger = logging.getLogger(__name__)
@@ -345,6 +346,11 @@ class EntreeCalendrier(models.Model):
 
     def __str__(self):
         return str(self.date)
+
+    def ephemeride(self):
+        e = Ephemeride(self.date, self.get_absolute_url(), False)
+        return e.ephemeride()
+
 
 
 @receiver(pre_save, sender=Fiche)
