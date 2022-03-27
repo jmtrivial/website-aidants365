@@ -17,9 +17,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 def annoter_class_nuage(objects):
-    nb_max = 4
+    nb_max = 5
     nb = objects.aggregate(Max("fiche_count"))["fiche_count__max"]
-    return objects.annotate(classe_nuage=ExpressionWrapper(F('fiche_count') / Decimal(nb) * Decimal(nb_max), output_field=IntegerField())). \
+    return objects.annotate(classe_nuage=ExpressionWrapper(F('fiche_count') * Decimal(nb_max) / Decimal(nb), output_field=IntegerField())). \
         annotate(max_classe_nuage=Value(nb_max))
 
 
