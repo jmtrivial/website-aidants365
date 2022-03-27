@@ -3,7 +3,8 @@ from django.template import loader
 from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire
 from django.shortcuts import get_object_or_404, render
 from .forms import FicheForm
-from django.db.models import Count, Q, Case, When, IntegerField
+from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value
+from decimal import Decimal
 
 from django.views.generic import DetailView
 
@@ -13,6 +14,13 @@ from django_weasyprint.views import WeasyTemplateResponse
 from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+def annoter_class_nuage(objects):
+    nb_max = 4
+    nb = objects.aggregate(Max("fiche_count"))["fiche_count__max"]
+    return objects.annotate(classe_nuage=ExpressionWrapper(F('fiche_count') / Decimal(nb) * Decimal(nb_max), output_field=IntegerField())). \
+        annotate(max_classe_nuage=Value(nb_max))
 
 
 @login_required
@@ -138,6 +146,14 @@ def categories_alpha(request):
 
 
 @login_required
+def categories_nuage(request):
+    categories = Categorie.objects.filter().annotate(fiche_count=Count(Case(When(Q(fiche_categorie1__isnull=False) | Q(fiche_categorie2__isnull=False) | Q(fiche_categorie3__isnull=False), then=1), output_field=IntegerField(),))).order_by("code")
+    categories = annoter_class_nuage(categories)
+    return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
+                                                         "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie"})
+
+
+@login_required
 def index_auteur(request, id):
     auteur = get_object_or_404(Auteur, pk=id)
     fiches = Fiche.objects.filter(auteur=auteur)
@@ -200,6 +216,15 @@ def categories_libres_alpha(request):
 
 
 @login_required
+def categories_libres_nuage(request):
+    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche')). \
+        order_by("nom")
+    categories_libres = annoter_class_nuage(categories_libres)
+    return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories_libres", "critere_name": "categorie_libre",
+                                                         "elements": categories_libres, "titre": "Toutes les catégories libres", "nom_humain": "catégorie libre"})
+
+
+@login_required
 def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
@@ -243,6 +268,15 @@ def themes_alpha(request):
 
 
 @login_required
+def themes_nuage(request):
+    themes = Theme.objects.filter().annotate(fiche_count=Count('fiche')). \
+        order_by("nom")
+    themes = annoter_class_nuage(themes)
+    return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
+                                                         "elements": themes, "titre": "Tous les thèmes", "nom_humain": "thème"})
+
+
+@login_required
 def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)
@@ -283,6 +317,15 @@ def motscles_alpha(request):
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                    "elements": motscles, "titre": "Tous les mots-clés", "nom_humain": "mot-clé",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
+
+
+@login_required
+def motscles_nuage(request):
+    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche')). \
+        order_by("nom")
+    motscles = annoter_class_nuage(motscles)
+    return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
+                                                         "elements": motscles, "titre": "Tous les mots-clés", "nom_humain": "mot-clé"})
 
 
 @login_required

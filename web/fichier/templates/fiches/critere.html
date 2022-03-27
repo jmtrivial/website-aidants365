@@ -18,7 +18,7 @@ Aidants 365 — {{ titre }} {{ visu }}
     {% load fichier_extras %}
     <div class="block" id="entete">
         <h1>{{ titre }} {{ visu }}</h1>
-        Trier par&nbsp;:
+        Afficher par&nbsp;:
         {% if visu_code == "basic" %} 
             <span class="active_visu">nombre de fiches</span>
         {% else %}
@@ -33,6 +33,9 @@ Aidants 365 — {{ titre }} {{ visu }}
             <a class="visu" href="{% url template_name %}">ordre alphabétique</a>
             {% endwith %}
         {% endif %}
+            {% with "fichier:"|add:critere_name_pluriel|add:"_nuage"  as template_name %}
+            <a class="visu" href="{% url template_name %}">nuage de mots</a>
+            {% endwith %}
         </div>
     <div class="block">
         <p>On retrouve dans le tableau ci-dessous le nombre de fiches  de chaque niveau (théorique, intermédiaire, pratique), ainsi que le nombre total de fiches par {{ nom_humain }}.</p>

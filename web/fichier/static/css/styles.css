@@ -391,6 +391,37 @@ table th:first-child {
     color: #F00 !important;
 }
 
+.nuage {
+    text-align: center;
+    width: 80%;
+    margin: auto;
+}
+
+.nuage-0-4, .nuage-0-4:visited {
+    font-size: 80%;
+    color: #6089af;
+}
+
+.nuage-1-4, .nuage-1-4:visited {
+    font-size: 100%;
+    color: #2f5980;
+}
+
+.nuage-2-4, .nuage-2-4:visited {
+    font-size: 130%;
+    color: #16395a;
+}
+
+.nuage-3-4, .nuage-3-4:visited {
+    font-size: 190%;
+    color: #0d253b;
+}
+
+.nuage-4-4, .nuage-4-4:visited {
+    font-size: 250%;
+    color: #081827;
+}
+
 @media only screen and (max-width: 1200px) {
 
     #content > .column_large, #content  > .column_small {

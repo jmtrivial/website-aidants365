@@ -1,0 +1,43 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with critere_name_pluriel as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Aidants 365 — {{ titre }} {{ visu }}
+{% endblock %}
+
+{% block content %}
+    {% load fichier_extras %}
+    <div class="block" id="entete">
+        <h1>{{ titre }} {{ visu }}</h1>
+        Afficher par&nbsp;:
+
+        {% with "fichier:"|add:critere_name_pluriel as template_name %}
+            <a class="visu" href="{% url template_name %}">nombre de fiches</a>
+        {% endwith %}
+
+        {% with "fichier:"|add:critere_name_pluriel|add:"_alpha" as template_name %}
+            <a class="visu" href="{% url template_name %}">ordre alphabétique</a>
+        {% endwith %}
+
+        <span class="active_visu">nuage de points</span>
+        </div>
+    <div class="block">
+        <p class="nuage">
+        {% for element in elements %}
+            {% with "fichier:index_"|add:critere_name as template_name %}
+            <a class="nuage-{{ element.classe_nuage }}-{{ element.max_classe_nuage }}" href="{% url template_name element.id %}">{{ element.description_longue }}</a>
+            {% endwith %}
+        {% endfor %}
+        </tbody>
+        </table>
+    </div>
+{% endblock %}
