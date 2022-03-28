@@ -429,7 +429,7 @@ a.nuage-5-5, a.nuage-4-4:visited {
 
 a.day {
     display: block;
-    background: #fff;
+    background: #c9dceb;
     font-weight: bold;
 }
 
@@ -437,7 +437,13 @@ a.missing-day {
     background: transparent;
     font-weight: normal;
     color: red;
+    opacity: 0.2;
 }
+
+a.missing-day:hover {
+    opacity: 1;
+}
+
 
 @media only screen and (max-width: 1200px) {
 
