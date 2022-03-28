@@ -31,8 +31,9 @@ Glossaire
 
 
     <div class="block" id="entete">
-        <a id="edit_button" href="{% url 'admin:index' %}fichier/entreeglossaire/{{ entree.id }}/change/"><button>éditer (ctrl+e)</button></a>
-        <h1>{{ entree }}</h1>
+        <p><a href="{% url 'fichier:glossaire' %}">◂ Retour au glossaire</a></p>
+        
+        <h1>Entrée glossaire&nbsp;: {{ entree }} <a class="card_edit" id="edit_button" href="{% url 'admin:index' %}fichier/entreeglossaire/{{ entree.id }}/change/">éditer <small>(ctrl+e)</small></a></h1>
             {% if entree.formes_alternatives %} 
         <p><strong>{% if entree.formes_alternatives|length > 1 %}Formes alternatives{% else %}Forme alternative{% endif %}&nbsp;:</strong> {% for alt in entree.formes_alternatives %}{% if not forloop.first %}, {% endif %}{{ alt }}{% endfor %}</p>
             {% endif %}
@@ -40,7 +41,7 @@ Glossaire
     <div class="block">
             <h2>Définition</h2>
             {{ entree.definition | safe }}
-    </div>
+        </div>
     {% with entree.matching_fiches as list_fiches %}
     {% if list_fiches %}
     <div class="block">
