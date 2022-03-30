@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeCalendrier
+from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda
 from django.shortcuts import get_object_or_404, render
 from .forms import FicheForm
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value
@@ -16,7 +16,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import Calendrier, Ephemeride
+from .utils import Agenda, Ephemeride
 
 
 def annoter_class_nuage(objects):
@@ -53,11 +53,11 @@ def accueil(request):
     categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbcategorieslibres]
     nbcategorieslibres = categories_libres.count()
 
-    entrees_calendriers = EntreeCalendrier.objects.filter(date=timezone.now())
-    if entrees_calendriers.count() == 0:
-        entree_calendrier = Ephemeride(timezone.now())
+    entrees_agenda = EntreeAgenda.objects.filter(date=timezone.now())
+    if entrees_agenda.count() == 0:
+        entree_agenda = Ephemeride(timezone.now())
     else:
-        entree_calendrier = entrees_calendriers[0]
+        entree_agenda = entrees_agenda[0]
 
     context = {'fiche_list': latest_fiche_list, 'nbfiches': nbfiches,
                "nbfichestotal": Fiche.objects.count(), "niveaux": niveaux,
@@ -67,7 +67,7 @@ def accueil(request):
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
                "nbentreesglossaire": nbentreesglossaire,
-               "entree_calendrier": entree_calendrier
+               "entree_agenda": entree_agenda
                }
     return render(request, 'fiches/accueil.html', context)
 
@@ -375,18 +375,18 @@ def entree_glossaire(request, id):
 
 
 @login_required
-def calendrier(request):
-    entrees = EntreeCalendrier.objects
-    ca = Calendrier(entrees, 0, 'fr_FR.UTF-8')
-    context = {'calendrier': ca}
-    return render(request, 'fiches/calendrier.html', context)
+def agenda(request):
+    entrees = EntreeAgenda.objects
+    aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
+    context = {'agenda': aa}
+    return render(request, 'fiches/agenda.html', context)
 
 
 @login_required
-def entree_calendrier(request, id):
-    entree = get_object_or_404(EntreeCalendrier, pk=id)
+def entree_agenda(request, id):
+    entree = get_object_or_404(EntreeAgenda, pk=id)
     context = {'entree': entree}
-    return render(request, 'fiches/entree_calendrier.html', context)
+    return render(request, 'fiches/entree_agenda.html', context)
 
 
 class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):

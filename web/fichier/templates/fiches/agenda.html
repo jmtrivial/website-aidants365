@@ -3,7 +3,7 @@
 {% load fichier_extras %}
 
 {% block entete_menu %}
-{% with "calendrier" as active_page %}
+{% with "agenda" as active_page %}
     {{ block.super }}
 {% endwith %}
 {% endblock %}
@@ -11,7 +11,7 @@
 
 
 {% block title %}
-Le fichier Aidants365 — Calendrier
+Le fichier Aidants365 — Agenda
 {% endblock %}
 
 
@@ -25,10 +25,10 @@ Glossaire
 
 
     <div class="block" id="entete">
-        <h1>Calendrier</h1>
+        <h1>Agenda</h1>
     </div>
     <div class="block">
-        {{ calendrier.annee_courante | safe }}
+        {{ agenda.annee_courante | safe }}
     </div>
 </div>
 {% endblock %}

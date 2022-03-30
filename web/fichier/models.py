@@ -326,11 +326,11 @@ class EntreeGlossaire(models.Model):
         return result
 
 
-class EntreeCalendrier(models.Model):
+class EntreeAgenda(models.Model):
 
     class Meta:
-        verbose_name = "Entrée du calendrier"
-        verbose_name_plural = "Entrées du calendrier"
+        verbose_name = "Entrée de l'agenda"
+        verbose_name_plural = "Entrées de l'agenda"
 
     date = models.DateField()
 
@@ -342,7 +342,7 @@ class EntreeCalendrier(models.Model):
     fiches_associees = models.ManyToManyField(Fiche, verbose_name="Fiches associées", blank=True)
 
     def get_absolute_url(self):
-        return reverse('fichier:entree_calendrier', kwargs={'id': self.pk})
+        return reverse('fichier:entree_agenda', kwargs={'id': self.pk})
 
     def __str__(self):
         return str(self.date)

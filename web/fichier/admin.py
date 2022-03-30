@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 
-from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie, EntreeGlossaire, EntreeCalendrier
+from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie, EntreeGlossaire, EntreeAgenda
 from .forms import FicheForm
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
@@ -141,7 +141,7 @@ class EntreeGlossaireAdmin(admin.ModelAdmin, DynamicArrayMixin):
 admin.site.register(EntreeGlossaire, EntreeGlossaireAdmin)
 
 
-class EntreeCalendrierAdmin(admin.ModelAdmin):
+class EntreeAgendaAdmin(admin.ModelAdmin):
     search_fields = ('notes', )
 
     @admin.display(empty_value='???', description='Lien')
@@ -170,4 +170,4 @@ class EntreeCalendrierAdmin(admin.ModelAdmin):
             return super().response_post_save_change(request, obj)
 
 
-admin.site.register(EntreeCalendrier, EntreeCalendrierAdmin)
+admin.site.register(EntreeAgenda, EntreeAgendaAdmin)
