@@ -132,10 +132,14 @@ def index_categorie_detail(request, id1, id2):
 
 @login_required
 def categories(request):
-    categories = Categorie.objects.filter().annotate(fiche_count=Count(Case(When(Q(fiche_categorie1__isnull=False) | Q(fiche_categorie2__isnull=False) | Q(fiche_categorie3__isnull=False), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
+    categories = Categorie.objects.filter(). \
+        annotate(fiche_count1=Count("fiche_categorie1", distinct=True)). \
+        annotate(fiche_count2=Count("fiche_categorie2", distinct=True)). \
+        annotate(fiche_count3=Count("fiche_categorie3", distinct=True)). \
+        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3")). \
+        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),), distinct=True)). \
+        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),), distinct=True)). \
+        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),), distinct=True)). \
         order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie",
@@ -144,10 +148,14 @@ def categories(request):
 
 @login_required
 def categories_alpha(request):
-    categories = Categorie.objects.filter().annotate(fiche_count=Count(Case(When(Q(fiche_categorie1__isnull=False) | Q(fiche_categorie2__isnull=False) | Q(fiche_categorie3__isnull=False), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
+    categories = Categorie.objects.filter(). \
+        annotate(fiche_count1=Count("fiche_categorie1", distinct=True)). \
+        annotate(fiche_count2=Count("fiche_categorie2", distinct=True)). \
+        annotate(fiche_count3=Count("fiche_categorie3", distinct=True)). \
+        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3")). \
+        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),), distinct=True)). \
+        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),), distinct=True)). \
+        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),), distinct=True)). \
         order_by("code")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie",
@@ -156,7 +164,12 @@ def categories_alpha(request):
 
 @login_required
 def categories_nuage(request):
-    categories = Categorie.objects.filter().annotate(fiche_count=Count(Case(When(Q(fiche_categorie1__isnull=False) | Q(fiche_categorie2__isnull=False) | Q(fiche_categorie3__isnull=False), then=1), output_field=IntegerField(),))).order_by("code")
+    categories = Categorie.objects.filter(). \
+        annotate(fiche_count1=Count("fiche_categorie1", distinct=True)). \
+        annotate(fiche_count2=Count("fiche_categorie2", distinct=True)). \
+        annotate(fiche_count3=Count("fiche_categorie3", distinct=True)). \
+        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3")). \
+        order_by("code")
     categories = annoter_class_nuage(categories)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                          "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie"})
