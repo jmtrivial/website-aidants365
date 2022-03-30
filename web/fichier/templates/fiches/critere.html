@@ -18,7 +18,24 @@ Aidants 365 — {{ titre }} {{ visu }}
     {% load fichier_extras %}
     <div class="block" id="entete">
         <h1>{{ titre }} {{ visu }}</h1>
-        Afficher par&nbsp;:
+
+        {% if critere_name == "categorie" %}
+            {% if visu_code == "alpha" %} 
+                <p>Voir aussi les <a href="{% url 'fichier:categories_libres_alpha' %}">catégories libres</a>.</p>
+            {% else %}
+            <p>Voir aussi les <a href="{% url 'fichier:categories_libres' %}">catégories libres</a>.</p>
+            {% endif %}
+        {% endif %}
+        {% if critere_name == "categorie_libre" %}
+            {% if visu_code == "alpha" %} 
+                <p>Voir aussi les <a href="{% url 'fichier:categories_alpha' %}">catégories principales</a>.</p>
+            {% else %}
+            <p>Voir aussi les <a href="{% url 'fichier:categories' %}">catégories principales</a>.</p>
+            {% endif %}
+        {% endif %}
+
+ 
+        <p>Afficher par&nbsp;:
         {% if visu_code == "basic" %} 
             <span class="active_visu">nombre de fiches</span>
         {% else %}
@@ -34,8 +51,10 @@ Aidants 365 — {{ titre }} {{ visu }}
             {% endwith %}
         {% endif %}
             {% with "fichier:"|add:critere_name_pluriel|add:"_nuage"  as template_name %}
-            <a class="visu" href="{% url template_name %}">nuage de mots</a>
-            {% endwith %}
+            <a class="visu" href="{% url template_name %}">nuage de {{ nom_humain_pluriel }}</a>
+        {% endwith %}
+        </p>
+        
         </div>
     <div class="block">
         <p>On retrouve dans le tableau ci-dessous le nombre de fiches  de chaque niveau (théorique, intermédiaire, pratique), ainsi que le nombre total de fiches par {{ nom_humain }}.</p>

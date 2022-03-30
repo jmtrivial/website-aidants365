@@ -130,49 +130,55 @@ def index_categorie_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
-@login_required
-def categories(request):
-    categories = Categorie.objects.filter(). \
+def annotate_categories_par_niveau():
+    return Categorie.objects.filter(). \
         annotate(fiche_count1=Count("fiche_categorie1", distinct=True)). \
         annotate(fiche_count2=Count("fiche_categorie2", distinct=True)). \
         annotate(fiche_count3=Count("fiche_categorie3", distinct=True)). \
-        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3")). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),), distinct=True)). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),), distinct=True)). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),), distinct=True)). \
-        order_by("-fiche_count")
+        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3"))
+
+
+def annotate_categories_par_niveau_complet():
+    return annotate_categories_par_niveau(). \
+        annotate(fiche_count_A1=Count("fiche_categorie1", filter=Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A), distinct=True)). \
+        annotate(fiche_count_A2=Count("fiche_categorie2", filter=Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A), distinct=True)). \
+        annotate(fiche_count_A3=Count("fiche_categorie3", filter=Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), distinct=True)). \
+        annotate(fiche_count_B1=Count("fiche_categorie1", filter=Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
+        annotate(fiche_count_B2=Count("fiche_categorie2", filter=Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
+        annotate(fiche_count_B3=Count("fiche_categorie3", filter=Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
+        annotate(fiche_count_C1=Count("fiche_categorie1", filter=Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C), distinct=True)). \
+        annotate(fiche_count_C2=Count("fiche_categorie2", filter=Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C), distinct=True)). \
+        annotate(fiche_count_C3=Count("fiche_categorie3", filter=Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), distinct=True)). \
+        annotate(fiche_count_A=F("fiche_count_A1") + F("fiche_count_A2") + F("fiche_count_A3")). \
+        annotate(fiche_count_B=F("fiche_count_B1") + F("fiche_count_B2") + F("fiche_count_B3")). \
+        annotate(fiche_count_C=F("fiche_count_C1") + F("fiche_count_C2") + F("fiche_count_C3"))
+
+
+@login_required
+def categories(request):
+    categories = annotate_categories_par_niveau_complet().order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
-                                                   "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie",
+                                                   "elements": categories, "titre": "Toutes les catégories",
+                                                   "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                    "visu_code": "basic", "visu": "triées par nombre total de fiches"})
 
 
 @login_required
 def categories_alpha(request):
-    categories = Categorie.objects.filter(). \
-        annotate(fiche_count1=Count("fiche_categorie1", distinct=True)). \
-        annotate(fiche_count2=Count("fiche_categorie2", distinct=True)). \
-        annotate(fiche_count3=Count("fiche_categorie3", distinct=True)). \
-        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3")). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.A) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),), distinct=True)). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.B) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),), distinct=True)). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche_categorie1__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie2__niveau__applicable=Niveau.Applicabilite.C) | Q(fiche_categorie3__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),), distinct=True)). \
-        order_by("code")
+    categories = annotate_categories_par_niveau_complet().order_by("-fiche_count").order_by("code")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
-                                                   "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie",
+                                                   "elements": categories, "titre": "Toutes les catégories",
+                                                   "nom_humain": "catégorie", "nom_humain_pluriel": "catégorie",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
 @login_required
 def categories_nuage(request):
-    categories = Categorie.objects.filter(). \
-        annotate(fiche_count1=Count("fiche_categorie1", distinct=True)). \
-        annotate(fiche_count2=Count("fiche_categorie2", distinct=True)). \
-        annotate(fiche_count3=Count("fiche_categorie3", distinct=True)). \
-        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3")). \
-        order_by("code")
+    categories = annotate_categories_par_niveau().order_by("code")
     categories = annoter_class_nuage(categories)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
-                                                         "elements": categories, "titre": "Toutes les catégories", "nom_humain": "catégorie"})
+                                                         "elements": categories, "titre": "Toutes les catégories",
+                                                         "nom_humain": "catégorie", "nom_humain_pluriel": "catégories"})
 
 
 @login_required
@@ -213,33 +219,34 @@ def index_categorie_libre_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
+def annotate_categories_par_niveau_simple(objects):
+    return objects.annotate(fiche_count=Count('fiche', distinct=True)). \
+        annotate(fiche_count_A=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.A), distinct=True)). \
+        annotate(fiche_count_B=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
+        annotate(fiche_count_C=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.C), distinct=True))
+
+
 @login_required
 def categories_libres(request):
-    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
-        order_by("-fiche_count")
+    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories_libres", "critere_name": "categorie_libre",
-                                                   "elements": categories_libres, "titre": "Toutes les catégories libres", "nom_humain": "catégorie libre",
+                                                   "elements": categories_libres, "titre": "Toutes les catégories libres",
+                                                   "nom_humain": "catégorie libre", "nom_humain_pluriel": "catégories libres",
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches"})
 
 
 @login_required
 def categories_libres_alpha(request):
-    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
-        order_by("nom")
+    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("nom")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories_libres", "critere_name": "categorie_libre",
-                                                   "elements": categories_libres, "titre": "Toutes les catégories libres", "nom_humain": "catégorie libre",
+                                                   "elements": categories_libres, "titre": "Toutes les catégories libres",
+                                                   "nom_humain": "catégorie libre", "nom_humain_pluriel": "catégories libres",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
 @login_required
 def categories_libres_nuage(request):
-    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche')). \
+    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)). \
         order_by("nom")
     categories_libres = annoter_class_nuage(categories_libres)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories_libres", "critere_name": "categorie_libre",
@@ -267,35 +274,30 @@ def index_theme_detail(request, id1, id2):
 
 @login_required
 def themes(request):
-    themes = Theme.objects.filter().annotate(fiche_count=Count('fiche')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
-        order_by("-fiche_count")
+    themes = annotate_categories_par_niveau_simple(Theme.objects).order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
-                                                   "elements": themes, "titre": "Tous les thèmes", "nom_humain": "thème",
+                                                   "elements": themes, "titre": "Tous les thèmes",
+                                                   "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches"})
 
 
 @login_required
 def themes_alpha(request):
-    themes = Theme.objects.filter().annotate(fiche_count=Count('fiche')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
-        order_by("nom")
+    themes = annotate_categories_par_niveau_simple(Theme.objects).order_by("nom")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
-                                                   "elements": themes, "titre": "Tous les thèmes", "nom_humain": "thème",
+                                                   "elements": themes, "titre": "Tous les thèmes",
+                                                   "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
 @login_required
 def themes_nuage(request):
-    themes = Theme.objects.filter().annotate(fiche_count=Count('fiche')). \
+    themes = Theme.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)). \
         order_by("nom")
     themes = annoter_class_nuage(themes)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
-                                                         "elements": themes, "titre": "Tous les thèmes", "nom_humain": "thème"})
+                                                         "elements": themes, "titre": "Tous les thèmes",
+                                                         "nom_humain": "thème", "nom_humain_pluriel": "thèmes"})
 
 
 @login_required
@@ -319,35 +321,29 @@ def index_motcle_detail(request, id1, id2):
 
 @login_required
 def motscles(request):
-    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
-        order_by("-fiche_count")
+    motscles = annotate_categories_par_niveau_simple(MotCle.objects).order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                   "elements": motscles, "titre": "Tous les mots-clés", "nom_humain": "mot-clé",
+                                                   "elements": motscles, "titre": "Tous les mots-clés",
+                                                   "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches"})
 
 
 @login_required
 def motscles_alpha(request):
-    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche')). \
-        annotate(fiche_count_A=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.A), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_B=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.B), then=1), output_field=IntegerField(),))). \
-        annotate(fiche_count_C=Count(Case(When(Q(fiche__niveau__applicable=Niveau.Applicabilite.C), then=1), output_field=IntegerField(),))). \
-        order_by("nom")
+    motscles = annotate_categories_par_niveau_simple(MotCle.objects).order_by("nom")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                   "elements": motscles, "titre": "Tous les mots-clés", "nom_humain": "mot-clé",
+                                                   "elements": motscles, "titre": "Tous les mots-clés",
+                                                   "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique"})
 
 
 @login_required
 def motscles_nuage(request):
-    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche')). \
-        order_by("nom")
+    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)).order_by("nom")
     motscles = annoter_class_nuage(motscles)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                         "elements": motscles, "titre": "Tous les mots-clés", "nom_humain": "mot-clé"})
+                                                         "elements": motscles, "titre": "Tous les mots-clés",
+                                                         "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés"})
 
 
 @login_required
