@@ -24,7 +24,6 @@
         display: block;
     }
 
-    #menubar.responsive {position: relative;}
     #menubar.responsive .icon {
         position: absolute;
         right: 0;

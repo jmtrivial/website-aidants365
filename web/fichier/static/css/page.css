@@ -107,7 +107,7 @@ page #contenu_page {
     width: 100%;
     background: #4b82bd;
     position: relative;
-    z-index: 1000;
+    z-index: 100;
     text-align: right;
     border-bottom: 2px solid #2a6098;
 }
