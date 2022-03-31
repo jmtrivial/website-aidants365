@@ -29,19 +29,70 @@ Toutes les fiches
             <button type="submit">Rechercher</button>
        </form>
 
+
         
     {% if recherche != None %}
-        {% if results|length > 0 %}
-            <h2>Résultats de {{ recherche }}</h2>
-            <ul>
-            {% for fiche in results %}
+
+    {% if results_fiches|length == 0 %}
+    <p>Aucune <a href="{% url 'fichier:index' %}">fiche</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+    {% if results_glossaire|length == 0 %}
+    <p>Aucune entrée du <a href="{% url 'fichier:glossaire' %}">glossaire</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+    {% if results_agenda|length == 0 %}
+    <p>Aucune entrée de l'<a href="{% url 'fichier:agenda' %}">agenda</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+
+    {% if results_fiches|length > 0 %}
+            <h2>{{ results_fiches.count }} 
+                {% if results_fiches|length > 1 %}
+                    fiches
+                {% else %}
+                    fiche
+                {% endif %}
+                correspondant à « {{ recherche }} »</h2>
+            <ol>
+            {% for fiche in results_fiches %}
                 <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
             {% endfor %}
-            </ul>
-        {% else %} 
-            <p>Aucun résultat pour la recherche « <strong>{{ recherche }}</strong> ».</p>
+            </ol>
         {% endif %}
     {% endif %}
+
+    {% if recherche != None %}
+        {% if results_glossaire|length > 0 %}
+            <h2>{{ results_glossaire.count }} 
+                {% if results_glossaire|length > 1 %}
+                    entrées de glossaire
+                {% else %}
+                    entrée de glossaire
+                {% endif %}
+                correspondant à « {{ recherche }} »</h2>
+            <ol>
+            {% for entree in results_glossaire %}
+                <li><a href="{% url 'fichier:entree_glossaire' entree.id %}">{{ entree }}</a></li>
+            {% endfor %}
+            </ol>
+        {% endif %}
+    {% endif %}
+
+    {% if recherche != None %}
+    {% if results_agenda|length > 0 %}
+        <h2>{{ results_agenda.count }} 
+            {% if results_agenda|length > 1 %}
+                entrées de l'agenda
+            {% else %}
+                entrée de l'agenda
+            {% endif %}
+            correspondant à « {{ recherche }} »</h2>
+        <ol>
+        {% for entree in results_agenda %}
+            <li><a href="{% url 'fichier:entree_agenda' entree.id %}">{{ entree }}</a></li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+{% endif %}
+
     </div>
 </div>
 {% endblock %}

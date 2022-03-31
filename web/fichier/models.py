@@ -325,6 +325,18 @@ class EntreeGlossaire(models.Model):
 
         return result
 
+    def rechercher(search_text):
+        from django.contrib.postgres.search import SearchVector
+        from django.contrib.postgres.search import SearchQuery
+
+        if not search_text:
+            return None
+
+        search_vectors = SearchVector('definition', weight='A', config='french') + \
+            SearchVector('entree', weight='B', config='french') + \
+            SearchVector('formes_alternatives', weight='C', config='french')
+        return EntreeGlossaire.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text.translate(table), config='french'))
+
 
 class EntreeAgenda(models.Model):
 
@@ -350,6 +362,19 @@ class EntreeAgenda(models.Model):
     def ephemeride(self):
         e = Ephemeride(self.date, self.get_absolute_url(), False)
         return e.ephemeride()
+
+    def rechercher(search_text):
+        from django.contrib.postgres.search import SearchVector
+        from django.contrib.postgres.search import SearchQuery
+
+        if not search_text:
+            return None
+
+        search_vectors = SearchVector('notes', weight='A', config='french') + \
+            SearchVector('themes', weight='B', config='french') + \
+            SearchVector('motscles', weight='C', config='french') + \
+            SearchVector('fiches_associees', weight='C', config='french')
+        return EntreeAgenda.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text.translate(table), config='french'))
 
 
 @receiver(pre_save, sender=Fiche)

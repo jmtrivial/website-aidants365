@@ -349,15 +349,22 @@ def motscles_nuage(request):
 @login_required
 def rechercher(request):
 
-    results = None
+    results_fiches = None
+    results_agenda = None
+    results_glossaire = None
     recherche = None
 
     if request.method == "GET":
         recherche = request.GET.get('search')
         if recherche != '':
-            results = Fiche.rechercher(recherche)
+            results_fiches = Fiche.rechercher(recherche)
+            results_glossaire = EntreeGlossaire.rechercher(recherche)
+            results_agenda = EntreeAgenda.rechercher(recherche)
 
-    return render(request, 'fiches/rechercher.html', {'results': results, 'recherche': recherche})
+    return render(request, 'fiches/rechercher.html', {'results_fiches': results_fiches,
+                                                      'results_glossaire': results_glossaire,
+                                                      'results_agenda': results_agenda,
+                                                      'recherche': recherche})
 
 
 @login_required
