@@ -57,7 +57,21 @@
       </ul>
       {% endif %}
 
+      {% load fichier_extras %}
+      <div id="legende">
+        <div class="legende">Légende</div>
+        <div class="entrees">
+          <div>{% get_carre_colore_A %}<span>Niveau théorique</span></div>
+          <div>{% get_carre_colore_B %}<span>Niveau intermédiaire</span></div>
+          <div>{% get_carre_colore_C %}<span>Niveau pratique</span></div>
+        </div>
+        <div class="fin"></div>
+      </div>
+  
     {% block content %}{% endblock %}
+
+
+
   </div>
   </div>
   <div id="footer">

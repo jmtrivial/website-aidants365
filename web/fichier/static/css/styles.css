@@ -73,6 +73,58 @@ a:hover {
     padding: 0;
 }
 
+#legende {
+    position: fixed;
+    top: 5em;
+    right: -16em;
+    background: #fff;
+    border-radius: 0.5em;
+    padding: 0.5em 0.2em;
+    box-shadow: 0 0 0.4em rgba(0,0,0,0.5);
+    z-index: 1000;
+    transition: right 250ms;
+    cursor: default;
+}
+
+#legende:hover {
+    right: -5em;
+}
+
+#legende .legende {
+    transform: rotate(-90deg) translateX(-5.2em);
+    float: left;
+    width: 1em;
+    font-variant: small-caps;
+    color: #444;
+}
+#legende .entrees {
+    float: left;
+}
+
+#legende .entrees>div {
+    margin: 0;
+    padding: 0;
+}
+#legende .entrees div div {
+    display: block;
+    position: relative;
+    width: 2em;
+    height: 2em;
+    margin: 0.4em;
+    float: left;
+    clear: both;
+}
+
+#legende span {
+    display: block;
+    overflow: hidden;
+    height: 1.5em;
+    width: 15em;
+    line-height: 1.5em;
+    float: left;
+    margin: 0.5em;
+}
+
 
 /* menu */
 
@@ -471,6 +523,7 @@ a.missing-day:hover {
     #menubar ul>li>a {
         padding: 0 0.5em;
     }
+
 }
 
 @media only screen and (max-width: 1000px) {
@@ -520,7 +573,6 @@ a.missing-day:hover {
     .column-middle {
         width: 100%;
     }
-    
 }
 
 @media only screen and (max-width: 600px) {
@@ -531,6 +583,35 @@ a.missing-day:hover {
     .cols4 {
         columns: 2;
     }
+
+    #legende {
+        position: relative;
+        width: auto;
+        top: auto;
+        right: auto;
+        z-index: 1;
+        margin: 0.5em;
+        padding: 1em;
+        border-radius: 0.2em;
+        box-shadow: 0 0 0.1em rgba(0,0,0,0.1);
+        transition: none;
+    }
+    #legende:hover {
+        right: auto;
+    }
+    #legende .legende {
+        transform: none;
+        width: auto;
+        height: auto;
+    }
+    #legende .entrees {
+        clear: both;
+    }
+
+    #legende .fin {
+        clear: both;
+    }
+
 }
 
 @media only screen and (max-width: 400px) {
