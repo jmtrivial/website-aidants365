@@ -3,6 +3,10 @@ from django.utils.safestring import mark_safe
 from fichier.models import Categorie, Niveau, EntreeGlossaire
 import re
 
+import html.entities
+
+table = {k: '&{};'.format(v) for k, v in html.entities.codepoint2name.items()}
+
 
 register = template.Library()
 
@@ -119,6 +123,6 @@ def ajouter_glossaire(texte):
 @register.filter
 def highlight_search(text, search):
     if search:
-        return text.replace(search, '<span class="highlight">' + search + '</span>')
+        return text.replace(search.translate(table), '<span class="highlight">' + search.translate(table) + '</span>')
     else:
         return text
