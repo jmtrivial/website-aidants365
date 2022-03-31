@@ -53,7 +53,7 @@ Toutes les fiches
                 correspondant à « {{ recherche }} »</h2>
             <ol>
             {% for fiche in results_fiches %}
-                <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
+                <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}?search={{ recherche }}">{{ fiche }}</a></li>
             {% endfor %}
             </ol>
         {% endif %}
@@ -70,7 +70,7 @@ Toutes les fiches
                 correspondant à « {{ recherche }} »</h2>
             <ol>
             {% for entree in results_glossaire %}
-                <li><a href="{% url 'fichier:entree_glossaire' entree.id %}">{{ entree }}</a></li>
+                <li><a href="{% url 'fichier:entree_glossaire' entree.id %}?search={{ recherche }}">{{ entree }}</a></li>
             {% endfor %}
             </ol>
         {% endif %}
@@ -87,7 +87,7 @@ Toutes les fiches
             correspondant à « {{ recherche }} »</h2>
         <ol>
         {% for entree in results_agenda %}
-            <li><a href="{% url 'fichier:entree_agenda' entree.id %}">{{ entree }}</a></li>
+            <li><a href="{% url 'fichier:entree_agenda' entree.id %}?search={{ recherche }}">{{ entree }}</a></li>
         {% endfor %}
         </ol>
     {% endif %}

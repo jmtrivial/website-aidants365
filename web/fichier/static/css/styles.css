@@ -420,6 +420,10 @@ table th:first-child {
     color: #fff;
 }
 
+.highlight {
+    background: #FF0;
+}
+
 @media only screen and (max-width: 1400px) {
     #entete .column_small {
         width: 40%;

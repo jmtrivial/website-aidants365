@@ -114,3 +114,11 @@ def ajouter_glossaire(texte):
     result = re.sub(r'\[([^\]<>]*)\]', r'<a class="glossaire-creer" title="ajouter « \1 » au glossaire" href="/admin/fichier/entreeglossaire/add/?entree=\1">\1</a>', result)
 
     return result
+
+
+@register.filter
+def highlight_search(text, search):
+    if search:
+        return text.replace(search, '<span class="highlight">' + search + '</span>')
+    else:
+        return text

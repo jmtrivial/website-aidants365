@@ -67,8 +67,7 @@ def accueil(request):
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
                "nbentreesglossaire": nbentreesglossaire,
-               "entree_agenda": entree_agenda
-               }
+               "entree_agenda": entree_agenda}
     return render(request, 'fiches/accueil.html', context)
 
 
@@ -89,7 +88,8 @@ def index_detail(request, id):
 @login_required
 def detail(request, id):
     fiche = get_object_or_404(Fiche, pk=id)
-    return render(request, 'fiches/detail.html', {'fiche': fiche})
+    search = request.GET.get('search')
+    return render(request, 'fiches/detail.html', {'fiche': fiche, 'search': search})
 
 
 @login_required
@@ -377,7 +377,8 @@ def glossaire(request):
 @login_required
 def entree_glossaire(request, id):
     entree = get_object_or_404(EntreeGlossaire, pk=id)
-    context = {'entree': entree}
+    search = request.GET.get('search')
+    context = {'entree': entree, 'search': search}
     return render(request, 'fiches/entree_glossaire.html', context)
 
 
@@ -392,7 +393,8 @@ def agenda(request):
 @login_required
 def entree_agenda(request, id):
     entree = get_object_or_404(EntreeAgenda, pk=id)
-    context = {'entree': entree}
+    search = request.GET.get('search')
+    context = {'entree': entree, 'search': search}
     return render(request, 'fiches/entree_agenda.html', context)
 
 

@@ -48,7 +48,7 @@ Glossaire
     <div class="block">
 
         <h2>Notes</h2>
-        {{ entree.notes|safe }}
+        {{ entree.notes| highlight_search:search |safe }}
     </div>
 
     {% if entree.fiches_associees.all %}
