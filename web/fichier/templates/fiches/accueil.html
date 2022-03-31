@@ -20,7 +20,7 @@ Le fichier Aidants365
 Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossaire }} entrées</a>.</p>
 </div>
 <div class="column_small">
-    <div class="column3">
+    <div class="column3 long">
         <h2 class="resserre">Niveaux</h2>
         <ul>
             {% for niveau in niveaux %}
@@ -35,7 +35,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
             {% endfor %}
             </ul>
     </div>
-    <div class="column3">
+    <div class="column3 long">
         <h2 class="resserre">Auteurs</h2>
         {% if auteurs %}
     <ul>

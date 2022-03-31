@@ -585,6 +585,7 @@ a.missing-day:hover {
     }
 
     #legende {
+        font-size: 80%;
         position: relative;
         width: auto;
         top: auto;
@@ -607,6 +608,17 @@ a.missing-day:hover {
     #legende .entrees {
         clear: both;
     }
+    #legende span {
+        width: auto;
+        height: auto;
+        line-height: auto;
+        margin: 0em .5em;
+    }
+    #legende .entrees div div {
+        width: 1em;
+        height: 1em;
+        margin: 0.1em;
+    }
 
     #legende .fin {
         clear: both;
@@ -620,6 +632,10 @@ a.missing-day:hover {
     }
     .column3 {
         width: 100%;
+    }
+
+    .column3.long {
+        width: 50%;
     }
 }
 
