@@ -2,6 +2,8 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.utils import timezone
 from django.db.models.signals import pre_save, post_init
+from django.db.models import Func, F, Value
+from django.db.models.functions import Concat, Right
 from django.dispatch import receiver
 from django.urls import reverse
 from django.contrib.auth.models import User
@@ -11,6 +13,8 @@ import html.entities
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from .utils import Ephemeride
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -242,33 +246,26 @@ class Fiche(models.Model):
         if not search_text:
             return None
 
-        search_vectors = SearchVector('presentation', weight='A', config='french') + \
-            SearchVector('problematique', weight='A', config='french') + \
-            SearchVector('quatrieme_de_couverture', weight='A', config='french') + \
-            SearchVector('plan_du_site', weight='A', config='french') + \
-            SearchVector('focus', weight='A', config='french') + \
-            SearchVector('auteur__code', weight='D', config='french') + \
-            SearchVector('auteur__nom', weight='D', config='french') + \
-            SearchVector('niveau__nom', weight='B', config='french') + \
-            SearchVector('categorie1__nom', weight='B', config='french') + \
-            SearchVector('categorie2__nom', weight='B', config='french') + \
-            SearchVector('categorie3__nom', weight='B', config='french') + \
-            SearchVector('niveau__code', weight='B', config='french') + \
-            SearchVector('categorie1__code', weight='B', config='french') + \
-            SearchVector('categorie2__code', weight='B', config='french') + \
-            SearchVector('categorie3__code', weight='B', config='french') + \
-            SearchVector('categories_libres', weight='C', config='french') + \
-            SearchVector('titre_fiche', weight='A', config='french') + \
-            SearchVector('sous_titre', weight='A', config='french') + \
-            SearchVector('titre', weight='D', config='french') + \
-            SearchVector('editeur', weight='D', config='french') + \
-            SearchVector('auteurs', weight='D', config='french') + \
-            SearchVector('collection', weight='D', config='french') + \
-            SearchVector('partenaires', weight='D', config='french') + \
-            SearchVector('reserves', weight='C', config='french') + \
-            SearchVector('lesplus', weight='C', config='french') + \
-            SearchVector('en_savoir_plus', weight='C', config='french')
-        return Fiche.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text.translate(table), config='french'))
+        search_vectors = SearchVector('agg_title', weight='B', config='french') + SearchVector('agg_contenu', weight='A', config='french')
+        search_query = SearchQuery(search_text, config='french')
+
+        return Fiche.objects.annotate(agg_title=Concat(Right(Concat(Value("00"), "niveau__ordre"), 2), Value(" "), "niveau__code", Value(" "),
+                                                       "categorie1__code", Value(" "), "auteur__code", Value(" "),
+                                                       Right(Concat(Value("0000"), "numero"), 4), Value(" "), "titre_fiche", output_field=models.CharField())). \
+            annotate(agg_contenu=Concat("sous_titre", Value(" "), "presentation", Value(" "), "problematique", Value(" "), "quatrieme_de_couverture", Value(" "),
+                                        "plan_du_site", Value(" "), "focus", Value(" "), "titre", Value(" "), "editeur", Value(" "), "auteurs", Value(" "), "collection",
+                                        "partenaires", Value(" "), "reserves", Value(" "), "lesplus", Value(" "), "en_savoir_plus", output_field=models.CharField())). \
+            annotate(search=search_vectors).filter(search=search_query). \
+            annotate(agg_title_hl=SearchHeadline("agg_title", search_query,
+                     start_sel="<span class=\"highlight\">",
+                     stop_sel="</span>",
+                     highlight_all=True,
+                     config='french')). \
+            annotate(agg_contenu_hl=SearchHeadline("agg_contenu", search_query,
+                     start_sel="<span class=\"highlight\">",
+                     stop_sel="</span>",
+                     max_fragments=50,
+                     config='french'))
 
 
 class EntreeGlossaire(models.Model):
@@ -326,16 +323,44 @@ class EntreeGlossaire(models.Model):
         return result
 
     def rechercher(search_text):
-        from django.contrib.postgres.search import SearchVector
-        from django.contrib.postgres.search import SearchQuery
 
         if not search_text:
             return None
 
+        def arrayToString(field: str):
+            return Func(
+                F(field),
+                Value(", "),
+                Value(""),
+                function="array_to_string",
+                output_field=models.TextField(),
+            )
+
         search_vectors = SearchVector('definition', weight='A', config='french') + \
             SearchVector('entree', weight='B', config='french') + \
             SearchVector('formes_alternatives', weight='C', config='french')
-        return EntreeGlossaire.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text.translate(table), config='french'))
+        search_query = SearchQuery(search_text.translate(table), config='french')
+
+        return EntreeGlossaire.objects.annotate(tt=arrayToString("formes_alternatives")). \
+            annotate(search=search_vectors).filter(search=search_query). \
+            annotate(definition_hl=SearchHeadline("definition",
+                                                  search_query,
+                                                  start_sel="<span class=\"highlight\">",
+                                                  stop_sel="</span>",
+                                                  max_fragments=50,
+                                                  config='french'),
+                     entree_hl=SearchHeadline("entree",
+                                              search_query,
+                                              start_sel="<span class=\"highlight\">",
+                                              stop_sel="</span>",
+                                              highlight_all=True,
+                                              config='french'),
+                     formes_alternatives_hl=SearchHeadline("tt",
+                                                           search_query,
+                                                           start_sel="<span class=\"highlight\">",
+                                                           stop_sel="</span>",
+                                                           highlight_all=True,
+                                                           config='french'))
 
 
 class EntreeAgenda(models.Model):
@@ -370,11 +395,15 @@ class EntreeAgenda(models.Model):
         if not search_text:
             return None
 
-        search_vectors = SearchVector('notes', weight='A', config='french') + \
-            SearchVector('themes', weight='B', config='french') + \
-            SearchVector('motscles', weight='C', config='french') + \
-            SearchVector('fiches_associees', weight='C', config='french')
-        return EntreeAgenda.objects.annotate(search=search_vectors).filter(search=SearchQuery(search_text.translate(table), config='french'))
+        search_vectors = SearchVector('notes', weight='A', config='french')
+        search_query = SearchQuery(search_text.translate(table), config='french')
+        return EntreeAgenda.objects.annotate(search=search_vectors).filter(search=search_query). \
+            annotate(notes_hl=SearchHeadline("notes",
+                     search_query,
+                     start_sel="<span class=\"highlight\">",
+                     stop_sel="</span>",
+                     max_fragments=50,
+                     config='french'))
 
 
 @receiver(pre_save, sender=Fiche)
