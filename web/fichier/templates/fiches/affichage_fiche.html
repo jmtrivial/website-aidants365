@@ -19,8 +19,8 @@
                         <a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{{ fiche.categorie1 }}</a>
                         <a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{{ fiche.auteur }}</a>
                         {{ fiche.numero  | number_xxxx }}</p>
-                    <h1>{{ fiche.titre_fiche  | highlight_search:search | safe }}</h1>
-                    <h2>{{ fiche.sous_titre  | highlight_search:search | safe }}</h2>
+                    <h1>{{ fiche.titre_fiche  | safe }}</h1>
+                    <h2>{{ fiche.sous_titre  | safe }}</h2>
                 </div>
                 <div class="droite">
                     <strong>Catégorie</strong><br />
@@ -62,17 +62,17 @@
             </div>
         </div>
         <div id="corps">
-            {{ fiche.presentation | safe | ajouter_glossaire | affiche_si_existe:"Présentation" | inside_si_existe:"p" | highlight_search:search | safe }}
-            {{ fiche.problematique | ajouter_glossaire | safe | affiche_si_existe:"Problématique" | inside_si_existe:"p" | highlight_search:search | safe }}
-            {{ fiche.quatrieme_de_couverture | ajouter_glossaire | safe | affiche_si_existe:"Quatrième de couverture" | inside_si_existe:"p" | highlight_search:search | safe }}
-            {{ fiche.plan_du_site | ajouter_glossaire | safe | affiche_si_existe:"Plan du site" | inside_si_existe:"p" | highlight_search:search | safe }}
-            {% affiche_bloc_si_existe fiche.focus|highlight_search:search|safe|ajouter_glossaire "Focus" fiche.detail_focus%}
+            {{ fiche.presentation | safe | ajouter_glossaire | affiche_si_existe:"Présentation" | inside_si_existe:"p" }}
+            {{ fiche.problematique | ajouter_glossaire | safe | affiche_si_existe:"Problématique" | inside_si_existe:"p" | safe }}
+            {{ fiche.quatrieme_de_couverture | ajouter_glossaire | safe | affiche_si_existe:"Quatrième de couverture" | inside_si_existe:"p" | safe }}
+            {{ fiche.plan_du_site | ajouter_glossaire | safe | affiche_si_existe:"Plan du site" | inside_si_existe:"p" | safe }}
+            {% affiche_bloc_si_existe fiche.focus|safe|ajouter_glossaire "Focus" fiche.detail_focus%}
         </div>
         <div id="pied">
             <ul>
-                {{ fiche.reserves | ajouter_glossaire | affiche_si_existe:"Réserves" | inside_si_existe:"li" | highlight_search:search | safe }}
-                {{ fiche.lesplus | ajouter_glossaire | affiche_si_existe:"Les plus" | inside_si_existe:"li" | highlight_search:search | safe }}
-                {{ fiche.en_savoir_plus | ajouter_glossaire | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" | highlight_search:search | safe }}
+                {{ fiche.reserves | ajouter_glossaire | affiche_si_existe:"Réserves" | inside_si_existe:"li" | safe }}
+                {{ fiche.lesplus | ajouter_glossaire | affiche_si_existe:"Les plus" | inside_si_existe:"li" | safe }}
+                {{ fiche.en_savoir_plus | ajouter_glossaire | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" | safe }}
                 {% if fiche.fiches_connexes.all %}
                 <li><strong>Fiches connexes&nbsp;:</strong>
                 {% for connexe in fiche.fiches_connexes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:detail' connexe.id %}">{{ connexe }}</a>{% endfor %}

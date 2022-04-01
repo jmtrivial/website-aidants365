@@ -162,6 +162,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CKEDITOR_CONFIGS = {
     'main_ckeditor': {
         'language': 'fr',
+        'entities_latin': False,
+        'entities': False
     },
 }
 

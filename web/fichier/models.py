@@ -9,17 +9,14 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django_better_admin_arrayfield.models.fields import ArrayField
 import re
-import html.entities
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
-from .utils import Ephemeride
+from .utils import Ephemeride, table, arrayToString
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 
 
 import logging
 logger = logging.getLogger(__name__)
-
-table = {k: '&{};'.format(v) for k, v in html.entities.codepoint2name.items()}
 
 
 class Niveau(models.Model):
@@ -286,7 +283,7 @@ class EntreeGlossaire(models.Model):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
     def ajouter_liens_entree(self, text, entree):
-        return re.sub(r'\[(%s)\]' % entree.translate(table), r'<a title="%s" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % (Truncator(strip_tags(self.definition)).words(64), str(self.id)), text, flags=re.I)
+        return re.sub(r'\[(%s)\]' % entree, r'<a title="%s" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % (Truncator(strip_tags(self.definition)).words(64), str(self.id)), text, flags=re.I)
 
     def ajouter_liens(self, text):
         result = self.ajouter_liens_entree(text, self.entree)
@@ -299,26 +296,22 @@ class EntreeGlossaire(models.Model):
 
     def matching_fiches(self):
         result = []
-        e_html = self.entree.translate(table)
-        if self.formes_alternatives:
-            fa_html = [fa.translate(table) for fa in self.formes_alternatives]
-        else:
-            fa_html = []
 
         for f in Fiche.objects.filter():
             for t in f.get_descriptions():
-                if re.search(r'\[%s\]' % e_html, str(t), flags=re.I):
+                if re.search(r'\[%s\]' % self.entree, str(t), flags=re.I):
                     result.append(f)
                     break
                 else:
                     found = False
-                    for fa in fa_html:
-                        if re.search(r'\[%s\]' % fa, str(t), flags=re.I):
-                            result.append(f)
-                            found = True
+                    if self.formes_alternatives:
+                        for fa in self.formes_alternatives:
+                            if re.search(r'\[%s\]' % fa, str(t), flags=re.I):
+                                result.append(f)
+                                found = True
+                                break
+                        if found:
                             break
-                    if found:
-                        break
 
         return result
 
@@ -327,19 +320,10 @@ class EntreeGlossaire(models.Model):
         if not search_text:
             return None
 
-        def arrayToString(field: str):
-            return Func(
-                F(field),
-                Value(", "),
-                Value(""),
-                function="array_to_string",
-                output_field=models.TextField(),
-            )
-
         search_vectors = SearchVector('definition', weight='A', config='french') + \
             SearchVector('entree', weight='B', config='french') + \
             SearchVector('formes_alternatives', weight='C', config='french')
-        search_query = SearchQuery(search_text.translate(table), config='french')
+        search_query = SearchQuery(search_text, config='french')
 
         return EntreeGlossaire.objects.annotate(tt=arrayToString("formes_alternatives")). \
             annotate(search=search_vectors).filter(search=search_query). \
@@ -396,7 +380,7 @@ class EntreeAgenda(models.Model):
             return None
 
         search_vectors = SearchVector('notes', weight='A', config='french')
-        search_query = SearchQuery(search_text.translate(table), config='french')
+        search_query = SearchQuery(search_text, config='french')
         return EntreeAgenda.objects.annotate(search=search_vectors).filter(search=search_query). \
             annotate(notes_hl=SearchHeadline("notes",
                      search_query,

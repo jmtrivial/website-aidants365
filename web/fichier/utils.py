@@ -5,6 +5,22 @@ from datetime import datetime as dtime, date, time
 import datetime
 from django.utils.translation import gettext as _
 import locale
+from django.db.models import Func, F, Value
+from django.db import models
+
+import html.entities
+
+table = {k: '&{};'.format(v) for k, v in html.entities.codepoint2name.items()}
+
+
+def arrayToString(field: str):
+    return Func(
+        F(field),
+        Value(", "),
+        Value(""),
+        function="array_to_string",
+        output_field=models.TextField(),
+    )
 
 
 class Ephemeride:

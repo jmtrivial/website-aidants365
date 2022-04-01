@@ -6,6 +6,8 @@ from .forms import FicheForm
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value
 from decimal import Decimal
 from django.utils import timezone
+from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
+from django.http import Http404
 
 from django.views.generic import DetailView
 
@@ -16,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import Agenda, Ephemeride
+from .utils import Agenda, Ephemeride, table, arrayToString
 
 
 def annoter_class_nuage(objects):
@@ -376,9 +378,40 @@ def glossaire(request):
 
 @login_required
 def entree_glossaire(request, id):
-    entree = get_object_or_404(EntreeGlossaire, pk=id)
-    search = request.GET.get('search')
-    context = {'entree': entree, 'search': search}
+    try:
+
+        search = request.GET.get('search')
+
+        entrees = EntreeGlossaire.objects.annotate(formes_alternatives_str=arrayToString("formes_alternatives"))
+        if search:
+            search_query = SearchQuery(search, config='french')
+            entrees = entrees.annotate(definition_hl=SearchHeadline("definition",
+                                                                    search_query,
+                                                                    start_sel="<span class=\"highlight\">",
+                                                                    stop_sel="</span>",
+                                                                    max_fragments=50,
+                                                                    highlight_all=True,
+                                                                    config='french'),
+                                       entree_hl=SearchHeadline("entree",
+                                                                search_query,
+                                                                start_sel="<span class=\"highlight\">",
+                                                                stop_sel="</span>",
+                                                                highlight_all=True,
+                                                                config='french'),
+                                       formes_alternatives_str_hl=SearchHeadline("formes_alternatives_str",
+                                                                                 search_query,
+                                                                                 start_sel="<span class=\"highlight\">",
+                                                                                 stop_sel="</span>",
+                                                                                 highlight_all=True,
+                                                                                 config='french'))
+            entree = entrees.get(pk=id)
+        else:
+            entree = entrees.annotate(definition_hl=Value(""), entree_hl=Value(""), formes_alternatives_str_hl=Value("")).get(pk=id)
+
+    except EntreeGlossaire.DoesNotExist:
+        raise Http404("No EntreeGlossaire matches the given query.")
+
+    context = {'entree': entree}
     return render(request, 'fiches/entree_glossaire.html', context)
 
 
@@ -392,9 +425,27 @@ def agenda(request):
 
 @login_required
 def entree_agenda(request, id):
-    entree = get_object_or_404(EntreeAgenda, pk=id)
-    search = request.GET.get('search')
-    context = {'entree': entree, 'search': search}
+    try:
+
+        search = request.GET.get('search')
+
+        if search:
+            search_query = SearchQuery(search, config='french')
+            entrees = EntreeAgenda.objects.annotate(notes_hl=SearchHeadline("notes",
+                                                    search_query,
+                                                    start_sel="<span class=\"highlight\">",
+                                                    stop_sel="</span>",
+                                                    max_fragments=50,
+                                                    highlight_all=True,
+                                                    config='french'))
+            entree = entrees.get(pk=id)
+        else:
+            entree = EntreeAgenda.objects.annotate(notes_hl=Value("")).get(pk=id)
+
+    except EntreeAgenda.DoesNotExist:
+        raise Http404("No EntreeAgenda matches the given query.")
+
+    context = {'entree': entree}
     return render(request, 'fiches/entree_agenda.html', context)
 
 

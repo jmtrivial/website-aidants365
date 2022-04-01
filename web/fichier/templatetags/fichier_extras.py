@@ -62,6 +62,15 @@ def inside_si_existe(value, arg):
 
 
 @register.filter
+def rine(value, arg):
+    '''replace if not empty'''
+    if arg is None or arg == "":
+        return value
+    else:
+        return mark_safe(arg)
+
+
+@register.filter
 def cliquable(value):
     if value:
         return "<a href=\"" + value + "\">" + value + "</a>"
@@ -118,11 +127,3 @@ def ajouter_glossaire(texte):
     result = re.sub(r'\[([^\]<>]*)\]', r'<a class="glossaire-creer" title="ajouter « \1 » au glossaire" href="/admin/fichier/entreeglossaire/add/?entree=\1">\1</a>', result)
 
     return result
-
-
-@register.filter
-def highlight_search(text, search):
-    if search:
-        return text.replace(search.translate(table), '<span class="highlight">' + search.translate(table) + '</span>')
-    else:
-        return text
