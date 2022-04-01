@@ -378,39 +378,7 @@ def glossaire(request):
 
 @login_required
 def entree_glossaire(request, id):
-    try:
-
-        search = request.GET.get('search')
-
-        entrees = EntreeGlossaire.objects.annotate(formes_alternatives_str=arrayToString("formes_alternatives"))
-        if search:
-            search_query = SearchQuery(search, config='french')
-            entrees = entrees.annotate(definition_hl=SearchHeadline("definition",
-                                                                    search_query,
-                                                                    start_sel="<span class=\"highlight\">",
-                                                                    stop_sel="</span>",
-                                                                    max_fragments=50,
-                                                                    highlight_all=True,
-                                                                    config='french'),
-                                       entree_hl=SearchHeadline("entree",
-                                                                search_query,
-                                                                start_sel="<span class=\"highlight\">",
-                                                                stop_sel="</span>",
-                                                                highlight_all=True,
-                                                                config='french'),
-                                       formes_alternatives_str_hl=SearchHeadline("formes_alternatives_str",
-                                                                                 search_query,
-                                                                                 start_sel="<span class=\"highlight\">",
-                                                                                 stop_sel="</span>",
-                                                                                 highlight_all=True,
-                                                                                 config='french'))
-            entree = entrees.get(pk=id)
-        else:
-            entree = entrees.annotate(definition_hl=Value(""), entree_hl=Value(""), formes_alternatives_str_hl=Value("")).get(pk=id)
-
-    except EntreeGlossaire.DoesNotExist:
-        raise Http404("No EntreeGlossaire matches the given query.")
-
+    entree = get_object_or_404(EntreeGlossaire, pk=id)
     context = {'entree': entree}
     return render(request, 'fiches/entree_glossaire.html', context)
 
@@ -425,26 +393,7 @@ def agenda(request):
 
 @login_required
 def entree_agenda(request, id):
-    try:
-
-        search = request.GET.get('search')
-
-        if search:
-            search_query = SearchQuery(search, config='french')
-            entrees = EntreeAgenda.objects.annotate(notes_hl=SearchHeadline("notes",
-                                                    search_query,
-                                                    start_sel="<span class=\"highlight\">",
-                                                    stop_sel="</span>",
-                                                    max_fragments=50,
-                                                    highlight_all=True,
-                                                    config='french'))
-            entree = entrees.get(pk=id)
-        else:
-            entree = EntreeAgenda.objects.annotate(notes_hl=Value("")).get(pk=id)
-
-    except EntreeAgenda.DoesNotExist:
-        raise Http404("No EntreeAgenda matches the given query.")
-
+    entree = get_object_or_404(EntreeAgenda, pk=id)
     context = {'entree': entree}
     return render(request, 'fiches/entree_agenda.html', context)
 

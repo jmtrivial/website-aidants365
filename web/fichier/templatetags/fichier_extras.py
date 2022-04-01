@@ -62,15 +62,6 @@ def inside_si_existe(value, arg):
 
 
 @register.filter
-def rine(value, arg):
-    '''replace if not empty'''
-    if arg is None or arg == "":
-        return value
-    else:
-        return mark_safe(arg)
-
-
-@register.filter
 def cliquable(value):
     if value:
         return "<a href=\"" + value + "\">" + value + "</a>"
