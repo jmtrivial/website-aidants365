@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.urls import reverse
 from django.template import loader
 from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda
 from django.shortcuts import get_object_or_404, render
@@ -7,7 +8,10 @@ from django.db.models import Count, Q, Case, When, IntegerField, Max, F, Express
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
-from django.http import Http404
+from django.http import Http404, HttpResponseRedirect
+from .forms import EntreeGlossaireForm
+from django.core.exceptions import PermissionDenied
+from django.contrib import messages
 
 from django.views.generic import DetailView
 
@@ -381,6 +385,47 @@ def entree_glossaire(request, id):
     entree = get_object_or_404(EntreeGlossaire, pk=id)
     context = {'entree': entree}
     return render(request, 'fiches/entree_glossaire.html', context)
+
+
+@login_required
+def edit_entree_glossaire(request, id=None):
+    # Retrieve object
+    if id is None:
+        # "Add" mode
+        object = None
+        required_permission = 'backend.add_entreeglossaire'
+        titre = "Création d\'une entrée de glossaire"
+    else:
+        # Change mode
+        object = get_object_or_404(EntreeGlossaire, pk=id)
+        required_permission = 'backend.change_entreeglossaire'
+        titre = "Édition de l\'entrée de glossaire " + object.entree
+
+    # Check user permissions
+    if not request.user.is_authenticated or not request.user.has_perm(required_permission):
+        raise PermissionDenied
+
+    template_name = 'fiches/edit_form.html'
+
+    if request.method == 'POST':
+        form = EntreeGlossaireForm(instance=object, data=request.POST)
+        if form.is_valid():
+            object = form.save()
+            if id is None:
+                message = 'L\'entrée de glossaire "%s" a été ajoutée avec succès.' % object
+            else:
+                message = 'L\'entrée de glossaire "%s" a été modifiée avec succès.' % object
+            messages.success(request, message)
+            return HttpResponseRedirect(reverse('fichier:entree_glossaire', args=[object.id]))
+
+    else:
+        form = EntreeGlossaireForm(instance=object)
+
+    return render(request, template_name, {
+        'titre': titre,
+        'object': object,
+        'form': form,
+    })
 
 
 @login_required

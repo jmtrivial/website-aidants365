@@ -405,6 +405,17 @@ table th:first-child {
     display: flex;
 }
 
+.button_round, .button_round:visited {
+    background: #aaa;
+    padding: 0.2em 1em;
+    border-radius: 1em;
+    color: #fff;
+    vertical-align: middle;
+    border: 0;
+    cursor: pointer;
+    margin-top: 1em;
+}
+
 .card_edit, .card_edit:visited {
     background: #aaa;
     font-size: 50%;
@@ -414,7 +425,7 @@ table th:first-child {
     vertical-align: middle;
 }
 
-.card_edit:hover {
+.card_edit:hover, .button_round:hover {
     background: #3d8ac6;
     text-decoration: none;
     color: #fff;

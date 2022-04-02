@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche
+from .models import Fiche, EntreeGlossaire
 from django.utils import timezone
 
 
@@ -18,3 +18,15 @@ class FicheForm(forms.ModelForm):
         instance = kwargs.get("instance")
         if not instance:
             self.fields['utiliser_suivant'].initial = True
+
+
+class EntreeGlossaireForm(forms.ModelForm):
+
+    class Meta:
+        model = EntreeGlossaire
+
+        fields = [
+            'entree',
+            'formes_alternatives',
+            'definition'
+        ]
