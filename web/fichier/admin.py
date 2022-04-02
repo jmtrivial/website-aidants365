@@ -69,30 +69,6 @@ class FicheAdmin(admin.ModelAdmin):
               "en_savoir_plus",
               "fiches_connexes", )
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super(FicheAdmin, self).get_form(request, obj, **kwargs)
-        form.base_fields['auteur'].initial = Auteur.get_connected_auteur(request.user)
-        return form
-
-    def render_change_form(self, request, context, *args, **kwargs):
-        """We need to update the context to show the button."""
-        context.update({'show_save_and_view': True})
-        return super().render_change_form(request, context, *args, **kwargs)
-
-    def response_post_save_change(self, request, obj):
-        """This method is called by `self.changeform_view()` when the form
-        was submitted successfully and should return an HttpResponse.
-        """
-        # Check that you clicked the button `_save_and_view`
-        if '_save_and_view' in request.POST:
-            view_url = obj.get_absolute_url()
-
-            # And redirect
-            return HttpResponseRedirect(view_url)
-        else:
-            # Otherwise, use default behavior
-            return super().response_post_save_change(request, obj)
-
 
 admin.site.register(MotCle, MotCleAdmin)
 admin.site.register(Theme, ThemeAdmin)
@@ -107,26 +83,6 @@ class EntreeGlossaireAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def custom_link(self, obj):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir l\'entrée</a>')
 
-    def render_change_form(self, request, context, *args, **kwargs):
-        """We need to update the context to show the button."""
-        context.update({'show_save_and_view': True})
-        return super().render_change_form(request, context, *args, **kwargs)
-
-    def response_post_save_change(self, request, obj):
-        """This method is called by `self.changeform_view()` when the form
-        was submitted successfully and should return an HttpResponse.
-        """
-        # Check that you clicked the button `_save_and_view`
-        if '_save_and_view' in request.POST:
-            view_url = obj.get_absolute_url()
-
-            # And redirect
-            return HttpResponseRedirect(view_url)
-        else:
-            # Otherwise, use default behavior
-            return super().response_post_save_change(request, obj)
-
-
 admin.site.register(EntreeGlossaire, EntreeGlossaireAdmin)
 
 
@@ -138,25 +94,6 @@ class EntreeAgendaAdmin(admin.ModelAdmin):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir l\'entrée</a>')
 
     autocomplete_fields = ['themes', 'motscles', 'fiches_associees']
-
-    def render_change_form(self, request, context, *args, **kwargs):
-        """We need to update the context to show the button."""
-        context.update({'show_save_and_view': True})
-        return super().render_change_form(request, context, *args, **kwargs)
-
-    def response_post_save_change(self, request, obj):
-        """This method is called by `self.changeform_view()` when the form
-        was submitted successfully and should return an HttpResponse.
-        """
-        # Check that you clicked the button `_save_and_view`
-        if '_save_and_view' in request.POST:
-            view_url = obj.get_absolute_url()
-
-            # And redirect
-            return HttpResponseRedirect(view_url)
-        else:
-            # Otherwise, use default behavior
-            return super().response_post_save_change(request, obj)
-
+    
 
 admin.site.register(EntreeAgenda, EntreeAgendaAdmin)
