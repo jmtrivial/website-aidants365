@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Theme
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie
 from django.utils import timezone
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.contrib import admin
@@ -25,6 +25,15 @@ class FicheForm(forms.ModelForm):
         if not instance:
             self.fields['utiliser_suivant'].initial = True
 
+    def clean_numero(self):
+        data = self.cleaned_data.get('numero', '')
+        if not data:
+            raise forms.ValidationError("Vous devez renseigner un numéro")
+            # if you don't want this functionality, just remove it.
+        if self.data.get('utiliser_suivant'):
+            data = Fiche.get_numero_suivant(self.cleaned_data.get('auteur'))
+        return data
+
 
 class EntreeGlossaireForm(forms.ModelForm):
 
@@ -38,5 +47,13 @@ class EntreeAgendaForm(forms.ModelForm):
 
     class Meta:
         model = EntreeAgenda
+
+        fields = '__all__'
+
+
+class CategorieForm(forms.ModelForm):
+
+    class Meta:
+        model = Categorie
 
         fields = '__all__'

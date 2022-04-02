@@ -18,6 +18,7 @@ urlpatterns = [
     path('categories/alpha/', views.categories_alpha, name='categories_alpha'),
     path('categories/nuage/', views.categories_nuage, name='categories_nuage'),
     path('categorie/<int:id>/', views.index_categorie, name='index_categorie'),
+    path('categorie/<pk>/delete/', views.DeleteCategorieView.as_view(), name='categorie_delete'),
     path('categorie/<int:id1>/<int:id2>/', views.index_categorie_detail, name='index_categorie_detail'),
     path('auteur/<int:id>/', views.index_auteur, name='index_auteur'),
     path('auteur/<int:id1>/<int:id2>/', views.index_auteur_detail, name='index_auteur_detail'),

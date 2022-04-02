@@ -302,6 +302,12 @@ a:hover {
 .messagelist .warning {
     background: #975709;
 } 
+
+.messagelist .info {
+    background: #719cc5;
+} 
+
+
 .messagelist .error {
     color: #a30d0d;
 
@@ -323,6 +329,10 @@ a:hover {
 
 .messagelist li a {
     color: #122b43;
+}
+
+.boutons_edition {
+    margin: 1em;
 }
 
 .cols3 {

@@ -5,13 +5,14 @@
 Le fichier Aidants365 — édition
 {% endblock %}
 
-{% block entete_header %}
 
+{% block entete_header %}
 {% load static %}
 <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css">
 <script src="/static/admin/js/vendor/jquery/jquery.js"></script>
 <script src="/static/admin/js/jquery.init.js"></script>
 <link href="/static/css/django_better_admin_arrayfield.min.css" type="text/css" media="all" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/form_fiche.css' %}">
 <script src="/static/js/django_better_admin_arrayfield.min.js"></script>
 <script src="{% static 'js/shortcut.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
@@ -20,8 +21,10 @@ Le fichier Aidants365 — édition
     }
     shortcut.add("Meta+S", save_and_view);
     shortcut.add("Ctrl+S", save_and_view);
+
 </script>
 {% endblock %}
+
 
 {% block content %}
 <div class="block">
@@ -29,12 +32,158 @@ Le fichier Aidants365 — édition
 </div>
 <div class="block">
     <form method="post">
+        <div class="boutons_edition">
+            <input class="button_round" type="submit" value="Enregistrer (ctrl-s)">
+            {% if not add %}
+            <input class="button_round" type="submit" name="annuler" value="Annuler">
+            {% endif %}
+        </div>
+
         {% csrf_token %}
         {{ form.media }}
+            <div id="form_fiche">
+            {% if nom_classe == "fiche" %}
+            {{ form.non_field_errors }}
+            {% for field in form.visible_fields %}
+                {% if not field.id_for_label == "id_utiliser_suivant" %}
+                <div id="field_wrapper_{{ field.id_for_label }}" class="field_form">
+                    <div class="field_label">
+                        <div>{{ field.label_tag }}</div>
+                    </div>
+                    <div class="field_data">
+                        <div>
+                            <div class="main_field">
+                                {{ field.errors }}
+                                {{ field }}
+                                {% if field.help_text %}
+                                <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                            {% if field.id_for_label == "id_numero" %} 
+                                <div class="second_field">
+                                    <input type="checkbox" name="utiliser_suivant" id="id_utiliser_suivant" 
+                                    {% if add %}
+                                        checked
+                                    {% endif %}
+                                    >
+                                    <label for="id_utiliser_suivant">Utiliser le prochain numéro disponible</label>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+            </div>
+            {% load fichier_extras %}
+            {% set_listes_categories_modifieurs_champs %}
+            <script>
+                  // on cache les propriétés suivant les catégories choisies
+                function is_numero_visible() {
+                    let e = document.getElementById("id_utiliser_suivant");
+                    return !(e.checked);
+                }
+                function is_biblio() {
+                    for (let i = 1; i <= 3; i++) {
+                    let e = document.querySelectorAll("#id_categorie" + i + " option:checked")[0].getAttribute("value");
+                    if (document.categories_bibio.includes(e))
+                        return true;
+                    }
+
+                    return false;
+                }
+                function is_site() {
+                    for (let i = 1; i <= 3; i++) {
+                    let e = document.querySelectorAll("#id_categorie" + i + " option:checked")[0].getAttribute("value");
+                    if (document.categories_site.includes(e))
+                        return true;
+                    }
+
+                    return false;
+                }
+                function is_film() {
+                    for (let i = 1; i <= 3; i++) {
+                    let e = document.querySelectorAll("#id_categorie" + i + " option:checked")[0].getAttribute("value");
+                    if (document.categories_film.includes(e))
+                        return true;
+                    }
+
+                    return false;
+                }
+
+                function set_visible(list_fields, visible) {
+                    list_fields.forEach(function(item, index, array) {
+                    field = "field_wrapper_id_" + item;
+                    var els = document.getElementById(field);
+                        if (visible)
+                            els.style.display = 'flex';
+                        else
+                            els.style.display = 'none';
+                    });
+                }
+
+                function set_enable(list_fields, enable) {
+                    list_fields.forEach(function(item, index, array) {
+                    var els = document.getElementById(item);
+                        if (enable)
+                        els.style.visibility = "visible";
+                        else
+                        els.style.visibility = "hidden";
+                    });
+                }
+
+                function update_visible_fields() {        
+                    let biblio_fields = ["titre", "auteurs", "annee_publication", "editeur", "format_bibl", "quatrieme_de_couverture", "collection"];
+                    let film_fields = ["realisateurs", "annee_film", "diffusion", "duree", "production"];
+                    let site_fields = ["plan_du_site"];
+                    set_visible(biblio_fields, is_biblio());
+                    set_visible(site_fields, is_site());
+                    set_visible(film_fields, is_film());
+
+                    let numero_fields = ["id_numero"];
+                    set_enable(numero_fields, is_numero_visible());
+                }
+
+                for (let i = 1; i <= 3; i++) {
+                    let selectElement = document.getElementById("id_categorie" + i);
+
+                    selectElement.addEventListener('change', (event) => {
+                    update_visible_fields();
+                    });
+
+                }
+                let selectElement = document.getElementById("id_utiliser_suivant");
+                selectElement.addEventListener('change', (event) => {
+                    update_visible_fields();
+                });
+
+                function ready(callback){
+                    // in case the document is already rendered
+                    if (document.readyState!='loading') callback();
+                    // modern browsers
+                    else if (document.addEventListener) document.addEventListener('DOMContentLoaded', callback);
+                    // IE <= 8
+                    else document.attachEvent('onreadystatechange', function(){
+                        if (document.readyState=='complete') callback();
+                    });
+                }
+
+                ready(function(){
+                    update_visible_fields();
+                });
+            </script>
+        {% else %}
         <table>
             {{ form.as_table }}
         </table>
-        <input class="button_round" type="submit" id="enregistrer" value="Enregistrer (ctrl-s)">
+        {% endif %}
+
+        <div class="boutons_edition">
+            <input class="button_round" type="submit" id="enregistrer" value="Enregistrer (ctrl-s)">
+            {% if not add %}
+            <input class="button_round" type="submit" id="annuler" name="annuler" value="Annuler">
+            {% endif %}
+        </div>
     </form>
 </div>
 
@@ -46,6 +195,7 @@ Le fichier Aidants365 — édition
 <script>$(document).ready(function() {
     $('select[multiple]').select2();
     $( 'input[name="date"]' ).datepicker();
+    $( 'input[name="date_creation"]' ).datepicker();
 });</script>
 
 {% endblock %}

@@ -3,13 +3,12 @@ from django.urls import reverse, reverse_lazy
 from django.template import loader
 from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda
 from django.shortcuts import get_object_or_404, render
-from .forms import FicheForm
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import EntreeGlossaireForm, EntreeAgendaForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -123,7 +122,7 @@ def index_categorie(request, id):
     categorie = get_object_or_404(Categorie, pk=id)
     fiches = Fiche.objects.filter(Q(categorie1=categorie) | Q(categorie2=categorie) | Q(categorie3=categorie))
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "categorie", "critere": categorie,
-                                                             "critere_human": "du catégorie", "critere_nom": str(categorie),
+                                                             "critere_human": "de la catégorie", "critere_nom": str(categorie),
                                                              "fiche_list": fiches})
 
 
@@ -409,6 +408,24 @@ def edit_object(request, classname, id=None):
         classe = EntreeAgenda
         classeform = EntreeAgendaForm
         reverse_url = 'fichier:entree_agenda'
+    elif classname == "fiche":
+        nom_classe = "fiche"
+        titre_add = "Création d\'une fiche"
+        titre_edition = "Édition de la fiche"
+        message_add_success = 'La fiche "%s" a été ajoutée avec succès.'
+        message_edit_success = 'La fiche "%s" a été modifiée avec succès.'
+        classe = Fiche
+        classeform = FicheForm
+        reverse_url = 'fichier:detail'
+    elif classname == "categorie":
+        nom_classe = "categorie"
+        titre_add = "Création d\'une catégorie"
+        titre_edition = "Édition de la catégorie"
+        message_add_success = 'La catégorie "%s" a été ajoutée avec succès.'
+        message_edit_success = 'La catégorie "%s" a été modifiée avec succès.'
+        classe = Categorie
+        classeform = CategorieForm
+        reverse_url = 'fichier:index_categorie'
     else:
         raise Http404("Donnée inconnue")
 
@@ -431,15 +448,19 @@ def edit_object(request, classname, id=None):
     template_name = 'fiches/edit_form.html'
 
     if request.method == 'POST':
-        form = classeform(instance=object, data=request.POST)
-        if form.is_valid():
-            object = form.save()
-            if id is None:
-                message = message_add_success % object
-            else:
-                message = message_edit_success % object
-            messages.success(request, message)
+        if "annuler" in request.POST:
+            messages.info(request, "Édition annulée")
             return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+        else:
+            form = classeform(instance=object, data=request.POST)
+            if form.is_valid():
+                object = form.save()
+                if id is None:
+                    message = message_add_success % object
+                else:
+                    message = message_edit_success % object
+                messages.success(request, message)
+                return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
 
     else:
         if request.GET:
@@ -451,6 +472,8 @@ def edit_object(request, classname, id=None):
         'titre': titre,
         'object': object,
         'form': form,
+        'add': id is None,
+        'nom_classe': nom_classe
     })
 
 
@@ -504,6 +527,12 @@ class DeleteEntreeAgendaView(DeleteObjectView):
     model = EntreeAgenda
     success_url = reverse_lazy("fichier:agenda")
     cancel_url = "fichier:entree_agenda"
+
+
+class DeleteCategorieView(DeleteObjectView):
+    model = Categorie
+    success_url = reverse_lazy("fichier:categories")
+    cancel_url = "fichier:index_categorie"
 
 
 def page_not_found_view(request, exception=None):

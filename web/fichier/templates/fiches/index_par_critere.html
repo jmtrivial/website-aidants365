@@ -8,7 +8,14 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 {% block content %}
     {% load fichier_extras %}
     <div class="block" id="entete">
-        <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }} <a class="card_edit" href="{% url 'admin:index' %}fichier/{{ critere_name | enlever_tiret_bas  }}/{{ critere.id }}/change/">éditer</a></h1>
+        <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }} 
+        {% if critere_name == "categorie" %}            
+            <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' critere_name critere.id %}">éditer <small>(ctrl+e)</small></a>
+            <a class="card_edit" id="delete_button" href="{% url 'fichier:categorie_delete' critere.id %}">supprimer</a>
+        {% endif %}</h1>
+        {% if critere_name == "categorie" %}
+        <p><em>{{ critere.nom }}</em></p>
+        {% endif %}
     </div>
     <div class="block">
         {% if fiche_list %}

@@ -74,17 +74,6 @@ class FicheAdmin(admin.ModelAdmin):
         form.base_fields['auteur'].initial = Auteur.get_connected_auteur(request.user)
         return form
 
-    def save_model(self, request, obj, form, change):
-        utiliser_suivant = form.cleaned_data.get('utiliser_suivant')
-
-        if not obj.id:
-            obj.save()
-
-        if utiliser_suivant:
-            obj.numero = Fiche.get_numero_suivant(form.cleaned_data.get('auteur'))
-
-        obj.save()
-
     def render_change_form(self, request, context, *args, **kwargs):
         """We need to update the context to show the button."""
         context.update({'show_save_and_view': True})

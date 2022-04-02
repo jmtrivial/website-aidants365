@@ -1,0 +1,68 @@
+#form_fiche {
+    width: 80%;
+    margin: auto;
+}
+
+.field_form {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 1px;
+    clear: both;
+}
+
+.field_label {
+    width: 20%;
+    float: left;
+    background: #f5f5f5;
+}
+
+.field_data {
+    flex-grow: 2;
+    width: auto;
+    float: left;
+    background: #fbfbfb;
+}
+
+.field_form>div>div {
+    padding: 1em;
+}
+
+#field_wrapper_id_categorie2, #field_wrapper_id_categorie3, #field_wrapper_id_categories_libres,
+#field_wrapper_id_niveau, #field_wrapper_id_categorie1 {
+    width: 33.3333%;
+    float: left;
+    clear: none;
+}
+#field_wrapper_id_categorie2 {
+    clear: both;
+}
+
+#field_wrapper_id_categorie2 .field_label,
+#field_wrapper_id_categorie3 .field_label,
+#field_wrapper_id_categories_libres .field_label,
+#field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label {
+    width: 60%;
+}
+
+#field_wrapper_id_titre_fiche, #field_wrapper_id_url, #field_wrapper_id_titre, #field_wrapper_id_realisateurs,
+#field_wrapper_id_partenaires, #field_wrapper_id_themes, #field_wrapper_id_presentation, #field_wrapper_id_reserves, 
+#field_wrapper_id_fiches_connexes {
+    margin-top: 2em;
+}
+
+select[multiple] {
+    width: 100%;
+}
+.field_form input {
+    width: 98%;
+}
+
+#field_wrapper_id_numero input {
+    width: auto;
+}
+#field_wrapper_id_numero .main_field,
+#field_wrapper_id_numero .second_field {
+    width: 50%;
+    float: left;
+}
+
