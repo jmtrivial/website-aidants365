@@ -20,12 +20,12 @@ class FicheForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-        user = kwargs.pop('user', None)
+        self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         instance = kwargs.get("instance")
         if not instance:
             self.fields['utiliser_suivant'].initial = True
-            self.fields['auteur'].initial = Auteur.get_connected_auteur(user)
+            self.fields['auteur'].initial = Auteur.get_connected_auteur(self.user)
 
     def clean_numero(self):
         data = self.cleaned_data.get('numero', '')
@@ -44,6 +44,10 @@ class EntreeGlossaireForm(forms.ModelForm):
 
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
 
 class EntreeAgendaForm(forms.ModelForm):
 
@@ -52,6 +56,10 @@ class EntreeAgendaForm(forms.ModelForm):
 
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+
 
 class CategorieForm(forms.ModelForm):
 
@@ -59,3 +67,7 @@ class CategorieForm(forms.ModelForm):
         model = Categorie
 
         fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
