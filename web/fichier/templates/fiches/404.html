@@ -1,0 +1,20 @@
+{% extends "fiches/page.html" %}
+
+
+{% block title %}
+Le fichier Aidants365 — Page non trouvée
+{% endblock %}
+
+
+{% block content %}
+    <div id="entete" class="block">
+    <h1>Page non trouvée (404)</h1>
+    </div>
+
+    <div class="block attention">
+        <p><span class="panneau">⚠</span> Impossible de trouver la page correspondante.</p>
+        {% if exception %}
+            exception
+        {% endif %}
+    </div>
+{% endblock %}
