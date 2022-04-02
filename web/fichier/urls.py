@@ -40,4 +40,5 @@ urlpatterns = [
     path('glossaire/<int:id>/', views.entree_glossaire, name='entree_glossaire'),
     path('agenda/', views.agenda, name='agenda'),
     path('agenda/<int:id>/', views.entree_agenda, name='entree_agenda'),
+    path('404/', views.page_not_found_view, name="page_not_found")
 ]

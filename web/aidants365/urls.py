@@ -15,3 +15,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('accounts/login/', auth_views.LoginView.as_view()),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+
+handler404 = "fichier.views.page_not_found_view"

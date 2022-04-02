@@ -410,3 +410,7 @@ class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
             nom=str(self.get_object()),
             at=str(self.get_object().date_derniere_modification.strftime("%d-%m-%Y %H:%M:%S")),
         )
+
+
+def page_not_found_view(request, exception=None):
+     return render(request, 'fiches/404.html', { "exception": exception})

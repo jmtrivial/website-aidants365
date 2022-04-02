@@ -505,6 +505,30 @@ a.missing-day:hover {
     opacity: 1;
 }
 
+.attention {
+    background: #f8f4eb;
+    padding: 3em;
+}
+.attention p {
+    font-size: 130%;
+}
+
+.panneau {
+    font-size: 150%;
+    background: #FFF;
+    border: .2em solid red;
+    font-weight: bold;
+    height: 1.2em;
+    width: 1.2em;
+    display: inline-block;
+    text-align: center;
+    padding: 0;
+    line-height: 1.1em;
+    border-radius: 2em;
+    box-shadow: 0 0 0.2em rgba(0,0,0,0.6);
+    vertical-align: middle;
+    margin-right: .5em;
+}
 
 @media only screen and (max-width: 1200px) {
 
