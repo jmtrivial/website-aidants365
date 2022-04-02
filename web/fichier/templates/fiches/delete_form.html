@@ -1,0 +1,21 @@
+{% extends "fiches/page.html" %}
+
+
+{% block title %}
+Le fichier Aidants365 — suppression
+{% endblock %}
+{% block content %}
+<div class="block">
+    <h1>Suppression de "{{ object }}" </h1>
+</div>
+<div class="block attention">
+    <form method="post">{% csrf_token %}
+        <p><span class="panneau">?</span> Êtes-vous sûr de vouloir supprimer "{{ object }}"?</p>
+        <input class="button_round" type="submit" name="confirm" value="Confirmer">
+        <input class="button_round" type="submit" name="cancel" value="Annuler">
+    </form>
+</div>
+
+
+{% endblock %}
+

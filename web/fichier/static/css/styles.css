@@ -440,6 +440,14 @@ table th:first-child {
     font-style: italic;
 }
 
+form td input {
+    float: left;
+}
+
+form td select[multiple] {
+    width: 100%;
+}
+
 @media only screen and (max-width: 1400px) {
     #entete .column_small {
         width: 40%;

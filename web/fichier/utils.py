@@ -48,7 +48,7 @@ class Ephemeride:
 
     def ephemeride(self):
         if self.empty:
-            return self._ephemeride(url="/admin/fichier/entreeagenda/add/?date=" + str(self.day()) + '/' + str(self.month()) + '/' + str(self.year()))
+            return self._ephemeride(url="/fichier/agenda/add/?date=" + str(self.day()) + '/' + str(self.month()) + '/' + str(self.year()))
         else:
             return self._ephemeride(url=self.url)
 
@@ -94,7 +94,7 @@ class Agenda(LocaleHTMLCalendar):
             if events_from_day.count() != 0:
                 event_html = '<a class="day existing-day" href="' + events_from_day[0].get_absolute_url() + '">' + str(day) + "</a>"
             else:
-                event_html = '<a class="day missing-day" href="/admin/fichier/entreeagenda/add/?date=' + \
+                event_html = '<a class="day missing-day" href="/fichier/agenda/add/?date=' + \
                     str(day) + '/' + str(themonth) + '/' + str(theyear) + \
                     '">' + str(day) + "</a>"
 

@@ -1,6 +1,12 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Theme
 from django.utils import timezone
+from django.contrib.admin.widgets import AutocompleteSelectMultiple
+from django.contrib import admin
+from django.urls import reverse
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class FicheForm(forms.ModelForm):
@@ -25,8 +31,12 @@ class EntreeGlossaireForm(forms.ModelForm):
     class Meta:
         model = EntreeGlossaire
 
-        fields = [
-            'entree',
-            'formes_alternatives',
-            'definition'
-        ]
+        fields = '__all__'
+
+
+class EntreeAgendaForm(forms.ModelForm):
+
+    class Meta:
+        model = EntreeAgenda
+
+        fields = '__all__'

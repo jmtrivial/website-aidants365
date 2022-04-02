@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.template import loader
 from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda
 from django.shortcuts import get_object_or_404, render
@@ -9,9 +9,10 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import EntreeGlossaireForm
+from .forms import EntreeGlossaireForm, EntreeAgendaForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
+from django.views.generic.edit import DeleteView
 
 from django.views.generic import DetailView
 
@@ -388,18 +389,40 @@ def entree_glossaire(request, id):
 
 
 @login_required
-def edit_entree_glossaire(request, id=None):
+def edit_object(request, classname, id=None):
+
+    if classname == "glossaire":
+        nom_classe = "entreeglossaire"
+        titre_add = "Création d\'entrée de glossaire"
+        titre_edition = "Édition de l\'entrée de glossaire"
+        message_add_success = 'L\'entrée de glossaire "%s" a été ajoutée avec succès.'
+        message_edit_success = 'L\'entrée de glossaire "%s" a été modifiée avec succès.'
+        classe = EntreeGlossaire
+        classeform = EntreeGlossaireForm
+        reverse_url = 'fichier:entree_glossaire'
+    elif classname == "agenda":
+        nom_classe = "entreeagenda"
+        titre_add = "Création d\'une entrée d'agenda"
+        titre_edition = "Édition de l\'entrée d'agenda"
+        message_add_success = 'L\'entrée d\'agenda "%s" a été ajoutée avec succès.'
+        message_edit_success = 'L\'entrée d\'agenda "%s" a été modifiée avec succès.'
+        classe = EntreeAgenda
+        classeform = EntreeAgendaForm
+        reverse_url = 'fichier:entree_agenda'
+    else:
+        raise Http404("Donnée inconnue")
+
     # Retrieve object
     if id is None:
         # "Add" mode
         object = None
-        required_permission = 'backend.add_entreeglossaire'
-        titre = "Création d\'une entrée de glossaire"
+        required_permission = 'backend.add_' + nom_classe
+        titre = titre_add
     else:
         # Change mode
-        object = get_object_or_404(EntreeGlossaire, pk=id)
-        required_permission = 'backend.change_entreeglossaire'
-        titre = "Édition de l\'entrée de glossaire " + object.entree
+        object = get_object_or_404(classe, pk=id)
+        required_permission = 'backend.change_' + nom_classe
+        titre = titre_edition + " " + str(object)
 
     # Check user permissions
     if not request.user.is_authenticated or not request.user.has_perm(required_permission):
@@ -408,18 +431,21 @@ def edit_entree_glossaire(request, id=None):
     template_name = 'fiches/edit_form.html'
 
     if request.method == 'POST':
-        form = EntreeGlossaireForm(instance=object, data=request.POST)
+        form = classeform(instance=object, data=request.POST)
         if form.is_valid():
             object = form.save()
             if id is None:
-                message = 'L\'entrée de glossaire "%s" a été ajoutée avec succès.' % object
+                message = message_add_success % object
             else:
-                message = 'L\'entrée de glossaire "%s" a été modifiée avec succès.' % object
+                message = message_edit_success % object
             messages.success(request, message)
-            return HttpResponseRedirect(reverse('fichier:entree_glossaire', args=[object.id]))
+            return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
 
     else:
-        form = EntreeGlossaireForm(instance=object)
+        if request.GET:
+            form = classeform(instance=object, data=request.GET)
+        else:
+            form = classeform(instance=object)
 
     return render(request, template_name, {
         'titre': titre,
@@ -455,6 +481,29 @@ class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
             nom=str(self.get_object()),
             at=str(self.get_object().date_derniere_modification.strftime("%d-%m-%Y %H:%M:%S")),
         )
+
+
+class DeleteObjectView(LoginRequiredMixin, DeleteView):
+    template_name = "fiches/delete_form.html"
+
+    def post(self, request, *args, **kwargs):
+        if "cancel" in request.POST:
+            url = reverse_lazy(self.cancel_url, kwargs={'id': self.kwargs['pk']})
+            return HttpResponseRedirect(url)
+        else:
+            return super(DeleteObjectView, self).post(request, *args, **kwargs)
+
+
+class DeleteEntreeGlossaireView(DeleteObjectView):
+    model = EntreeGlossaire
+    success_url = reverse_lazy("fichier:glossaire")
+    cancel_url = "fichier:entree_glossaire"
+
+
+class DeleteEntreeAgendaView(DeleteObjectView):
+    model = EntreeAgenda
+    success_url = reverse_lazy("fichier:agenda")
+    cancel_url = "fichier:entree_agenda"
 
 
 def page_not_found_view(request, exception=None):

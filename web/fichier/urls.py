@@ -37,10 +37,14 @@ urlpatterns = [
     path('motcle/<int:id>/', views.index_motcle, name='index_motcle'),
     path('motcle/<int:id1>/<int:id2>/', views.index_motcle_detail, name='index_motcle_detail'),
     path('glossaire/', views.glossaire, name='glossaire'),
-    path('glossaire/add/', views.edit_entree_glossaire, name='entree_glossaire_add'),
     path('glossaire/<int:id>/', views.entree_glossaire, name='entree_glossaire'),
-    path('glossaire/<int:id>/change/', views.edit_entree_glossaire, name='entree_glossaire_change'),
+    path('glossaire/<pk>/delete/', views.DeleteEntreeGlossaireView.as_view(), name='entree_glossaire_delete'),
     path('agenda/', views.agenda, name='agenda'),
     path('agenda/<int:id>/', views.entree_agenda, name='entree_agenda'),
-    path('404/', views.page_not_found_view, name="page_not_found")
+    path('agenda/<pk>/delete/', views.DeleteEntreeAgendaView.as_view(), name='entree_agenda_delete'),
+    path('404/', views.page_not_found_view, name="page_not_found"),
+
+    path('<str:classname>/add/', views.edit_object, name='object_add'),
+    path('<str:classname>/<int:id>/change/', views.edit_object, name='object_change'),
+
 ]

@@ -37,7 +37,8 @@ Glossaire
 
     <div class="block" id="entete">
         <p><a href="{% url 'fichier:agenda' %}">◂ agenda</a></p>
-        <h1>Entrée du {{ entree.date }} <a id="edit_button" class="card_edit" href="{% url 'admin:index' %}fichier/entreeagenda/{{ entree.id }}/change/">éditer <small>(ctrl+e)</small></a></h1>
+        <h1>Entrée du {{ entree.date }} <a id="edit_button" class="card_edit" href="{% url 'fichier:object_change' 'agenda' entree.id %}">éditer <small>(ctrl+e)</small></a>
+            <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a></h1>
         {% if entree.themes.all %}
         <strong>Thèmes&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
         {% endif %}
