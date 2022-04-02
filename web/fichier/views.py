@@ -413,4 +413,4 @@ class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
 
 
 def page_not_found_view(request, exception=None):
-     return render(request, 'fiches/404.html', { "exception": exception})
+    return render(request, 'fiches/404.html', {"exception": exception})
