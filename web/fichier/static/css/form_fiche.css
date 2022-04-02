@@ -66,3 +66,23 @@ select[multiple] {
     float: left;
 }
 
+
+@media only screen and (max-width: 1400px) {
+    #form_fiche {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 1200px) {
+    #field_wrapper_id_categorie2, #field_wrapper_id_categorie3, #field_wrapper_id_categories_libres,
+    #field_wrapper_id_niveau, #field_wrapper_id_categorie1 {
+        width: 100%;
+    }
+
+    #field_wrapper_id_categorie2 .field_label,
+    #field_wrapper_id_categorie3 .field_label,
+    #field_wrapper_id_categories_libres .field_label,
+    #field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label {
+        width: 15%;
+    }
+}
