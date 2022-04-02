@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur
 from django.utils import timezone
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.contrib import admin
@@ -20,10 +20,12 @@ class FicheForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         instance = kwargs.get("instance")
         if not instance:
             self.fields['utiliser_suivant'].initial = True
+            self.fields['auteur'].initial = Auteur.get_connected_auteur(user)
 
     def clean_numero(self):
         data = self.cleaned_data.get('numero', '')

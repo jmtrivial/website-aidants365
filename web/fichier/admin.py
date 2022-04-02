@@ -83,6 +83,7 @@ class EntreeGlossaireAdmin(admin.ModelAdmin, DynamicArrayMixin):
     def custom_link(self, obj):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir l\'entrée</a>')
 
+
 admin.site.register(EntreeGlossaire, EntreeGlossaireAdmin)
 
 
@@ -94,6 +95,6 @@ class EntreeAgendaAdmin(admin.ModelAdmin):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir l\'entrée</a>')
 
     autocomplete_fields = ['themes', 'motscles', 'fiches_associees']
-    
+
 
 admin.site.register(EntreeAgenda, EntreeAgendaAdmin)

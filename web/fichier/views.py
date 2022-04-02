@@ -452,7 +452,7 @@ def edit_object(request, classname, id=None):
             messages.info(request, "Édition annulée")
             return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
         else:
-            form = classeform(instance=object, data=request.POST)
+            form = classeform(instance=object, data=request.POST, user=request.user)
             if form.is_valid():
                 object = form.save()
                 if id is None:
@@ -464,9 +464,9 @@ def edit_object(request, classname, id=None):
 
     else:
         if request.GET:
-            form = classeform(instance=object, data=request.GET)
+            form = classeform(instance=object, data=request.GET, user=request.user)
         else:
-            form = classeform(instance=object)
+            form = classeform(instance=object, user=request.user)
 
     return render(request, template_name, {
         'titre': titre,
