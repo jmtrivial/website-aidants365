@@ -43,13 +43,12 @@ Le fichier Aidants365 — édition
         {% csrf_token %}
         {{ form.media }}
             <div id="form_fiche">
-            {% if nom_classe == "fiche" %}
             {{ form.non_field_errors }}
             {% for field in form.visible_fields %}
                 {% if not field.id_for_label == "id_utiliser_suivant" %}
                 <div id="field_wrapper_{{ field.id_for_label }}" class="field_form">
                     <div class="field_label">
-                        <div id="{{ field.id_for_label }}_anchor"></div>
+                        <div id="{{ field.id_for_label }}_anchor" class="anchor"></div>
                         <div>{{ field.label_tag }}</div>
                     </div>
                     <div class="field_data">
@@ -76,14 +75,11 @@ Le fichier Aidants365 — édition
                 </div>
                 {% endif %}
             {% endfor %}
-            {% load fichier_extras %}
-            {% set_listes_categories_modifieurs_champs %}
-            <script src="{% static 'js/forme_dynamique.js' %}" ></script>
-        {% else %}
-        <table>
-            {{ form.as_table }}
-        </table>
-        {% endif %}
+            {% if nom_classe == "fiche" %}
+                {% load fichier_extras %}
+                {% set_listes_categories_modifieurs_champs %}
+                <script src="{% static 'js/forme_dynamique.js' %}" ></script>
+            {% endif %}
         </div>
 
         <div class="boutons_edition">

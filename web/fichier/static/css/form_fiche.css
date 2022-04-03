@@ -10,6 +10,12 @@
     clear: both;
 }
 
+.anchor {
+    height: 0;
+    margin: 0;
+    padding: 0 !important;
+}
+
 .field_label {
     width: 15%;
     float: left;
@@ -79,11 +85,23 @@ select[multiple] {
         width: 100%;
     }
 
+    .field_label,
     #field_wrapper_id_categorie2 .field_label,
     #field_wrapper_id_categorie3 .field_label,
     #field_wrapper_id_categories_libres .field_label,
     #field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label {
-        width: 15%;
+        width: 20%;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .field_form {
+        display: block;
+    }
+
+    .field_form > div {
+        width: 100% !important;
+        height: auto;
     }
 }
 

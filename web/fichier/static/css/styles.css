@@ -417,10 +417,10 @@ table th:first-child {
 
 .button_round, .button_round:visited {
     background: #aaa;
-    padding: 0.2em 1em;
+    padding: 0.3em 1em;
     border-radius: 1em;
     color: #fff;
-    vertical-align: middle;
+    vertical-align: baseline;
     border: 0;
     cursor: pointer;
     margin-top: 1em;

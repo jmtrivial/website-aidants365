@@ -163,7 +163,8 @@ CKEDITOR_CONFIGS = {
     'main_ckeditor': {
         'language': 'fr',
         'entities_latin': False,
-        'entities': False
+        'entities': False,
+        'width': 'auto',
     },
 }
 
