@@ -76,7 +76,6 @@ Le fichier Aidants365 — édition
                 </div>
                 {% endif %}
             {% endfor %}
-            </div>
             {% load fichier_extras %}
             {% set_listes_categories_modifieurs_champs %}
             <script src="{% static 'js/forme_dynamique.js' %}" ></script>
@@ -85,11 +84,12 @@ Le fichier Aidants365 — édition
             {{ form.as_table }}
         </table>
         {% endif %}
+        </div>
 
         <div class="boutons_edition">
             <input class="button_round" type="submit" id="enregistrer" value="Enregistrer (ctrl-s)">
             {% if not add %}
-            <input class="button_round" id="annuler" name="annuler" value="Annuler">
+            <input class="button_round" type="submit" id="annuler" name="annuler" value="Annuler">
             {% endif %}
         </div>
     </form>
