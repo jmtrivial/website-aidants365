@@ -13,6 +13,7 @@ Le fichier Aidants365 — édition
 <script src="/static/admin/js/jquery.init.js"></script>
 <link href="/static/css/django_better_admin_arrayfield.min.css" type="text/css" media="all" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/form_fiche.css' %}">
+<link rel="stylesheet" href="{% static 'css/popup_add_dynamique.css' %}">
 <script src="/static/js/django_better_admin_arrayfield.min.js"></script>
 <script src="{% static 'js/shortcut.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
@@ -48,6 +49,7 @@ Le fichier Aidants365 — édition
                 {% if not field.id_for_label == "id_utiliser_suivant" %}
                 <div id="field_wrapper_{{ field.id_for_label }}" class="field_form">
                     <div class="field_label">
+                        <div id="{{ field.id_for_label }}_anchor"></div>
                         <div>{{ field.label_tag }}</div>
                     </div>
                     <div class="field_data">
@@ -87,22 +89,55 @@ Le fichier Aidants365 — édition
         <div class="boutons_edition">
             <input class="button_round" type="submit" id="enregistrer" value="Enregistrer (ctrl-s)">
             {% if not add %}
-            <input class="button_round" type="submit" id="annuler" name="annuler" value="Annuler">
+            <input class="button_round" id="annuler" name="annuler" value="Annuler">
             {% endif %}
         </div>
     </form>
 </div>
 
+<div class="modal" id="popup_add_dynamique">
+    <div class="popup">
+        <div class="popup_head"><h2>Ajouter <span></span></h2>
+        </div>
+        <form>
+            <div class="popup_body">
+                <div class="erreur_popup"></div>
+                <label for="popup_name">Nom&nbsp;: </label><input type="text" name="popup_name" id="popup_name">
+            </div>
+            <div class="popup_foot">
+                <input class="button_round ajouter_popup" type="submit" id="ajouter" value="Ajouter">
+                <input class="button_round annuler_popup" id="annuler" value="Annuler">
+            </div>
+        </form>
+    </div>
+</div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/fr.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-<script>$(document).ready(function() {
-    $('select[multiple]').select2();
+{% if nom_classe == "fiche" %}
+<script src="{% static 'js/add_dynamique.js' %}" ></script>
+{% endif %}
+<script>
+    window.csrftoken = '{{ csrf_token }}';
+    $(document).ready(function() {
+
+    var with_popups = [ "#id_themes", "#id_categories_libres", "#id_mots_cles" ]
+    for (const element of with_popups) {
+        $(element).select2({language: "fr"}).on('select2:open', (e) => {
+            $(".select2-results:not(:has(a))").append('<a href="' + element + '_anchor" style="padding: 6px;height: 20px;display: inline-table;">Créer un nouveau champ</a>');
+            $(".select2-results a").click(function(handler) { show_add_dynamique($(this), $(element));});
+        });
+    }
+
     $( 'input[name="date"]' ).datepicker();
     $( 'input[name="date_creation"]' ).datepicker();
+
 });</script>
+
 
 {% endblock %}
 

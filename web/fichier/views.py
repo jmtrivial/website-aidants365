@@ -12,6 +12,7 @@ from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieFo
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
+import json
 
 from django.views.generic import DetailView
 
@@ -23,6 +24,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .utils import Agenda, Ephemeride, table, arrayToString
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 def annoter_class_nuage(objects):
@@ -537,3 +541,26 @@ class DeleteCategorieView(DeleteObjectView):
 
 def page_not_found_view(request, exception=None):
     return render(request, 'fiches/404.html', {"exception": exception})
+
+
+def rest_api(request, classname):
+    classes = {"categorie_libre": CategorieLibre, "theme": Theme, "motcle": MotCle}
+
+    def json_context(dictionary):
+        return {"json": json.dumps(dictionary)}
+
+    if classname not in classes:
+        return render(request, 'fiches/json.html', json_context({"error": "class not found"}))
+
+    if request.method == 'POST':
+        body = json.loads(request.body)
+
+        if "nom" not in body:
+            return render(request, 'fiches/json.html', json_context({"error": "new name not found"}))
+
+        nom = body["nom"]
+
+        b = classes[classname](nom=nom)
+        b.save()
+
+        return render(request, 'fiches/json.html', json_context({"id": b.id, "nom": b.nom}))

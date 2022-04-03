@@ -44,8 +44,9 @@ urlpatterns = [
     path('agenda/<int:id>/', views.entree_agenda, name='entree_agenda'),
     path('agenda/<pk>/delete/', views.DeleteEntreeAgendaView.as_view(), name='entree_agenda_delete'),
     path('404/', views.page_not_found_view, name="page_not_found"),
-
+    # pour ajouter et modifier des objets complexes, on utilise un formulaire
     path('<str:classname>/add/', views.edit_object, name='object_add'),
     path('<str:classname>/<int:id>/change/', views.edit_object, name='object_change'),
-
+    # pour ajouter des objets simples, on utilise une API (uniquement POST implémenté)
+    path('<str:classname>/api/', views.rest_api, name='rest_api')
 ]
