@@ -125,6 +125,7 @@ Le fichier Aidants365 — édition
     window.csrftoken = '{{ csrf_token }}';
     $(document).ready(function() {
 
+    {% if nom_classe == "fiche" %}
     var with_popups = [ "#id_themes", "#id_categories_libres", "#id_mots_cles" ]
     for (const element of with_popups) {
         $(element).select2({language: "fr"}).on('select2:open', (e) => {
@@ -133,6 +134,9 @@ Le fichier Aidants365 — édition
         });
     }
     $("#id_fiches_connexes").select2({language: "fr"});
+    {% else %}
+    $("select[multiple]").select2({language: "fr"}).on('select2:open');
+    {% endif %}
 
     $( 'input[name="date"]' ).datepicker();
     $( 'input[name="date_creation"]' ).datepicker();
