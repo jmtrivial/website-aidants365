@@ -117,6 +117,7 @@ Le fichier Aidants365 — édition
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/i18n/fr.js"></script>
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+<script src="{% static 'js/datepicker-fr.js' %}" ></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 {% if nom_classe == "fiche" %}
 <script src="{% static 'js/add_dynamique.js' %}" ></script>
@@ -129,8 +130,14 @@ Le fichier Aidants365 — édition
     var with_popups = [ "#id_themes", "#id_categories_libres", "#id_mots_cles" ]
     for (const element of with_popups) {
         $(element).select2({language: "fr"}).on('select2:open', (e) => {
+            document.popup_preval = "";
             $(".select2-results:not(:has(a))").append('<a href="' + element + '_anchor" style="padding: 6px;height: 20px;display: inline-table;">Créer un nouveau champ</a>');
-            $(".select2-results a").click(function(handler) { show_add_dynamique($(this), $(element));});
+            $(".select2-results a").click(function(handler) { 
+                show_add_dynamique($(this), $(element));
+            });
+            $(document).on('keyup', '.select2-search__field', function (e) {   
+                document.popup_preval = $(".select2-search__field").val();
+            });
         });
     }
     $("#id_fiches_connexes").select2({language: "fr"});

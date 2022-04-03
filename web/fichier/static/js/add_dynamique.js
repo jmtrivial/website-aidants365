@@ -14,14 +14,14 @@ function show_add_dynamique(node, select2) {
         document.classe_popup = "theme";
         document.select_popup = "#id_themes";
     }
-    else if (node.prev().attr("id") == "select2-id_motscles-results") {
+    else if (node.prev().attr("id") == "select2-id_mots_cles-results") {
         titre = "un mot-clé";
         document.classe_popup = "motcle";
         document.select_popup = "#id_mots_cles";
     }
 
     modal.find(".popup_head span").html(titre);
-    $("#popup_name").val("");
+    $("#popup_name").val(document.popup_preval);
 }
 
 var annuler = document.getElementsByClassName("annuler_popup")[0];
@@ -33,7 +33,6 @@ annuler.onclick = function() {
 var ajouter = document.getElementsByClassName("ajouter_popup")[0];
 
 function setErreur(msg) {
-    console.log("erreur: " + msg);
     $(".erreur_popup").html(msg);
     $(".erreur_popup").css("display", "block");
 }
