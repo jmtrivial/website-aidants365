@@ -5,6 +5,30 @@
 Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 {% endblock %}
 
+{% block parametres_ajouter_fiche %}{% spaceless %}
+{% if critere_name == "categorie" %}
+?categorie1={{ critere.id }}
+{% elif critere_name == "categorie_libre" %}
+?categories_libres={{ critere.id }}
+{% elif critere_name == "theme" %}
+?themes={{ critere.id }}
+{% elif critere_name == "motcle" %}
+?mots_cles={{ critere.id }}
+{% endif %}
+{% endspaceless %}{% endblock %}
+
+{% block description_ajouter_fiche %}{% spaceless %}
+{% if critere_name == "categorie" %}
+dans la catégorie {{ critere_nom }}
+{% elif critere_name == "categorie_libre" %}
+dans la catégorie libre {{ critere_nom }}
+{% elif critere_name == "theme" %}
+dans le thème {{ critere_nom }}
+{% elif critere_name == "motcle" %}
+avec le mot-clé {{ critere_nom }}
+{% endif %}
+{% endspaceless %}{% endblock %}
+
 {% block content %}
     {% load fichier_extras %}
     <div class="block" id="entete">

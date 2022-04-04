@@ -476,6 +476,7 @@ def edit_object(request, classname, id=None):
         'titre': titre,
         'object': object,
         'form': form,
+        'validation': not bool(request.GET),
         'add': id is None,
         'nom_classe': nom_classe
     })

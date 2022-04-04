@@ -54,7 +54,7 @@ Le fichier Aidants365 — édition
                     <div class="field_data">
                         <div>
                             <div class="main_field">
-                                {{ field.errors }}
+                                {% if validation %}{{ field.errors }}{% endif %}
                                 {{ field }}
                                 {% if field.help_text %}
                                 <p class="help">{{ field.help_text|safe }}</p>

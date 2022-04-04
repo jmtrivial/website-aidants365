@@ -25,7 +25,7 @@
           <li {% if active_page == "glossaire" %}class="actif"{% endif %}><a href="{% url 'fichier:glossaire' %}">Glossaire</a></li>
           <li {% if active_page == "agenda" %}class="actif"{% endif %}><a href="{% url 'fichier:agenda' %}">Agenda</a></li>
           <li class="onglet_rechercher {% if active_page == "rechercher" %}actif{% endif %}"><a href="{% url 'fichier:rechercher' %}">Rechercher</a></li>
-          <li class="bouton espace-gauche" id="ajouter_fiche"><a href="{%url 'fichier:object_add' 'fiche' %}" title="créer une fiche">+ fiche</a></li>
+          <li class="bouton espace-gauche" id="ajouter_fiche"><a href="{%url 'fichier:object_add' 'fiche' %}{% block parametres_ajouter_fiche %}{% endblock %}" title="créer une fiche {% block description_ajouter_fiche %}{% endblock %}">+ fiche</a></li>
           {% if active_page == "glossaire" %}<li class="bouton" id="ajouter_entree_glossaire"><a href="{%url 'fichier:object_add' 'glossaire' %}" title="créer une entrée de glossaire">+ entrée glossaire</a></li>{% endif %}
           {% if active_page == "categories" %}<li class="bouton" id="ajouter_categorie"><a href="{%url 'fichier:object_add' 'categorie' %}" title="créer une catégorie">+ catégorie</a></li>{% endif %}
           <li class="icon"><a href="javascript:void(0);" onclick="switchMenuBar()">
