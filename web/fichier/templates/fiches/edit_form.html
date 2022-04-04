@@ -123,17 +123,19 @@ Le fichier Aidants365 — édition
     $(document).ready(function() {
 
     {% if nom_classe == "fiche" %}
-    var with_popups = [ "#id_themes", "#id_categories_libres", "#id_mots_cles" ]
-    for (const element of with_popups) {
+    var with_popups = [ "id_themes", "id_categories_libres", "id_mots_cles" ]
+    for (const element_class of with_popups) {
+        const element = "#" + element_class;
         $(element).select2({language: "fr"}).on('select2:open', (e) => {
             document.popup_preval = "";
             $(".select2-results:not(:has(a))").append('<a href="' + element + '_anchor" style="padding: 6px;height: 20px;display: inline-table;">Créer un nouveau champ</a>');
             $(".select2-results a").click(function(handler) { 
                 show_add_dynamique($(this), $(element));
             });
-            $(document).on('keyup', '.select2-search__field', function (e) {   
-                document.popup_preval = $(".select2-search__field").val();
-            });
+            
+        });
+        $("#field_wrapper_" + element_class + ' .select2-search__field').on('keyup', function (e) {   
+                document.popup_preval = $("#field_wrapper_" + element_class + " .select2-search__field").val();
         });
     }
     $("#id_fiches_connexes").select2({language: "fr"});
