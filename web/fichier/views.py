@@ -437,12 +437,12 @@ def edit_object(request, classname, id=None):
     if id is None:
         # "Add" mode
         object = None
-        required_permission = 'backend.add_' + nom_classe
+        required_permission = 'fichier.add_' + nom_classe
         titre = titre_add
     else:
         # Change mode
         object = get_object_or_404(classe, pk=id)
-        required_permission = 'backend.change_' + nom_classe
+        required_permission = 'fichier.change_' + nom_classe
         titre = titre_edition + " " + str(object)
 
     # Check user permissions
