@@ -152,8 +152,8 @@ class Fiche(models.Model):
 
     niveau = models.ForeignKey(Niveau, verbose_name="Niveau", on_delete=models.RESTRICT)
     categorie1 = models.ForeignKey(Categorie, verbose_name="Catégorie principale", on_delete=models.RESTRICT, related_name='%(class)s_categorie1')
-    categorie2 = models.ForeignKey(Categorie, verbose_name="Catégorie secondaire", on_delete=models.SET_NULL, related_name='%(class)s_categorie2', blank=True, null=True)
-    categorie3 = models.ForeignKey(Categorie, verbose_name="Catégorie 3", on_delete=models.SET_NULL, related_name='%(class)s_categorie3', blank=True, null=True)
+    categorie2 = models.ForeignKey(Categorie, verbose_name="Deuxième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie2', blank=True, null=True)
+    categorie3 = models.ForeignKey(Categorie, verbose_name="Troisième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie3', blank=True, null=True)
     categories_libres = models.ManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True)
 
     auteur = models.ForeignKey(Auteur, verbose_name="Auteur", on_delete=models.RESTRICT)
@@ -355,8 +355,8 @@ class EntreeAgenda(models.Model):
 
     date = models.DateField()
 
-    themes = models.ManyToManyField(Theme, verbose_name="Thèmes associées", blank=True)
-    motscles = models.ManyToManyField(MotCle, verbose_name="Mots-clés associées", blank=True)
+    themes = models.ManyToManyField(Theme, verbose_name="Thèmes associés", blank=True)
+    motscles = models.ManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True)
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True)
 
