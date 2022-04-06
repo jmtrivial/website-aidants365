@@ -47,7 +47,7 @@ def accueil(request):
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
 
     nbcategories = 9
-    categories = Categorie.objects.annotate(fiche_count=Count(Case(When(Q(fiche_categorie1__isnull=False) | Q(fiche_categorie2__isnull=False) | Q(fiche_categorie3__isnull=False), then=1), output_field=IntegerField(),)))[:nbcategories]
+    categories = annotate_categories_par_niveau()[:nbcategories]
     nbcategories = categories.count()
 
     auteurs = Auteur.objects.annotate(fiche_count=Count('fiche'))
