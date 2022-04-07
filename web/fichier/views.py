@@ -167,28 +167,38 @@ def annotate_categories_par_niveau_complet():
 @login_required
 def categories(request):
     categories = annotate_categories_par_niveau_complet().order_by("-fiche_count")
+    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories",
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
-                                                   "visu_code": "basic", "visu": "triées par nombre total de fiches"})
+                                                   "visu_code": "basic", "visu": "triées par nombre total de fiches",
+                                                   "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
+                                                   "critere_name_second":"categorie_libre"})
 
 
 @login_required
 def categories_alpha(request):
     categories = annotate_categories_par_niveau_complet().order_by("-fiche_count").order_by("code")
+    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("nom")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories",
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégorie",
-                                                   "visu_code": "alpha", "visu": "par ordre alphabétique"})
+                                                   "visu_code": "alpha", "visu": "par ordre alphabétique",
+                                                   "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
+                                                   "critere_name_second":"categorie_libre"})
 
 
 @login_required
 def categories_nuage(request):
     categories = annotate_categories_par_niveau().order_by("code")
     categories = annoter_class_nuage(categories)
+    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)).order_by("nom")
+    categories_libres = annoter_class_nuage(categories_libres)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                          "elements": categories, "titre": "Toutes les catégories",
-                                                         "nom_humain": "catégorie", "nom_humain_pluriel": "catégories"})
+                                                         "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
+                                                         "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
+                                                         "critere_name_second":"categorie_libre"})
 
 
 @login_required
@@ -234,33 +244,6 @@ def annotate_categories_par_niveau_simple(objects):
         annotate(fiche_count_A=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.A), distinct=True)). \
         annotate(fiche_count_B=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
         annotate(fiche_count_C=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.C), distinct=True))
-
-
-@login_required
-def categories_libres(request):
-    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("-fiche_count")
-    return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories_libres", "critere_name": "categorie_libre",
-                                                   "elements": categories_libres, "titre": "Toutes les catégories libres",
-                                                   "nom_humain": "catégorie libre", "nom_humain_pluriel": "catégories libres",
-                                                   "visu_code": "basic", "visu": "triées par nombre de fiches"})
-
-
-@login_required
-def categories_libres_alpha(request):
-    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("nom")
-    return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories_libres", "critere_name": "categorie_libre",
-                                                   "elements": categories_libres, "titre": "Toutes les catégories libres",
-                                                   "nom_humain": "catégorie libre", "nom_humain_pluriel": "catégories libres",
-                                                   "visu_code": "alpha", "visu": "par ordre alphabétique"})
-
-
-@login_required
-def categories_libres_nuage(request):
-    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)). \
-        order_by("nom")
-    categories_libres = annoter_class_nuage(categories_libres)
-    return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories_libres", "critere_name": "categorie_libre",
-                                                         "elements": categories_libres, "titre": "Toutes les catégories libres", "nom_humain": "catégorie libre"})
 
 
 @login_required

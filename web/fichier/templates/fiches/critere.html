@@ -18,22 +18,6 @@ Aidants 365 — {{ titre }} {{ visu }}
     {% load fichier_extras %}
     <div class="block" id="entete">
         <h1>{{ titre }} {{ visu }}</h1>
-
-        {% if critere_name == "categorie" %}
-            {% if visu_code == "alpha" %} 
-                <p>Voir aussi les <a href="{% url 'fichier:categories_libres_alpha' %}">catégories libres</a>.</p>
-            {% else %}
-            <p>Voir aussi les <a href="{% url 'fichier:categories_libres' %}">catégories libres</a>.</p>
-            {% endif %}
-        {% endif %}
-        {% if critere_name == "categorie_libre" %}
-            {% if visu_code == "alpha" %} 
-                <p>Voir aussi les <a href="{% url 'fichier:categories_alpha' %}">catégories principales</a>.</p>
-            {% else %}
-            <p>Voir aussi les <a href="{% url 'fichier:categories' %}">catégories principales</a>.</p>
-            {% endif %}
-        {% endif %}
-
  
         <p>Afficher par&nbsp;:
         {% if visu_code == "basic" %} 
@@ -57,29 +41,12 @@ Aidants 365 — {{ titre }} {{ visu }}
         
         </div>
     <div class="block">
-        <p>On retrouve dans le tableau ci-dessous le nombre de fiches  de chaque niveau (théorique, intermédiaire, pratique), ainsi que le nombre total de fiches par {{ nom_humain }}.</p>
-        <table class="distribution">
-            <thead>
-                <tr>
-                    <th>{{ nom_humain }}</th>
-                    <th>{% get_carre_colore_A %} théorique</th>
-                    <th>{% get_carre_colore_B %} intermédiaire</th>
-                    <th>{% get_carre_colore_C %} pratique</th>
-                    <th>total</th>
-                </tr>
-            </thead>
-            <tbody>
-        {% for element in elements %}
-            {% with "fichier:index_"|add:critere_name as template_name %}
-            <tr><th><a href="{% url template_name element.id %}">{{ element.description_longue }}</a></th> 
-                <td>{{element.fiche_count_A}}</td>
-                <td>{{element.fiche_count_B}}</td>
-                <td>{{element.fiche_count_C}}</td>
-                <td>{{element.fiche_count }}</td> 
-            </tr>
-            {% endwith %}
-        {% endfor %}
-        </tbody>
-        </table>
+        <p>On retrouve dans le tableau ci-dessous le nombre de fiches de chaque niveau (théorique, intermédiaire, pratique), ainsi que le nombre total de fiches par {{ nom_humain }}.</p>
+        {% include "fiches/table_par_niveau.html" %}
+
+        {% if elements_second %}
+        {% include "fiches/table_par_niveau.html" with elements=elements_second nom_humain=nom_humain_second critere_name=critere_name_second %}
+        {% endif %}
+
     </div>
 {% endblock %}

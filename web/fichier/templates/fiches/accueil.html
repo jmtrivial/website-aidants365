@@ -91,7 +91,6 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
         </li>
     {% endfor %}
     </ul>
-    <div class="suite">Voir <a href="{% url 'fichier:categories' %}">toutes les catégories générales ▸</a></div>
 {% else %}
     <p>Pas de catégorie disponible.</p>
 {% endif %}
@@ -108,8 +107,8 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
             </li>
         {% endfor %}
         </ul>
-        <div class="suite">Voir <a href="{% url 'fichier:categories_libres' %}">toutes les catégories libres ▸</a></div>
 {% endif %}
+    <div class="suite">Voir <a href="{% url 'fichier:categories_alpha' %}">toutes les catégories ▸</a></div>
 {% endblock %}
 
 {% block gauche2 %}
@@ -137,7 +136,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
         </li>
     {% endfor %}
     </ul>
-    <div class="suite">Voir <a href="{% url 'fichier:themes' %}">tous les thèmes ▸</a></div>
+    <div class="suite">Voir <a href="{% url 'fichier:themes_alpha' %}">tous les thèmes ▸</a></div>
 {% else %}
     <p>Pas de thème disponible.</p>
 {% endif %}
