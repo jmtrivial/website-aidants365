@@ -22,12 +22,12 @@ logger = logging.getLogger(__name__)
 class Niveau(models.Model):
 
     class Applicabilite(models.TextChoices):
-        A = 'A', "théorique"
+        A = 'A', "informatif"
         B = 'B', "intermédiaire"
         C = 'C', "pratique"
 
     couleur_A = "#fdfbe9"
-    couleur_B = "#d22439"
+    couleur_B = "#ea841d"
     couleur_C = "#67b43f"
 
     ordre = models.IntegerField(verbose_name="Numéro", unique=True)

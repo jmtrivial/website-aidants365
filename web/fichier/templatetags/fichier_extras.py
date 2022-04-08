@@ -108,6 +108,21 @@ def get_carre_colore_C():
     return carre_colore(Niveau.couleur_C)
 
 
+@register.simple_tag
+def get_nom_niveau_A():
+    return Niveau.Applicabilite.A.label
+
+
+@register.simple_tag
+def get_nom_niveau_B():
+    return Niveau.Applicabilite.B.label
+
+
+@register.simple_tag
+def get_nom_niveau_C():
+    return Niveau.Applicabilite.C.label
+
+
 @register.filter
 def ajouter_glossaire(texte):
     result = texte
