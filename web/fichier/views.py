@@ -173,7 +173,7 @@ def categories(request):
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                    "visu_code": "basic", "visu": "triées par nombre total de fiches",
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
-                                                   "critere_name_second":"categorie_libre"})
+                                                   "critere_name_second": "categorie_libre"})
 
 
 @login_required
@@ -185,7 +185,7 @@ def categories_alpha(request):
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégorie",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique",
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
-                                                   "critere_name_second":"categorie_libre"})
+                                                   "critere_name_second": "categorie_libre"})
 
 
 @login_required
@@ -198,7 +198,7 @@ def categories_nuage(request):
                                                          "elements": categories, "titre": "Toutes les catégories",
                                                          "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                          "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
-                                                         "critere_name_second":"categorie_libre"})
+                                                         "critere_name_second": "categorie_libre"})
 
 
 @login_required
