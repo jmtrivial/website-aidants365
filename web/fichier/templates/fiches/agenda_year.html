@@ -1,0 +1,36 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "agenda" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Le fichier Aidants365 — Agenda
+{% endblock %}
+
+
+
+
+
+{% block content %}
+
+
+    <div class="block" id="entete">
+        <h1>Année {{year}}</h1>
+        <div>
+            <div class="left">{% lien_annee_precedente year %}</div>
+            <div class="right">{% lien_annee_suivante year %}</div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+    <div class="block">
+        {% show_year agenda year %}
+    </div>
+</div>
+{% endblock %}
