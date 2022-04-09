@@ -13,6 +13,8 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
 import json
+from datetime import datetime, timedelta
+
 
 from django.views.generic import DetailView
 
@@ -394,7 +396,7 @@ def edit_object(request, classname, id=None):
         message_edit_success = 'L\'entrée d\'agenda "%s" a été modifiée avec succès.'
         classe = EntreeAgenda
         classeform = EntreeAgendaForm
-        reverse_url = 'fichier:entree_agenda'
+        reverse_url = 'fichier:entree_agenda_pk'
     elif classname == "fiche":
         nom_classe = "fiche"
         titre_add = "Création d\'une fiche"
@@ -466,18 +468,52 @@ def edit_object(request, classname, id=None):
 
 
 @login_required
-def agenda(request):
-    entrees = EntreeAgenda.objects
-    aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
-    context = {'agenda': aa}
-    return render(request, 'fiches/agenda.html', context)
+def agenda_current_year(request):
+    return agenda_year(request, timezone.now().year)
 
 
 @login_required
-def entree_agenda(request, id):
-    entree = get_object_or_404(EntreeAgenda, pk=id)
-    context = {'entree': entree}
+def agenda_year(request, year):
+    entrees = EntreeAgenda.objects.filter(date__year=year)
+    aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
+    context = {'agenda': aa, "year": year}
+    return render(request, 'fiches/agenda_year.html', context)
+
+
+@login_required
+def agenda_month(request, year, month):
+    entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month)
+    aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
+    context = {'agenda': aa, "year": year, "month": month}
+    return render(request, 'fiches/agenda_month.html', context)
+
+
+def _entree_agenda(request, entree, d):
+    prev_entree = EntreeAgenda.objects.filter(date=d + timedelta(days=1))
+    if len(prev_entree) == 0:
+        prev_entree = d + timedelta(days=1)
+    else:
+        prev_entree = prev_entree[0]
+    next_entree = EntreeAgenda.objects.filter(date=d - timedelta(days=1))
+    if len(next_entree) == 0:
+        next_entree = d - timedelta(days=1)
+    else:
+        next_entree = next_entree[0]
+    context = {'entree': entree, 'prev': prev_entree, 'next': next_entree}
     return render(request, 'fiches/entree_agenda.html', context)
+
+
+@login_required
+def entree_agenda_pk(request, id):
+    entree = get_object_or_404(EntreeAgenda, pk=id)
+    return _entree_agenda(request, entree, entree.date)
+
+
+@login_required
+def entree_agenda(request, year, month, day):
+    d = datetime(year, month, day)
+    entree = EntreeAgenda.objects.filter(date=d)[0]
+    return _entree_agenda(request, entree, d)
 
 
 class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):

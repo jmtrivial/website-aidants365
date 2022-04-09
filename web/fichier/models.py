@@ -363,7 +363,7 @@ class EntreeAgenda(models.Model):
     fiches_associees = models.ManyToManyField(Fiche, verbose_name="Fiches associées", blank=True)
 
     def get_absolute_url(self):
-        return reverse('fichier:entree_agenda', kwargs={'id': self.pk})
+        return reverse('fichier:entree_agenda', kwargs={'year': self.date.year, 'month': self.date.month, 'day': self.date.day})
 
     def __str__(self):
         return str(self.date)

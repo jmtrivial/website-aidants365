@@ -7,6 +7,7 @@ from django.utils.translation import gettext as _
 import locale
 from django.db.models import Func, F, Value
 from django.db import models
+from django.urls import reverse
 
 import html.entities
 
@@ -54,24 +55,32 @@ class Ephemeride:
 
 
 class Agenda(LocaleHTMLCalendar):
+    month_name = ["", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+
     def __init__(self, events=None, *args):
         super(Agenda, self).__init__(*args)
         self.events = events
 
-    def annee_courante(self):
-        return self.formatyear(2022, 1)
+    def year(self, year):
+        return self.formatyear(year, 1)
+
+    def month(self, year, month):
+        return self.formatmonth(year, month)
 
     def formatmonthname(self, theyear, themonth, withyear=True):
         """
         Return a month name as a table row.
         """
-        month_name = ["", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+
         if withyear:
-            s = '%s %s' % (month_name[themonth], theyear)
+            return ('<tr><th colspan="7" class="%s">' % self.cssclass_month_head) + \
+                str(Agenda.month_name[themonth]) + \
+                ' <a href="' + reverse('fichier:agenda_year', kwargs={'year': theyear}) + '">%s</a>' % theyear + \
+                '</th></tr>'
         else:
-            s = '%s' % month_name[themonth]
-        return '<tr><th colspan="7" class="%s">%s</th></tr>' % (
-            self.cssclass_month_head, s)
+            return ('<tr><th colspan="7" class="%s">' % self.cssclass_month_head) + \
+                '<a href="' + reverse('fichier:agenda_month', kwargs={'year': theyear, 'month': themonth}) + '">%s</a>' % Agenda.month_name[themonth] + \
+                '</th></tr>'
 
     def formatweekday(self, day):
         """
@@ -89,7 +98,6 @@ class Agenda(LocaleHTMLCalendar):
         if day == 0:
             return '<td class="noday">&nbsp;</td>'  # day outside month
         else:
-
             events_from_day = events.filter(date__day=day)
             if events_from_day.count() != 0:
                 event_html = '<a class="day existing-day" href="' + events_from_day[0].get_absolute_url() + '">' + str(day) + "</a>"

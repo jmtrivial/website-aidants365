@@ -1,7 +1,10 @@
 from django import template
 from django.utils.safestring import mark_safe
-from fichier.models import Categorie, Niveau, EntreeGlossaire
+from fichier.models import Categorie, Niveau, EntreeGlossaire, EntreeAgenda
 import re
+from fichier.utils import Agenda
+from django.urls import reverse
+from datetime import datetime
 
 import html.entities
 
@@ -29,6 +32,94 @@ def carre_colore(value):
 @register.filter
 def number_xxxx(value):
     return "{:04d}".format(value)
+
+
+@register.filter
+def nom_mois(value):
+    return Agenda.month_name[value].lower()
+
+
+@register.simple_tag
+def show_year(agenda, year):
+    return mark_safe(agenda.year(year))
+
+
+@register.simple_tag
+def show_month(agenda, year, month):
+    return mark_safe(agenda.month(year, month))
+
+
+def get_url_jour_missing(date):
+    return reverse("fichier:object_add", kwargs={"classname": "agenda"}) + "?date=" + str(date.day) + "/" + str(date.month) + "/" + str(date.year)
+
+
+def get_url_jour(date):
+    return reverse("fichier:entree_agenda", kwargs={"year": date.year, "month": date.month, "day": date.day})
+
+
+def get_day_name(date):
+    return str(date.day) + " " + Agenda.month_name[date.month].lower() + " " + str(date.year)
+
+
+def lien_jour(url, text, class_name):
+    return mark_safe('<a class="' + class_name + '" href="' + url + '">' + text + "</a>")
+
+
+@register.simple_tag
+def lien_jour_suivant(day):
+    if isinstance(day, EntreeAgenda):
+        url = get_url_jour(day.date)
+        text = get_day_name(day.date)
+        classname = ""
+    else:
+        url = get_url_jour_missing(day)
+        text = get_day_name(day)
+        classname = " missing-day"
+    return lien_jour(url, "◂ " + text, "lien_pred" + classname)
+
+
+@register.simple_tag
+def lien_jour_precedent(day):
+    if isinstance(day, EntreeAgenda):
+        url = get_url_jour(day.date)
+        text = get_day_name(day.date)
+        classname = ""
+    else:
+        url = get_url_jour_missing(day)
+        text = get_day_name(day)
+        classname = " missing-day"
+
+    return lien_jour(url, text + " ▸", "lien_next" + classname)
+
+
+@register.simple_tag
+def lien_mois_precedent(year, month):
+    month -= 1
+    if month == 0:
+        year -= 1
+        month = 12
+    return mark_safe('<a class="lien_pred" href="' + reverse("fichier:agenda_month", kwargs={"year": year, "month": month}) + '">◂ ' + Agenda.month_name[month] + " " + str(year) + "</a>")
+
+
+@register.simple_tag
+def lien_mois_suivant(year, month):
+    month += 1
+    if month == 13:
+        year += 1
+        month = 1
+    return mark_safe('<a class="lien_next" href="' + reverse("fichier:agenda_month", kwargs={"year": year, "month": month}) + '">' + Agenda.month_name[month] + " " + str(year) + " ▸</a>")
+
+
+@register.simple_tag
+def lien_annee_suivante(year):
+    year += 1
+    return mark_safe('<a class="lien_next" href="' + reverse("fichier:agenda_year", kwargs={"year": year}) + '">' + str(year) + " ▸</a>")
+
+
+@register.simple_tag
+def lien_annee_precedente(year):
+    year -= 1
+    return mark_safe('<a class="lien_pred" href="' + reverse("fichier:agenda_year", kwargs={"year": year}) + '">◂ ' + str(year) + "</a>")
 
 
 @register.filter

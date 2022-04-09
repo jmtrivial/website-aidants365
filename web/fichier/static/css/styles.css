@@ -243,6 +243,16 @@ a:hover {
     padding: 0;
 }
 
+.lien_next {
+    float: right;
+    display: block;
+}
+
+.lien_pred {
+    float: left;
+    display: block;
+}
+
 .block {
     margin: 0.5em;
     background: #fff;
