@@ -512,8 +512,11 @@ def entree_agenda_pk(request, id):
 @login_required
 def entree_agenda(request, year, month, day):
     d = datetime(year, month, day)
-    entree = EntreeAgenda.objects.filter(date=d)[0]
-    return _entree_agenda(request, entree, d)
+    entree = EntreeAgenda.objects.filter(date=d)
+    if entree:
+        return _entree_agenda(request, entree[0], d)
+    else:
+        return HttpResponseRedirect(reverse("fichier:object_add", args=["agenda"]) + "?date=" + "/".join(map(str, [year, month, day])))
 
 
 class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
