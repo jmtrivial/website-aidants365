@@ -62,9 +62,15 @@
       <div id="legende" class="visible">
         <div class="legende">Légende</div>
         <div class="entrees">
-          <div>{% get_carre_colore_A %}<span>Niveau {% get_nom_niveau_A %}</span></div>
-          <div>{% get_carre_colore_B %}<span>Niveau {% get_nom_niveau_B %}</span></div>
-          <div>{% get_carre_colore_C %}<span>Niveau {% get_nom_niveau_C %}</span></div>
+          <div>{% get_carre_colore_A %}<span class="titre">Niveau {% get_nom_niveau_A %}</span>
+            <span class="liste">{% liste_niveaux "A" %}</span>
+          </div>
+          <div>{% get_carre_colore_B %}<span class="titre">Niveau {% get_nom_niveau_B %}</span>
+            <span class="liste">{% liste_niveaux "B" %}</span>
+          </div>
+          <div>{% get_carre_colore_C %}<span class="titre">Niveau {% get_nom_niveau_C %}</span>
+            <span class="liste">{% liste_niveaux "C" %}</span>
+          </div>
         </div>
         <div class="fin"></div>
       </div>

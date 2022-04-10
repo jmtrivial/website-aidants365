@@ -115,7 +115,7 @@ a:hover {
     clear: both;
 }
 
-#legende span {
+#legende span.titre {
     display: block;
     overflow: hidden;
     height: 1.5em;
@@ -124,7 +124,16 @@ a:hover {
     float: left;
     margin: 0.5em;
 }
-
+#legende span.liste {
+    display: block;
+    width: 15em;
+    float: left;
+    clear: left;
+    line-height: 1.2em;
+    margin-top: -1.2em;
+    margin-left: 5em;
+    font-size: 80%;
+}
 
 /* menu */
 
@@ -674,7 +683,7 @@ a.missing-day:hover {
         box-shadow: 0 0 0.1em rgba(0,0,0,0.1);
         transition: none;
     }
-    #legende:hover, #legende {
+    #legende:hover, #legende, #legende.visible {
         right: auto;
     }
     #legende .legende {
@@ -685,11 +694,19 @@ a.missing-day:hover {
     #legende .entrees {
         clear: both;
     }
-    #legende span {
+    #legende span.titre {
         width: auto;
         height: auto;
         line-height: auto;
         margin: 0em .5em;
+    }
+    #legende span.titre::after {
+        content: " :";
+    }
+    #legende span.liste {
+        margin: auto;
+        clear: none;
+        margin-top: .4em;
     }
     #legende .entrees div div {
         width: 1em;

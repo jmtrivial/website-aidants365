@@ -214,6 +214,19 @@ def get_nom_niveau_C():
     return Niveau.Applicabilite.C.label
 
 
+@register.simple_tag
+def liste_niveaux(niveau_code):
+    match = {"A": Niveau.Applicabilite.A, "B": Niveau.Applicabilite.B, "C": Niveau.Applicabilite.C}
+    niv = Niveau.objects.filter(applicable=match[niveau_code])
+    result = ""
+    for n in niv:
+        if result != "":
+            result += ", "
+        result += '<a href="' + reverse("fichier:index_niveau", kwargs={"id": n.id}) + '">' + str(n) + "</a>"
+    result += ""
+    return mark_safe(result)
+
+
 @register.filter
 def ajouter_glossaire(texte):
     result = texte
