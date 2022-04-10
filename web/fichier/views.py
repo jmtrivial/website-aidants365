@@ -573,7 +573,7 @@ class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
     def get_pdf_filename(self):
         from django.utils import timezone
         return '{nom} {at}.pdf'.format(
-            nom=str(self.get_object()).replace('\'','\\\''),
+            nom=str(self.get_object()).replace('\'', '\\\''),
             at=str(self.get_object().date_derniere_modification.strftime("%d-%m-%Y %H:%M:%S")),
         )
 
