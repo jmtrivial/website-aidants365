@@ -244,11 +244,14 @@ def index_categorie_libre_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
-def annotate_categories_par_niveau_simple(objects):
-    return objects.annotate(fiche_count=Count('fiche', distinct=True)). \
+def annotate_categories_par_niveau_simple(objects, agenda=False):
+    result = objects.annotate(fiche_count=Count('fiche', distinct=True)). \
         annotate(fiche_count_A=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.A), distinct=True)). \
         annotate(fiche_count_B=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
         annotate(fiche_count_C=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.C), distinct=True))
+    if agenda:
+        result = result.annotate(agenda_count=Count('entreeagenda', distinct=True))
+    return result
 
 
 @login_required
@@ -274,7 +277,7 @@ def index_theme_detail(request, id1, id2):
 
 @login_required
 def themes(request):
-    themes = annotate_categories_par_niveau_simple(Theme.objects).order_by("-fiche_count")
+    themes = annotate_categories_par_niveau_simple(Theme.objects, True).order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
                                                    "elements": themes, "titre": "Tous les thèmes",
                                                    "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
@@ -283,7 +286,7 @@ def themes(request):
 
 @login_required
 def themes_alpha(request):
-    themes = annotate_categories_par_niveau_simple(Theme.objects).order_by("nom")
+    themes = annotate_categories_par_niveau_simple(Theme.objects, True).order_by("nom")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
                                                    "elements": themes, "titre": "Tous les thèmes",
                                                    "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
@@ -322,7 +325,7 @@ def index_motcle_detail(request, id1, id2):
 
 @login_required
 def motscles(request):
-    motscles = annotate_categories_par_niveau_simple(MotCle.objects).order_by("-fiche_count")
+    motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                    "elements": motscles, "titre": "Tous les mots-clés",
                                                    "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
@@ -331,7 +334,7 @@ def motscles(request):
 
 @login_required
 def motscles_alpha(request):
-    motscles = annotate_categories_par_niveau_simple(MotCle.objects).order_by("nom")
+    motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by("nom")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                    "elements": motscles, "titre": "Tous les mots-clés",
                                                    "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",

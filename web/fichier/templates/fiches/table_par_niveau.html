@@ -2,11 +2,21 @@
 <table class="distribution">
     <thead>
         <tr>
-            <th>{{ nom_humain }}</th>
+            {% if critere_name == "theme" or critere_name == "motcle" %}
+            <tr>
+                <td></td>
+                <th colspan="4" scope="colgroup">Fiches</th>
+                <th scope="colgroup">Agenda</th>
+              </tr>
+              {% endif %}
+              <th>{{ nom_humain }}</th>
             <th>{% get_carre_colore_A %} théorique</th>
             <th>{% get_carre_colore_B %} intermédiaire</th>
             <th>{% get_carre_colore_C %} pratique</th>
-            <th>total</th>
+            <th>total fiches</th>
+        {% if critere_name == "theme" or critere_name == "motcle" %}
+            <th>entrées agenda</th>
+        {% endif %}
         </tr>
     </thead>
     <tbody>
@@ -24,6 +34,9 @@
         <td>{{element.fiche_count_B}}</td>
         <td>{{element.fiche_count_C}}</td>
         <td>{{element.fiche_count }}</td> 
+        {% if critere_name == "theme" or critere_name == "motcle" %}
+        <td>{{element.agenda_count }}</td> 
+        {% endif %}
     </tr>
     {% endwith %}
 {% endfor %}
