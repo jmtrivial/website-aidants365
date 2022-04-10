@@ -54,7 +54,7 @@ Glossaire
     <div class="block">
 
         <h2>Notes</h2>
-        {{ entree.notes | safe }}
+        {{ entree.notes | ajouter_glossaire:True | safe }}
         
     </div>
 

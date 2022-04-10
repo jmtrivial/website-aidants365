@@ -308,6 +308,26 @@ class EntreeGlossaire(models.Model):
 
         return result
 
+    def matching_entrees_agenda(self):
+        result = []
+
+        for e in EntreeAgenda.objects.filter():
+            if re.search(r'\[%s\]' % self.entree, str(e.notes), flags=re.I):
+                result.append(e)
+                break
+            else:
+                found = False
+                if self.formes_alternatives:
+                    for fa in self.formes_alternatives:
+                        if re.search(r'\[%s\]' % fa, str(e.notes), flags=re.I):
+                            result.append(e)
+                            found = True
+                            break
+                    if found:
+                        break
+
+        return result
+
     def matching_fiches(self):
         result = []
 

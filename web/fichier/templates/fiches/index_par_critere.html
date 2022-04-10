@@ -64,7 +64,7 @@ avec le mot-clé {{ critere_nom }}
             <h2>Entrées de l'agenda</h2>
             <ul>
             {% for entree in entreesagenda %}
-            <li><a href="{% url 'fichier:entree_agenda' entree.date.year entree.date.month entree.date.day %}">{{ entree }}</a></li>
+            <li><a href="{{ entree.get_absolute_url }}">{{ entree }}</a></li>
             {% endfor %}
             </lul>
         {% endif %}

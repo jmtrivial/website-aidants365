@@ -50,10 +50,23 @@ Glossaire
     {% with entree.matching_fiches as list_fiches %}
     {% if list_fiches %}
     <div class="block">
-        <h2>Fiches faisant mention de cette entrée</h2>
+        <h2>Fiches faisant mention de cette entrée du glossaire</h2>
     <ul>
-        {% for fiche in entree.matching_fiches %}
+        {% for fiche in list_fiches %}
             <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
+        {% endfor %}
+    </ul>
+    </div>
+    {% endif %}
+    {% endwith %}
+
+    {% with entree.matching_entrees_agenda as list_eagenda %}
+    {% if list_eagenda %}
+    <div class="block">
+        <h2>Entrées de l'agenda faisant mention de cette entrée du glossaire</h2>
+    <ul>
+        {% for e in list_eagenda %}
+            <li><a href="{{ e.get_absolute_url }}">{{ e }}</a></li>
         {% endfor %}
     </ul>
     </div>

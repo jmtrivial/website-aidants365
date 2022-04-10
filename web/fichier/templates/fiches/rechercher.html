@@ -90,7 +90,7 @@ Toutes les fiches
             correspondant à « {{ recherche }} »</h2>
         <ol>
         {% for entree in results_agenda %}
-            <li><strong><a href="{% url 'fichier:entree_agenda' entree.date.year entree.date.month entree.date.day %}?search={{ recherche }}">{{ entree }}</a></strong>
+            <li><strong><a href="{{ entree.get_absolute_url }}?search={{ recherche }}">{{ entree }}</a></strong>
             <p class="preview_highlight">{{ entree.notes_hl | safe }}</p>
             </li>
         {% endfor %}
