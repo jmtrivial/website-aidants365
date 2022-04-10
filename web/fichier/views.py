@@ -631,8 +631,11 @@ def rest_api(request, classname):
 
         nom = body["nom"]
 
-        b = classes[classname](nom=nom)
-        b.save()
+        try:
+            b = classes[classname](nom=nom)
+            b.save()
+        except:
+            return render(request, 'fiches/json.html', json_context({"error": "L'entrée existe déjà. Veuillez choisir cette entrée dans la liste des entrées existantes."}))
 
         return render(request, 'fiches/json.html', json_context({"id": b.id, "nom": b.nom}))
 

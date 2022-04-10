@@ -106,7 +106,7 @@ class Auteur(models.Model):
 
 
 class CategorieLibre(models.Model):
-    nom = models.CharField(verbose_name="Nom de la catégorie libre", max_length=64)
+    nom = models.CharField(verbose_name="Nom de la catégorie libre", max_length=64, unique=True, blank=False)
 
     class Meta:
         verbose_name = "Catégorie libre"
@@ -120,7 +120,7 @@ class CategorieLibre(models.Model):
 
 
 class MotCle(models.Model):
-    nom = models.CharField(verbose_name="Mot-clé", max_length=64)
+    nom = models.CharField(verbose_name="Mot-clé", max_length=64, unique=True, blank=False)
 
     class Meta:
         verbose_name = "Mot-clé"
@@ -134,7 +134,7 @@ class MotCle(models.Model):
 
 
 class Theme(models.Model):
-    nom = models.CharField(verbose_name="Thème", max_length=64)
+    nom = models.CharField(verbose_name="Thème", max_length=64, unique=True, blank=False)
 
     class Meta:
         verbose_name = "Thème"
@@ -274,7 +274,7 @@ class EntreeGlossaire(models.Model):
     def __str__(self):
         return self.entree
 
-    entree = models.CharField(verbose_name="Entrée", max_length=128)
+    entree = models.CharField(verbose_name="Entrée", max_length=128, unique=True, blank=False)
     formes_alternatives = ArrayField(models.CharField(max_length=128, blank=True), verbose_name="Formes alternatives (pluriels, abréviations, etc)", blank=True, null=True)
 
     definition = RichTextField(verbose_name="Définition", config_name='main_ckeditor', blank=True)

@@ -57,7 +57,10 @@ ajouter.onclick = function() {
         contentType: 'application/json; charset=utf-8',
         data: JSON.stringify({nom: $("#popup_name").val()}),
         success: function (data) {
-            if ("erreur" in data || !(("nom" in data) && ("id" in data))) {
+            if ("error" in data) {
+                setErreur(data["error"]);
+            }
+            else if (!(("nom" in data) && ("id" in data))) {
                 setErreur("Une erreur s'est produite pendant l'enregistrement. Veuillez essayer plus tard.");
             }
             else {
