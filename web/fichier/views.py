@@ -8,7 +8,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -445,6 +445,15 @@ def edit_object(request, classname, id=None):
         classe = CategorieLibre
         classeform = CategorieLibreForm
         reverse_url = 'fichier:index_categorie_libre'
+    elif classname == "niveau":
+        nom_classe = "niveau"
+        titre_add = "Création d\'un niveau"
+        titre_edition = "Édition d'un niveau"
+        message_add_success = 'Le niveau "%s" a été ajouté avec succès.'
+        message_edit_success = 'Le niveau "%s" a été modifié avec succès.'
+        classe = Niveau
+        classeform = NiveauForm
+        reverse_url = 'fichier:index_niveau'
     else:
         raise Http404("Donnée inconnue")
 

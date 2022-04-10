@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre, Niveau
 from django.utils import timezone
 from django.db import models
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
@@ -89,6 +89,14 @@ class CategorieLibreForm(WithUserForm):
 
     class Meta:
         model = CategorieLibre
+
+        fields = '__all__'
+
+
+class NiveauForm(WithUserForm):
+
+    class Meta:
+        model = Niveau
 
         fields = '__all__'
 
