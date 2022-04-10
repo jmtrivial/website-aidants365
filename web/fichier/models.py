@@ -392,7 +392,7 @@ class EntreeAgenda(models.Model):
     themes = models.ManyToManyField(Theme, verbose_name="Thèmes associés", blank=True)
     motscles = models.ManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True)
 
-    notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True)
+    notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
     fiches_associees = models.ManyToManyField(Fiche, verbose_name="Fiches associées", blank=True)
 
