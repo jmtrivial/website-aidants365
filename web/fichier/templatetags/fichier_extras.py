@@ -215,6 +215,13 @@ def get_nom_niveau_C():
 
 
 @register.simple_tag
+def lien_interne(texte, ok, url):
+    if ok:
+        return '<a class="interne" href="' + url + '>' + texte + "</a>"
+    else:
+        return texte
+
+@register.simple_tag
 def liste_niveaux(niveau_code):
     match = {"A": Niveau.Applicabilite.A, "B": Niveau.Applicabilite.B, "C": Niveau.Applicabilite.C}
     niv = Niveau.objects.filter(applicable=match[niveau_code])
@@ -228,12 +235,18 @@ def liste_niveaux(niveau_code):
 
 
 @register.filter
-def ajouter_glossaire(texte):
+def ajouter_glossaire(texte, liens):
     result = texte
 
     for e in EntreeGlossaire.objects.filter():
-        result = e.ajouter_liens(result)
+        if liens:
+            result = e.ajouter_liens(result)
+        else:
+            result = e.ajouter_span(result)
 
-    result = re.sub(r'\[([^\]<>]*)\]', r'<a class="glossaire-creer" title="ajouter « \1 » au glossaire" href="/fichier/glossaire/add/?entree=\1">\1</a>', result)
+    if liens:
+        result = re.sub(r'\[([^\]<>]*)\]', r'<a class="glossaire-creer" title="ajouter « \1 » au glossaire" href="/fichier/glossaire/add/?entree=\1">\1</a>', result)
+    else:
+        result = re.sub(r'\[([^\]<>]*)\]', r'<span class="glossaire-creer">\1</a>', result)
 
     return result

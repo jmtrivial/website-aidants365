@@ -282,6 +282,9 @@ class EntreeGlossaire(models.Model):
     def get_absolute_url(self):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
+    def ajouter_span_entree(self, text, entree):
+        return re.sub(r'\[(%s)\]' % entree, r'<span class="glossaire">\1</span>*', text, flags=re.I)
+
     def ajouter_liens_entree(self, text, entree):
         return re.sub(r'\[(%s)\]' % entree, r'<a title="%s" class="glossaire" href="/fichier/glossaire/%s/">\1</a>' % (Truncator(strip_tags(self.definition)).words(64), str(self.id)), text, flags=re.I)
 
@@ -291,6 +294,15 @@ class EntreeGlossaire(models.Model):
         if self.formes_alternatives:
             for fa in self.formes_alternatives:
                 result = self.ajouter_liens_entree(result, fa)
+
+        return result
+
+    def ajouter_span(self, text):
+        result = self.ajouter_span_entree(text, self.entree)
+
+        if self.formes_alternatives:
+            for fa in self.formes_alternatives:
+                result = self.ajouter_span_entree(result, fa)
 
         return result
 

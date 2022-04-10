@@ -1,32 +1,32 @@
 {% load fichier_extras %}
-{% if liens %}
-{% endif %}
 <div id="message_responsive">La présentation des fiches sur petits écrans type smartphone pourrait ne pas être conforme à la <a href="{% url 'fichier:detail_pdf' fiche.id %}">présentation finale en pdf</a>. Affichage à titre informatif.</div>
 <page size="A4">
+    {% if liens %}
     <div id="actions">
         {% if details %} <a href="{% url 'fichier:detail' fiche.id %}"><button>plein écran</button></a> {% endif %}
         <a href="{% url 'fichier:object_change' 'fiche' fiche.id %}" id="edit_button"><button>éditer (ctrl-e)</button></a>
         <a href="{% url 'fichier:detail_pdf' fiche.id %}"><button>pdf</button></a>
     </div>
-      <div id="contenu_page">
+    {% endif %}
+    <div id="contenu_page">
         <div id="haut">
             <div id="entete">
                 <div class="gauche">
                     <p class="nomenclature">
                         {{ fiche.niveau.couleur | carre_colore }}
-                        <a class="internal" href="{% url 'fichier:index_detail' fiche.id %}">Projet365</a> — 
-                        <a class="internal" href="{% url 'fichier:index_niveau_detail' fiche.niveau.id fiche.id %}">{{ fiche.niveau }}</a>
-                        <a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{{ fiche.categorie1 }}</a>
-                        <a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{{ fiche.auteur }}</a>
+                        {% if liens %}<a class="internal" href="{% url 'fichier:index_detail' fiche.id %}">{% endif %}Aidants 365{% if liens %}</a>{% endif %} — 
+                        {% if liens %}<a class="internal" href="{% url 'fichier:index_niveau_detail' fiche.niveau.id fiche.id %}">{% endif %}{{ fiche.niveau }}{% if liens %}</a>{% endif %}
+                        {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{% endif %}{{ fiche.categorie1 }}{% if liens %}</a>{% endif %}
+                        {% if liens %}<a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{% endif %}{{ fiche.auteur }}{% if liens %}</a>{% endif %}
                         {{ fiche.numero  | number_xxxx }}</p>
                     <h1>{{ fiche.titre_fiche  | safe }}</h1>
                     <h2>{{ fiche.sous_titre  | safe }}</h2>
                 </div>
                 <div class="droite">
                     <strong>Catégorie</strong><br />
-                    <a class="internal" href="{% url 'fichier:index_niveau_detail' fiche.niveau.id fiche.id %}">{{ fiche.niveau.code }}</a>, <a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{{ fiche.categorie1 }}</a>{% if fiche.categorie2 %}, <a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie2.id fiche.id %}">{{ fiche.categorie2 }}</a>{% endif %}{% if fiche.categorie3 %}, <a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie3.id fiche.id %}">{{ fiche.categorie3 }}</a>{% endif %}{% for cl in fiche.categories_libres.all %}, <a class="internal" href="{% url 'fichier:index_categorie_libre_detail' cl.id fiche.id %}">{{ cl }}</a>{% endfor %}<br />
+                    {% if liens %}<a class="internal" href="{% url 'fichier:index_niveau_detail' fiche.niveau.id fiche.id %}">{% endif %}{{ fiche.niveau.code }}{% if liens %}</a>{% endif %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{% endif %}{{ fiche.categorie1 }}{% if liens %}</a>{% endif %}{% if fiche.categorie2 %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie2.id fiche.id %}">{% endif %}{{ fiche.categorie2 }}{% if liens %}</a>{% endif %}{% endif %}{% if fiche.categorie3 %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie3.id fiche.id %}">{% endif %}{{ fiche.categorie3 }}{% if liens %}</a>{% endif %}{% endif %}{% for cl in fiche.categories_libres.all %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_libre_detail' cl.id fiche.id %}">{% endif %}{{ cl }}{% if liens %}</a>{% endif %}{% endfor %}<br />
                     <strong>Auteur</strong><br />
-                    <a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{{ fiche.auteur.nom }}</a><br />
+                    {% if liens %}<a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{% endif %}{{ fiche.auteur.nom }}{% if liens %}</a>{% endif %}<br />
                     <strong>Date création</strong><br />
                     {{ fiche.date_creation }}<br />
                     <strong>Date dernière modification</strong><br />
@@ -50,32 +50,32 @@
                     {{ fiche.partenaires | affiche_si_existe:"Partenaires" | inside_si_existe:"li" }}
                     {% if fiche.themes.all %}
                     <li><strong>Thèmes&nbsp;:</strong>
-                    {% for theme in fiche.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme_detail' theme.id fiche.id %}">{{ theme.nom }}</a>{% endfor %}
+                    {% for theme in fiche.themes.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:index_theme_detail' theme.id fiche.id %}">{% endif %}{{ theme.nom }}{% if liens %}</a>{% endif %}{% endfor %}
                     </li>
                     {% endif %}
                     {% if fiche.mots_cles.all %}
                     <li><strong>Mots-clés&nbsp;:</strong>
-                    {% for motcle in fiche.mots_cles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle_detail' motcle.id fiche.id %}">{{ motcle.nom }}</a>{% endfor %}
+                    {% for motcle in fiche.mots_cles.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:index_motcle_detail' motcle.id fiche.id %}">{% endif %}{{ motcle.nom }}{% if liens %}</a>{% endif %}{% endfor %}
                     </li>
                     {% endif %}
                 </ul>
             </div>
         </div>
         <div id="corps">
-            {{ fiche.presentation | safe | ajouter_glossaire | affiche_si_existe:"Présentation" | inside_si_existe:"p" }}
-            {{ fiche.problematique | ajouter_glossaire | safe | affiche_si_existe:"Problématique" | inside_si_existe:"p" | safe }}
-            {{ fiche.quatrieme_de_couverture | ajouter_glossaire | safe | affiche_si_existe:"Quatrième de couverture" | inside_si_existe:"p" | safe }}
-            {{ fiche.plan_du_site | ajouter_glossaire | safe | affiche_si_existe:"Plan du site" | inside_si_existe:"p" | safe }}
-            {% affiche_bloc_si_existe fiche.focus|safe|ajouter_glossaire "Focus" fiche.detail_focus%}
+            {{ fiche.presentation | safe | ajouter_glossaire:liens | affiche_si_existe:"Présentation" | inside_si_existe:"p" }}
+            {{ fiche.problematique | ajouter_glossaire:liens | safe | affiche_si_existe:"Problématique" | inside_si_existe:"p" | safe }}
+            {{ fiche.quatrieme_de_couverture | ajouter_glossaire:liens | safe | affiche_si_existe:"Quatrième de couverture" | inside_si_existe:"p" | safe }}
+            {{ fiche.plan_du_site | ajouter_glossaire:liens | safe | affiche_si_existe:"Plan du site" | inside_si_existe:"p" | safe }}
+            {% affiche_bloc_si_existe fiche.focus|safe|ajouter_glossaire:liens "Focus" fiche.detail_focus%}
         </div>
         <div id="pied">
             <ul>
-                {{ fiche.reserves | ajouter_glossaire | affiche_si_existe:"Réserves" | inside_si_existe:"li" | safe }}
-                {{ fiche.lesplus | ajouter_glossaire | affiche_si_existe:"Les plus" | inside_si_existe:"li" | safe }}
-                {{ fiche.en_savoir_plus | ajouter_glossaire | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" | safe }}
+                {{ fiche.reserves | ajouter_glossaire:liens | affiche_si_existe:"Réserves" | inside_si_existe:"li" | safe }}
+                {{ fiche.lesplus | ajouter_glossaire:liens | affiche_si_existe:"Les plus" | inside_si_existe:"li" | safe }}
+                {{ fiche.en_savoir_plus | ajouter_glossaire:liens | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" | safe }}
                 {% if fiche.fiches_connexes.all %}
                 <li><strong>Fiches connexes&nbsp;:</strong>
-                {% for connexe in fiche.fiches_connexes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:detail' connexe.id %}">{{ connexe }}</a>{% endfor %}
+                {% for connexe in fiche.fiches_connexes.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:detail' connexe.id %}">{% endif %}{{ connexe }}{% if liens %}</a>{% endif %}{% endfor %}
                 </li>
                 {% endif %}
             </ul>
