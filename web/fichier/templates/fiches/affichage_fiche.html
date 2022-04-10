@@ -62,17 +62,17 @@
             </div>
         </div>
         <div id="corps">
-            {{ fiche.presentation | safe | ajouter_glossaire:liens | affiche_si_existe:"Présentation" | inside_si_existe:"p" }}
-            {{ fiche.problematique | ajouter_glossaire:liens | safe | affiche_si_existe:"Problématique" | inside_si_existe:"p" | safe }}
-            {{ fiche.quatrieme_de_couverture | ajouter_glossaire:liens | safe | affiche_si_existe:"Quatrième de couverture" | inside_si_existe:"p" | safe }}
-            {{ fiche.plan_du_site | ajouter_glossaire:liens | safe | affiche_si_existe:"Plan du site" | inside_si_existe:"p" | safe }}
-            {% affiche_bloc_si_existe fiche.focus|safe|ajouter_glossaire:liens "Focus" fiche.detail_focus%}
+            {{ fiche.presentation | safe | ajouter_glossaire:liens | ajouter_liens | affiche_si_existe:"Présentation" | inside_si_existe:"p" }}
+            {{ fiche.problematique | ajouter_glossaire:liens | safe | ajouter_liens | affiche_si_existe:"Problématique" | inside_si_existe:"p" | safe }}
+            {{ fiche.quatrieme_de_couverture | ajouter_glossaire:liens | ajouter_liens | safe | affiche_si_existe:"Quatrième de couverture" | inside_si_existe:"p" | safe }}
+            {{ fiche.plan_du_site | ajouter_glossaire:liens | safe | ajouter_liens | affiche_si_existe:"Plan du site" | inside_si_existe:"p" | safe }}
+            {% affiche_bloc_si_existe fiche.focus|safe|ajouter_glossaire:liens|ajouter_liens "Focus" fiche.detail_focus%}
         </div>
         <div id="pied">
             <ul>
-                {{ fiche.reserves | ajouter_glossaire:liens | affiche_si_existe:"Réserves" | inside_si_existe:"li" | safe }}
-                {{ fiche.lesplus | ajouter_glossaire:liens | affiche_si_existe:"Les plus" | inside_si_existe:"li" | safe }}
-                {{ fiche.en_savoir_plus | ajouter_glossaire:liens | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" | safe }}
+                {{ fiche.reserves | ajouter_glossaire:liens | ajouter_liens | affiche_si_existe:"Réserves" | inside_si_existe:"li" | safe }}
+                {{ fiche.lesplus | ajouter_glossaire:liens | ajouter_liens | affiche_si_existe:"Les plus" | inside_si_existe:"li" | safe }}
+                {{ fiche.en_savoir_plus | ajouter_glossaire:liens | ajouter_liens | affiche_si_existe:"En savoir plus" | inside_si_existe:"li" | safe }}
                 {% if fiche.fiches_connexes.all %}
                 <li><strong>Fiches connexes&nbsp;:</strong>
                 {% for connexe in fiche.fiches_connexes.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:detail' connexe.id %}">{% endif %}{{ connexe }}{% if liens %}</a>{% endif %}{% endfor %}

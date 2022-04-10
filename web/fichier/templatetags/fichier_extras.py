@@ -251,3 +251,10 @@ def ajouter_glossaire(texte, liens):
         result = re.sub(r'\[([^\]<>]*)\]', r'<span class="glossaire-creer">\1</a>', result)
 
     return result
+
+
+@register.filter
+def ajouter_liens(texte):
+    # on ajoute les liens des urls si elles existent
+    pat1 = re.compile(r"(^|[\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)", re.IGNORECASE | re.DOTALL)
+    return pat1.sub(r'\1<a href="\2">\2</a>', texte)
