@@ -14,7 +14,7 @@ from django.contrib import messages
 from django.views.generic.edit import DeleteView
 import json
 from datetime import datetime, timedelta
-
+from django.db import IntegrityError
 
 from django.views.generic import DetailView
 
@@ -634,7 +634,7 @@ def rest_api(request, classname):
         try:
             b = classes[classname](nom=nom)
             b.save()
-        except:
+        except IntegrityError:
             return render(request, 'fiches/json.html', json_context({"error": "L'entrée existe déjà. Veuillez choisir cette entrée dans la liste des entrées existantes."}))
 
         return render(request, 'fiches/json.html', json_context({"id": b.id, "nom": b.nom}))
