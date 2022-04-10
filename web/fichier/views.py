@@ -646,20 +646,17 @@ def merge(request, classname):
         pluriel = "catégories libres"
         classform = CategorieLibreMergeForm
         reverse_url_main = "fichier:categories"
-        reverse_url = "fichier:index_categorie_libre"
         field_fiche = "categories_libres"
     elif classname == "theme":
         pluriel = "thèmes"
         classform = ThemeMergeForm
         reverse_url_main = "fichier:themes"
-        reverse_url = "fichier:index_theme"
         field_fiche = "themes"
         field_agenda = "themes"
     elif classname == "motcle":
         pluriel = "mots-clés"
         classform = MotCleMergeForm
         reverse_url_main = "fichier:motscles"
-        reverse_url = "fichier:index_motcle"
         field_fiche = "mots_cles"
         field_agenda = "motscles"
     else:
@@ -700,7 +697,7 @@ def merge(request, classname):
                     CategorieLibre.objects.filter(pk=form.cleaned_data["element2"].id).delete()
 
                 messages.success(request, "Fusion réussie entre les deux " + pluriel + " " + form.cleaned_data["element1"].nom + " et " + form.cleaned_data["element2"].nom)
-                return HttpResponseRedirect(reverse(reverse_url, args=[form.cleaned_data["element1"].id]))
+                return HttpResponseRedirect(reverse(reverse_url_main))
     else:
         form = classform()
 
