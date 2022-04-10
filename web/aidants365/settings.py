@@ -165,6 +165,8 @@ CKEDITOR_CONFIGS = {
         'entities_latin': False,
         'entities': False,
         'width': 'auto',
+        "extraPlugins": 'autolink',
+        "removePlugins": "exportpdf"
     },
 }
 
