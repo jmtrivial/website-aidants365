@@ -255,9 +255,11 @@ def annotate_categories_par_niveau_simple(objects):
 def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
+    agendas = EntreeAgenda.objects.filter(themes=theme)
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "theme", "critere": theme,
                                                              "critere_human": "du thème",
-                                                             "critere_nom": str(theme), "fiche_list": fiches})
+                                                             "critere_nom": str(theme), "fiche_list": fiches,
+                                                             "entreesagenda": agendas})
 
 
 @login_required
@@ -302,9 +304,10 @@ def themes_nuage(request):
 def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)
+    agendas = EntreeAgenda.objects.filter(motscles=motcle)
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
                                                              "critere_human": "du mot-clé", "critere_nom": str(motcle),
-                                                             "fiche_list": fiches})
+                                                             "fiche_list": fiches, "entreesagenda": agendas})
 
 
 @login_required

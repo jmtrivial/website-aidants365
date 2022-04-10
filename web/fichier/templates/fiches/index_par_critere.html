@@ -59,6 +59,15 @@ avec le mot-clé {{ critere_nom }}
             </ul>
 
         {% endfor %}
+
+        {% if entreesagenda %}
+            <h2>Entrées de l'agenda</h2>
+            <ul>
+            {% for entree in entreesagenda %}
+            <li><a href="{% url 'fichier:entree_agenda' entree.date.year entree.date.month entree.date.day %}">{{ entree }}</a></li>
+            {% endfor %}
+            </lul>
+        {% endif %}
     {% else %}
         <p>Pas de fiche disponible.</p>
     {% endif %}
