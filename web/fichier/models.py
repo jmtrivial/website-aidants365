@@ -252,7 +252,7 @@ class Fiche(models.Model):
                                                        "categorie1__code", Value(" "), "auteur__code", Value(" "),
                                                        Right(Concat(Value("0000"), "numero"), 4), Value(" "), "titre_fiche", output_field=models.CharField())). \
             annotate(agg_contenu=Concat("sous_titre", Value(" "), "presentation", Value(" "), "problematique", Value(" "), "quatrieme_de_couverture", Value(" "),
-                                        "plan_du_site", Value(" "), "focus", Value(" "), "titre", Value(" "), "editeur", Value(" "), "auteurs", Value(" "), "collection",
+                                        "plan_du_site", Value(" Focus "), "detail_focus", Value(" "), "focus", Value(" "), "titre", Value(" "), "editeur", Value(" "), "auteurs", Value(" "), "collection",
                                         "partenaires", Value(" "), "reserves", Value(" "), "lesplus", Value(" "), "en_savoir_plus", output_field=models.CharField())). \
             annotate(search=search_vectors).filter(search=search_query). \
             annotate(agg_title_hl=SearchHeadline("agg_title", search_query,
