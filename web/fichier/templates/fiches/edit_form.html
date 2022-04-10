@@ -115,7 +115,7 @@ Le fichier Aidants365 — édition
 <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
 <script src="{% static 'js/datepicker-fr.js' %}" ></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-{% if nom_classe == "fiche" %}
+{% if nom_classe == "fiche" or nom_classe == "entreeagenda" %}
 <script src="{% static 'js/add_dynamique.js' %}" ></script>
 {% endif %}
 <script>
