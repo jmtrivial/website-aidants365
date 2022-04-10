@@ -18,6 +18,8 @@ from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHead
 import logging
 logger = logging.getLogger(__name__)
 
+message_glossaire = "Dans ce texte, vous pouvez encadrer un terme par des crochets pour qu'ils devienne un lien vers l'entrée de glossaire correspondante. <br> Exemple: [aidant]."
+
 
 class Niveau(models.Model):
 
@@ -189,24 +191,24 @@ class Fiche(models.Model):
     mots_cles = models.ManyToManyField(MotCle, verbose_name="Mots-clés", blank=True)
 
     # corps
-    presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True)
+    presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
-    problematique = RichTextField(verbose_name="Problématique", config_name='main_ckeditor', blank=True)
+    problematique = RichTextField(verbose_name="Problématique", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
     # uniquement si biblio
-    quatrieme_de_couverture = RichTextField(verbose_name="Quatrième de couverture", config_name='main_ckeditor', blank=True)
+    quatrieme_de_couverture = RichTextField(verbose_name="Quatrième de couverture", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
     # uniquement si site
-    plan_du_site = RichTextField(verbose_name="Plan du site", config_name='main_ckeditor', blank=True)
+    plan_du_site = RichTextField(verbose_name="Plan du site", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
     detail_focus = models.CharField(verbose_name="Détail du focus (placé après le mot \"Focus\")", max_length=1024, blank=True)
 
-    focus = RichTextField(verbose_name="Focus", config_name='main_ckeditor', blank=True)
+    focus = RichTextField(verbose_name="Focus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
     # pied de page
-    reserves = RichTextField(verbose_name="Réserves", config_name='main_ckeditor', blank=True)
-    lesplus = RichTextField(verbose_name="Les plus", config_name='main_ckeditor', blank=True)
-    en_savoir_plus = RichTextField(verbose_name="En savoir plus", config_name='main_ckeditor', blank=True)
+    reserves = RichTextField(verbose_name="Réserves", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
+    lesplus = RichTextField(verbose_name="Les plus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
+    en_savoir_plus = RichTextField(verbose_name="En savoir plus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
     fiches_connexes = models.ManyToManyField("self", verbose_name="Fiches connexes", blank=True)
 
     class Meta:

@@ -10,6 +10,11 @@
     clear: both;
 }
 
+
+.help {
+    font-size: 90%;
+}
+
 .anchor {
     height: 0;
     margin: 0;
