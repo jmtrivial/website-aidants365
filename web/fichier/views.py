@@ -8,7 +8,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -175,6 +175,7 @@ def categories(request):
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                    "visu_code": "basic", "visu": "triées par nombre total de fiches",
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
+                                                   "nom_humain_second_pluriel": "catégories libres",
                                                    "critere_name_second": "categorie_libre"})
 
 
@@ -184,9 +185,10 @@ def categories_alpha(request):
     categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("nom")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories",
-                                                   "nom_humain": "catégorie", "nom_humain_pluriel": "catégorie",
+                                                   "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique",
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
+                                                   "nom_humain_second_pluriel": "catégories libres",
                                                    "critere_name_second": "categorie_libre"})
 
 
@@ -200,6 +202,7 @@ def categories_nuage(request):
                                                          "elements": categories, "titre": "Toutes les catégories",
                                                          "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                          "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
+                                                         "nom_humain_second_pluriel": "catégories libres",
                                                          "critere_name_second": "categorie_libre"})
 
 
@@ -632,3 +635,74 @@ def rest_api(request, classname):
         b.save()
 
         return render(request, 'fiches/json.html', json_context({"id": b.id, "nom": b.nom}))
+
+
+@login_required
+def merge(request, classname):
+    if classname == "categorie_libre":
+        pluriel = "catégories libres"
+        classform = CategorieLibreMergeForm
+        reverse_url_main = "fichier:categories"
+        reverse_url = "fichier:index_categorie_libre"
+        field_fiche = "categories_libres"
+    elif classname == "theme":
+        pluriel = "thèmes"
+        classform = ThemeMergeForm
+        reverse_url_main = "fichier:themes"
+        reverse_url = "fichier:index_theme"
+        field_fiche = "themes"
+        field_agenda = "themes"
+    elif classname == "motcle":
+        pluriel = "mots-clés"
+        classform = MotCleMergeForm
+        reverse_url_main = "fichier:motscles"
+        reverse_url = "fichier:index_motcle"
+        field_fiche = "mots_cles"
+        field_agenda = "motscles"
+    else:
+        return Http404("Impossible de lancer la fusion")
+
+    if request.method == 'POST':
+        logger.warning(request.POST)
+        if "annuler" in request.POST:
+            messages.info(request, "Fusion annulée")
+            return HttpResponseRedirect(reverse(reverse_url_main))
+        else:
+            form = classform(data=request.POST)
+            if form.is_valid():
+                for fiche in Fiche.objects.filter(**{field_fiche: form.cleaned_data["element2"].id}):
+                    if classname == "theme":
+                        fiche.themes.add(form.cleaned_data["element1"])
+                        fiche.themes.remove(form.cleaned_data["element2"])
+                    elif classname == "motcle":
+                        fiche.mots_cles.add(form.cleaned_data["element1"])
+                        fiche.mots_cles.remove(form.cleaned_data["element2"])
+                    elif classname == "categorie_libre":
+                        fiche.categories_libres.add(form.cleaned_data["element1"])
+                        fiche.categories_libres.remove(form.cleaned_data["element2"])
+                if classname == "theme" or classname == "motcle":
+                    for entree in EntreeAgenda.objects.filter(**{field_agenda: form.cleaned_data["element2"].id}):
+                        if classname == "theme":
+                            entree.themes.add(form.cleaned_data["element1"])
+                            entree.themes.remove(form.cleaned_data["element2"])
+                        elif classname == "motcle":
+                            entree.motscles.add(form.cleaned_data["element1"])
+                            entree.motscles.remove(form.cleaned_data["element2"])
+
+                if classname == "theme":
+                    Theme.objects.filter(pk=form.cleaned_data["element2"].id).delete()
+                elif classname == "motcle":
+                    MotCle.objects.filter(pk=form.cleaned_data["element2"].id).delete()
+                elif classname == "categorie_libre":
+                    CategorieLibre.objects.filter(pk=form.cleaned_data["element2"].id).delete()
+
+                messages.success(request, "Fusion réussie entre les deux " + pluriel + " " + form.cleaned_data["element1"].nom + " et " + form.cleaned_data["element2"].nom)
+                return HttpResponseRedirect(reverse(reverse_url, args=[form.cleaned_data["element1"].id]))
+    else:
+        form = classform()
+
+    return render(request, "fiches/merge.html", {
+        'titre': "Fusion de deux " + pluriel,
+        'form': form,
+        'pluriel': pluriel
+    })

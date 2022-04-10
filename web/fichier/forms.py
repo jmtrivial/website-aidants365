@@ -1,6 +1,7 @@
 from django import forms
 from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre
 from django.utils import timezone
+from django.db import models
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.contrib import admin
 from django.urls import reverse
@@ -90,3 +91,29 @@ class CategorieLibreForm(WithUserForm):
         model = CategorieLibre
 
         fields = '__all__'
+
+
+class MergeForm(forms.Form):
+    def clean(self):
+        field1 = self.cleaned_data['element1']
+        field2 = self.cleaned_data['element2']
+
+        if field1 == field2:
+            self.add_error("element2", "Les deux champs doivent être différents")
+
+        return self.cleaned_data
+
+
+class ThemeMergeForm(MergeForm):
+    element1 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom"), required=True, label="Thème principal")
+    element2 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom"), required=True, label="Thème à intégrer dans le principal")
+
+
+class MotCleMergeForm(MergeForm):
+    element1 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom"), required=True, label="Mot-clé principal")
+    element2 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom"), required=True, label="Mot-clé à intégrer dans le principal")
+
+
+class CategorieLibreMergeForm(MergeForm):
+    element1 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom"), required=True, label="Catégorie libre principal")
+    element2 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom"), required=True, label="Catégorie libre à intégrer dans le principal")
