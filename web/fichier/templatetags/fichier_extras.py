@@ -221,6 +221,7 @@ def lien_interne(texte, ok, url):
     else:
         return texte
 
+
 @register.simple_tag
 def liste_niveaux(niveau_code):
     match = {"A": Niveau.Applicabilite.A, "B": Niveau.Applicabilite.B, "C": Niveau.Applicabilite.C}

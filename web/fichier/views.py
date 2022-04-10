@@ -8,7 +8,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -415,6 +415,33 @@ def edit_object(request, classname, id=None):
         classe = Categorie
         classeform = CategorieForm
         reverse_url = 'fichier:index_categorie'
+    elif classname == "theme":
+        nom_classe = "theme"
+        titre_add = "Création d\'un thème"
+        titre_edition = "Édition du thème"
+        message_add_success = 'Le thème "%s" a été ajouté avec succès.'
+        message_edit_success = 'Le thème "%s" a été modifié avec succès.'
+        classe = Theme
+        classeform = ThemeForm
+        reverse_url = 'fichier:index_theme'
+    elif classname == "motcle":
+        nom_classe = "motcle"
+        titre_add = "Création d\'un mot-clé"
+        titre_edition = "Édition du mot-clé"
+        message_add_success = 'Le mot-clé "%s" a été ajouté avec succès.'
+        message_edit_success = 'Le mot-clé "%s" a été modifié avec succès.'
+        classe = MotCle
+        classeform = MotCleForm
+        reverse_url = 'fichier:index_motcle'
+    elif classname == "categorie_libre":
+        nom_classe = "categorie_libre"
+        titre_add = "Création d\'une catégorie libre"
+        titre_edition = "Édition d'une catégorie libre"
+        message_add_success = 'La catégorie libre "%s" a été ajoutée avec succès.'
+        message_edit_success = 'La catégorie libre "%s" a été modifiée avec succès.'
+        classe = CategorieLibre
+        classeform = CategorieLibreForm
+        reverse_url = 'fichier:index_categorie_libre'
     else:
         raise Http404("Donnée inconnue")
 
@@ -542,6 +569,24 @@ class DeleteObjectView(LoginRequiredMixin, DeleteView):
             return HttpResponseRedirect(url)
         else:
             return super(DeleteObjectView, self).post(request, *args, **kwargs)
+
+
+class DeleteCategorieLibreView(DeleteObjectView):
+    model = CategorieLibre
+    success_url = reverse_lazy("fichier:categories")
+    cancel_url = "fichier:entree_categorie_libre"
+
+
+class DeleteThemeView(DeleteObjectView):
+    model = Theme
+    success_url = reverse_lazy("fichier:themes")
+    cancel_url = "fichier:entree_theme"
+
+
+class DeleteMotCleView(DeleteObjectView):
+    model = MotCle
+    success_url = reverse_lazy("fichier:motscles")
+    cancel_url = "fichier:entree_motcle"
 
 
 class DeleteEntreeGlossaireView(DeleteObjectView):

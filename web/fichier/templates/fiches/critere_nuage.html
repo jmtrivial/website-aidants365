@@ -17,6 +17,8 @@ Aidants 365 — {{ titre }} {{ visu }}
 {% block content %}
     {% load fichier_extras %}
     <div class="block" id="entete">
+        {% include "fiches/ajouter_critere.html" %}
+
         <h1>{{ titre }} {{ visu }}</h1>
         Afficher par&nbsp;:
 

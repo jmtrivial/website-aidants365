@@ -17,6 +17,8 @@ Aidants 365 — {{ titre }} {{ visu }}
 {% block content %}
     {% load fichier_extras %}
     <div class="block" id="entete">
+        {% include "fiches/ajouter_critere.html" %}
+
         <h1>{{ titre }} {{ visu }}</h1>
  
         <p>Afficher par&nbsp;:
@@ -38,6 +40,7 @@ Aidants 365 — {{ titre }} {{ visu }}
             <a class="visu" href="{% url template_name %}">nuage de {{ nom_humain_pluriel }}</a>
         {% endwith %}
         </p>
+
         
         </div>
     <div class="block">

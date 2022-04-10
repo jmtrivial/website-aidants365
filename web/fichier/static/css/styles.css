@@ -193,7 +193,7 @@ a:hover {
     margin-left: 3em;
 }
 
-#menubar .bouton {
+#menubar .bouton, .lien_next.bouton {
     border: 1px solid #3d8ac6;
     height: auto;
     margin-top: 0.5em;
@@ -206,11 +206,29 @@ a:hover {
     display: inline-block;
     margin-right: 0.5em;
 }
-#menubar .bouton a, #menubar .bouton span {
+#menubar .bouton a, #menubar .bouton span,
+.lien_next.bouton a {
     line-height: 1.5em;
     height: 1.5em;
     text-align: center;
+    color: #fff;
 }
+
+.lien_next.bouton {
+    padding: 0.1em 0.8em;
+    background: #122b43;
+    border: 0;
+    clear: both;
+}
+
+.lien_next.bouton:hover {
+    background: #2a6098;
+}
+
+.lien_next.bouton a:hover {
+    text-decoration: none;
+}
+
 
 #content {
     margin-top: 3.2em;

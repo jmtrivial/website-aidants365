@@ -26,10 +26,8 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 
 {% block entete %}
     <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }}
-        {% if critere_name == "categorie" %}            
-        <a class="card_edit" href="{% url 'fichier:object_change' critere_name critere.id %}">éditer</a>
-        <a class="card_edit" href="{% url 'fichier:categorie_delete' critere.id %}">supprimer</a>
-    {% endif %}</h1>
+        {% include "fiches/editer_supprimer_critere.html" %}
+        </h1>
 
     {% if critere_name == "categorie" %}
     <p><em>{{ critere.nom }}</em></p>

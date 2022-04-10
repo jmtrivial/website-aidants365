@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre
 from django.utils import timezone
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.contrib import admin
@@ -7,6 +7,13 @@ from django.urls import reverse
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+class WithUserForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
 
 
 class FicheForm(forms.ModelForm):
@@ -37,37 +44,49 @@ class FicheForm(forms.ModelForm):
         return data
 
 
-class EntreeGlossaireForm(forms.ModelForm):
+class EntreeGlossaireForm(WithUserForm):
 
     class Meta:
         model = EntreeGlossaire
 
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
 
-
-class EntreeAgendaForm(forms.ModelForm):
+class EntreeAgendaForm(WithUserForm):
 
     class Meta:
         model = EntreeAgenda
 
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
 
-
-class CategorieForm(forms.ModelForm):
+class CategorieForm(WithUserForm):
 
     class Meta:
         model = Categorie
 
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user', None)
-        super().__init__(*args, **kwargs)
+
+class ThemeForm(WithUserForm):
+
+    class Meta:
+        model = Theme
+
+        fields = '__all__'
+
+
+class MotCleForm(WithUserForm):
+
+    class Meta:
+        model = MotCle
+
+        fields = '__all__'
+
+
+class CategorieLibreForm(WithUserForm):
+
+    class Meta:
+        model = CategorieLibre
+
+        fields = '__all__'

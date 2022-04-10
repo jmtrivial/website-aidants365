@@ -33,12 +33,8 @@ avec le mot-clé {{ critere_nom }}
     {% load fichier_extras %}
     <div class="block" id="entete">
         <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }} {% if critere_name == "niveau" %}({{ critere.nom }}){% endif %}
-        {% if critere_name == "categorie" %}            
-            <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' critere_name critere.id %}">éditer <small>(ctrl+e)</small></a>
-            {% if not fiche_list %}
-            <a class="card_edit" id="delete_button" href="{% url 'fichier:categorie_delete' critere.id %}">supprimer</a>
-            {% endif %}
-        {% endif %}</h1>
+            {% include "fiches/editer_supprimer_critere.html" %}</h1>
+
         {% if critere_name == "categorie" %}
         <p><em>{{ critere.nom }}</em></p>
         {% endif %}
