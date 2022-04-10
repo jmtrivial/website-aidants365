@@ -18,7 +18,7 @@ from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHead
 import logging
 logger = logging.getLogger(__name__)
 
-message_glossaire = "Dans ce texte, vous pouvez encadrer un terme par des crochets pour qu'ils devienne un lien vers l'entrée de glossaire correspondante. <br> Exemple: [aidant]."
+message_glossaire = "Dans ce texte, vous pouvez encadrer un terme par des crochets pour qu'ils devienne un lien vers l'entrée de glossaire correspondante (exemple: [aidant]). Dans ce texte, les adresses internet (https://... ou http://...) sont automatiquement transformées en liens cliquables."
 
 
 class Niveau(models.Model):
