@@ -507,8 +507,8 @@ def edit_object(request, classname, id=None):
 
 
 @login_required
-def agenda_current_year(request):
-    return agenda_year(request, timezone.now().year)
+def agenda_current_month(request):
+    return agenda_month(request, timezone.now().year, timezone.now().month)
 
 
 @login_required
