@@ -44,12 +44,13 @@ Le fichier Aidants365 — édition
         {{ form.media }}
             <div id="form_fiche">
             {{ form.non_field_errors }}
+            <p>Les champs dont les noms sont en gras sont des champs requis.</p>
             {% for field in form.visible_fields %}
                 {% if not field.id_for_label == "id_utiliser_suivant" %}
                 <div id="field_wrapper_{{ field.id_for_label }}" class="field_form">
                     <div class="field_label">
                         <div id="{{ field.id_for_label }}_anchor" class="anchor"></div>
-                        <div>{{ field.label_tag }}</div>
+                        <div{% if field.field.required %} class="champs_requis"{% endif %}>{{ field.label_tag }}</div>
                     </div>
                     <div class="field_data">
                         <div>
