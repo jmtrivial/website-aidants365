@@ -34,6 +34,11 @@ class FicheForm(forms.ModelForm):
         if not instance:
             self.fields['utiliser_suivant'].initial = True
             self.fields['auteur'].initial = Auteur.get_connected_auteur(self.user)
+        self.fields["categories_libres"].widget.id_for_label = lambda x: "id_categories_libres"
+        self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
+        self.fields["mots_cles"].widget.id_for_label = lambda x: "id_mots_cles"
+        self.fields["fiches_connexes"].widget.id_for_label = lambda x: "id_fiches_connexes"
+
 
     def clean_numero(self):
         data = self.cleaned_data.get('numero', '')
@@ -60,6 +65,10 @@ class EntreeAgendaForm(WithUserForm):
 
         fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
+        self.fields["motscles"].widget.id_for_label = lambda x: "id_motscles"
 
 class CategorieForm(WithUserForm):
 

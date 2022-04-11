@@ -13,6 +13,7 @@ from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from .utils import Ephemeride, table, arrayToString
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
+from sortedm2m.fields import SortedManyToManyField
 
 
 import logging
@@ -156,7 +157,7 @@ class Fiche(models.Model):
     categorie1 = models.ForeignKey(Categorie, verbose_name="Catégorie principale", on_delete=models.RESTRICT, related_name='%(class)s_categorie1')
     categorie2 = models.ForeignKey(Categorie, verbose_name="Deuxième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie2', blank=True, null=True)
     categorie3 = models.ForeignKey(Categorie, verbose_name="Troisième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie3', blank=True, null=True)
-    categories_libres = models.ManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True)
+    categories_libres = SortedManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True)
 
     auteur = models.ForeignKey(Auteur, verbose_name="Auteur", on_delete=models.RESTRICT)
     numero = models.IntegerField(verbose_name="Numéro", default=9999)
@@ -187,8 +188,8 @@ class Fiche(models.Model):
     # uniquement si site
     partenaires = models.CharField(verbose_name="Partenaires", max_length=1024, blank=True, null=True)
 
-    themes = models.ManyToManyField(Theme, verbose_name="Thèmes", blank=True)
-    mots_cles = models.ManyToManyField(MotCle, verbose_name="Mots-clés", blank=True)
+    themes = SortedManyToManyField(Theme, verbose_name="Thèmes", blank=True)
+    mots_cles = SortedManyToManyField(MotCle, verbose_name="Mots-clés", blank=True)
 
     # corps
     presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
@@ -209,7 +210,7 @@ class Fiche(models.Model):
     reserves = RichTextField(verbose_name="Réserves", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
     lesplus = RichTextField(verbose_name="Les plus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
     en_savoir_plus = RichTextField(verbose_name="En savoir plus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
-    fiches_connexes = models.ManyToManyField("self", verbose_name="Fiches connexes", blank=True)
+    fiches_connexes = SortedManyToManyField("self", verbose_name="Fiches connexes", blank=True)
 
     class Meta:
         verbose_name = "Fiche"
@@ -389,12 +390,12 @@ class EntreeAgenda(models.Model):
 
     date = models.DateField()
 
-    themes = models.ManyToManyField(Theme, verbose_name="Thèmes associés", blank=True)
-    motscles = models.ManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True)
+    themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True)
+    motscles = SortedManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True)
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
-    fiches_associees = models.ManyToManyField(Fiche, verbose_name="Fiches associées", blank=True)
+    fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True)
 
     def get_absolute_url(self):
         return reverse('fichier:entree_agenda', kwargs={'year': self.date.year, 'month': self.date.month, 'day': self.date.day})

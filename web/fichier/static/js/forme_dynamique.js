@@ -91,3 +91,29 @@ function ready(callback){
 ready(function(){
     update_visible_fields();
 });
+
+function moveElementToEndOfParent(element) {
+    var parent = element.parent();
+
+    element.detach();
+
+    parent.append(element);
+};
+
+
+function update_field_m2m(element_class) {
+
+    $("#field_wrapper_" + element_class + " ul.select2-selection__rendered").children("li[title]").each(function(i, obj){
+        var element = $("#" + element_class + "_m2m").children("option").filter(function () { return $(this).html() == obj.title; });
+        moveElementToEndOfParent(element);
+    });
+
+    fill_input_m2m(element_class);
+    $("#field_wrapper_" + element_class).trigger('change');
+}
+
+function fill_input_m2m(element_class) {
+    text = $("#" + element_class + "_m2m").val().join();
+    $("#" + element_class).val(text);
+}
+

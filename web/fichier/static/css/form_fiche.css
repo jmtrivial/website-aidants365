@@ -42,6 +42,35 @@
     padding: 1em;
 }
 
+#form_fiche .sortedm2m-container,
+#form_fiche .sortedm2m-container p.selector-filter {
+    width: 100%;
+}
+#form_fiche .sortedm2m-container p.selector-filter img {
+    display: none;
+}
+#form_fiche .sortedm2m-container p.selector-filter input {
+    width: 80%;
+}
+#form_fiche ul.sortedm2m {
+    min-height: 2em;
+    max-height: 6em;
+    overflow-y: auto;
+    width: 80%;
+    margin-top: 0.2em;
+}
+
+#form_fiche ul.sortedm2m li {
+    width: 100%;
+}
+
+#form_fiche .sortedm2m label {
+    float: left;
+}
+#form_fiche .sortedm2m label input {
+    width: auto;
+}
+
 #field_wrapper_id_categorie2, #field_wrapper_id_categorie3, #field_wrapper_id_categories_libres,
 #field_wrapper_id_niveau, #field_wrapper_id_categorie1 {
     width: 33.333%;

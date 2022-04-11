@@ -4,20 +4,25 @@ function show_add_dynamique(node, select2) {
     select2.select2("close");
     modal.css("display", "block");
     clearErreur();
-    if (node.prev().attr("id") == "select2-id_categories_libres-results") {
+    if (node.prev().attr("id") == "select2-id_categories_libres_m2m-results") {
         titre = "une catégorie libre";
         document.classe_popup = "categorie_libre";
-        document.select_popup = "#id_categories_libres";
+        document.select_popup = "#id_categories_libres_m2m";
     }
-    else if (node.prev().attr("id") == "select2-id_themes-results") {
+    else if (node.prev().attr("id") == "select2-id_themes_m2m-results") {
         titre = "un thème";
         document.classe_popup = "theme";
-        document.select_popup = "#id_themes";
+        document.select_popup = "#id_themes_m2m";
     }
-    else if (node.prev().attr("id") == "select2-id_mots_cles-results") {
+    else if (node.prev().attr("id") == "select2-id_mots_cles_m2m-results") {
         titre = "un mot-clé";
         document.classe_popup = "motcle";
-        document.select_popup = "#id_mots_cles";
+        document.select_popup = "#id_mots_cles_m2m";
+    }
+    else if (node.prev().attr("id") == "select2-id_motscles_m2m-results") {
+        titre = "un mot-clé";
+        document.classe_popup = "motcle";
+        document.select_popup = "#id_motscles_m2m";
     }
 
     modal.find(".popup_head span").html(titre);

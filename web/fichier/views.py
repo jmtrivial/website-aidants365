@@ -474,7 +474,7 @@ def edit_object(request, classname, id=None):
         object = get_object_or_404(classe, pk=id)
         required_permission = 'fichier.change_' + nom_classe
         titre = titre_edition + " " + str(object)
-
+    
     # Check user permissions
     if not request.user.is_authenticated or not request.user.has_perm(required_permission):
         raise PermissionDenied
@@ -486,6 +486,7 @@ def edit_object(request, classname, id=None):
             messages.info(request, "Édition annulée")
             return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
         else:
+            logger.warning(request.POST)
             form = classeform(instance=object, data=request.POST, user=request.user)
             if form.is_valid():
                 object = form.save()

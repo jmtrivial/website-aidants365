@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_better_admin_arrayfield',
     "django.contrib.postgres",
+    'sortedm2m',
 ]
 
 MIDDLEWARE = [

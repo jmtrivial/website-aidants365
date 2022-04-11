@@ -258,3 +258,39 @@ def ajouter_liens(texte):
     # on ajoute les liens des urls si elles existent
     pat1 = re.compile(r"(^|[\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)", re.IGNORECASE | re.DOTALL)
     return pat1.sub(r'\1<a href="\2">\2</a>', texte)
+
+
+@register.filter
+def extract_id_from_m2m(texte):
+    return texte.split("\"")[1].split("_")[-1]
+
+@register.filter
+def extract_id_from_cb_m2m(texte):
+    return texte.split("\"")[-8] # pas super robuste, mais si on ne change pas les dépendances, ça va marcher... ingénierie inverse
+
+def extract_field_id(texte):
+    return "_".join(texte.split("\"")[1].split("_")[:-1])
+
+
+def extract_field_id_small(texte):
+    return "_".join(texte.split("\"")[1].split("_")[1:-1])
+
+
+@register.simple_tag
+def get_field_id_m2m(selected, unselected):
+    if selected:
+        return extract_field_id(selected[0]["label_for"])
+    elif unselected:
+        return extract_field_id(unselected[0]["label_for"])
+    else:
+        return "unset"
+
+
+@register.simple_tag
+def get_field_id_small_m2m(selected, unselected):
+    if selected:
+        return extract_field_id_small(selected[0]["label_for"])
+    elif unselected:
+        return extract_field_id_small(unselected[0]["label_for"])
+    else:
+        return "unset"

@@ -36,7 +36,7 @@ class FicheAdmin(admin.ModelAdmin):
     def custom_link(self, obj):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir la fiche</a>')
 
-    autocomplete_fields = ['categories_libres', 'themes', 'fiches_connexes', 'mots_cles']
+    #autocomplete_fields = ['categories_libres', 'themes', 'fiches_connexes', 'mots_cles']
 
     fields = (("niveau", "categorie1"),
               ("categorie2", "categorie3", "categories_libres"),
@@ -94,7 +94,7 @@ class EntreeAgendaAdmin(admin.ModelAdmin):
     def custom_link(self, obj):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir l\'entrée</a>')
 
-    autocomplete_fields = ['themes', 'motscles', 'fiches_associees']
+    #autocomplete_fields = ['themes', 'motscles', 'fiches_associees']
 
 
 admin.site.register(EntreeAgenda, EntreeAgendaAdmin)
