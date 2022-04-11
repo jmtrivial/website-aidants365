@@ -264,9 +264,11 @@ def ajouter_liens(texte):
 def extract_id_from_m2m(texte):
     return texte.split("\"")[1].split("_")[-1]
 
+
 @register.filter
 def extract_id_from_cb_m2m(texte):
-    return texte.split("\"")[-8] # pas super robuste, mais si on ne change pas les dépendances, ça va marcher... ingénierie inverse
+    return texte.split("\"")[-8]  # pas super robuste, mais si on ne change pas les dépendances, ça va marcher... ingénierie inverse
+
 
 def extract_field_id(texte):
     return "_".join(texte.split("\"")[1].split("_")[:-1])

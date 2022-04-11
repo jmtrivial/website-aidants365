@@ -39,7 +39,6 @@ class FicheForm(forms.ModelForm):
         self.fields["mots_cles"].widget.id_for_label = lambda x: "id_mots_cles"
         self.fields["fiches_connexes"].widget.id_for_label = lambda x: "id_fiches_connexes"
 
-
     def clean_numero(self):
         data = self.cleaned_data.get('numero', '')
         if not data:
@@ -69,6 +68,7 @@ class EntreeAgendaForm(WithUserForm):
         super().__init__(*args, **kwargs)
         self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
         self.fields["motscles"].widget.id_for_label = lambda x: "id_motscles"
+
 
 class CategorieForm(WithUserForm):
 

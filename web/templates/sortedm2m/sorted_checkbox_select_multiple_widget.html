@@ -1,0 +1,17 @@
+{% load i18n static %}
+{% load fichier_extras %}
+
+<div>
+    <input type="hidden" id="{% get_field_id_m2m selected unselected %}" name="{% get_field_id_small_m2m selected unselected %}" value="">
+
+    <select id="{% get_field_id_m2m selected unselected %}_m2m" multiple>
+        {% for row in selected %}
+        <option value="{{ row.rendered_cb|extract_id_from_cb_m2m|safe }}" selected>{{ row.option_label }}</option>
+        {% endfor %}
+
+        {% for row in unselected %}
+        <option value="{{ row.rendered_cb|extract_id_from_cb_m2m|safe }}">{{ row.option_label }}</option>
+        {% endfor %}
+
+    </select>
+</div>
