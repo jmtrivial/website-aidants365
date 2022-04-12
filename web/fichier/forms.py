@@ -68,6 +68,7 @@ class EntreeAgendaForm(WithUserForm):
         super().__init__(*args, **kwargs)
         self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
         self.fields["motscles"].widget.id_for_label = lambda x: "id_motscles"
+        self.fields["fiches_associees"].widget.id_for_label = lambda x: "id_fiches_associees"
 
 
 class CategorieForm(WithUserForm):

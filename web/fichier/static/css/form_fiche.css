@@ -71,7 +71,7 @@
     width: auto;
 }
 
-#field_wrapper_id_categorie2, #field_wrapper_id_categorie3, #field_wrapper_id_categories_libres,
+#field_wrapper_id_categorie2, #field_wrapper_id_categorie3,
 #field_wrapper_id_niveau, #field_wrapper_id_categorie1 {
     width: 33.333%;
     float: left;
@@ -83,7 +83,6 @@
 
 #field_wrapper_id_categorie2 .field_label,
 #field_wrapper_id_categorie3 .field_label,
-#field_wrapper_id_categories_libres .field_label,
 #field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label {
     width: 45%;
 }
@@ -118,7 +117,7 @@ select[multiple] {
 }
 
 @media only screen and (max-width: 1200px) {
-    #field_wrapper_id_categorie2, #field_wrapper_id_categorie3, #field_wrapper_id_categories_libres,
+    #field_wrapper_id_categorie2, #field_wrapper_id_categorie3,
     #field_wrapper_id_niveau, #field_wrapper_id_categorie1 {
         width: 100%;
     }
@@ -126,7 +125,6 @@ select[multiple] {
     .field_label,
     #field_wrapper_id_categorie2 .field_label,
     #field_wrapper_id_categorie3 .field_label,
-    #field_wrapper_id_categories_libres .field_label,
     #field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label {
         width: 20%;
     }

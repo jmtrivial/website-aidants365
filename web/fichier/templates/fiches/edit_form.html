@@ -125,14 +125,17 @@ Le fichier Aidants365 — édition
     $(document).ready(function() {
 
     {% if nom_classe == "fiche" %}
-    var with_popups = [ "id_themes", "id_categories_libres", "id_mots_cles" ]
+    var with_popups_add = [ "id_themes", "id_categories_libres", "id_mots_cles" ]
+    var with_popups = [ "id_fiches_connexes" ]
     {% elif nom_classe == "entreeagenda" %}
-    var with_popups = [ "id_themes", "id_motscles" ]
+    var with_popups_add = [ "id_themes", "id_motscles" ]
+    var with_popups = [ "id_fiches_associees" ]
     {% else %}
+    var with_popups_add = []
     var with_popups = []
     {% endif %}
 
-    for (const element_class of with_popups) {
+    for (const element_class of with_popups_add) {
         const element = "#" + element_class + "_m2m";
         $(element).select2({language: "fr"}).on('select2:open', (e) => {
             document.popup_preval = "";
@@ -156,7 +159,20 @@ Le fichier Aidants365 — édition
         fill_input_m2m(element_class);
     }
 
-    $("select[multiple]:not(.select2-hidden-accessible)").select2({language: "fr"}).on('select2:open');
+    for (const element_class of with_popups) {
+        const element = "#" + element_class + "_m2m";
+        $(element).select2({language: "fr"}).on("change", (e) => {
+            update_field_m2m(element_class);
+        });
+
+        $("#field_wrapper_" + element_class + " ul.select2-selection__rendered").sortable({
+            containment: 'parent',
+            stop: (e) => {
+                update_field_m2m(element_class)}
+        });
+
+        fill_input_m2m(element_class);
+    }
 
     $( 'input[name="date"]' ).datepicker();
     $( 'input[name="date_creation"]' ).datepicker();

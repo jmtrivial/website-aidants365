@@ -20,6 +20,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 message_glossaire = "Dans ce texte, vous pouvez encadrer un terme par des crochets pour qu'ils devienne un lien vers l'entrée de glossaire correspondante (exemple: [aidant]). Dans ce texte, les adresses internet (https://... ou http://...) sont automatiquement transformées en liens cliquables."
+message_sortable = "Les éléments de cette entrée sont ordonnés. Vous pouvez les ajouter dans l'ordre qui vous convient, mais aussi les trier par la suite"
 
 
 class Niveau(models.Model):
@@ -157,7 +158,7 @@ class Fiche(models.Model):
     categorie1 = models.ForeignKey(Categorie, verbose_name="Catégorie principale", on_delete=models.RESTRICT, related_name='%(class)s_categorie1')
     categorie2 = models.ForeignKey(Categorie, verbose_name="Deuxième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie2', blank=True, null=True)
     categorie3 = models.ForeignKey(Categorie, verbose_name="Troisième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie3', blank=True, null=True)
-    categories_libres = SortedManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True)
+    categories_libres = SortedManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True, help_text=message_sortable)
 
     auteur = models.ForeignKey(Auteur, verbose_name="Auteur", on_delete=models.RESTRICT)
     numero = models.IntegerField(verbose_name="Numéro", default=9999)
@@ -188,8 +189,8 @@ class Fiche(models.Model):
     # uniquement si site
     partenaires = models.CharField(verbose_name="Partenaires", max_length=1024, blank=True, null=True)
 
-    themes = SortedManyToManyField(Theme, verbose_name="Thèmes", blank=True)
-    mots_cles = SortedManyToManyField(MotCle, verbose_name="Mots-clés", blank=True)
+    themes = SortedManyToManyField(Theme, verbose_name="Thèmes", blank=True, help_text=message_sortable)
+    mots_cles = SortedManyToManyField(MotCle, verbose_name="Mots-clés", blank=True, help_text=message_sortable)
 
     # corps
     presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
@@ -210,7 +211,7 @@ class Fiche(models.Model):
     reserves = RichTextField(verbose_name="Réserves", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
     lesplus = RichTextField(verbose_name="Les plus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
     en_savoir_plus = RichTextField(verbose_name="En savoir plus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
-    fiches_connexes = SortedManyToManyField("self", verbose_name="Fiches connexes", blank=True)
+    fiches_connexes = SortedManyToManyField("self", verbose_name="Fiches connexes", blank=True, help_text=message_sortable)
 
     class Meta:
         verbose_name = "Fiche"
@@ -390,12 +391,12 @@ class EntreeAgenda(models.Model):
 
     date = models.DateField()
 
-    themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True)
-    motscles = SortedManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True)
+    themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True, help_text=message_sortable)
+    motscles = SortedManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True, help_text=message_sortable)
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
-    fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True)
+    fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True, help_text=message_sortable)
 
     def get_absolute_url(self):
         return reverse('fichier:entree_agenda', kwargs={'year': self.date.year, 'month': self.date.month, 'day': self.date.day})
