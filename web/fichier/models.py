@@ -20,7 +20,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 message_glossaire = "Dans ce texte, vous pouvez encadrer un terme par des crochets pour qu'ils devienne un lien vers l'entrée de glossaire correspondante (exemple: [aidant]). Dans ce texte, les adresses internet (https://... ou http://...) sont automatiquement transformées en liens cliquables."
-message_sortable = "Les éléments de cette entrée sont ordonnés. Vous pouvez les ajouter dans l'ordre qui vous convient, mais aussi les trier par la suite"
+message_sortable = "Les éléments de cette entrée sont ordonnés. Vous pouvez les ajouter dans l'ordre qui vous convient, mais aussi les trier par la suite par glisser/déposer"
 
 
 class Niveau(models.Model):
