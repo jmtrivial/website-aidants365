@@ -33,6 +33,32 @@ Toutes les fiches
         
     {% if recherche != None %}
 
+    {% if results_categories|length > 0 %}
+    <p><strong>Catégorie{% if results_categories|length > 1 %}s{% endif %}&nbsp;:</strong>
+        {% for categorie in results_categories %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_categorie' categorie.id %}">{{ categorie.nom_hl | safe }}</a>{% endfor %}
+     </p>
+     {% endif %}
+
+     {% if results_categories_libres|length > 0 %}
+     <p><strong>{% if results_categories_libres|length > 1 %}Catégories libres{% else %}Catégorie libre{% endif %}&nbsp;:</strong>
+         {% for categorie in results_categories_libres %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_categorie_libre' categorie.id %}">{{ categorie.nom_hl | safe }}</a>{% endfor %}
+      </p>
+      {% endif %}
+
+      
+     {% if results_themes|length > 0 %}
+       <p><strong>Thème{% if results_themes|length > 1 %}s{% endif %}&nbsp;:</strong>
+        {% for theme in results_themes %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_theme' theme.id %}">{{ theme.nom_hl | safe }}</a>{% endfor %}
+        </p>
+    {% endif %}
+
+    {% if results_motscles|length > 0 %}
+       <p><strong>{% if results_motscles|length > 1 %}Mots-clés{% else %}Mot-clé{% endif %}&nbsp;:</strong>
+        {% for motcle in results_motscles %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle.nom_hl | safe }}</a>{% endfor %}
+        </p>
+    {% endif %}
+
+
     {% if results_fiches|length == 0 %}
     <p>Aucune <a href="{% url 'fichier:index' %}">fiche</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
     {% endif %} 

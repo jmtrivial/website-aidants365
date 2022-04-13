@@ -23,6 +23,24 @@ message_glossaire = "Dans ce texte, vous pouvez encadrer un terme par des croche
 message_sortable = "Les éléments de cette entrée sont ordonnés. Vous pouvez les ajouter dans l'ordre qui vous convient, mais aussi les trier par la suite par glisser/déposer"
 
 
+def rechercher_nom_simple(search_text, classname):
+    from django.contrib.postgres.search import SearchVector
+    from django.contrib.postgres.search import SearchQuery
+
+    if not search_text:
+        return None
+
+    search_vectors = SearchVector('nom', weight='A', config='french')
+    search_query = SearchQuery(search_text, config='french')
+    return classname.objects.annotate(search=search_vectors).filter(search=search_query). \
+        annotate(nom_hl=SearchHeadline("nom",
+                 search_query,
+                 start_sel="<span class=\"highlight\">",
+                 stop_sel="</span>",
+                 max_fragments=50,
+                 config='french'))
+
+
 class Niveau(models.Model):
 
     class Applicabilite(models.TextChoices):
@@ -54,6 +72,9 @@ class Niveau(models.Model):
 
     def __str__(self):
         return " ".join(["{:02d}".format(self.ordre), self.code])
+
+    def rechercher(search_text):
+        return rechercher_nom_simple(search_text, Niveau)
 
 
 class TypeCategorie(models.Model):
@@ -87,6 +108,9 @@ class Categorie(models.Model):
 
     def description_longue(self):
         return self.code + " — " + self.nom
+
+    def rechercher(search_text):
+        return rechercher_nom_simple(search_text, Categorie)
 
 
 class Auteur(models.Model):
@@ -122,6 +146,9 @@ class CategorieLibre(models.Model):
     def description_longue(self):
         return self.nom
 
+    def rechercher(search_text):
+        return rechercher_nom_simple(search_text, CategorieLibre)
+
 
 class MotCle(models.Model):
     nom = models.CharField(verbose_name="Mot-clé", max_length=64, unique=True, blank=False)
@@ -136,6 +163,9 @@ class MotCle(models.Model):
     def description_longue(self):
         return self.nom
 
+    def rechercher(search_text):
+        return rechercher_nom_simple(search_text, MotCle)
+
 
 class Theme(models.Model):
     nom = models.CharField(verbose_name="Thème", max_length=64, unique=True, blank=False)
@@ -149,6 +179,9 @@ class Theme(models.Model):
 
     def description_longue(self):
         return self.nom
+
+    def rechercher(search_text):
+        return rechercher_nom_simple(search_text, Theme)
 
 
 class Fiche(models.Model):

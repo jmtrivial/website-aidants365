@@ -364,10 +364,18 @@ def rechercher(request):
             results_fiches = Fiche.rechercher(recherche)
             results_glossaire = EntreeGlossaire.rechercher(recherche)
             results_agenda = EntreeAgenda.rechercher(recherche)
+            results_motscles = MotCle.rechercher(recherche)
+            results_themes = Theme.rechercher(recherche)
+            results_categories_libres = CategorieLibre.rechercher(recherche)
+            results_categories = Categorie.rechercher(recherche)
 
     return render(request, 'fiches/rechercher.html', {'results_fiches': results_fiches,
                                                       'results_glossaire': results_glossaire,
                                                       'results_agenda': results_agenda,
+                                                      'results_motscles': results_motscles,
+                                                      'results_themes': results_themes,
+                                                      'results_categories': results_categories,
+                                                      'results_categories_libres': results_categories_libres,
                                                       'recherche': recherche})
 
 
