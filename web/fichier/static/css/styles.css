@@ -76,7 +76,7 @@ a:hover {
 #legende {
     position: fixed;
     top: 5em;
-    right: -16em;
+    right: -19em;
     background: #fff;
     border-radius: 0.5em;
     padding: 0.5em 0.2em;
@@ -91,12 +91,20 @@ a:hover {
 }
 
 #legende .legende {
-    transform: rotate(-90deg) translateX(-5.2em);
+    transform: rotate(-90deg) translateX(-7em);
     float: left;
     width: 1em;
     font-variant: small-caps;
     color: #444;
 }
+#legende .legende .avant {
+    margin-right: 1.5em;
+}
+#legende .legende .apres {
+    margin-left: 1.5em;
+}
+
+
 #legende .entrees {
     float: left;
 }
@@ -708,6 +716,9 @@ a.missing-day:hover {
         transform: none;
         width: auto;
         height: auto;
+    }
+    #legende .legende span {
+        display: none;
     }
     #legende .entrees {
         clear: both;

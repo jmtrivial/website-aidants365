@@ -57,8 +57,8 @@
       {% endif %}
 
       {% load fichier_extras %}
-      <div id="legende" class="visible">
-        <div class="legende">Légende</div>
+      <div id="legende">
+        <div class="legende"><span class="avant">▴</span>Légende<span class="apres">▴</span></div>
         <div class="entrees">
           <div>{% get_carre_colore_A %}<span class="titre">Niveau {% get_nom_niveau_A %}</span>
             <span class="liste">{% liste_niveaux "A" %}</span>
@@ -71,20 +71,7 @@
           </div>
         </div>
         <div class="fin"></div>
-      </div>
-      <script>
-          window.addEventListener('scroll', function(e) {
-            var x = document.getElementById("legende");
-            x.className = "";
-          });
-
-          var x = document.getElementById("legende");
-          x.addEventListener('mouseover', function( event ) {
-            var x = document.getElementById("legende");
-            x.className = "";
-          });
-      </script>
-  
+      </div>  
     {% block content %}{% endblock %}
 
 
