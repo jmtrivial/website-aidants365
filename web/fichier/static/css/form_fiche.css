@@ -13,6 +13,19 @@
 
 .help {
     font-size: 90%;
+    display: none;
+    position: absolute;
+    background: #eee;
+    width: 20em;
+    margin-top: -1em;
+    z-index: 1;
+    padding: 1em;
+    border-radius: 0.5em;
+    box-shadow: 0 0 0.2em rgba(0,0,0,0.2);
+}
+
+.field_label:hover .help {
+    display: block;
 }
 
 .champs_requis label {

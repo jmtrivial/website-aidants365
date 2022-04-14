@@ -29,6 +29,8 @@ Le fichier Aidants365 — édition
 
 
 {% block content %}
+{% load fichier_extras %}
+
 <div class="block">
     <h1>{{ titre }}</h1>
 </div>
@@ -45,20 +47,19 @@ Le fichier Aidants365 — édition
         {{ form.media }}
             <div id="form_fiche">
             {{ form.non_field_errors }}
-            <p>Les champs dont les noms sont en gras sont des champs requis.</p>
             {% for field in form.visible_fields %}
                 {% if not field.id_for_label == "id_utiliser_suivant" %}
                 <div id="field_wrapper_{{ field.id_for_label }}" class="field_form">
                     <div class="field_label">
                         <div id="{{ field.id_for_label }}_anchor" class="anchor"></div>
-                        <div{% if field.field.required %} class="champs_requis"{% endif %}>{{ field.label_tag }}</div>
-                    </div>
+                        <div{% if field.field.required %} class="champs_requis"{% endif %}>{{ field|label_with_stars|safe }}</div>
+                        {% if field.help_text %}
+                        <p class="help">{{ field.help_text|safe }}</p>
+                        {% endif %}
+                        </div>
                     <div class="field_data">
                         <div>
                             <div class="main_field">
-                                {% if field.help_text %}
-                                <p class="help">{{ field.help_text|safe }}</p>
-                                {% endif %}
                                 {% if validation %}{{ field.errors }}{% endif %}
                                 {{ field }}
                             </div>
@@ -78,10 +79,13 @@ Le fichier Aidants365 — édition
                 {% endif %}
             {% endfor %}
             {% if nom_classe == "fiche" %}
-                {% load fichier_extras %}
                 {% set_listes_categories_modifieurs_champs %}
                 <script src="{% static 'js/forme_dynamique.js' %}" ></script>
             {% endif %}
+        </div>
+
+        <div>
+            {{ footer | safe }}
         </div>
 
         <div class="boutons_edition">

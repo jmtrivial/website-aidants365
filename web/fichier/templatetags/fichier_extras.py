@@ -5,6 +5,8 @@ import re
 from fichier.utils import Agenda
 from django.urls import reverse
 from datetime import datetime
+from sortedm2m.fields import SortedMultipleChoiceField
+from ckeditor.fields import RichTextFormField
 
 import html.entities
 
@@ -296,3 +298,13 @@ def get_field_id_small_m2m(selected, unselected):
         return extract_field_id_small(unselected[0]["label_for"])
     else:
         return "unset"
+
+
+@register.filter
+def label_with_stars(field):
+    if (isinstance(field.field, SortedMultipleChoiceField)):
+        return field.label_tag().replace(":", "<sup>*</sup>")
+    if (isinstance(field.field, RichTextFormField)):
+        return field.label_tag().replace(":", "<sup>**</sup>")
+    else:
+        return field.label_tag().replace(":", "")

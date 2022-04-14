@@ -15,6 +15,7 @@ from django.views.generic.edit import DeleteView
 import json
 from datetime import datetime, timedelta
 from django.db import IntegrityError
+from .utils import message_glossaire, message_sortable
 
 from django.views.generic import DetailView
 
@@ -511,13 +512,16 @@ def edit_object(request, classname, id=None):
         else:
             form = classeform(instance=object, user=request.user)
 
+    footer = "<ul><li>Les champs dont les noms sont en gras sont des champs requis.</li><li>* : " + message_sortable + "</i><li>** : " + message_glossaire + "</li></ul>"
+
     return render(request, template_name, {
         'titre': titre,
         'object': object,
         'form': form,
         'validation': not bool(request.GET),
         'add': id is None,
-        'nom_classe': nom_classe
+        'nom_classe': nom_classe,
+        'footer': footer
     })
 
 

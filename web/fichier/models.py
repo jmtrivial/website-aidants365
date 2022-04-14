@@ -14,13 +14,10 @@ from django.utils.text import Truncator
 from .utils import Ephemeride, table, arrayToString
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from sortedm2m.fields import SortedManyToManyField
-
+from .utils import message_glossaire, message_sortable
 
 import logging
 logger = logging.getLogger(__name__)
-
-message_glossaire = "Dans ce texte, vous pouvez encadrer un terme par des crochets pour qu'ils devienne un lien vers l'entrée de glossaire correspondante (exemple: [aidant]). Dans ce texte, les adresses internet (https://... ou http://...) sont automatiquement transformées en liens cliquables."
-message_sortable = "Les éléments de cette entrée sont ordonnés. Vous pouvez les ajouter dans l'ordre qui vous convient, mais aussi les trier par la suite par glisser/déposer"
 
 
 def rechercher_nom_simple(search_text, classname):
