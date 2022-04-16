@@ -26,16 +26,22 @@ function show_add_dynamique(node, select2) {
     }
 
     modal.find(".popup_head span").html(titre);
-    $("#popup_name").val(document.popup_preval);
+    $("#popup_name").val(document.popup_preval).focus().off("keyup").on('keyup', function (e) {   
+        if (e.key === 'Escape' || e.keyCode === 27) {
+            $("#annuler_popup").click();
+            select2.select2('open');            
+            var search = select2.data('select2').dropdown.$search || select2.data('select2').selection.$search;
+            search.val($("#popup_name").val());
+            search.trigger('keyup');
+            search.focus();
+        }
+    });
 }
 
-var annuler = document.getElementsByClassName("annuler_popup")[0];
-
-annuler.onclick = function() {
+ $("#annuler_popup").click(function() {
     modal.css("display", "none");
-}
+});
 
-var ajouter = document.getElementsByClassName("ajouter_popup")[0];
 
 function setErreur(msg) {
     $(".erreur_popup").html(msg);
@@ -46,8 +52,7 @@ function clearErreur() {
     $(".erreur_popup").css("display", "none");
 }
 
-
-ajouter.onclick = function() {
+$("#ajouter_popup").click(function() {
     const headers = {
         'X-CSRFToken': window.csrftoken
       };
@@ -72,8 +77,10 @@ ajouter.onclick = function() {
                 nom = data["nom"];
                 id = data["id"];
                 nouvelle_entree = new Option(nom, id, true, true); // '<option value="' + id + '">' + nom + '</option>';
+                $(".create_new_entry_select2").removeClass("actif");
                 $(document.select_popup).append(nouvelle_entree);
                 $(document.select_popup).trigger('change');
+                $(document.select_popup).focus();
                 modal.css("display", "none");
             }
         },
@@ -83,7 +90,7 @@ ajouter.onclick = function() {
     });
 
     return false;
-}
+});
 
 function moveElementToBeginOfParent(element) {
     var parent = element.parent();

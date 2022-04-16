@@ -28,6 +28,25 @@
     color: #fff;
 }
 
+.popup .button_round.actif {
+    background: #0f3654;
+}
+
+.create_new_entry_select2.actif {
+    background: #adadad;
+    color: #041725;
+}
+.create_new_entry_select2 {
+    padding: 6px;
+    width: 100%;
+    overflow-y: hidden;
+    display: block;
+}
+
+.select2-search__field {
+    width: auto !important;
+}
+
 .popup_head {
     padding: 0.2em 1em;
 }

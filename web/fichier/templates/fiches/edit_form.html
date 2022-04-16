@@ -107,8 +107,8 @@ Le fichier Aidants365 — édition
                 <label for="popup_name">Nom&nbsp;: </label><input type="text" name="popup_name" id="popup_name">
             </div>
             <div class="popup_foot">
-                <input class="button_round ajouter_popup" type="submit" id="ajouter" value="Ajouter">
-                <input class="button_round annuler_popup" id="annuler" value="Annuler">
+                <input class="button_round ajouter_popup actif" type="submit" id="ajouter_popup" value="Ajouter">
+                <input class="button_round annuler_popup" id="annuler_popup" value="Annuler">
             </div>
         </form>
     </div>
@@ -143,15 +143,23 @@ Le fichier Aidants365 — édition
         const element = "#" + element_class + "_m2m";
         $(element).select2({language: "fr"}).on('select2:open', (e) => {
             document.popup_preval = "";
-            $(".select2-results:not(:has(a))").append('<a href="' + element + '_anchor" style="padding: 6px;height: 20px;display: inline-table;">Créer un nouveau champ</a>');
+           $(".select2-results:not(:has(a))").append('<a href="' + element + '_anchor" class="create_new_entry_select2">Créer un nouveau champ</a>');
             $(".select2-results a").click(function(handler) { 
                 show_add_dynamique($(this), $(element));
             });
         }).on("change", (e) => {
             update_field_m2m(element_class);
         });
-        $("#field_wrapper_" + element_class + ' .select2-search__field').on('keyup', function (e) {   
+        $("#field_wrapper_" + element_class + ' .select2-search__field').on('keyup', function (e) {
                 document.popup_preval = $("#field_wrapper_" + element_class + " .select2-search__field").val();
+                if ($('.select2-results__option.select2-results__message').length != 0) {
+                    if (e.key === 'Enter' || e.keyCode === 13) {
+                        show_add_dynamique($(".select2-results a"), $(element));
+                    }
+                    $(".create_new_entry_select2").addClass("actif");   
+                }
+                else
+                    $(".create_new_entry_select2").removeClass("actif");
         });
 
         $("#field_wrapper_" + element_class + " ul.select2-selection__rendered").sortable({
