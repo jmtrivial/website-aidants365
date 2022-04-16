@@ -432,7 +432,7 @@ class EntreeAgenda(models.Model):
         return reverse('fichier:entree_agenda', kwargs={'year': self.date.year, 'month': self.date.month, 'day': self.date.day})
 
     def __str__(self):
-        return str(self.date)
+        return self.date.strftime("%d/%m/%Y")
 
     def ephemeride(self):
         e = Ephemeride(self.date, self.get_absolute_url(), False)

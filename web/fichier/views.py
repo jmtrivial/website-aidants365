@@ -509,6 +509,8 @@ def edit_object(request, classname, id=None):
     else:
         if request.GET:
             form = classeform(instance=object, data=request.GET, user=request.user)
+            if classname == "agenda" and request.GET["date"]:
+                titre = titre_edition + " " + request.GET["date"]
         else:
             form = classeform(instance=object, user=request.user)
 
