@@ -3,7 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.template import loader
 from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda
 from django.shortcuts import get_object_or_404, render
-from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value
+from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
@@ -16,6 +16,7 @@ import json
 from datetime import datetime, timedelta
 from django.db import IntegrityError
 from .utils import message_glossaire, message_sortable
+from django.db.models.functions import Ceil, Cast
 
 from django.views.generic import DetailView
 
@@ -35,7 +36,8 @@ logger = logging.getLogger(__name__)
 def annoter_class_nuage(objects):
     nb_max = 5
     nb = objects.aggregate(Max("fiche_count"))["fiche_count__max"]
-    return objects.annotate(classe_nuage=ExpressionWrapper(F('fiche_count') * Decimal(nb_max) / Decimal(nb), output_field=IntegerField())). \
+    logger.warning("count max " + str(nb))
+    return objects.annotate(classe_nuage=Cast(Ceil(Cast(Value(nb_max) * F('fiche_count'), FloatField()) / Value(nb)), IntegerField())). \
         annotate(max_classe_nuage=Value(nb_max))
 
 
@@ -59,7 +61,7 @@ def accueil(request):
     themes = Theme.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbthemes]
     nbthemes = themes.count()
 
-    motcles = MotCle.objects.annotate(fiche_count=Count('fiche')).order_by("nom")
+    motcles = MotCle.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom")
     motcles = annoter_class_nuage(motcles)
 
     nbcategorieslibres = 9
@@ -296,7 +298,7 @@ def themes_alpha(request):
 
 @login_required
 def themes_nuage(request):
-    themes = Theme.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)). \
+    themes = Theme.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)). \
         order_by("nom")
     themes = annoter_class_nuage(themes)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
@@ -344,7 +346,7 @@ def motscles_alpha(request):
 
 @login_required
 def motscles_nuage(request):
-    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)).order_by("nom")
+    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom")
     motscles = annoter_class_nuage(motscles)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                          "elements": motscles, "titre": "Tous les mots-clés",

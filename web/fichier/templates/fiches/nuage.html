@@ -1,7 +1,7 @@
 <p class="nuage">
     {% for element in elements %}
         {% with "fichier:index_"|add:critere_name as template_name %}
-        <a class="nuage-{{ element.classe_nuage }}-{{ element.max_classe_nuage }}" href="{% url template_name element.id %}">{{ element.description_longue }}</a>
+        <a title=" {{ element.fiche_count }}" class="nuage-{{ element.classe_nuage }}-{{ element.max_classe_nuage }}" href="{% url template_name element.id %}">{{ element.description_longue }}</a>
         {% endwith %}
     {% endfor %}
 </p>

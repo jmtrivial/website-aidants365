@@ -542,27 +542,32 @@ form td select[multiple] {
     margin: auto;
 }
 
-a.nuage-1-5, a.nuage-0-4:visited {
+a.nuage-0-5, a.nuage-0-5:visited {
+    font-size: 60%;
+    color: rgb(183, 106, 106);
+}
+
+a.nuage-1-5, a.nuage-1-5:visited {
     font-size: 80%;
     color: #6089af;
 }
 
-a.nuage-2-5, a.nuage-1-4:visited {
+a.nuage-2-5, a.nuage-2-5:visited {
     font-size: 100%;
     color: #2f5980;
 }
 
-a.nuage-3-5, a.nuage-2-4:visited {
+a.nuage-3-5, a.nuage-3-5:visited {
     font-size: 130%;
     color: #16395a;
 }
 
-a.nuage-4-5, a.nuage-3-4:visited {
+a.nuage-4-5, a.nuage-4-5:visited {
     font-size: 190%;
     color: #0d253b;
 }
 
-a.nuage-5-5, a.nuage-4-4:visited {
+a.nuage-5-5, a.nuage-5-5:visited {
     font-size: 250%;
     color: #081827;
 }
