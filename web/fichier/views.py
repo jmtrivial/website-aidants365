@@ -398,6 +398,7 @@ def entree_glossaire(request, id):
 
 @login_required
 def edit_object(request, classname, id=None):
+    single_reverse = False
 
     if classname == "glossaire":
         nom_classe = "entreeglossaire"
@@ -443,7 +444,8 @@ def edit_object(request, classname, id=None):
         message_edit_success = 'Le thème "%s" a été modifié avec succès.'
         classe = Theme
         classeform = ThemeForm
-        reverse_url = 'fichier:index_theme'
+        reverse_url = 'fichier:themes_alpha'
+        single_reverse = True
     elif classname == "motcle":
         nom_classe = "motcle"
         titre_add = "Création d\'un mot-clé"
@@ -452,7 +454,8 @@ def edit_object(request, classname, id=None):
         message_edit_success = 'Le mot-clé "%s" a été modifié avec succès.'
         classe = MotCle
         classeform = MotCleForm
-        reverse_url = 'fichier:index_motcle'
+        reverse_url = 'fichier:motscles_alpha'
+        single_reverse = True
     elif classname == "categorie_libre":
         nom_classe = "categorie_libre"
         titre_add = "Création d\'une catégorie libre"
@@ -506,7 +509,10 @@ def edit_object(request, classname, id=None):
                 else:
                     message = message_edit_success % object
                 messages.success(request, message)
-                return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+                if single_reverse:
+                    return HttpResponseRedirect(reverse(reverse_url))
+                else:
+                    return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
 
     else:
         if request.GET:
