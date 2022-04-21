@@ -123,15 +123,15 @@ class MergeForm(forms.Form):
 
 
 class ThemeMergeForm(MergeForm):
-    element1 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom"), required=True, label="Thème principal")
-    element2 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom"), required=True, label="Thème à intégrer dans le principal")
+    element1 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom__unaccent"), required=True, label="Thème principal")
+    element2 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom__unaccent"), required=True, label="Thème à intégrer dans le principal")
 
 
 class MotCleMergeForm(MergeForm):
-    element1 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom"), required=True, label="Mot-clé principal")
-    element2 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom"), required=True, label="Mot-clé à intégrer dans le principal")
+    element1 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé principal")
+    element2 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé à intégrer dans le principal")
 
 
 class CategorieLibreMergeForm(MergeForm):
-    element1 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom"), required=True, label="Catégorie libre principal")
-    element2 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom"), required=True, label="Catégorie libre à intégrer dans le principal")
+    element1 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom__unaccent"), required=True, label="Catégorie libre principal")
+    element2 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom__unaccent"), required=True, label="Catégorie libre à intégrer dans le principal")

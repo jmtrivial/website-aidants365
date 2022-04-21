@@ -16,7 +16,7 @@ import json
 from datetime import datetime, timedelta
 from django.db import IntegrityError
 from .utils import message_glossaire, message_sortable
-from django.db.models.functions import Ceil, Cast
+from django.db.models.functions import Ceil, Cast, Lower
 
 from django.views.generic import DetailView
 
@@ -58,14 +58,14 @@ def accueil(request):
     auteurs = Auteur.objects.annotate(fiche_count=Count('fiche'))
 
     nbthemes = 15
-    themes = Theme.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbthemes]
+    themes = Theme.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom__unaccent")[:nbthemes]
     nbthemes = themes.count()
 
-    motcles = MotCle.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom")
+    motcles = MotCle.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
     motcles = annoter_class_nuage(motcles)
 
     nbcategorieslibres = 9
-    categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom")[:nbcategorieslibres]
+    categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom__unaccent")[:nbcategorieslibres]
     nbcategorieslibres = categories_libres.count()
 
     entrees_agenda = EntreeAgenda.objects.filter(date=timezone.now())
@@ -184,8 +184,8 @@ def categories(request):
 
 @login_required
 def categories_alpha(request):
-    categories = annotate_categories_par_niveau_complet().order_by("-fiche_count").order_by("code")
-    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("nom")
+    categories = annotate_categories_par_niveau_complet().order_by("-fiche_count").order_by(Lower("code__unaccent"))
+    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("nom__unaccent")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories",
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
@@ -197,9 +197,9 @@ def categories_alpha(request):
 
 @login_required
 def categories_nuage(request):
-    categories = annotate_categories_par_niveau().order_by("code")
+    categories = annotate_categories_par_niveau().order_by("code__unaccent")
     categories = annoter_class_nuage(categories)
-    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)).order_by("nom")
+    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)).order_by("nom__unaccent")
     categories_libres = annoter_class_nuage(categories_libres)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                          "elements": categories, "titre": "Toutes les catégories",
@@ -289,7 +289,7 @@ def themes(request):
 
 @login_required
 def themes_alpha(request):
-    themes = annotate_categories_par_niveau_simple(Theme.objects, True).order_by("nom")
+    themes = annotate_categories_par_niveau_simple(Theme.objects, True).order_by("nom__unaccent")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
                                                    "elements": themes, "titre": "Tous les thèmes",
                                                    "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
@@ -299,7 +299,7 @@ def themes_alpha(request):
 @login_required
 def themes_nuage(request):
     themes = Theme.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)). \
-        order_by("nom")
+        order_by("nom__unaccent")
     themes = annoter_class_nuage(themes)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
                                                          "elements": themes, "titre": "Tous les thèmes",
@@ -337,7 +337,7 @@ def motscles(request):
 
 @login_required
 def motscles_alpha(request):
-    motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by("nom")
+    motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by("nom__unaccent")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                    "elements": motscles, "titre": "Tous les mots-clés",
                                                    "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
@@ -346,7 +346,7 @@ def motscles_alpha(request):
 
 @login_required
 def motscles_nuage(request):
-    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom")
+    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
     motscles = annoter_class_nuage(motscles)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                          "elements": motscles, "titre": "Tous les mots-clés",
@@ -384,7 +384,7 @@ def rechercher(request):
 
 @login_required
 def glossaire(request):
-    entrees = EntreeGlossaire.objects.order_by('entree')
+    entrees = EntreeGlossaire.objects.order_by('entree__unaccent')
     context = {'entrees': entrees}
     return render(request, 'fiches/index_entree_glossaire.html', context)
 
