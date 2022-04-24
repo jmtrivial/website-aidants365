@@ -42,6 +42,9 @@ Glossaire
             <div style="clear: both"></div>
         </div>
         <h1>Entrée du {{ entree.date.day }} <a href="{% url 'fichier:agenda_month' entree.date.year entree.date.month %}">{{ entree.date|date:'F' }}</a> <a href="{% url 'fichier:agenda_year' entree.date.year %}">{{ entree.date.year }}</a> 
+            {% if entree.marque %}
+            ☑
+            {% endif %}
             <a id="edit_button" class="card_edit" href="{% url 'fichier:object_change' 'agenda' entree.id %}">éditer <small>(ctrl+e)</small></a>
             <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a></h1>
         {% if entree.themes.all %}

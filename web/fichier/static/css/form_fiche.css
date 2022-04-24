@@ -84,8 +84,15 @@
     width: auto;
 }
 
+#field_wrapper_id_date, #field_wrapper_id_auteur {
+    width: 66.66%;
+    float: left;
+    clear: none;
+}
+
 #field_wrapper_id_categorie2, #field_wrapper_id_categorie3,
-#field_wrapper_id_niveau, #field_wrapper_id_categorie1 {
+#field_wrapper_id_niveau, #field_wrapper_id_categorie1, 
+#field_wrapper_id_marque {
     width: 33.333%;
     float: left;
     clear: none;
@@ -96,9 +103,14 @@
 
 #field_wrapper_id_categorie2 .field_label,
 #field_wrapper_id_categorie3 .field_label,
-#field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label {
+#field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label,
+#field_wrapper_id_marque .field_label {
     width: 45%;
 }
+#field_wrapper_id_date .field_label, #field_wrapper_id_auteur .field_label {
+    width: 22.5%;
+}
+
 
 #field_wrapper_id_titre_fiche, #field_wrapper_id_url, #field_wrapper_id_titre, #field_wrapper_id_realisateurs,
 #field_wrapper_id_partenaires, #field_wrapper_id_themes, #field_wrapper_id_presentation, #field_wrapper_id_reserves, 
@@ -131,14 +143,16 @@ select[multiple] {
 
 @media only screen and (max-width: 1200px) {
     #field_wrapper_id_categorie2, #field_wrapper_id_categorie3,
-    #field_wrapper_id_niveau, #field_wrapper_id_categorie1 {
+    #field_wrapper_id_niveau, #field_wrapper_id_categorie1,
+    #field_wrapper_id_date, #field_wrapper_id_auteur, #field_wrapper_id_marque {
         width: 100%;
     }
 
     .field_label,
     #field_wrapper_id_categorie2 .field_label,
     #field_wrapper_id_categorie3 .field_label,
-    #field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label {
+    #field_wrapper_id_niveau .field_label, #field_wrapper_id_categorie1 .field_label,
+    #field_wrapper_id_date .field_label, #field_wrapper_id_auteur .field_label, #field_wrapper_id_marque .field_label {
         width: 20%;
     }
 }

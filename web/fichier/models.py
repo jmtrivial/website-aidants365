@@ -191,6 +191,8 @@ class Fiche(models.Model):
     categories_libres = SortedManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True, help_text=message_sortable)
 
     auteur = models.ForeignKey(Auteur, verbose_name="Auteur", on_delete=models.RESTRICT)
+    marque = models.BooleanField(verbose_name="Entrée de qualité", default=False)
+
     numero = models.IntegerField(verbose_name="Numéro", default=9999)
     titre_fiche = models.CharField(verbose_name="Titre de la fiche", max_length=256)
     sous_titre = models.CharField(verbose_name="Sous-titre", max_length=256, blank=True)
@@ -254,7 +256,10 @@ class Fiche(models.Model):
                 self.reserves, self.lesplus, self.en_savoir_plus]
 
     def __str__(self):
-        return " ".join(map(str, [self.niveau, self.categorie1, self.auteur, "{:04d}".format(self.numero), self.titre_fiche]))
+        liste = [self.niveau, self.categorie1, self.auteur, "{:04d}".format(self.numero), self.titre_fiche]
+        if self.marque:
+            liste.append("☑")
+        return " ".join(map(str, liste))
 
     def get_numero_suivant(auteur):
         if Fiche.objects.all().count() == 0:
@@ -421,6 +426,8 @@ class EntreeAgenda(models.Model):
 
     date = models.DateField()
 
+    marque = models.BooleanField(verbose_name="Entrée de qualité", default=False)
+
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True, help_text=message_sortable)
     motscles = SortedManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True, help_text=message_sortable)
 
@@ -432,7 +439,11 @@ class EntreeAgenda(models.Model):
         return reverse('fichier:entree_agenda', kwargs={'year': self.date.year, 'month': self.date.month, 'day': self.date.day})
 
     def __str__(self):
-        return self.date.strftime("%d/%m/%Y")
+        texte = self.date.strftime("%d/%m/%Y")
+        if self.marque:
+            return texte + " ☑"
+        else:
+            return texte
 
     def ephemeride(self):
         e = Ephemeride(self.date, self.get_absolute_url(), False)

@@ -18,7 +18,8 @@
                         {% if liens %}<a class="internal" href="{% url 'fichier:index_niveau_detail' fiche.niveau.id fiche.id %}">{% endif %}{{ fiche.niveau }}{% if liens %}</a>{% endif %}
                         {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{% endif %}{{ fiche.categorie1 }}{% if liens %}</a>{% endif %}
                         {% if liens %}<a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{% endif %}{{ fiche.auteur }}{% if liens %}</a>{% endif %}
-                        {{ fiche.numero  | number_xxxx }}</p>
+                        {{ fiche.numero  | number_xxxx }}
+                        {% if fiche.marque %}☑{% endif %}</p>
                     <h1>{{ fiche.titre_fiche  | safe }}</h1>
                     <h2>{{ fiche.sous_titre  | safe }}</h2>
                 </div>
