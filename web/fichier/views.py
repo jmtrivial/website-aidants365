@@ -150,7 +150,8 @@ def annotate_categories_par_niveau():
         annotate(fiche_count1=Count("fiche_categorie1", distinct=True)). \
         annotate(fiche_count2=Count("fiche_categorie2", distinct=True)). \
         annotate(fiche_count3=Count("fiche_categorie3", distinct=True)). \
-        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3"))
+        annotate(fiche_count=F("fiche_count1") + F("fiche_count2") + F("fiche_count3")). \
+        annotate(entry_count=F("fiche_count"))
 
 
 def annotate_categories_par_niveau_complet():
@@ -253,7 +254,9 @@ def annotate_categories_par_niveau_simple(objects, agenda=False):
         annotate(fiche_count_B=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
         annotate(fiche_count_C=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.C), distinct=True))
     if agenda:
-        result = result.annotate(agenda_count=Count('entreeagenda', distinct=True))
+        result = result.annotate(agenda_count=Count('entreeagenda', distinct=True)).annotate(entry_count=F("agenda_count") + F("fiche_count"))
+    else:
+        result = result.annotate(entry_count=F("fiche_count"))
     return result
 
 

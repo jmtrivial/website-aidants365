@@ -528,12 +528,20 @@ form td select[multiple] {
     font-size: 80%;
 }
 
-.glossaire, .glossaire-creer {
+.glossaire, .glossaire-creer, .missing-entry {
     text-decoration: underline dotted #975709;
 }
 
 .glossaire-creer {
     color: #F00 !important;
+}
+
+.missing-entry, .missing-entry:visited {
+    color: #c00;
+}
+
+.missing-entry:hover {
+    color: #f00;
 }
 
 .nuage {

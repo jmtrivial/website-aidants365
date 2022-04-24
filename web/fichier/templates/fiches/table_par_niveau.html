@@ -24,18 +24,18 @@
     {% with "fichier:index_"|add:critere_name as template_name %}
     <tr><th>
         {% if element.code %}
-        <a href="{% url template_name element.id %}">{{ element.code }}</a><br />
+        <a href="{% url template_name element.id %}"{% if element.entry_count == 0 %}class="missing-entry"{% endif %}>{{ element.code }}</a><br />
         <span>{{ element.nom }}</span>
         {% else %}
-        <a href="{% url template_name element.id %}">{{ element.nom }}</a>
+        <a href="{% url template_name element.id %}"{% if element.entry_count == 0 %}class="missing-entry"{% endif %}>{{ element.nom }}</a>
         {% endif %}
     </th> 
         <td>{{element.fiche_count_A}}</td>
         <td>{{element.fiche_count_B}}</td>
         <td>{{element.fiche_count_C}}</td>
-        <td>{{element.fiche_count }}</td> 
+        <td {% if element.fiche_count == 0 %}class="missing-entry"{% endif %}>{{element.fiche_count }}</td> 
         {% if critere_name == "theme" or critere_name == "motcle" %}
-        <td>{{element.agenda_count }}</td> 
+        <td {% if element.agenda_count == 0 %}class="missing-entry"{% endif %}>{{element.agenda_count }}</td> 
         {% endif %}
     </tr>
     {% endwith %}
