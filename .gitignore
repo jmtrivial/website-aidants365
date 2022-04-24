@@ -3,3 +3,5 @@ db.sqlite3
 warning.log
 .env.prod
 .env.prod.db
+backups
+update-dev.sh
