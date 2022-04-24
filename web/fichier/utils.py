@@ -103,7 +103,10 @@ class Agenda(LocaleHTMLCalendar):
         else:
             events_from_day = events.filter(date__day=day)
             if events_from_day.count() != 0:
-                event_html = '<a class="day existing-day" href="' + events_from_day[0].get_absolute_url() + '">' + str(day) + "</a>"
+                event_html = '<a class="day existing-day" href="' + events_from_day[0].get_absolute_url() + '">' + str(day)
+                if events_from_day[0].marque:
+                    event_html += " ☑"
+                event_html += "</a>"
             else:
                 event_html = '<a class="day missing-day" href="/fichier/agenda/add/?date=' + \
                     str(day) + '/' + "{0:02d}".format(themonth) + '/' + str(theyear) + \
