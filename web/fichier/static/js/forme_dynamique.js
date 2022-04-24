@@ -54,7 +54,7 @@ function set_enable(list_fields, enable) {
 
 function update_visible_fields() {        
     let biblio_fields = ["titre", "auteurs", "annee_publication", "editeur", "format_bibl", "quatrieme_de_couverture", "collection"];
-    let film_fields = ["realisateurs", "annee_film", "diffusion", "duree", "production"];
+    let film_fields = ["realisateurs", "acteurs", "annee_film", "diffusion", "duree", "production"];
     let site_fields = ["plan_du_site"];
     set_visible(biblio_fields, is_biblio());
     set_visible(site_fields, is_site());
