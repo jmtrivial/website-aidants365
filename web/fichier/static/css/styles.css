@@ -582,7 +582,7 @@ a.missing-day {
     background: transparent;
     font-weight: normal;
     color: red;
-    opacity: 0.2;
+    opacity: 0.5;
 }
 
 .month a.missing-day:hover {
