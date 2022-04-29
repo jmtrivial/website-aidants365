@@ -52,7 +52,7 @@ Le fichier Aidants365 — édition
                 <div id="field_wrapper_{{ field.id_for_label }}" class="field_form">
                     <div class="field_label">
                         <div id="{{ field.id_for_label }}_anchor" class="anchor"></div>
-                        <div{% if field.field.required %} class="champs_requis"{% endif %}>{{ field|label_with_stars|safe }}</div>
+                        <div{% if field.field.required %} class="champs_requis"{% endif %}>{% if not nom_classe == "document" %}{{ field|label_with_stars|safe }}{% else %}{{ field.label }}{% endif %}</div>
                         {% if field.help_text %}
                         <p class="help">{{ field.help_text|safe }}</p>
                         {% endif %}

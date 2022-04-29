@@ -468,6 +468,45 @@ class EntreeAgenda(models.Model):
                      config='french'))
 
 
+class Document(models.Model):
+
+    titre = models.CharField(verbose_name="Nom", max_length=512)
+    format_A4 = models.BooleanField(verbose_name="Présentation sous forme d'une unique page A4", default=False)
+    contenu = RichTextField(verbose_name="Contenu", config_name='main_ckeditor', blank=True)
+
+    date_creation = models.DateField(verbose_name="Date de création", default=timezone.now)
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
+
+    def __str__(self):
+        return self.titre
+
+    def get_absolute_url(self):
+        return reverse('fichier:document', kwargs={'id': self.pk})
+
+    def rechercher(search_text):
+
+        if not search_text:
+            return None
+
+        search_vectors = SearchVector('contenu', weight='A', config='french') + \
+            SearchVector('titre', weight='B', config='french')
+        search_query = SearchQuery(search_text, config='french')
+
+        return Document.objects.annotate(search=search_vectors).filter(search=search_query). \
+            annotate(contenu_hl=SearchHeadline("contenu",
+                                               search_query,
+                                               start_sel="<span class=\"highlight\">",
+                                               stop_sel="</span>",
+                                               max_fragments=50,
+                                               config='french'),
+                     titre_hl=SearchHeadline("titre",
+                                             search_query,
+                                             start_sel="<span class=\"highlight\">",
+                                             stop_sel="</span>",
+                                             highlight_all=True,
+                                             config='french'))
+
+
 @receiver(pre_save, sender=Fiche)
 def my_callback_pre_save(sender, instance, **kwargs):
     if instance.date_derniere_modification == instance.__original_date_derniere_modification:

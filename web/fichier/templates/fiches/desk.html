@@ -1,0 +1,44 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "desk" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Le fichier Aidants365 — Desk
+{% endblock %}
+
+
+
+
+{% block entete %}
+Desk
+{% endblock %}
+
+{% block content %}
+
+
+    <div class="block" id="entete">
+        <div class="lien_next bouton"><a title="ajouter un document" href="{%url 'fichier:object_add' 'document' %}">+ document</a></div>
+        <h1>Desk</h1>
+    </div>
+    <div class="block">
+        {% if entrees %}
+
+        <ul>
+        {% for entree in entrees %}
+            <li><a href="{% url 'fichier:document' entree.id %}">{{ entree }}</a></li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun document.</p>
+    {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre, Niveau
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre, Niveau, Document
 from django.utils import timezone
 from django.db import models
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
@@ -55,6 +55,14 @@ class EntreeGlossaireForm(WithUserForm):
         model = EntreeGlossaire
 
         fields = '__all__'
+
+
+class DocumentForm(WithUserForm):
+
+    class Meta:
+        model = Document
+
+        exclude = ('date_creation', 'date_derniere_modification', )
 
 
 class EntreeAgendaForm(WithUserForm):

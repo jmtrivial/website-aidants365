@@ -1,14 +1,14 @@
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda
+from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -374,6 +374,7 @@ def rechercher(request):
             results_themes = Theme.rechercher(recherche)
             results_categories_libres = CategorieLibre.rechercher(recherche)
             results_categories = Categorie.rechercher(recherche)
+            results_documents = Document.rechercher(recherche)
 
     return render(request, 'fiches/rechercher.html', {'results_fiches': results_fiches,
                                                       'results_glossaire': results_glossaire,
@@ -382,6 +383,7 @@ def rechercher(request):
                                                       'results_themes': results_themes,
                                                       'results_categories': results_categories,
                                                       'results_categories_libres': results_categories_libres,
+                                                      'results_documents': results_documents,
                                                       'recherche': recherche})
 
 
@@ -400,10 +402,33 @@ def entree_glossaire(request, id):
 
 
 @login_required
+def desk(request):
+    entrees = Document.objects.order_by('titre__unaccent')
+    context = {'entrees': entrees}
+    return render(request, 'fiches/desk.html', context)
+
+
+@login_required
+def document(request, id):
+    entree = get_object_or_404(Document, pk=id)
+    context = {'entree': entree}
+    return render(request, 'fiches/document.html', context)
+
+
+@login_required
 def edit_object(request, classname, id=None):
     single_reverse = False
 
-    if classname == "glossaire":
+    if classname == "document":
+        nom_classe = "document"
+        titre_add = "Création d\'un document du desk"
+        titre_edition = "Édition du document du desk"
+        message_add_success = 'Le document du desk "%s" a été ajouté avec succès.'
+        message_edit_success = 'Le document du desk "%s" a été modifié avec succès.'
+        classe = Document
+        classeform = DocumentForm
+        reverse_url = 'fichier:document'
+    elif classname == "glossaire":
         nom_classe = "entreeglossaire"
         titre_add = "Création d\'entrée de glossaire"
         titre_edition = "Édition de l\'entrée de glossaire"
@@ -649,6 +674,12 @@ class DeleteCategorieView(DeleteObjectView):
     model = Categorie
     success_url = reverse_lazy("fichier:categories")
     cancel_url = "fichier:index_categorie"
+
+
+class DeleteDocumentView(DeleteObjectView):
+    model = Document
+    success_url = reverse_lazy("fichier:desk")
+    cancel_url = "fichier:document"
 
 
 def page_not_found_view(request, exception=None):

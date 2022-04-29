@@ -68,43 +68,46 @@ Toutes les fiches
     {% if results_agenda|length == 0 %}
     <p>Aucune entrée de l'<a href="{% url 'fichier:agenda' %}">agenda</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
     {% endif %} 
-
+    {% if results_document|length == 0 %}
+    <p>Aucun document du <a href="{% url 'fichier:desk' %}">desk</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+    
     {% if results_fiches|length > 0 %}
-            <h2>{{ results_fiches.count }} 
-                {% if results_fiches|length > 1 %}
-                    fiches
-                {% else %}
-                    fiche
-                {% endif %}
-                correspondant à « {{ recherche }} »</h2>
-            <ol>
-            {% for fiche in results_fiches %}
-                <li><strong>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}?search={{ recherche }}">{{ fiche.agg_title_hl | safe }}</a></strong>
-                    <p class="preview_highlight">{{ fiche.agg_contenu_hl | safe }}</p>
-                </li>
-            {% endfor %}
-            </ol>
-        {% endif %}
+        <h2>{{ results_fiches.count }} 
+            {% if results_fiches|length > 1 %}
+                fiches
+            {% else %}
+                fiche
+            {% endif %}
+            correspondant à « {{ recherche }} »</h2>
+        <ol>
+        {% for fiche in results_fiches %}
+            <li><strong>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}?search={{ recherche }}">{{ fiche.agg_title_hl | safe }}</a></strong>
+                <p class="preview_highlight">{{ fiche.agg_contenu_hl | safe }}</p>
+            </li>
+        {% endfor %}
+        </ol>
+    {% endif %}
 
-        {% if results_glossaire|length > 0 %}
-            <h2>{{ results_glossaire.count }} 
-                {% if results_glossaire|length > 1 %}
-                    entrées de glossaire
-                {% else %}
-                    entrée de glossaire
+    {% if results_glossaire|length > 0 %}
+        <h2>{{ results_glossaire.count }} 
+            {% if results_glossaire|length > 1 %}
+                entrées de glossaire
+            {% else %}
+                entrée de glossaire
+            {% endif %}
+            correspondant à « {{ recherche }} »</h2>
+        <ol>
+        {% for entree in results_glossaire %}
+            <li><strong><a href="{% url 'fichier:entree_glossaire' entree.id %}?search={{ recherche }}">{{ entree.entree_hl | safe }}</a></strong>
+                {% if entree.formes_alternatives_hl %}
+                    ({{ entree.formes_alternatives_hl | safe }})
                 {% endif %}
-                correspondant à « {{ recherche }} »</h2>
-            <ol>
-            {% for entree in results_glossaire %}
-                <li><strong><a href="{% url 'fichier:entree_glossaire' entree.id %}?search={{ recherche }}">{{ entree.entree_hl | safe }}</a></strong>
-                    {% if entree.formes_alternatives_hl %}
-                     ({{ entree.formes_alternatives_hl | safe }})
-                    {% endif %}
-                    <p class="preview_highlight">{{ entree.definition_hl | safe }}</p>
-                </li>
-            {% endfor %}
-            </ol>
-        {% endif %}
+                <p class="preview_highlight">{{ entree.definition_hl | safe }}</p>
+            </li>
+        {% endfor %}
+        </ol>
+    {% endif %}
 
     {% if results_agenda|length > 0 %}
         <h2>{{ results_agenda.count }} 
@@ -122,6 +125,25 @@ Toutes les fiches
         {% endfor %}
         </ol>
     {% endif %}
+
+
+    {% if results_documents|length > 0 %}
+        <h2>{{ results_documents.count }} 
+            {% if results_documents|length > 1 %}
+                documents du desk
+            {% else %}
+                document du desk
+            {% endif %}
+            correspondant à « {{ recherche }} »</h2>
+        <ol>
+        {% for entree in results_documents %}
+            <li><strong><a href="{% url 'fichier:document' entree.id %}?search={{ recherche }}">{{ entree.titre_hl | safe }}</a></strong>
+                <p class="preview_highlight">{{ entree.contenu_hl | safe }}</p>
+            </li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
 {% endif %}
 
     </div>

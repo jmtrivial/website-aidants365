@@ -1,0 +1,60 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+
+{% block title %}
+Le fichier Aidants365 — Desk : {{ entree }}
+{% endblock %}
+
+
+{% block entete_header %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+<link rel="stylesheet" href="{% static 'css/page_html.css' %}">
+<link rel="stylesheet" href="{% static 'css/pleine_page.css' %}">
+<script src="{% static 'js/shortcut.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+    function save_and_view(){
+        document.getElementById('edit_button').click()
+    }
+    shortcut.add("Meta+E", save_and_view);
+    shortcut.add("Ctrl+E", save_and_view);
+</script>
+{% endblock %}
+
+
+{% block entete %}
+Desk
+{% endblock %}
+
+{% block content %}
+
+    {% if entree.format_A4 %}
+    <page size="A4">
+        <div id="actions">
+            <a href="{% url 'fichier:object_change' 'document' entree.id %}" id="edit_button"><button>éditer (ctrl-e)</button></a>
+            <a href="{% url 'fichier:document_delete' entree.id %}" id="delete_button"><button>supprimer</button></a>
+        </div>
+        <div id="contenu_page">
+            <div>
+                <h1>{{ entree.titre }}</h1>
+                {{ entree.contenu | safe }}
+            </div>
+        </div>
+    </page>
+    {% else %}
+    <div class="block" id="entete">
+        <p><a href="{% url 'fichier:desk' %}">◂ desk</a></p>
+        
+        <h1>Document&nbsp;: {{ entree.titre }} <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' 'document' entree.id %}">éditer <small>(ctrl+e)</small></a>
+            <a class="card_edit" id="delete_button" href="{% url 'fichier:document_delete' entree.id %}">supprimer</a>
+        </h1>
+    </div>
+    <div class="block">
+            {{ entree.contenu | safe }}
+    </div>
+    {% endif %}
+
+{% endblock %}
