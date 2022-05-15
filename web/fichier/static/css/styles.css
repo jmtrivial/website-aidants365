@@ -685,6 +685,10 @@ a.missing-day {
         padding: 0 0.5em;
     }
     
+    .button_round, .button_round:visited {
+        width: 100%;
+        font-size: 120%;
+    }
 }
 
 @media only screen and (max-width: 800px) {
