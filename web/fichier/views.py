@@ -522,6 +522,7 @@ def edit_object(request, classname, id=None):
         raise PermissionDenied
 
     template_name = 'fiches/edit_form.html'
+    header = ""
 
     if request.method == 'POST':
         if "annuler" in request.POST:
@@ -541,6 +542,11 @@ def edit_object(request, classname, id=None):
                     return HttpResponseRedirect(reverse(reverse_url))
                 else:
                     return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+            else:
+                if classname == "glossaire" and "entree" in form.errors and form.data["entree"] != "":
+                    entree = EntreeGlossaire.objects.filter(entree=form.data["entree"])[0]
+                    url = reverse_lazy("fichier:entree_glossaire", kwargs={'id': entree.id})
+                    header = "<ul><li>Les modifications que vous avez faites n'ont pas été enregistrées car nous avons identifié que l'entrée <a href=\"" + url + "\">" + form.data["entree"] + "</a> existait déjà.</li></ul>"
 
     else:
         if request.GET:
@@ -559,7 +565,8 @@ def edit_object(request, classname, id=None):
         'validation': not bool(request.GET),
         'add': id is None,
         'nom_classe': nom_classe,
-        'footer': footer
+        'footer': footer,
+        'header': header
     })
 
 

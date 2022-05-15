@@ -341,6 +341,7 @@ a:hover {
     padding: 0 1em;
 }
 
+
 .messagelist .success {
     background: #01a129;
 }
@@ -348,7 +349,7 @@ a:hover {
     background: #975709;
 } 
 
-.messagelist .info {
+.messagelist .info, .info_form_header {
     background: #719cc5;
 } 
 
@@ -357,7 +358,7 @@ a:hover {
     color: #a30d0d;
 
 }
-.messagelist {
+.messagelist, .info_form_header {
     margin: 1em 0;
     padding: 0;
     box-shadow: 0 0 0.1em rgba(0,0,0,0.1);
@@ -365,14 +366,14 @@ a:hover {
     overflow: hidden;
 }
 
-.messagelist li {
+.messagelist li, .info_form_header li  {
     display: block;
     margin: 0;
     padding: 1em;
     color: #fff;
 }
 
-.messagelist li a {
+.messagelist li a, .info_form_header li a {
     color: #122b43;
 }
 

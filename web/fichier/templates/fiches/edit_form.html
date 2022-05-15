@@ -46,6 +46,9 @@ Le fichier Aidants365 — édition
         {% csrf_token %}
         {{ form.media }}
             <div id="form_fiche">
+            {% if header %}
+                <div class="info_form_header">{{ header | safe }}</div>
+            {% endif %}
             {{ form.non_field_errors }}
             {% for field in form.visible_fields %}
                 {% if not field.id_for_label == "id_utiliser_suivant" %}
