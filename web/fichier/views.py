@@ -389,7 +389,7 @@ def rechercher(request):
 
 @login_required
 def glossaire(request):
-    entrees = EntreeGlossaire.objects.order_by('entree__unaccent')
+    entrees = EntreeGlossaire.objects.order_by(Lower('entree__unaccent'))
     context = {'entrees': entrees}
     return render(request, 'fiches/index_entree_glossaire.html', context)
 
