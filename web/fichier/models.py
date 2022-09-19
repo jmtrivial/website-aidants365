@@ -256,11 +256,15 @@ class Fiche(models.Model):
                 self.plan_du_site, self.focus,
                 self.reserves, self.lesplus, self.en_savoir_plus]
 
-    def __str__(self):
+    def get_simple_name(self):
         liste = [self.niveau, self.categorie1, self.auteur, "{:04d}".format(self.numero), self.titre_fiche]
-        if self.marque:
-            liste.append("☑")
         return " ".join(map(str, liste))
+
+    def __str__(self):
+        name = self.get_simple_name()
+        if self.marque:
+            name += " ☑"
+        return name
 
     def get_numero_suivant(auteur):
         if Fiche.objects.all().count() == 0:
