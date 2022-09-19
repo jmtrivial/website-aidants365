@@ -248,7 +248,7 @@ def ajouter_glossaire(texte, liens):
             result = e.ajouter_span(result)
 
     if liens:
-        result = re.sub(r'\[([^\]<>]*)\]', r'<a class="glossaire-creer" title="ajouter « \1 » au glossaire" href="/fichier/glossaire/add/?entree=\1">\1</a>', result)
+        result = re.sub(r'\[([^\]<>]*)\]', lambda x: x.group() if x.group() == "[...]" else '<a class="glossaire-creer" title="ajouter « ' + x.group() + ' » au glossaire" href="/fichier/glossaire/add/?entree=' + x.group() + '>' + x.group() + '</a>', result)
     else:
         result = re.sub(r'\[([^\]<>]*)\]', r'<span class="glossaire-creer">\1</a>', result)
 
