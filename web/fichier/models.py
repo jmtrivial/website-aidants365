@@ -42,8 +42,8 @@ class Niveau(models.Model):
 
     class Applicabilite(models.TextChoices):
         A = 'A', "informatif"
-        B = 'B', "intermédiaire"
-        C = 'C', "pratique"
+        B = 'B', "pratique"
+        C = 'C', "opérationnel"
 
     couleur_A = "#fdfbe9"
     couleur_B = "#ea841d"
@@ -209,7 +209,7 @@ class Fiche(models.Model):
     annee_publication = models.IntegerField(verbose_name="Année de publication", blank=True, null=True)
     editeur = models.CharField(verbose_name="Éditeur", max_length=1024, blank=True)
     collection = models.CharField(verbose_name="Collection", max_length=1024, blank=True)
-    format_bibl = models.CharField(verbose_name="Format", max_length=1024, blank=True)
+    format_bibl = models.CharField(verbose_name="Format", max_length=1024, blank=True, help_text="Format attendu: ??.? x ??.? cm, ?? pages")
 
     # uniquement si film
     realisateurs = models.CharField(verbose_name="Réalisateur(s)", max_length=1024, blank=True)
