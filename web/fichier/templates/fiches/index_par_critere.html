@@ -32,7 +32,7 @@ avec le mot-clé {{ critere_nom }}
 {% block content %}
     {% load fichier_extras %}
     <div class="block" id="entete">
-        <h1>Toutes les fiches {{ critere_human }} {{ critere_nom }} {% if critere_name == "niveau" %}({{ critere.nom }}){% endif %}
+        <h1>Toutes les entrées {{ critere_human }} {{ critere_nom }} {% if critere_name == "niveau" %}({{ critere.nom }}){% endif %}
             {% include "fiches/ajouter_supprimer_critere.html" %}</h1>
 
         {% if critere_name == "categorie" %}
@@ -60,16 +60,21 @@ avec le mot-clé {{ critere_nom }}
 
         {% endfor %}
 
-        {% if entreesagenda %}
-            <h2>Entrées de l'agenda</h2>
-            <ul>
-            {% for entree in entreesagenda %}
-            <li><a href="{{ entree.get_absolute_url }}">{{ entree }}</a></li>
-            {% endfor %}
-            </lul>
-        {% endif %}
     {% else %}
-        <p>Pas de fiche disponible.</p>
+    <h2>Fiches</h2>
+    <p>Pas de fiche disponible.</p>
     {% endif %}
-    </div>
+    {% if critere_name == "theme" or critere_name == "motcle" %}
+        <h2>Entrées de l'agenda</h2>
+        {% if entreesagenda %}
+        <ul>
+        {% for entree in entreesagenda %}
+        <li><a href="{{ entree.get_absolute_url }}">{{ entree }}</a></li>
+        {% endfor %}
+        </lul>
+        {% else %}
+        <p>Pas d'entrée d'agenda disponible.</p>
+        {% endif %}
+    {% endif %}
+</div>
 {% endblock %}

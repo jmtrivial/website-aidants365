@@ -15,6 +15,8 @@ class WithUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
+        if self.autofocus:
+            self.fields[self.autofocus].widget.attrs.update({"autofocus": True})
 
 
 class FicheForm(forms.ModelForm):
@@ -51,6 +53,8 @@ class FicheForm(forms.ModelForm):
 
 class EntreeGlossaireForm(WithUserForm):
 
+    autofocus = "entree"
+
     class Meta:
         model = EntreeGlossaire
 
@@ -58,6 +62,8 @@ class EntreeGlossaireForm(WithUserForm):
 
 
 class DocumentForm(WithUserForm):
+
+    autofocus = "titre"
 
     class Meta:
         model = Document
@@ -81,6 +87,8 @@ class EntreeAgendaForm(WithUserForm):
 
 class CategorieForm(WithUserForm):
 
+    autofocus = "code"
+
     class Meta:
         model = Categorie
 
@@ -88,6 +96,8 @@ class CategorieForm(WithUserForm):
 
 
 class ThemeForm(WithUserForm):
+
+    autofocus = "nom"
 
     class Meta:
         model = Theme
@@ -97,6 +107,8 @@ class ThemeForm(WithUserForm):
 
 class MotCleForm(WithUserForm):
 
+    autofocus = "nom"
+
     class Meta:
         model = MotCle
 
@@ -105,6 +117,8 @@ class MotCleForm(WithUserForm):
 
 class CategorieLibreForm(WithUserForm):
 
+    autofocus = "nom"
+
     class Meta:
         model = CategorieLibre
 
@@ -112,6 +126,8 @@ class CategorieLibreForm(WithUserForm):
 
 
 class NiveauForm(WithUserForm):
+
+    autofocus = "nom"
 
     class Meta:
         model = Niveau

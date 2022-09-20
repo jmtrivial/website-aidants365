@@ -19,7 +19,7 @@ Aidants 365 — {{ titre }} {{ visu }}
     <div class="block" id="entete">
         {% include "fiches/ajouter_critere.html" %}
 
-        <h1>{{ titre }} {{ visu }}</h1>
+        <h1>{{ titre }} {{ visu }} <span class="remarque">({{ elements.all.count }} entrées)</span></h1>
  
         <p>Afficher par&nbsp;:
         {% if visu_code == "basic" %} 

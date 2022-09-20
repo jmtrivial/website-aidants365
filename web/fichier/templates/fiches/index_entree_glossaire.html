@@ -26,7 +26,7 @@ Glossaire
 
     <div class="block" id="entete">
         <div class="lien_next bouton"><a title="ajouter une entrée de glossaire" href="{%url 'fichier:object_add' 'glossaire' %}">+ entrée glossaire</a></div>
-        <h1>Glossaire</h1>
+        <h1>Glossaire <span class="remarque">({{ entrees.all.count }} entrées)</span></h1>
     </div>
     <div class="block">
         {% if entrees %}
