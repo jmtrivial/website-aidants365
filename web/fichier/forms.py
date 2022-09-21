@@ -15,7 +15,7 @@ class WithUserForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
-        if self.autofocus:
+        if self.autofocus and self.autofocus in self.fields:
             self.fields[self.autofocus].widget.attrs.update({"autofocus": True})
 
 
@@ -72,6 +72,8 @@ class DocumentForm(WithUserForm):
 
 
 class EntreeAgendaForm(WithUserForm):
+
+    autofocus = "themes"
 
     class Meta:
         model = EntreeAgenda
