@@ -302,6 +302,10 @@ a:hover {
     display: block;
 }
 
+.large {
+    font-size: 120%;
+}
+
 .block {
     margin: 0.5em;
     background: #fff;

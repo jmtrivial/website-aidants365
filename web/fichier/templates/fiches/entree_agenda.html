@@ -37,6 +37,10 @@ Glossaire
 
     <div class="block" id="entete">
         <div>
+            <div class="left">{% lien_jour_un_an_avant un_an_prev %}</div>
+            <div class="right">{% lien_jour_un_an_apres un_an_next %}</div>
+            <div style="clear: both"></div>
+        <div class="large">
             <div class="left">{% lien_jour_precedent prev %}</div>
             <div class="right">{% lien_jour_suivant next %}</div>
             <div style="clear: both"></div>
@@ -48,10 +52,10 @@ Glossaire
             <a id="edit_button" class="card_edit" href="{% url 'fichier:object_change' 'agenda' entree.id %}">éditer <small>(ctrl+e)</small></a>
             <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a></h1>
         {% if entree.themes.all %}
-        <strong>Thèmes&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
+        <strong>Thème{% if entree.themes.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
         {% endif %}
         {% if entree.motscles.all %}
-        <strong>Mots-clés&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
+        <strong>Mot{% if entree.motscles.all.count > 1%}s{% endif %}-clé{% if entree.motscles.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
         {% endif %}
     </div>
     <div class="block">

@@ -13,7 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, date, timedelta
 from django.db import IntegrityError
 from .utils import message_glossaire, message_sortable
 from django.db.models.functions import Ceil, Cast, Lower
@@ -592,17 +592,36 @@ def agenda_month(request, year, month):
 
 
 def _entree_agenda(request, entree, d):
-    prev_entree = EntreeAgenda.objects.filter(date=d + timedelta(days=1))
+    prev_date = d - timedelta(days=1)
+    prev_entree = EntreeAgenda.objects.filter(date=prev_date)
     if len(prev_entree) == 0:
-        prev_entree = d + timedelta(days=1)
+        prev_entree = prev_date
     else:
         prev_entree = prev_entree[0]
-    next_entree = EntreeAgenda.objects.filter(date=d - timedelta(days=1))
+
+    next_date = d + timedelta(days=1)
+    next_entree = EntreeAgenda.objects.filter(date=next_date)
     if len(next_entree) == 0:
-        next_entree = d - timedelta(days=1)
+        next_entree = next_date
     else:
         next_entree = next_entree[0]
-    context = {'entree': entree, 'prev': prev_entree, 'next': next_entree}
+
+    un_an_avant_date = date(d.year - 1, d.month, d.day)
+    un_an_avant_entree = EntreeAgenda.objects.filter(date=un_an_avant_date)
+    if len(un_an_avant_entree) == 0:
+        un_an_avant_entree = un_an_avant_date
+    else:
+        un_an_avant_entree = un_an_avant_entree[0]
+
+    un_an_apres_date = date(d.year + 1, d.month, d.day)
+    un_an_apres_entree = EntreeAgenda.objects.filter(date=un_an_apres_date)
+    if len(un_an_apres_entree) == 0:
+        un_an_apres_entree = un_an_apres_date
+    else:
+        un_an_apres_entree = un_an_apres_entree[0]
+
+    context = {'entree': entree, 'prev': prev_entree, 'next': next_entree,
+               'un_an_prev': un_an_avant_entree, 'un_an_next': un_an_apres_entree, }
     return render(request, 'fiches/entree_agenda.html', context)
 
 

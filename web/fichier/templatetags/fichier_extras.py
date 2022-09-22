@@ -67,8 +67,7 @@ def lien_jour(url, text, class_name):
     return mark_safe('<a class="' + class_name + '" href="' + url + '">' + text + "</a>")
 
 
-@register.simple_tag
-def lien_jour_suivant(day):
+def lien_jour_prepostfix(day, prefix, postfix, name):
     if isinstance(day, EntreeAgenda):
         url = get_url_jour(day.date)
         text = get_day_name(day.date)
@@ -77,21 +76,27 @@ def lien_jour_suivant(day):
         url = get_url_jour_missing(day)
         text = get_day_name(day)
         classname = " missing-day"
-    return lien_jour(url, "◂ " + text, "lien_pred" + classname)
+    return lien_jour(url, prefix + " " + text + " " + postfix, "lien_" + name + classname)
 
 
 @register.simple_tag
 def lien_jour_precedent(day):
-    if isinstance(day, EntreeAgenda):
-        url = get_url_jour(day.date)
-        text = get_day_name(day.date)
-        classname = ""
-    else:
-        url = get_url_jour_missing(day)
-        text = get_day_name(day)
-        classname = " missing-day"
+    return lien_jour_prepostfix(day, "◂", " ", "pred")
 
-    return lien_jour(url, text + " ▸", "lien_next" + classname)
+
+@register.simple_tag
+def lien_jour_un_an_avant(day):
+    return lien_jour_prepostfix(day, "◂◂", "", "pred")
+
+
+@register.simple_tag
+def lien_jour_suivant(day):
+    return lien_jour_prepostfix(day, "", "▸", "next")
+
+
+@register.simple_tag
+def lien_jour_un_an_apres(day):
+    return lien_jour_prepostfix(day, "", "▸▸", "next")
 
 
 @register.simple_tag
