@@ -428,6 +428,7 @@ def edit_object(request, classname, id=None):
         classe = Document
         classeform = DocumentForm
         reverse_url = 'fichier:document'
+        reverse_url_cancel = 'fichier:desk'
     elif classname == "glossaire":
         nom_classe = "entreeglossaire"
         titre_add = "Création d\'entrée de glossaire"
@@ -437,6 +438,7 @@ def edit_object(request, classname, id=None):
         classe = EntreeGlossaire
         classeform = EntreeGlossaireForm
         reverse_url = 'fichier:entree_glossaire'
+        reverse_url_cancel = 'fichier:glossaire'
     elif classname == "agenda":
         nom_classe = "entreeagenda"
         titre_add = "Création d\'une entrée d'agenda"
@@ -446,6 +448,7 @@ def edit_object(request, classname, id=None):
         classe = EntreeAgenda
         classeform = EntreeAgendaForm
         reverse_url = 'fichier:entree_agenda_pk'
+        reverse_url_cancel = 'fichier:agenda'
     elif classname == "fiche":
         nom_classe = "fiche"
         titre_add = "Création d\'une fiche"
@@ -455,6 +458,7 @@ def edit_object(request, classname, id=None):
         classe = Fiche
         classeform = FicheForm
         reverse_url = 'fichier:detail'
+        reverse_url_cancel = 'fichier:index'
     elif classname == "categorie":
         nom_classe = "categorie"
         titre_add = "Création d\'une catégorie"
@@ -464,6 +468,7 @@ def edit_object(request, classname, id=None):
         classe = Categorie
         classeform = CategorieForm
         reverse_url = 'fichier:index_categorie'
+        reverse_url_cancel = 'fichier:categories'
     elif classname == "theme":
         nom_classe = "theme"
         titre_add = "Création d\'un thème"
@@ -473,6 +478,7 @@ def edit_object(request, classname, id=None):
         classe = Theme
         classeform = ThemeForm
         reverse_url = 'fichier:themes_alpha'
+        reverse_url_cancel = 'fichier:themes_alpha'
         single_reverse = True
     elif classname == "motcle":
         nom_classe = "motcle"
@@ -483,6 +489,7 @@ def edit_object(request, classname, id=None):
         classe = MotCle
         classeform = MotCleForm
         reverse_url = 'fichier:motscles_alpha'
+        reverse_url_cancel = 'fichier:motscles_alpha'
         single_reverse = True
     elif classname == "categorie_libre":
         nom_classe = "categorie_libre"
@@ -493,6 +500,7 @@ def edit_object(request, classname, id=None):
         classe = CategorieLibre
         classeform = CategorieLibreForm
         reverse_url = 'fichier:index_categorie_libre'
+        reverse_url_cancel = 'fichier:categories'
     elif classname == "niveau":
         nom_classe = "niveau"
         titre_add = "Création d\'un niveau"
@@ -502,6 +510,7 @@ def edit_object(request, classname, id=None):
         classe = Niveau
         classeform = NiveauForm
         reverse_url = 'fichier:index_niveau'
+        reverse_url_cancel = 'fichier:index'
     else:
         raise Http404("Donnée inconnue")
 
@@ -527,7 +536,10 @@ def edit_object(request, classname, id=None):
     if request.method == 'POST':
         if "annuler" in request.POST:
             messages.info(request, "Édition annulée")
-            return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+            if object:
+                return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+            else:
+                return HttpResponseRedirect(reverse(reverse_url_cancel))
         else:
             logger.warning(request.POST)
             form = classeform(instance=object, data=request.POST, user=request.user)

@@ -38,9 +38,7 @@ Le fichier Aidants365 — édition
     <form method="post">
         <div class="boutons_edition">
             <input class="button_round" type="submit" value="Enregistrer (ctrl-s)">
-            {% if not add %}
             <input class="button_round" type="submit" name="annuler" value="Annuler">
-            {% endif %}
         </div>
 
         {% csrf_token %}
@@ -93,9 +91,7 @@ Le fichier Aidants365 — édition
 
         <div class="boutons_edition">
             <input class="button_round" type="submit" id="enregistrer" value="Enregistrer (ctrl-s)">
-            {% if not add %}
             <input class="button_round" type="submit" id="annuler" name="annuler" value="Annuler">
-            {% endif %}
         </div>
     </form>
 </div>

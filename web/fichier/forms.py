@@ -11,6 +11,7 @@ logger = logging.getLogger(__name__)
 
 
 class WithUserForm(forms.ModelForm):
+    use_required_attribute = False
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -21,6 +22,7 @@ class WithUserForm(forms.ModelForm):
 
 class FicheForm(forms.ModelForm):
     utiliser_suivant = forms.BooleanField(label="Utiliser le prochain numéro disponible", initial=False, required=False)
+    use_required_attribute = False
 
     class Meta:
         model = Fiche
