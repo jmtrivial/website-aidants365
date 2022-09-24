@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+{% load fichier_extras %}
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
@@ -51,7 +52,7 @@
       {% if messages %}
       <ul class="messagelist">
         {% for message in messages %}
-        <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} </li>
+        <li  {% if message.tags %} class=" {{ message.tags }} " {% endif %}> {{ message }} {{ message | button_add_another_on_create }}</li>
         {% endfor %}
       </ul>
       {% endif %}

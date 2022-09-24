@@ -242,6 +242,10 @@ a:hover {
     text-decoration: none;
 }
 
+.messagelist .lien_next.bouton {
+    padding-top: 0;
+    margin-top: -0.1em;
+}
 
 #content {
     margin-top: 3.2em;

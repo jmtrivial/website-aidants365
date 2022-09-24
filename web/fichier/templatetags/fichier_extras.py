@@ -313,3 +313,20 @@ def label_with_stars(field):
         return field.label_tag().replace(":", "<sup>**</sup>")
     else:
         return field.label_tag().replace(":", "")
+
+
+def button_new(txt, link, title):
+    return mark_safe('<div class="lien_next bouton"><a title="' + title + '" href="' + link + '">' + txt + '</a></div>')
+
+
+@register.filter
+def button_add_another_on_create(message):
+    msg = str(message)
+    if re.match("L'entrée de glossaire .* a été ajoutée avec succès.", msg):
+        return button_new("+ entrée glossaire", "/fichier/glossaire/add/", "ajouter une entrée de glossaire")
+    if re.match("La fiche .* a été ajoutée avec succès.", msg):
+        return button_new("+ fiche", "/fichier/fiche/add/", "ajouter une fiche")
+    if re.match("L'entrée d'agenda .* a été ajoutée avec succès.", msg):
+        return button_new("+ entrée agenda", "/fichier/agenda/add/", "ajouter une entrée de l'agenda")
+    else:
+        return ""
