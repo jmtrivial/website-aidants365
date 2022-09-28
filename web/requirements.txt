@@ -5,3 +5,4 @@ psycopg2-binary==2.9.1
 django-weasyprint==2.1.0
 django-better-admin-arrayfield==1.4.2
 django-sortedm2m==3.1.1
+django-debug-toolbar==3.7.0

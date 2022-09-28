@@ -10,6 +10,7 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', lambda req: redirect('fichier/')),
+    path('__debug__/', include('debug_toolbar.urls')),
     path('fichier/', include('fichier.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('django.contrib.auth.urls')),
