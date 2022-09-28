@@ -15,6 +15,7 @@ urlpatterns = [
     path('fiches/<int:id>/', views.index_detail, name='index_detail'),
     path('fiche/<int:id>/', views.detail, name='detail'),
     path('fiche/<pk>/pdf/', views.FicheViewPDF.as_view(), name='detail_pdf'),
+    path('fiche/<pk>/delete/', views.DeleteFicheView.as_view(), name='fiche_delete'),
     path('niveau/<int:id>/', views.index_niveau, name='index_niveau'),
     path('niveau/<int:id1>/<int:id2>/', views.index_niveau_detail, name='index_niveau_detail'),
     path('categories/', views.categories, name='categories'),

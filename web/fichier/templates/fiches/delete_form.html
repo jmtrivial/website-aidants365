@@ -11,6 +11,9 @@ Le fichier Aidants365 — suppression
 <div class="block attention">
     <form method="post">{% csrf_token %}
         <p><span class="panneau">?</span> Êtes-vous sûr de vouloir supprimer "{{ object }}"?</p>
+        <p style="font-size: 100%">Cette suppression sera définitive. Les autres documents y faisant éventuellement référence (fiches, entrées d'agenda, etc) 
+            ne seront quant à eux pas supprimés, mais perdront tout lien avec le document supprimé.
+        </p>
         <input class="button_round" type="submit" name="confirm" value="Confirmer">
         <input class="button_round" type="submit" name="cancel" value="Annuler">
     </form>

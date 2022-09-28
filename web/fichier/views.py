@@ -695,6 +695,11 @@ class DeleteMotCleView(DeleteObjectView):
     success_url = reverse_lazy("fichier:motscles")
     cancel_url = "fichier:entree_motcle"
 
+class DeleteFicheView(DeleteObjectView):
+    model = Fiche
+    success_url = reverse_lazy("fichier:index")
+    cancel_url = "fichier:detail"
+
 
 class DeleteEntreeGlossaireView(DeleteObjectView):
     model = EntreeGlossaire
