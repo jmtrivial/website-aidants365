@@ -1,0 +1,52 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+
+{% block title %}
+Le fichier Aidants365 — glossaire : {{ recherche }}
+{% endblock %}
+
+
+
+{% block entete %}
+Glossaire
+{% endblock %}
+
+{% block content %}
+
+    {% if entrees.count == 0 %}
+    <div class="block" id="entete">
+        <h1>Recherche d'une entrée de glossaire « {{ recherche }} »</h1>
+    </div>
+    <div class="block">
+        <p>Il n'existe pas d'entrée de glossaire correspondant à « {{ recherche }} ». 
+            Vous pouvez pour créer <a href="{%url 'fichier:object_add' 'glossaire' %}?entree={{ recherche }}">une entrée correspondante</a>.
+        </p>
+    </div>
+    {% else %} 
+        {% if entrees.count == 1 %}
+
+            <div class="block" id="entete">
+                <p style="font-style: italic">Cette entrée du glossaire est la seule à correspondre à la requête « {{ recherche }} ».</p>
+                {% include "fiches/titre_glossaire.html" with niveau="h1" shortcut=1 entree=entrees.0 %}
+            </div>
+            {% include "fiches/contenu_glossaire.html" with niveau="h2" entree=entrees.0 %}
+        {% else %}
+        <div class="block" id="entete">
+            <h1>Recherche d'une entrée de glossaire « {{ recherche }} »</h1>
+            <p>{{ entrees.count }} entrées correspondent à votre requête.</p>
+        </div>  
+
+        {% for entree in entrees %}
+
+        <div class="block">
+            {% include "fiches/titre_glossaire.html" with niveau="h2" %}
+    
+            {% include "fiches/contenu_glossaire.html" with niveau="h3" %}
+        </div>
+
+        {% endfor %}
+        {% endif %}
+    {% endif %}
+{% endblock %}
