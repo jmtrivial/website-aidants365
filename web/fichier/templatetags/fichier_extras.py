@@ -246,16 +246,10 @@ def liste_niveaux(niveau_code):
 def ajouter_glossaire(texte, liens):
     result = texte
 
-    for e in EntreeGlossaire.objects.filter():
-        if liens:
-            result = e.ajouter_liens(result)
-        else:
-            result = e.ajouter_span(result)
-
     if liens:
-        result = re.sub(r'\[([^\]<>]*)\]', lambda x: x.group() if x.group() == "[...]" else '<a class="glossaire-creer" title="ajouter « ' + x.group() + ' » au glossaire" href="/fichier/glossaire/add/?entree=' + x.group() + '>' + x.group() + '</a>', result)
+        result = re.sub(r'\[([^\]<>]*)\]', lambda x: x.group() if x.group() == "[...]" else '<a class="glossaire" title="' + x.group()[1:-1] + '" href="/fichier/glossaire/search/' + x.group()[1:-1] + '/">' + x.group()[1:-1] + '</a>', result)
     else:
-        result = re.sub(r'\[([^\]<>]*)\]', r'<span class="glossaire-creer">\1</a>', result)
+        result = re.sub(r'\[([^\]<>]*)\]', r'<span class="glossaire">\1</a>', result)
 
     return result
 

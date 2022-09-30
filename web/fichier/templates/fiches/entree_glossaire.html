@@ -34,43 +34,8 @@ Glossaire
 
     <div class="block" id="entete">
         <p><a href="{% url 'fichier:glossaire' %}">◂ glossaire</a></p>
-        
-        <h1>Entrée glossaire&nbsp;: {{ entree.entree }} <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' 'glossaire' entree.id %}">éditer <small>(ctrl+e)</small></a>
-            <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_glossaire_delete' entree.id %}">supprimer</a>
-        </h1>
-            {% if entree.formes_alternatives %} 
-        <p><strong>{% if entree.formes_alternatives|length > 1 %}Formes alternatives{% else %}Forme alternative{% endif %}&nbsp;:</strong> 
-            {% for fa in entree.formes_alternatives %}{% if not forloop.first %}, {% endif %}{{ fa }}{% endfor %}
-            {% endif %}
+        {% include "fiches/titre_glossaire.html" with niveau="h1" shortcut=1 %}
     </div>
-    <div class="block">
-            <h2>Définition</h2>
-            {{ entree.definition | safe }}
-        </div>
-    {% with entree.matching_fiches as list_fiches %}
-    {% if list_fiches %}
-    <div class="block">
-        <h2>Fiche{% if list_fiches.all.count > 1%}s{% endif %} faisant mention de cette entrée du glossaire</h2>
-    <ul>
-        {% for fiche in list_fiches %}
-            <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
-        {% endfor %}
-    </ul>
-    </div>
-    {% endif %}
-    {% endwith %}
-
-    {% with entree.matching_entrees_agenda as list_eagenda %}
-    {% if list_eagenda %}
-    <div class="block">
-        <h2>Entrée{% if list_eagenda.all.count > 1%}s{% endif %} de l'agenda faisant mention de cette entrée du glossaire</h2>
-    <ul>
-        {% for e in list_eagenda %}
-            <li><a href="{{ e.get_absolute_url }}">{{ e }}</a></li>
-        {% endfor %}
-    </ul>
-    </div>
-    {% endif %}
-    {% endwith %}
+    {% include "fiches/contenu_glossaire.html" with niveau="h2" %}
 
 {% endblock %}

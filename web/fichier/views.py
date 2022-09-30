@@ -395,6 +395,13 @@ def glossaire(request):
 
 
 @login_required
+def recherche_glossaire(request, txt):
+    entrees = EntreeGlossaire.objects.filter(Q(entree=txt) | Q(formes_alternatives__contains=[txt]))
+    context = {'entrees': entrees, 'recherche': txt}
+    return render(request, 'fiches/entrees_glossaire.html', context)
+
+
+@login_required
 def entree_glossaire(request, id):
     entree = get_object_or_404(EntreeGlossaire, pk=id)
     context = {'entree': entree}

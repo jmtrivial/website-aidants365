@@ -43,6 +43,7 @@ urlpatterns = [
     path('motcle/<pk>/delete/', views.DeleteMotCleView.as_view(), name='motcle_delete'),
     path('glossaire/', views.glossaire, name='glossaire'),
     path('glossaire/<int:id>/', views.entree_glossaire, name='entree_glossaire'),
+    path('glossaire/search/<str:txt>/', views.recherche_glossaire, name='recherche_glossaire'),
     path('glossaire/<pk>/delete/', views.DeleteEntreeGlossaireView.as_view(), name='entree_glossaire_delete'),
     path('agenda/', views.agenda_current_month, name='agenda'),
     path('agenda/<int:year>/', views.agenda_year, name='agenda_year'),
