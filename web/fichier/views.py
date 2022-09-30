@@ -718,7 +718,7 @@ class DeleteEntreeGlossaireView(DeleteObjectView):
 class DeleteEntreeAgendaView(DeleteObjectView):
     model = EntreeAgenda
     success_url = reverse_lazy("fichier:agenda")
-    cancel_url = "fichier:entree_agenda"
+    cancel_url = "fichier:entree_agenda_pk"
 
 
 class DeleteCategorieView(DeleteObjectView):
