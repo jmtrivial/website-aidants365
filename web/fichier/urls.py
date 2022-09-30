@@ -7,8 +7,8 @@ from django.views.decorators.cache import cache_page
 app_name = "fichier"
 
 # durée cache par défaut
-dcp = 2 * 60  # 2 mn
-dcf = 15 * 60 # 15 mn
+dcp = 2 * 60   # 2 mn
+dcf = 15 * 60  # 15 mn
 
 urlpatterns = [
     path('', cache_page(dcp)(views.accueil), name='accueil'),
