@@ -72,4 +72,16 @@ Aidants 365 — {{ titre }} {{ visu }}
         {% endif %}
 
     </div>
+
+    {% if key_alpha or paginator %}
+        <div class="block">
+    {% if key_alpha %}
+        {% index_alpha key_alpha url_key_alpha %}
+    {% endif %}
+
+    {% if paginator %}
+        {% index_paginator paginator p_id url_key_paginator %}
+    {% endif %}
+    </div>
+    {% endif %}
 {% endblock %}
