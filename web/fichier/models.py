@@ -442,10 +442,10 @@ class EntreeGlossaire(models.Model):
                                                            highlight_all=True,
                                                            config='french'))
 
-
     def associated_entries(self):
         # Liste des entrées d'agenda et les fiches associées à cette entrée de glossaire
         return self.matching_entrees_agenda() + self.matching_fiches()
+
 
 class EntreeAgenda(models.Model):
 
