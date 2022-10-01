@@ -17,6 +17,7 @@ from datetime import datetime, date, timedelta
 from django.db import IntegrityError
 from .utils import message_glossaire, message_sortable
 from django.db.models.functions import Ceil, Cast, Lower
+from django.core.paginator import Paginator
 
 from django.views.generic import DetailView
 
@@ -331,25 +332,54 @@ def index_motcle_detail(request, id1, id2):
 
 @login_required
 def motscles(request):
+    return motscles_page(request, 1)
+
+
+@login_required
+def motscles_page(request, key):
     motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by("-fiche_count")
+    step = 20
+    mc = Paginator(motscles, step)
+    nb_motscles = MotCle.objects.count()
+    extension_titre = "de " + str(step * (key - 1) + 1) + " à " +  str(step * key)
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                   "elements": motscles, "titre": "Tous les mots-clés",
+                                                   "elements": mc.page(key).object_list, 
+                                                   "nb_elements": nb_motscles,
+                                                   "extension_titre": extension_titre,
+                                                   "p_id": key,
+                                                   "url_key_paginator": "fichier:motscles_page",
+                                                   "paginator": mc,
+                                                   "titre": "Mots-clés",
                                                    "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches"})
 
 
 @login_required
 def motscles_alpha(request):
-    motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by("nom__unaccent")
+    return motscles_alpha_page(request, "A")
+
+
+@login_required
+def motscles_alpha_page(request, key):
+    if key >= "A" and key <= "Z":
+        motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by(Lower("nom__unaccent")).filter(nom__istartswith=key)
+        extension_titre = "commençant par " + key
+    else:
+        motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by(Lower("nom__unaccent")).exclude(nom__unaccent__iregex=r'^[a-zA-Z].*$')
+        extension_titre = "ne commençant pas par une lettre"
+    nb_motscles = MotCle.objects.count()
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                   "elements": motscles, "titre": "Tous les mots-clés",
+                                                   "nb_elements": nb_motscles, "key_alpha": key,
+                                                   "extension_titre": extension_titre,
+                                                   "url_key_alpha": "fichier:motscles_alpha_page",
+                                                   "elements": motscles, "titre": "Mots-clés",
                                                    "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
-                                                   "visu_code": "alpha", "visu": "par ordre alphabétique"})
+                                                   "visu_code": "alpha", "visu": ""})
 
 
 @login_required
 def motscles_nuage(request):
-    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
+    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by(Lower("nom__unaccent"))
     motscles = annoter_class_nuage(motscles)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                          "elements": motscles, "titre": "Tous les mots-clés",
@@ -389,8 +419,20 @@ def rechercher(request):
 
 @login_required
 def glossaire(request):
-    entrees = EntreeGlossaire.objects.order_by(Lower('entree__unaccent'))
-    context = {'entrees': entrees}
+    return glossaire_page(request, "A")
+
+
+@login_required
+def glossaire_page(request, key):
+    if key >= "A" and key <= "Z":
+        entrees = EntreeGlossaire.objects.order_by(Lower('entree__unaccent')).filter(entree__istartswith=key)
+        extension_titre = "commençant par " + key
+    else:
+        entrees = EntreeGlossaire.objects.order_by(Lower('entree__unaccent')).exclude(entree__unaccent__iregex=r'^[a-zA-Z].*$')
+        extension_titre = "ne commençant pas par une lettre"
+    nb_entrees = EntreeGlossaire.objects.count()
+
+    context = {'entrees': entrees, "nb_entrees": nb_entrees, "key": key, "extension_titre": extension_titre }
     return render(request, 'fiches/index_entree_glossaire.html', context)
 
 

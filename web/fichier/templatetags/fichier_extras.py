@@ -7,6 +7,7 @@ from django.urls import reverse
 from datetime import datetime
 from sortedm2m.fields import SortedMultipleChoiceField
 from ckeditor.fields import RichTextFormField
+from string import ascii_uppercase
 
 import html.entities
 
@@ -324,3 +325,31 @@ def button_add_another_on_create(message):
         return button_new("+ entrée agenda", "/fichier/agenda/add/", "ajouter une entrée de l'agenda")
     else:
         return ""
+
+
+@register.simple_tag
+def index_alpha(key_alpha, url_key_alpha):
+    result = '<div class="index_menu">'
+
+    for letter in ascii_uppercase + "-":
+        if letter == key_alpha:
+            result += '<div><span class="active_visu">' + letter + "</span></div>"
+        else:
+            result += '<div><a class="visu" href="' + reverse(url_key_alpha, kwargs={"key": letter}) + '">' + letter + "</a></div>"
+
+    result += "</div>"
+    return mark_safe(result)
+
+@register.simple_tag
+def index_paginator(paginator, p_id, url_key_paginator):
+    result = '<div class="index_menu_large">Page : '
+
+    for id in range(1, paginator.num_pages + 1):
+        sid = str(id)
+        if id == p_id:
+            result += '<div><span class="active_visu">' + sid + "</span></div>"
+        else:
+            result += '<div><a class="visu" href="' + reverse(url_key_paginator, kwargs={"key": id}) + '">' + sid + "</a></div>"
+
+    result += "</div>"
+    return mark_safe(result)

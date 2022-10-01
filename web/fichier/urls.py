@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, re_path
 
 from . import views
 
@@ -40,19 +40,22 @@ urlpatterns = [
     path('theme/<int:id>/', views.index_theme, name='index_theme'),
     path('theme/<int:id1>/<int:id2>/', views.index_theme_detail, name='index_theme_detail'),
     path('theme/<pk>/delete/', views.DeleteThemeView.as_view(), name='theme_delete'),
-    path('motscles/', cache_page(dcf)(views.motscles), name='motscles'),
-    path('motscles/alpha/', cache_page(dcf)(views.motscles_alpha), name='motscles_alpha'),
+    path('motscles/', views.motscles, name='motscles'),
+    path('motscles/page/<int:key>', views.motscles_page, name='motscles_page'),
+    path('motscles/alpha/', views.motscles_alpha, name='motscles_alpha'),
+    re_path(r'^motscles/alpha/(?P<key>[A-Z\-])/$', views.motscles_alpha_page, name='motscles_alpha_page'),
     path('motscles/nuage/', cache_page(dcf)(views.motscles_nuage), name='motscles_nuage'),
     path('motcle/<int:id>/', views.index_motcle, name='index_motcle'),
     path('motcle/<int:id1>/<int:id2>/', views.index_motcle_detail, name='index_motcle_detail'),
     path('motcle/<pk>/delete/', views.DeleteMotCleView.as_view(), name='motcle_delete'),
-    path('glossaire/', cache_page(dcf)(views.glossaire), name='glossaire'),
+    path('glossaire/', views.glossaire, name='glossaire'),
+    re_path(r'^glossaire/(?P<key>[A-Z\-])/$', views.glossaire_page, name='glossaire_page'),
     path('glossaire/<int:id>/', views.entree_glossaire, name='entree_glossaire'),
     path('glossaire/search/<str:txt>/', views.recherche_glossaire, name='recherche_glossaire'),
     path('glossaire/<pk>/delete/', views.DeleteEntreeGlossaireView.as_view(), name='entree_glossaire_delete'),
-    path('agenda/', cache_page(dcf)(views.agenda_current_month), name='agenda'),
+    path('agenda/', views.agenda_current_month, name='agenda'),
     path('agenda/<int:year>/', cache_page(dcf)(views.agenda_year), name='agenda_year'),
-    path('agenda/<int:year>/<int:month>/', cache_page(dcf)(views.agenda_month), name='agenda_month'),
+    path('agenda/<int:year>/<int:month>/', views.agenda_month, name='agenda_month'),
     path('agenda/<int:year>/<int:month>/<int:day>/', views.entree_agenda, name='entree_agenda'),
     path('agenda/entree/<int:id>/', views.entree_agenda_pk, name='entree_agenda_pk'),
     path('agenda/entree/<pk>/delete/', views.DeleteEntreeAgendaView.as_view(), name='entree_agenda_delete'),

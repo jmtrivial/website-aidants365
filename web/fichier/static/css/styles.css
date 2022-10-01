@@ -646,6 +646,20 @@ a.missing-day {
     margin-right: .5em;
 }
 
+.index_menu, .index_menu_large {
+    margin: auto;
+    text-align: center;
+}
+.index_menu {
+    max-width: 40em;
+}
+
+.index_menu div, .index_menu_large div {
+    display: inline-block;
+    margin: 0.1em;
+}
+
+
 @media only screen and (max-width: 1200px) {
 
     #menubar .espace-gauche {

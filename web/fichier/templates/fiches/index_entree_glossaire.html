@@ -26,7 +26,10 @@ Glossaire
 
     <div class="block" id="entete">
         <div class="lien_next bouton"><a title="ajouter une entrée de glossaire" href="{%url 'fichier:object_add' 'glossaire' %}">+ entrée glossaire</a></div>
-        <h1>Glossaire <span class="remarque">({{ entrees.all.count }} entrées)</span></h1>
+        <h1>Glossaire <span class="remarque">({{ entrees.all.count }} entrées sur {{ nb_entrees }})</span></h1>
+
+
+        {% index_alpha key "fichier:glossaire_page" %}
     </div>
     <div class="block">
         {% if entrees %}
@@ -40,7 +43,7 @@ Glossaire
             {{ entree.definition | safe }}
         {% endfor %}
     {% else %}
-        <p>Pas d'entée de glossaire disponible.</p>
+        <p>Pas d'entrée de glossaire commençant par {{ key }}.</p>
     {% endif %}
     </div>
 </div>
