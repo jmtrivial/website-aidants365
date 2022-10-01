@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="{% static 'css/responsive-menubar.css' %}">
 </head>
 <body>
-  <div id="full_content">
+  <div id="full_content" class="{% block classe_principale %}{% endblock %}">
     <div id="menubar" class="topnav">
       <div>
         <ul>{% block entete_menu %}

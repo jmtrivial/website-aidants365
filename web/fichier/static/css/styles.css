@@ -318,10 +318,11 @@ a:hover {
     box-shadow: 0 0 0.1em rgba(0,0,0,0.1);
 }
 
-.block ul {
+.accueil_page .block ul, .detail_page  .block ul {
     list-style: none;
     padding: 0 0.5em;
 }
+
 
 #full_content {
     margin: auto;

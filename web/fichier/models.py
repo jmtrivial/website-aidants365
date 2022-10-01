@@ -2,7 +2,7 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from django.utils import timezone
 from django.db.models.signals import pre_save, post_init
-from django.db.models import Func, F, Value
+from django.db.models import Func, F, Value, Q
 from django.db.models.functions import Concat, Right
 from django.dispatch import receiver
 from django.urls import reverse
@@ -109,6 +109,14 @@ class Categorie(models.Model):
     def rechercher(search_text):
         return rechercher_nom_simple(search_text, Categorie)
 
+    def associated_entries(self):
+        result = []
+
+        # Liste des entrées d'agenda associées à cette catégorie
+        result += Fiche.objects.filter(Q(categorie1=self.id) | Q(categorie2=self.id) | Q(categorie3=self.id))
+
+        return result
+
 
 class Auteur(models.Model):
     code = models.CharField(verbose_name="Code auteur", max_length=3)
@@ -146,6 +154,14 @@ class CategorieLibre(models.Model):
     def rechercher(search_text):
         return rechercher_nom_simple(search_text, CategorieLibre)
 
+    def associated_entries(self):
+        result = []
+
+        # Liste des entrées d'agenda associées à cette catégorie
+        result += Fiche.objects.filter(categories_libres=self.id)
+
+        return result
+
 
 class MotCle(models.Model):
     nom = models.CharField(verbose_name="Mot-clé", max_length=64, unique=True, blank=False)
@@ -163,6 +179,16 @@ class MotCle(models.Model):
     def rechercher(search_text):
         return rechercher_nom_simple(search_text, MotCle)
 
+    def associated_entries(self):
+        result = []
+        # Liste des fiches ayant ce mot-clé
+        result += Fiche.objects.filter(mots_cles=self.id)
+
+        # Liste des entrées d'agenda ayant ce mot-clé
+        result += EntreeAgenda.objects.filter(motscles=self.id)
+
+        return result
+
 
 class Theme(models.Model):
     nom = models.CharField(verbose_name="Thème", max_length=64, unique=True, blank=False)
@@ -179,6 +205,16 @@ class Theme(models.Model):
 
     def rechercher(search_text):
         return rechercher_nom_simple(search_text, Theme)
+
+    def associated_entries(self):
+        result = []
+        # Liste des fiches ayant ce theme
+        result += Fiche.objects.filter(themes=self.id)
+
+        # Liste des entrées d'agenda ayant ce thème
+        result += EntreeAgenda.objects.filter(themes=self.id)
+
+        return result
 
 
 class Fiche(models.Model):
@@ -307,6 +343,14 @@ class Fiche(models.Model):
                      stop_sel="</span>",
                      max_fragments=50,
                      config='french'))
+
+    def associated_entries(self):
+        result = []
+
+        # Liste des entrées d'agenda associées à cette fiche
+        result += EntreeAgenda.objects.filter(fiches_associees=self.id)
+
+        return result
 
 
 class EntreeGlossaire(models.Model):

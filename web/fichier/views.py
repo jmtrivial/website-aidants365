@@ -730,7 +730,7 @@ class DeleteObjectView(LoginRequiredMixin, DeleteView):
 class DeleteCategorieLibreView(DeleteObjectView):
     model = CategorieLibre
     success_url = reverse_lazy("fichier:categories")
-    cancel_url = "fichier:entree_categorie_libre"
+    cancel_url = "fichier:index_categorie_libre"
 
 
 class DeleteThemeView(DeleteObjectView):
@@ -742,7 +742,7 @@ class DeleteThemeView(DeleteObjectView):
 class DeleteMotCleView(DeleteObjectView):
     model = MotCle
     success_url = reverse_lazy("fichier:motscles")
-    cancel_url = "fichier:entree_motcle"
+    cancel_url = "fichier:index_motcle"
 
 
 class DeleteFicheView(DeleteObjectView):
