@@ -341,9 +341,9 @@ def motscles_page(request, key):
     step = 20
     mc = Paginator(motscles, step)
     nb_motscles = MotCle.objects.count()
-    extension_titre = "de " + str(step * (key - 1) + 1) + " à " +  str(step * key)
+    extension_titre = "de " + str(step * (key - 1) + 1) + " à " + str(step * key)
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                   "elements": mc.page(key).object_list, 
+                                                   "elements": mc.page(key).object_list,
                                                    "nb_elements": nb_motscles,
                                                    "extension_titre": extension_titre,
                                                    "p_id": key,
@@ -432,7 +432,7 @@ def glossaire_page(request, key):
         extension_titre = "ne commençant pas par une lettre"
     nb_entrees = EntreeGlossaire.objects.count()
 
-    context = {'entrees': entrees, "nb_entrees": nb_entrees, "key": key, "extension_titre": extension_titre }
+    context = {'entrees': entrees, "nb_entrees": nb_entrees, "key": key, "extension_titre": extension_titre}
     return render(request, 'fiches/index_entree_glossaire.html', context)
 
 

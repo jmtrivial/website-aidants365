@@ -340,6 +340,7 @@ def index_alpha(key_alpha, url_key_alpha):
     result += "</div>"
     return mark_safe(result)
 
+
 @register.simple_tag
 def index_paginator(paginator, p_id, url_key_paginator):
     result = '<div class="index_menu_large">Page : '
