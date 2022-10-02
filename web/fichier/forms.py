@@ -5,6 +5,12 @@ from django.db import models
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
 from django.contrib import admin
 from django.urls import reverse
+from sortedm2m.forms import SortedCheckboxSelectMultiple
+from django.utils.encoding import force_str
+from itertools import chain
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
+from django.utils.html import conditional_escape
 
 import logging
 logger = logging.getLogger(__name__)
@@ -73,6 +79,42 @@ class DocumentForm(WithUserForm):
         exclude = ('date_creation', 'date_derniere_modification', )
 
 
+class MySortedCheckboxSelectMultiple(SortedCheckboxSelectMultiple):
+    def render(self, name, value, attrs=None, choices=(), renderer=None):
+
+        # Normalize to strings
+        str_values = [force_str(v) for v in value]
+
+        selected = []
+        unselected = []
+
+        for option_value, option_label in chain(self.choices, choices):
+
+            # cb = forms.CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
+            option_value = force_str(option_value)
+            option_label = conditional_escape(force_str(option_label))
+            item = {
+                'option_label': option_label,
+                'option_value': option_value
+            }
+            if option_value in str_values:
+                selected.append(item)
+            else:
+                unselected.append(item)
+
+        # replace template rendering by ad-hoc rendering to speedup the process
+        html = '<div>'
+        html += '<input type="hidden" id="' + attrs["id"] + '" name="' + name + '" value="">'
+        html += '<select id="' + attrs["id"] + '_m2m" multiple>'
+        html += ' ' + "".join(['<option value="' + row["option_value"] + '" selected>' + row["option_label"] + '</option>\n' for row in selected])
+        html += ' ' + "".join(['<option value="' + row["option_value"] + '">' + row["option_label"] + '</option>\n' for row in unselected])
+        html += '</select>'
+
+        html += '</div>'
+
+        return mark_safe(html)
+
+
 class EntreeAgendaForm(WithUserForm):
 
     autofocus = "themes"
@@ -81,6 +123,11 @@ class EntreeAgendaForm(WithUserForm):
         model = EntreeAgenda
 
         fields = '__all__'
+        widgets = {
+            "themes": MySortedCheckboxSelectMultiple,
+            "motscles": MySortedCheckboxSelectMultiple,
+            "fiches_associees": MySortedCheckboxSelectMultiple,
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
