@@ -16,6 +16,44 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+class MySortedCheckboxSelectMultiple(SortedCheckboxSelectMultiple):
+    def render(self, name, value, attrs=None, choices=(), renderer=None):
+
+        # Normalize to strings
+        if value:
+            str_values = [force_str(v) for v in value]
+        else:
+            str_values = []
+
+        selected = []
+        unselected = []
+
+        for option_value, option_label in chain(self.choices, choices):
+
+            option_value = force_str(option_value)
+            option_label = conditional_escape(force_str(option_label))
+            item = {
+                'option_label': option_label,
+                'option_value': option_value
+            }
+            if option_value in str_values:
+                selected.append(item)
+            else:
+                unselected.append(item)
+
+        # replace template rendering by ad-hoc rendering to speedup the process
+        html = '<div>'
+        html += '<input type="hidden" id="' + attrs["id"] + '" name="' + name + '" value="">'
+        html += '<select id="' + attrs["id"] + '_m2m" multiple>'
+        html += ' ' + "".join(['<option value="' + row["option_value"] + '" selected>' + row["option_label"] + '</option>\n' for row in selected])
+        html += ' ' + "".join(['<option value="' + row["option_value"] + '">' + row["option_label"] + '</option>\n' for row in unselected])
+        html += '</select>'
+
+        html += '</div>'
+
+        return mark_safe(html)
+
+
 class WithUserForm(forms.ModelForm):
     use_required_attribute = False
 
@@ -36,6 +74,13 @@ class FicheForm(forms.ModelForm):
         localized_fields = ('date_creation', 'date_derniere_modification',)
 
         fields = '__all__'
+
+        widgets = {
+            "categories_libres": MySortedCheckboxSelectMultiple,
+            "themes": MySortedCheckboxSelectMultiple,
+            "motscles": MySortedCheckboxSelectMultiple,
+            "fiches_connexes": MySortedCheckboxSelectMultiple,
+        }
 
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user', None)
@@ -77,42 +122,6 @@ class DocumentForm(WithUserForm):
         model = Document
 
         exclude = ('date_creation', 'date_derniere_modification', )
-
-
-class MySortedCheckboxSelectMultiple(SortedCheckboxSelectMultiple):
-    def render(self, name, value, attrs=None, choices=(), renderer=None):
-
-        # Normalize to strings
-        str_values = [force_str(v) for v in value]
-
-        selected = []
-        unselected = []
-
-        for option_value, option_label in chain(self.choices, choices):
-
-            # cb = forms.CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
-            option_value = force_str(option_value)
-            option_label = conditional_escape(force_str(option_label))
-            item = {
-                'option_label': option_label,
-                'option_value': option_value
-            }
-            if option_value in str_values:
-                selected.append(item)
-            else:
-                unselected.append(item)
-
-        # replace template rendering by ad-hoc rendering to speedup the process
-        html = '<div>'
-        html += '<input type="hidden" id="' + attrs["id"] + '" name="' + name + '" value="">'
-        html += '<select id="' + attrs["id"] + '_m2m" multiple>'
-        html += ' ' + "".join(['<option value="' + row["option_value"] + '" selected>' + row["option_label"] + '</option>\n' for row in selected])
-        html += ' ' + "".join(['<option value="' + row["option_value"] + '">' + row["option_label"] + '</option>\n' for row in unselected])
-        html += '</select>'
-
-        html += '</div>'
-
-        return mark_safe(html)
 
 
 class EntreeAgendaForm(WithUserForm):
