@@ -81,6 +81,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    "django_cprofile_middleware.middleware.ProfilerMiddleware",
 ]
 
 ROOT_URLCONF = 'aidants365.urls'
@@ -186,3 +187,5 @@ CACHES = {
         'LOCATION': 'cache:11211',
     }
 }
+
+DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False

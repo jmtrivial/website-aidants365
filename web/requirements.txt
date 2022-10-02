@@ -7,3 +7,4 @@ django-better-admin-arrayfield==1.4.2
 django-sortedm2m==3.1.1
 django-debug-toolbar==3.7.0
 pymemcache==3.5.2
+django-cprofile-middleware==1.0.5
