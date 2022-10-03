@@ -43,7 +43,11 @@ Glossaire
             {{ entree.definition | safe }}
         {% endfor %}
     {% else %}
+        {% if key == "-" %}
+        <p>Pas d'entrée de glossaire commençant par un caractère non alphabétique.</p>
+        {% else %}
         <p>Pas d'entrée de glossaire commençant par {{ key }}.</p>
+        {% endif %}
     {% endif %}
     </div>
 
