@@ -11,6 +11,7 @@ from itertools import chain
 from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
+from django_better_admin_arrayfield.forms.widgets import DynamicArrayWidget
 
 import logging
 logger = logging.getLogger(__name__)
@@ -104,6 +105,10 @@ class FicheForm(forms.ModelForm):
         return data
 
 
+class MyDynamicArrayWidget(DynamicArrayWidget):
+    template_name = "fiches/dynamic_array.html"
+
+
 class EntreeGlossaireForm(WithUserForm):
 
     autofocus = "entree"
@@ -112,6 +117,10 @@ class EntreeGlossaireForm(WithUserForm):
         model = EntreeGlossaire
 
         fields = '__all__'
+
+        widgets = {
+            "formes_alternatives": MyDynamicArrayWidget
+        }
 
 
 class DocumentForm(WithUserForm):
