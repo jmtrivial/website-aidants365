@@ -79,7 +79,7 @@ class FicheForm(forms.ModelForm):
         widgets = {
             "categories_libres": MySortedCheckboxSelectMultiple,
             "themes": MySortedCheckboxSelectMultiple,
-            "motscles": MySortedCheckboxSelectMultiple,
+            "mots_cles": MySortedCheckboxSelectMultiple,
             "fiches_connexes": MySortedCheckboxSelectMultiple,
         }
 
