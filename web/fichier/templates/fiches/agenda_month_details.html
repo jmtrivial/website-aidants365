@@ -1,0 +1,61 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "agenda" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Le fichier Aidants365 — Agenda
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="block" id="entete">
+    <h1>Calendrier du mois de {{ month|nom_mois }} <a href="{% url 'fichier:agenda_year' year %}">{{year}}</a></h1>
+    <p>Note&nbsp;: pour des raisons de performance, cette page n'est mise à jour que toutes les 15 minutes. Vous visualisez peut-être une version qui n'est pas à jour.</p>
+    <div>
+        <div class="left">{% lien_mois_precedent year month 1 %}</div>
+        <div class="right">{% lien_mois_suivant year month 1 %}</div>
+        <div style="clear: both"></div>
+        <p>Voir <a href="{% url 'fichier:agenda_month' year month %}">la vue synthétique</a> du mois.</p>
+    </div>
+
+</div>
+    {% for entree in entrees %}
+    <div class="block">
+        <h2>Entrée du {{ entree.date.day }} <a href="{% url 'fichier:agenda_month' entree.date.year entree.date.month %}">{{ entree.date|date:'F' }}</a> <a href="{% url 'fichier:agenda_year' entree.date.year %}">{{ entree.date.year }}</a> 
+        {% if entree.marque %}
+        ☑
+        {% endif %}
+        <a id="edit_button" class="card_edit" href="{% url 'fichier:object_change' 'agenda' entree.id %}">éditer <small>(ctrl+e)</small></a>
+        <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a></h2>
+    {% if entree.themes.all %}
+    <strong>Thème{% if entree.themes.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
+    {% endif %}
+    {% if entree.motscles.all %}
+    <strong>Mot{% if entree.motscles.all.count > 1%}s{% endif %}-clé{% if entree.motscles.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
+    {% endif %}
+
+    <h3>Notes</h3>
+    {{ entree.notes | ajouter_glossaire:True | safe }}
+    
+    {% if entree.fiches_associees.all %}
+    <h3>Fiches associées</h3>
+    <ul>
+    {% for associee in entree.fiches_associees.all %}
+        <li><a class="internal" href="{% url 'fichier:detail' associee.id %}">{{ associee }}</a></li>
+    {% endfor %}
+    </ul>
+    {% endif %}
+    </div>
+    {% endfor %}
+{% endblock %}
