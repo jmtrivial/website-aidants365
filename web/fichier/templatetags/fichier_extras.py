@@ -101,21 +101,21 @@ def lien_jour_un_an_apres(day):
 
 
 @register.simple_tag
-def lien_mois_precedent(year, month):
+def lien_mois_precedent(year, month, details):
     month -= 1
     if month == 0:
         year -= 1
         month = 12
-    return mark_safe('<a class="lien_pred" href="' + reverse("fichier:agenda_month", kwargs={"year": year, "month": month}) + '">◂ ' + Agenda.month_name[month] + " " + str(year) + "</a>")
+    return mark_safe('<a class="lien_pred" href="' + reverse("fichier:agenda_month" + ("_details" if details == 1 else ""), kwargs={"year": year, "month": month}) + '">◂ ' + Agenda.month_name[month] + " " + str(year) + "</a>")
 
 
 @register.simple_tag
-def lien_mois_suivant(year, month):
+def lien_mois_suivant(year, month, details):
     month += 1
     if month == 13:
         year += 1
         month = 1
-    return mark_safe('<a class="lien_next" href="' + reverse("fichier:agenda_month", kwargs={"year": year, "month": month}) + '">' + Agenda.month_name[month] + " " + str(year) + " ▸</a>")
+    return mark_safe('<a class="lien_next" href="' + reverse("fichier:agenda_month" + ("_details" if details == 1 else ""), kwargs={"year": year, "month": month}) + '">' + Agenda.month_name[month] + " " + str(year) + " ▸</a>")
 
 
 @register.simple_tag

@@ -652,6 +652,13 @@ def agenda_month(request, year, month):
     return render(request, 'fiches/agenda_month.html', context)
 
 
+@login_required
+def agenda_month_details(request, year, month):
+    entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month)
+    context = {'entrees': entrees, "year": year, "month": month}
+    return render(request, 'fiches/agenda_month_details.html', context)
+
+
 def _entree_agenda(request, entree, d):
     prev_date = d - timedelta(days=1)
     prev_entree = EntreeAgenda.objects.filter(date=prev_date)

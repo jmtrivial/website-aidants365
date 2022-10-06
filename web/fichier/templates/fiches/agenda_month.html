@@ -22,14 +22,14 @@ Le fichier Aidants365 — Agenda
 <div class="block" id="entete">
     <h1>Calendrier du mois de {{ month|nom_mois }} <a href="{% url 'fichier:agenda_year' year %}">{{year}}</a></h1>
     <div>
-        <div class="left">{% lien_mois_precedent year month %}</div>
-        <div class="right">{% lien_mois_suivant year month %}</div>
+        <div class="left">{% lien_mois_precedent year month 0 %}</div>
+        <div class="right">{% lien_mois_suivant year month 0 %}</div>
         <div style="clear: both"></div>
+        <p>Voir <a href="{% url 'fichier:agenda_month_details' year month %}">toutes les entrées</a> du mois.</p>
     </div>
 
 </div>
 <div class="block">
         {% show_month agenda year month  %}
-    </div>
 </div>
 {% endblock %}

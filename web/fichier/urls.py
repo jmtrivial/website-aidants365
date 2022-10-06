@@ -56,6 +56,7 @@ urlpatterns = [
     path('agenda/', views.agenda_current_month, name='agenda'),
     path('agenda/<int:year>/', cache_page(dcf)(views.agenda_year), name='agenda_year'),
     path('agenda/<int:year>/<int:month>/', views.agenda_month, name='agenda_month'),
+    path('agenda/<int:year>/<int:month>/details/', cache_page(dcf)(views.agenda_month_details), name='agenda_month_details'),
     path('agenda/<int:year>/<int:month>/<int:day>/', views.entree_agenda, name='entree_agenda'),
     path('agenda/entree/<int:id>/', views.entree_agenda_pk, name='entree_agenda_pk'),
     path('agenda/entree/<pk>/delete/', views.DeleteEntreeAgendaView.as_view(), name='entree_agenda_delete'),
