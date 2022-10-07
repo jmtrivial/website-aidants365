@@ -888,6 +888,10 @@ only screen and (max-width: 760px),
 		top: -9999px;
 		left: -9999px;
 	}
+
+    .tableau_agenda tbody :nth-child(2) {
+        display: none;
+    }
 	
 	tr { border: 1px solid #ccc; }
 	
