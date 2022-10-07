@@ -654,7 +654,7 @@ def agenda_month(request, year, month):
 
 @login_required
 def agenda_month_details(request, year, month):
-    entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month)
+    entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month).order_by("date")
     context = {'entrees': entrees, "year": year, "month": month}
     return render(request, 'fiches/agenda_month_details.html', context)
 
