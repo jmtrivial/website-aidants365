@@ -22,3 +22,12 @@
 {% endif %}
 
 <p><strong>Voir aussi&nbsp;:</strong>  <a href="{% url 'fichier:rechercher' %}?search={{ entree.entree }}">toutes les références à {{ entree.entree }}</a> dans le fichier Aidants365.</p>
+
+{% if entree.date_derniere_modification %}
+<div class="lien_next">
+    Dernière modification&nbsp;: {{entree.date_derniere_modification }}
+</div>
+<div style="clear: both"></div>
+{% endif %}
+
+

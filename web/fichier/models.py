@@ -392,6 +392,8 @@ class EntreeGlossaire(models.Model):
     entree = models.CharField(verbose_name="Entrée", max_length=128, unique=False, blank=False)
     formes_alternatives = ArrayField(models.CharField(max_length=128, blank=True), verbose_name="Signification et formes alternatives", blank=True, null=True)
 
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
+
     definition = RichTextField(verbose_name="Définition", config_name='main_ckeditor', blank=True)
 
     def get_absolute_url(self):
@@ -488,6 +490,8 @@ class EntreeAgenda(models.Model):
     motscles = SortedManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True, help_text=message_sortable)
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
+
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True, help_text=message_sortable)
 

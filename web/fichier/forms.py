@@ -127,7 +127,7 @@ class EntreeGlossaireForm(WithUserForm):
     class Meta:
         model = EntreeGlossaire
 
-        fields = '__all__'
+        exclude = ('date_derniere_modification', )
 
         widgets = {
             "formes_alternatives": MyDynamicArrayWidget
@@ -151,7 +151,8 @@ class EntreeAgendaForm(WithUserForm):
     class Meta:
         model = EntreeAgenda
 
-        fields = '__all__'
+        exclude = ('date_derniere_modification', )
+
         widgets = {
             "themes": MySortedCheckboxSelectMultiple,
             "motscles": MySortedCheckboxSelectMultiple,

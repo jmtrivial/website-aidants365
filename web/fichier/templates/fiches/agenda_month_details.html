@@ -45,6 +45,13 @@ Le fichier Aidants365 — Agenda
     <strong>Mot{% if entree.motscles.all.count > 1%}s{% endif %}-clé{% if entree.motscles.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
     {% endif %}
 
+    {% if entree.date_derniere_modification %}
+    <div class="lien_next">
+        Dernière modification&nbsp;: {{entree.date_derniere_modification }}
+    </div>
+    <div style="clear: both"></div>
+    {% endif %}
+
     <h3>Notes</h3>
     {{ entree.notes | ajouter_glossaire:True | safe }}
     

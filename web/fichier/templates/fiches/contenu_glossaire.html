@@ -1,4 +1,6 @@
 {% load fichier_extras %}
+
+
 <div class="block">
     <{{ niveau }}>Définition</{{ niveau }}>
     {{ entree.definition | ajouter_glossaire:1 | ajouter_liens | safe }}
@@ -25,6 +27,8 @@
     <li><a href="{{ e.get_absolute_url }}">{{ e }}</a></li>
 {% endfor %}
 </ul>
+
 </div>
 {% endif %}
+
 {% endwith %}
