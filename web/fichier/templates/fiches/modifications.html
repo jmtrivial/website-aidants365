@@ -19,7 +19,11 @@ Aidants 365 — dernières modifications
     <div class="block" id="entete">
 
         <h1>Dernières modifications</h1>
- 
+        <p>
+            On trouve listées ci-dessous, par ordre de dernière modification, les différentes entrées du fichier aidants365&nbsp;: 
+            <a href="{% url 'fichier:index' %}">fiches</a>, <a href="{% url 'fichier:agenda' %}">entrées d'agenda</a>
+            et <a href="{% url 'fichier:glossaire' %}">entrées de glossaire</a>.
+        </p>
         {% if paginator %}
             {% index_paginator paginator p_id url_key_paginator %}
         {% endif %}
