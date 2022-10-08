@@ -384,4 +384,4 @@ def niveau_suivant(niveau):
 
 @register.filter
 def is_recent_entry(d):
-    return d > datetime.fromisoformat('2022-10-08T18:00+02:00')
+    return d > datetime.fromisoformat('2022-10-08T19:15+02:00')
