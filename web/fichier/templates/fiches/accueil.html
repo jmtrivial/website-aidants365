@@ -17,7 +17,7 @@ Le fichier Aidants365
 {% block entete %}
 <div class="column"><h1>Accueil du fichier Aidants 365</h1>
 <p>Vous retrouvez sur ce tableau de bord un accès aux <a href="{% url 'fichier:index' %}">{{ nbfichestotal }} fiches</a> via leurs différents niveaux, catégories, thèmes ou mots-clés.
-Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossaire }} entrées</a>.</p>
+Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossairetotal }} entrées</a>.</p>
 </div>
 <div class="column4 cright">
     {{ entree_agenda.ephemeride | safe }}
@@ -60,7 +60,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 <div style="clear: both"></div>
 {% endblock %}
 
-{% block gauche1 %}
+{% block droite1 %}
 <h2>Les {{ nbfiches }} dernières fiches modifiées</h2>
 {% if fiche_list %}
     <ul>
@@ -68,15 +68,40 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
         <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
     {% endfor %}
     </ul>
-    <div class="suite">Voir <a href="{% url 'fichier:index' %}">toutes les fiches ▸</a></div>
 {% else %}
     <p>Pas de fiche disponible.</p>
 {% endif %}
+
+<h2>Les {{ nbentreesglossaire }} dernières entrées de glossaire modifiées</h2>
+{% if entrees_glossaire_list %}
+    <ol>
+    {% for entree_glossaire in entrees_glossaire_list %}
+        <li><a href="{{ entree_glossaire.get_absolute_url }}">{{ entree_glossaire }}</a> 
+            {% if entree_glossaire.date_derniere_modification|is_recent_entry %}
+                — dernière modification&nbsp;: {{entree_glossaire.date_derniere_modification}}</li>
+            {% endif %}
+    {% endfor %}
+    </ol>
+{% endif %}
+
+<h2>Les {{ nbentreesagenda }} dernières entrées d'agenda modifiées</h2>
+{% if entrees_agenda_list %}
+    <ol>
+    {% for entree_agenda in entrees_agenda_list %}
+        <li><a href="{{ entree_agenda.get_absolute_url }}">{{ entree_agenda }}</a> 
+            {% if entree_agenda.date_derniere_modification|is_recent_entry %}
+            — dernière modification&nbsp;: {{entree_agenda.date_derniere_modification}}</li>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ol>
+{% endif %}
+<div class="suite"><a href="{% url 'fichier:modifications' %}">dernières modifications ▸</a></div>
+
 {% endblock %}
 
 
-
-{% block droite1 %}
+{% block droite2 %}
 {% if categories %}
 <h2>Les {{ nbcategories }} principales catégories générales</h2>
 <ul class="cols4">
@@ -111,7 +136,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
     <div class="suite">Voir <a href="{% url 'fichier:categories_alpha' %}">toutes les catégories ▸</a></div>
 {% endblock %}
 
-{% block gauche2 %}
+{% block gauche1 %}
 <h2>Nuage de mots-clés</h2>
 {% if motcles %}
     {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" %}    
@@ -122,7 +147,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% endif %}
 {% endblock %}
 
-{% block droite2 %}
+{% block droite3 %}
 <h2>Les {{ nbthemes }} principaux thèmes</h2>
 {% if themes %}
     <ul class="cols3">

@@ -1,0 +1,38 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with critere_name_pluriel as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Aidants 365 — dernières modifications
+{% endblock %}
+
+{% block content %}
+    {% load fichier_extras %}
+    <div class="block" id="entete">
+
+        <h1>Dernières modifications</h1>
+ 
+        {% if paginator %}
+            {% index_paginator paginator p_id url_key_paginator %}
+        {% endif %}
+    </div>
+    <div class="block">
+        <ul>
+        
+        {% for entree in elements %}
+        <li><a href="{{ entree.get_absolute_url }}">{{ entree }}</a> 
+            {% if entree.date_derniere_modification|is_recent_entry %}
+                — dernière modification&nbsp;: {{entree.date_derniere_modification}}</li>
+            {% endif %}
+        {% endfor %}
+        </ul>
+</div>
+{% endblock %}

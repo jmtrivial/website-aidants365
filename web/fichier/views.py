@@ -18,6 +18,7 @@ from django.db import IntegrityError
 from .utils import message_glossaire, message_sortable
 from django.db.models.functions import Ceil, Cast, Lower
 from django.core.paginator import Paginator
+from itertools import chain
 
 from django.views.generic import DetailView
 
@@ -56,7 +57,15 @@ def accueil(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')[:5]
     nbfiches = latest_fiche_list.count()
 
-    nbentreesglossaire = EntreeGlossaire.objects.count()
+    nbentreesglossaire = 5
+    latest_entrees_glossaire_list = EntreeGlossaire.objects.order_by('-date_derniere_modification')[:5]
+    nbentreesglossaire = latest_entrees_glossaire_list.count()
+
+    nbentreesagenda = 5
+    latest_entrees_agenda_list = EntreeAgenda.objects.order_by('-date_derniere_modification')[:5]
+    nbentreesagenda = latest_entrees_agenda_list.count()
+
+    nbentreesglossairetotal = EntreeGlossaire.objects.count()
 
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
 
@@ -84,13 +93,15 @@ def accueil(request):
         entree_agenda = entrees_agenda[0]
 
     context = {'fiche_list': latest_fiche_list, 'nbfiches': nbfiches,
+               'entrees_glossaire_list': latest_entrees_glossaire_list, 'nbentreesglossaire': nbentreesglossaire,
+               'entrees_agenda_list': latest_entrees_agenda_list, 'nbentreesagenda': nbentreesagenda,
                "nbfichestotal": Fiche.objects.count(), "niveaux": niveaux,
                "categories": categories, "nbcategories": nbcategories,
                "auteurs": auteurs,
                "themes": themes, "nbthemes": nbthemes,
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
-               "nbentreesglossaire": nbentreesglossaire,
+               "nbentreesglossairetotal": nbentreesglossairetotal,
                "entree_agenda": entree_agenda}
     return render(request, 'fiches/accueil.html', context)
 
@@ -926,3 +937,26 @@ def merge(request, classname):
         'form': form,
         'pluriel': pluriel
     })
+
+
+@login_required
+def modifications(request):
+    return modifications_page(request, 1)
+
+
+@login_required
+def modifications_page(request, key):
+
+    agendas = EntreeAgenda.objects.all()
+    glossaires = EntreeGlossaire.objects.all()
+    fiches = Fiche.objects.all()
+    entrees = sorted(chain(agendas, glossaires, fiches),
+                     key=lambda entree: entree.date_derniere_modification, reverse=True)
+    step = 20
+    es = Paginator(entrees, step)
+
+    return render(request, "fiches/modifications.html", {
+                  "elements": es.page(key).object_list,
+                  "url_key_paginator": "fichier:modifications_page",
+                  "p_id": key,
+                  "paginator": es})

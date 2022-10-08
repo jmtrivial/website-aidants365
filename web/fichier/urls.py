@@ -11,7 +11,7 @@ dcp = 2 * 60   # 2 mn
 dcf = 15 * 60  # 15 mn
 
 urlpatterns = [
-    path('', cache_page(dcp)(views.accueil), name='accueil'),
+    path('', views.accueil, name='accueil'),
     path('rechercher/', views.rechercher, name='rechercher'),
     path('desk/', views.desk, name='desk'),
     path('desk/<int:id>/', views.document, name='document'),
@@ -67,5 +67,7 @@ urlpatterns = [
     # pour ajouter des objets simples, on utilise une API (uniquement POST implémenté)
     path('<str:classname>/api/', views.rest_api, name='rest_api'),
     # pour les catégories simples, on propose la fusion
-    path('<str:classname>/merge/', views.merge, name='merge')
+    path('<str:classname>/merge/', views.merge, name='merge'),
+    path('modifications/', views.modifications, name='modifications'),
+    path('modifications/page/<int:key>', views.modifications_page, name='modifications_page'),
 ]

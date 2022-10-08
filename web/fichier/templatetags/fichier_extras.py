@@ -4,7 +4,7 @@ from fichier.models import Categorie, Niveau, EntreeGlossaire, EntreeAgenda, Ent
 import re
 from fichier.utils import Agenda
 from django.urls import reverse
-from datetime import datetime
+from datetime import datetime, date
 from sortedm2m.fields import SortedMultipleChoiceField
 from ckeditor.fields import RichTextFormField
 from string import ascii_uppercase
@@ -52,16 +52,16 @@ def show_month(agenda, year, month):
     return mark_safe(agenda.month(year, month))
 
 
-def get_url_jour_missing(date):
-    return reverse("fichier:object_add", kwargs={"classname": "agenda"}) + "?date=" + str(date.day) + "/" + str(date.month) + "/" + str(date.year)
+def get_url_jour_missing(d):
+    return reverse("fichier:object_add", kwargs={"classname": "agenda"}) + "?date=" + str(d.day) + "/" + str(d.month) + "/" + str(d.year)
 
 
-def get_url_jour(date):
-    return reverse("fichier:entree_agenda", kwargs={"year": date.year, "month": date.month, "day": date.day})
+def get_url_jour(d):
+    return reverse("fichier:entree_agenda", kwargs={"year": d.year, "month": d.month, "day": d.day})
 
 
-def get_day_name(date):
-    return str(date.day) + " " + Agenda.month_name[date.month].lower() + " " + str(date.year)
+def get_day_name(d):
+    return str(d.day) + " " + Agenda.month_name[d.month].lower() + " " + str(d.year)
 
 
 def lien_jour(url, text, class_name):
@@ -380,3 +380,8 @@ def entete_texte(entete):
 @register.filter
 def niveau_suivant(niveau):
     return niveau[0] + str(int(niveau[1]) + 1)
+
+
+@register.filter
+def is_recent_entry(d):
+    return d > datetime.fromisoformat('2022-10-08T18:00+02:00')
