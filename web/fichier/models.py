@@ -54,6 +54,7 @@ class EntetePage(models.Model):
 
     def nom_page(page):
         nom_page = {"index": "des fiches", "desk": "du desk", "categories": "des catégories",
+                    "glossaire": "du glossaire",
                     "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda"}
         return nom_page[page]
 
