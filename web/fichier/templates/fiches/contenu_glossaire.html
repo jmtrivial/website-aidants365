@@ -1,6 +1,7 @@
+{% load fichier_extras %}
 <div class="block">
     <{{ niveau }}>Définition</{{ niveau }}>
-    {{ entree.definition | safe }}
+    {{ entree.definition | ajouter_glossaire:1 | ajouter_liens | safe }}
 </div>
 {% with entree.matching_fiches as list_fiches %}
 {% if list_fiches %}
