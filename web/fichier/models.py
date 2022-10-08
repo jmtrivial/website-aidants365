@@ -53,8 +53,8 @@ class EntetePage(models.Model):
         return reverse("fichier:object_add", kwargs={'classname': 'entete_page'}) + "?page=" + page_name
 
     def nom_page(page):
-        nom_page = { "index": "des fiches", "desk": "du desk", "categories": "des catégories", 
-                     "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda"}
+        nom_page = {"index": "des fiches", "desk": "du desk", "categories": "des catégories",
+                    "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda"}
         return nom_page[page]
 
     def __str__(self):

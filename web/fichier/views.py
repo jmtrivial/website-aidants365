@@ -401,7 +401,7 @@ def motscles_nuage(request):
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                          "elements": motscles, "titre": "Tous les mots-clés",
                                                          "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
-                                                   "entete": get_entete("motscles")})
+                                                         "entete": get_entete("motscles")})
 
 
 @login_required
@@ -433,7 +433,7 @@ def rechercher(request):
                                                       'results_categories_libres': results_categories_libres,
                                                       'results_documents': results_documents,
                                                       'recherche': recherche,
-                                                   "entete": get_entete("motscles")})
+                                                      "entete": get_entete("motscles")})
 
 
 @login_required
@@ -452,7 +452,7 @@ def glossaire_page(request, key):
     nb_entrees = EntreeGlossaire.objects.count()
 
     context = {'entrees': entrees, "nb_entrees": nb_entrees, "key": key, "extension_titre": extension_titre,
-              'entete': get_entete("glossaire")}
+               'entete': get_entete("glossaire")}
     return render(request, 'fiches/index_entree_glossaire.html', context)
 
 

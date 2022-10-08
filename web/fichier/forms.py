@@ -113,7 +113,7 @@ class EntetePageForm(WithUserForm):
     autofocus = "texte"
 
     entete = True
-    
+
     class Meta:
         model = EntetePage
 

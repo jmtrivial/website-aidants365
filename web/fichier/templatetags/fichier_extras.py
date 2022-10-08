@@ -363,6 +363,7 @@ def url_entete_edit(entete):
     else:
         return entete.edit_url()
 
+
 @register.simple_tag
 def entete_texte(entete):
     default_message = "<p><em>Entête non définie.</em></p>"
