@@ -213,6 +213,9 @@ class MotCle(models.Model):
 
         return result
 
+    def get_absolute_url(self):
+        return reverse('fichier:index_motcle', kwargs={'id': self.pk})
+
 
 class Theme(models.Model):
     nom = models.CharField(verbose_name="Thème", max_length=64, unique=True, blank=False)

@@ -375,3 +375,8 @@ def entete_texte(entete):
             return mark_safe(default_message)
         else:
             return mark_safe(entete.texte)
+
+
+@register.filter
+def niveau_suivant(niveau):
+    return niveau[0] + str(int(niveau[1]) + 1)

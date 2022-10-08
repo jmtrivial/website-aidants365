@@ -1,4 +1,10 @@
-<{{ niveau }}>Entrée glossaire&nbsp;: {{ entree.entree }} <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' 'glossaire' entree.id %}">éditer{% if shortcut %} <small>(ctrl+e){% endif %}</small></a>
+<{{ niveau }}>Entrée glossaire&nbsp;: 
+    {% if niveau == "h1" %}
+        {{ entree.entree }}
+    {% else %}
+        <a href="{{ entree.get_absolute_url }}">{{ entree.entree }}</a>
+    {% endif %}
+     <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' 'glossaire' entree.id %}">éditer{% if shortcut %} <small>(ctrl+e){% endif %}</small></a>
     <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_glossaire_delete' entree.id %}">supprimer</a>
 </{{ niveau }}>
     {% if entree.formes_alternatives %} 

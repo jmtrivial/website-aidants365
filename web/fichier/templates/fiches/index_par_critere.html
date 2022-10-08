@@ -72,10 +72,18 @@ avec le mot-clé {{ critere_nom }}
         {% for entree in entreesagenda %}
         <li><a href="{{ entree.get_absolute_url }}">{{ entree }}</a></li>
         {% endfor %}
-        </lul>
+        </ul>
         {% else %}
         <p>Pas d'entrée d'agenda disponible.</p>
         {% endif %}
+    {% endif %}
+
+    {% if entreesglossaire.count != 0 %}
+    <h2>Entrée{% if entreesglossaire.all.count > 1%}s{% endif %} du glossaire similaire{% if motscles.all.count > 1%}s{% endif %} à ce mot-clé</h2>
+    <ul>
+        {% for eg in entreesglossaire %}
+        <li><a href="{{ eg.get_absolute_url }}">{{ eg }}</a></li>
+    {% endfor %}
     {% endif %}
 </div>
 {% endblock %}

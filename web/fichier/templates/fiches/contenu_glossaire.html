@@ -6,7 +6,7 @@
 {% with entree.matching_fiches as list_fiches %}
 {% if list_fiches %}
 <div class="block">
-<h2>Fiche{% if list_fiches.all.count > 1%}s{% endif %} faisant mention de cette entrée du glossaire</h2>
+<{{ niveau }}>Fiche{% if list_fiches.all.count > 1%}s{% endif %} faisant mention de cette entrée du glossaire</{{ niveau }}>
 <ul>
 {% for fiche in list_fiches %}
     <li><a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
@@ -19,7 +19,7 @@
 {% with entree.matching_entrees_agenda as list_eagenda %}
 {% if list_eagenda %}
 <div class="block">
-<h2>Entrée{% if list_eagenda.all.count > 1%}s{% endif %} de l'agenda faisant mention de cette entrée du glossaire</h2>
+<{{ niveau }}>Entrée{% if list_eagenda.all.count > 1%}s{% endif %} de l'agenda faisant mention de cette entrée du glossaire</{{ niveau }}>
 <ul>
 {% for e in list_eagenda %}
     <li><a href="{{ e.get_absolute_url }}">{{ e }}</a></li>
@@ -28,3 +28,15 @@
 </div>
 {% endif %}
 {% endwith %}
+
+{% if motscles %}
+<div class="block">
+<{{ niveau }}>Mot{% if motscles.all.count > 1%}s{% endif %}-clé{% if motscles.all.count > 1%}s{% endif %} similaire{% if motscles.all.count > 1%}s{% endif %} à cette entrée du glossaire</{{ niveau }}>
+<ul>
+    {% for mc in motscles %}
+    <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
+{% endfor %}
+</ul>
+
+</div>
+{% endif %}

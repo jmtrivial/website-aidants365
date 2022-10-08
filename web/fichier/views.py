@@ -329,9 +329,11 @@ def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)
     agendas = EntreeAgenda.objects.filter(motscles=motcle)
+    glossaires = EntreeGlossaire.objects.filter(Q(entree=motcle.nom) | Q(formes_alternatives__contains=[motcle.nom]))
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
                                                              "critere_human": "du mot-clé", "critere_nom": str(motcle),
                                                              "fiche_list": fiches, "entreesagenda": agendas,
+                                                             "entreesglossaire": glossaires,
                                                              'entete': get_entete("themes")})
 
 
@@ -466,7 +468,8 @@ def recherche_glossaire(request, txt):
 @login_required
 def entree_glossaire(request, id):
     entree = get_object_or_404(EntreeGlossaire, pk=id)
-    context = {'entree': entree}
+    motscles = MotCle.objects.filter(Q(nom=entree.entree) | Q(nom=entree.formes_alternatives))
+    context = {'entree': entree, 'motscles': motscles}
     return render(request, 'fiches/entree_glossaire.html', context)
 
 
