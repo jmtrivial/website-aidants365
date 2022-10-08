@@ -11,7 +11,7 @@ dcp = 2 * 60   # 2 mn
 dcf = 15 * 60  # 15 mn
 
 urlpatterns = [
-    path('', views.accueil, name='accueil'),
+    path('', cache_page(dcp)(views.accueil), name='accueil'),
     path('rechercher/', views.rechercher, name='rechercher'),
     path('desk/', views.desk, name='desk'),
     path('desk/<int:id>/', views.document, name='document'),

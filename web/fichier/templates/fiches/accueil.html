@@ -18,6 +18,7 @@ Le fichier Aidants365
 <div class="column"><h1>Accueil du fichier Aidants 365</h1>
 <p>Vous retrouvez sur ce tableau de bord un accès aux <a href="{% url 'fichier:index' %}">{{ nbfichestotal }} fiches</a> via leurs différents niveaux, catégories, thèmes ou mots-clés.
 Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossairetotal }} entrées</a>.</p>
+<p>Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
 </div>
 <div class="column4 cright">
     {{ entree_agenda.ephemeride | safe }}
