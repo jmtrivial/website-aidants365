@@ -11,4 +11,14 @@
 <p><strong>{% if entree.formes_alternatives|length > 1 %}Formes alternatives{% else %}Forme alternative{% endif %}&nbsp;:</strong> 
     {% for fa in entree.formes_alternatives %}{% if not forloop.first %}, {% endif %}{{ fa }}{% endfor %}
     {% endif %}</p>
+
+{% if motscles %}
+<p><strong>Mot{% if motscles.all.count > 1%}s{% endif %}-clé{% if motscles.all.count > 1%}s{% endif %} similaire{% if motscles.all.count > 1%}s{% endif %}&nbsp;:</strong>
+    {% for mc in motscles %}
+    {% if not forloop.first %}, {% endif %}<a href="{{ mc.get_absolute_url }}">{{ mc }}</a>
+    {% endfor %}
+</p>
+
+{% endif %}
+
 <p><strong>Voir aussi&nbsp;:</strong>  <a href="{% url 'fichier:rechercher' %}?search={{ entree.entree }}">toutes les références à {{ entree.entree }}</a> dans le fichier Aidants365.</p>

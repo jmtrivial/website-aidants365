@@ -28,15 +28,3 @@
 </div>
 {% endif %}
 {% endwith %}
-
-{% if motscles %}
-<div class="block">
-<{{ niveau }}>Mot{% if motscles.all.count > 1%}s{% endif %}-clé{% if motscles.all.count > 1%}s{% endif %} similaire{% if motscles.all.count > 1%}s{% endif %} à cette entrée du glossaire</{{ niveau }}>
-<ul>
-    {% for mc in motscles %}
-    <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
-{% endfor %}
-</ul>
-
-</div>
-{% endif %}
