@@ -27,6 +27,9 @@ Desk
     <div class="block" id="entete">
         <div class="lien_next bouton"><a title="ajouter un document" href="{%url 'fichier:object_add' 'document' %}">+ document</a></div>
         <h1>Desk</h1>
+
+        {% include "fiches/entete.html" %}
+
     </div>
     <div class="block">
         {% if entrees %}

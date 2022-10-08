@@ -234,12 +234,28 @@ a:hover {
     clear: both;
 }
 
+.lien_next .lien_next.bouton {
+    float: none;
+}
+
 .lien_next.bouton:hover {
     background: #2a6098;
 }
 
 .lien_next.bouton a:hover {
     text-decoration: none;
+}
+
+.entete_page .bouton {
+    margin: 0;
+}
+
+.entete_page {
+    margin: 1.5em 0.5em;
+    clear: both;
+    padding: 0.5em;
+    background: #f5f5f5;
+    border-radius: .5em;
 }
 
 .messagelist .lien_next.bouton {

@@ -1,6 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
-from fichier.models import Categorie, Niveau, EntreeGlossaire, EntreeAgenda
+from fichier.models import Categorie, Niveau, EntreeGlossaire, EntreeAgenda, EntetePage
 import re
 from fichier.utils import Agenda
 from django.urls import reverse
@@ -354,3 +354,23 @@ def index_paginator(paginator, p_id, url_key_paginator):
 
     result += "</div>"
     return mark_safe(result)
+
+
+@register.simple_tag
+def url_entete_edit(entete):
+    if isinstance(entete, str):
+        return EntetePage.create_url(entete)
+    else:
+        return entete.edit_url()
+
+@register.simple_tag
+def entete_texte(entete):
+    default_message = "<p><em>Entête non définie.</em></p>"
+    if isinstance(entete, str):
+        return mark_safe(default_message)
+    else:
+        txt = entete.texte
+        if txt == "":
+            return mark_safe(default_message)
+        else:
+            return mark_safe(entete.texte)

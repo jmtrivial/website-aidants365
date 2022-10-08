@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre, Niveau, Document
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre, Niveau, Document, EntetePage
 from django.utils import timezone
 from django.db import models
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
@@ -107,6 +107,17 @@ class FicheForm(forms.ModelForm):
 
 class MyDynamicArrayWidget(DynamicArrayWidget):
     template_name = "fiches/dynamic_array.html"
+
+
+class EntetePageForm(WithUserForm):
+    autofocus = "texte"
+
+    entete = True
+    
+    class Meta:
+        model = EntetePage
+
+        fields = '__all__'
 
 
 class EntreeGlossaireForm(WithUserForm):

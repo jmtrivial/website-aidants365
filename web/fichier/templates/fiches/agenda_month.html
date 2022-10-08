@@ -21,6 +21,10 @@ Le fichier Aidants365 — Agenda
 
 <div class="block" id="entete">
     <h1>Calendrier du mois de {{ month|nom_mois }} <a href="{% url 'fichier:agenda_year' year %}">{{year}}</a></h1>
+
+    {% include "fiches/entete.html" %}
+
+
     <div>
         <div class="left">{% lien_mois_precedent year month 0 %}</div>
         <div class="right">{% lien_mois_suivant year month 0 %}</div>

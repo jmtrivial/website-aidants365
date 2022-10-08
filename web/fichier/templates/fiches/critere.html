@@ -21,6 +21,8 @@ Aidants 365 — {{ titre }} {{ visu }}
 
         <h1>{{ titre }} {{ extension_titre }} {{ visu }} <span class="remarque">({% if nb_elements %}{{ elements.all.count }} entrées parmi {{ nb_elements }}{% else %}{{ elements.all.count }} entrées{% endif %})</span></h1>
  
+        {% include "fiches/entete.html" %}
+
         <p>Afficher par&nbsp;:
         {% if visu_code == "basic" %} 
             <span class="active_visu">nombre de fiches</span>

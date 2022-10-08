@@ -20,6 +20,9 @@ Aidants 365 — {{ titre }} {{ visu }}
         {% include "fiches/ajouter_critere.html" %}
 
         <h1>{{ titre }} {{ visu }}</h1>
+
+        {% include "fiches/entete.html" %}
+        
         Afficher par&nbsp;:
 
         {% with "fichier:"|add:critere_name_pluriel as template_name %}

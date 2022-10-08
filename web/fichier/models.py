@@ -38,6 +38,29 @@ def rechercher_nom_simple(search_text, classname):
                  config='french'))
 
 
+class EntetePage(models.Model):
+
+    page = models.CharField(unique=True, max_length=32)
+    texte = RichTextField(verbose_name="Texte de l'entête", config_name='main_ckeditor', blank=True)
+
+    def page_url_name(page_name):
+        return "fichier:" + page_name
+
+    def edit_url(self):
+        return reverse("fichier:object_change", kwargs={'classname': 'entete_page', 'id': self.pk})
+
+    def create_url(page_name):
+        return reverse("fichier:object_add", kwargs={'classname': 'entete_page'}) + "?page=" + page_name
+
+    def nom_page(page):
+        nom_page = { "index": "des fiches", "desk": "du desk", "categories": "des catégories", 
+                     "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda"}
+        return nom_page[page]
+
+    def __str__(self):
+        return "la page " + EntetePage.nom_page(self.page)
+
+
 class Niveau(models.Model):
 
     class Applicabilite(models.TextChoices):

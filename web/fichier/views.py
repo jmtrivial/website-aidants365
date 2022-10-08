@@ -1,14 +1,14 @@
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document
+from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document, EntetePage
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm, EntetePageForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -32,6 +32,14 @@ from .utils import Agenda, Ephemeride, table, arrayToString
 
 import logging
 logger = logging.getLogger(__name__)
+
+
+def get_entete(page):
+    entetes = EntetePage.objects.filter(page=page)
+    if entetes.count() == 0:
+        return page
+    else:
+        return entetes[0]
 
 
 def annoter_class_nuage(objects):
@@ -90,7 +98,7 @@ def accueil(request):
 @login_required
 def index(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')
-    context = {'fiche_list': latest_fiche_list}
+    context = {'fiche_list': latest_fiche_list, 'entete': get_entete("index")}
     return render(request, 'fiches/index.html', context)
 
 
@@ -181,7 +189,8 @@ def categories(request):
                                                    "visu_code": "basic", "visu": "triées par nombre total de fiches",
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
                                                    "nom_humain_second_pluriel": "catégories libres",
-                                                   "critere_name_second": "categorie_libre"})
+                                                   "critere_name_second": "categorie_libre",
+                                                   'entete': get_entete("categories")})
 
 
 @login_required
@@ -194,7 +203,8 @@ def categories_alpha(request):
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique",
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
                                                    "nom_humain_second_pluriel": "catégories libres",
-                                                   "critere_name_second": "categorie_libre"})
+                                                   "critere_name_second": "categorie_libre",
+                                                   'entete': get_entete("categories")})
 
 
 @login_required
@@ -208,7 +218,8 @@ def categories_nuage(request):
                                                          "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                          "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
                                                          "nom_humain_second_pluriel": "catégories libres",
-                                                         "critere_name_second": "categorie_libre"})
+                                                         "critere_name_second": "categorie_libre",
+                                                         'entete': get_entete("categories")})
 
 
 @login_required
@@ -288,7 +299,8 @@ def themes(request):
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
                                                    "elements": themes, "titre": "Tous les thèmes",
                                                    "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
-                                                   "visu_code": "basic", "visu": "triées par nombre de fiches"})
+                                                   "visu_code": "basic", "visu": "triées par nombre de fiches",
+                                                   'entete': get_entete("themes")})
 
 
 @login_required
@@ -297,7 +309,8 @@ def themes_alpha(request):
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
                                                    "elements": themes, "titre": "Tous les thèmes",
                                                    "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
-                                                   "visu_code": "alpha", "visu": "par ordre alphabétique"})
+                                                   "visu_code": "alpha", "visu": "par ordre alphabétique",
+                                                   'entete': get_entete("themes")})
 
 
 @login_required
@@ -307,7 +320,8 @@ def themes_nuage(request):
     themes = annoter_class_nuage(themes)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "themes", "critere_name": "theme",
                                                          "elements": themes, "titre": "Tous les thèmes",
-                                                         "nom_humain": "thème", "nom_humain_pluriel": "thèmes"})
+                                                         "nom_humain": "thème", "nom_humain_pluriel": "thèmes",
+                                                         'entete': get_entete("themes")})
 
 
 @login_required
@@ -317,7 +331,8 @@ def index_motcle(request, id):
     agendas = EntreeAgenda.objects.filter(motscles=motcle)
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
                                                              "critere_human": "du mot-clé", "critere_nom": str(motcle),
-                                                             "fiche_list": fiches, "entreesagenda": agendas})
+                                                             "fiche_list": fiches, "entreesagenda": agendas,
+                                                             'entete': get_entete("themes")})
 
 
 @login_required
@@ -351,7 +366,8 @@ def motscles_page(request, key):
                                                    "paginator": mc,
                                                    "titre": "Mots-clés",
                                                    "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
-                                                   "visu_code": "basic", "visu": "triées par nombre de fiches"})
+                                                   "visu_code": "basic", "visu": "triées par nombre de fiches",
+                                                   'entete': get_entete("motscles")})
 
 
 @login_required
@@ -374,7 +390,8 @@ def motscles_alpha_page(request, key):
                                                    "url_key_alpha": "fichier:motscles_alpha_page",
                                                    "elements": motscles, "titre": "Mots-clés",
                                                    "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
-                                                   "visu_code": "alpha", "visu": ""})
+                                                   "visu_code": "alpha", "visu": "",
+                                                   "entete": get_entete("motscles")})
 
 
 @login_required
@@ -383,7 +400,8 @@ def motscles_nuage(request):
     motscles = annoter_class_nuage(motscles)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
                                                          "elements": motscles, "titre": "Tous les mots-clés",
-                                                         "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés"})
+                                                         "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
+                                                   "entete": get_entete("motscles")})
 
 
 @login_required
@@ -414,7 +432,8 @@ def rechercher(request):
                                                       'results_categories': results_categories,
                                                       'results_categories_libres': results_categories_libres,
                                                       'results_documents': results_documents,
-                                                      'recherche': recherche})
+                                                      'recherche': recherche,
+                                                   "entete": get_entete("motscles")})
 
 
 @login_required
@@ -432,7 +451,8 @@ def glossaire_page(request, key):
         extension_titre = "ne commençant pas par une lettre"
     nb_entrees = EntreeGlossaire.objects.count()
 
-    context = {'entrees': entrees, "nb_entrees": nb_entrees, "key": key, "extension_titre": extension_titre}
+    context = {'entrees': entrees, "nb_entrees": nb_entrees, "key": key, "extension_titre": extension_titre,
+              'entete': get_entete("glossaire")}
     return render(request, 'fiches/index_entree_glossaire.html', context)
 
 
@@ -453,7 +473,7 @@ def entree_glossaire(request, id):
 @login_required
 def desk(request):
     entrees = Document.objects.order_by('titre__unaccent')
-    context = {'entrees': entrees}
+    context = {'entrees': entrees, 'entete': get_entete("desk")}
     return render(request, 'fiches/desk.html', context)
 
 
@@ -560,6 +580,18 @@ def edit_object(request, classname, id=None):
         classeform = NiveauForm
         reverse_url = 'fichier:index_niveau'
         reverse_url_cancel = 'fichier:index'
+    elif classname == "entete_page":
+        nom_classe = "niveau"
+        titre_add = "Création de l'entête"
+        if request.method == 'GET' and "page" in request.GET:
+            titre_add += " de la page " + EntetePage.nom_page(request.GET["page"])
+        titre_edition = "Édition de l'entête"
+        message_add_success = 'L\'entête de "%s" a été ajoutée avec succès.'
+        message_edit_success = 'L\'entête de "%s" a été modifiée avec succès.'
+        classe = EntetePage
+        classeform = EntetePageForm
+        reverse_url = '^'
+        reverse_url_cancel = '^'
     else:
         raise Http404("Donnée inconnue")
 
@@ -583,10 +615,21 @@ def edit_object(request, classname, id=None):
     header = ""
 
     if request.method == 'POST':
+
+        simple_reverse = False
+        if reverse_url == "^":
+            simple_reverse = True
+            reverse_url = EntetePage.page_url_name(request.POST["page"])
+        if reverse_url_cancel == "^":
+            reverse_url_cancel = EntetePage.page_url_name(request.POST["page"])
+
         if "annuler" in request.POST:
             messages.info(request, "Édition annulée")
             if object:
-                return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+                if not simple_reverse:
+                    return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+                else:
+                    return HttpResponseRedirect(reverse(reverse_url))
             else:
                 return HttpResponseRedirect(reverse(reverse_url_cancel))
         else:
@@ -599,7 +642,7 @@ def edit_object(request, classname, id=None):
                 else:
                     message = message_edit_success % object
                 messages.success(request, message)
-                if single_reverse:
+                if single_reverse or simple_reverse:
                     return HttpResponseRedirect(reverse(reverse_url))
                 else:
                     return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
@@ -633,7 +676,7 @@ def edit_object(request, classname, id=None):
 
 @login_required
 def agenda_current_month(request):
-    return agenda_month(request, timezone.now().year, timezone.now().month)
+    return agenda_month(request, timezone.now().year, timezone.now().month, entete=True)
 
 
 @login_required
@@ -645,10 +688,12 @@ def agenda_year(request, year):
 
 
 @login_required
-def agenda_month(request, year, month):
+def agenda_month(request, year, month, entete=False):
     entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month)
     aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
     context = {'agenda': aa, "year": year, "month": month}
+    if entete:
+        context["entete"] = get_entete("agenda")
     return render(request, 'fiches/agenda_month.html', context)
 
 

@@ -31,7 +31,7 @@ Toutes les fiches
         <div class="lien_next bouton"><a title="ajouter une fiche" href="{%url 'fichier:object_add' 'fiche' %}">+ fiche</a></div>
         <h1>Toutes les fiches</h1>
 
-
+        {% include "fiches/entete.html" %}
     </div>
     <div class="block">
         {% if fiche_list %}

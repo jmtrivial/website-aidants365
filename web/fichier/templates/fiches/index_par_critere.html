@@ -34,6 +34,7 @@ avec le mot-clé {{ critere_nom }}
     <div class="block" id="entete">
         <h1>Toutes les entrées {{ critere_human }} {{ critere_nom }} {% if critere_name == "niveau" %}({{ critere.nom }}){% endif %}
             {% include "fiches/ajouter_supprimer_critere.html" %}</h1>
+        
 
         {% if critere_name == "categorie" %}
         <p><em>{{ critere.nom }}</em></p>

@@ -10,6 +10,9 @@
     clear: both;
 }
 
+.field_form.hidden {
+    display: none;
+}
 
 .help {
     font-size: 90%;

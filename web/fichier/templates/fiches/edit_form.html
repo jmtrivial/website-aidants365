@@ -50,10 +50,10 @@ Le fichier Aidants365 — édition
             {{ form.non_field_errors }}
             {% for field in form.visible_fields %}
                 {% if not field.id_for_label == "id_utiliser_suivant" %}
-                <div id="field_wrapper_{{ field.id_for_label }}" class="field_form">
+                <div id="field_wrapper_{{ field.id_for_label }}" class="field_form{% if field.id_for_label == 'id_page' %} hidden{% endif %}">
                     <div class="field_label">
                         <div id="{{ field.id_for_label }}_anchor" class="anchor"></div>
-                        <div{% if field.field.required %} class="champs_requis"{% endif %}>{% if not nom_classe == "document" %}{{ field|label_with_stars|safe }}{% else %}{{ field.label }}{% endif %}</div>
+                        <div{% if field.field.required %} class="champs_requis"{% endif %}>{% if form.entete and not nom_classe == "document" %}{{ field|label_with_stars|safe }}{% else %}{{ field.label }}{% endif %}</div>
                         {% if field.help_text %}
                         <p class="help">{{ field.help_text|safe }}</p>
                         {% endif %}

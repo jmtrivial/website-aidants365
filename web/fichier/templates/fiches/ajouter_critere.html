@@ -1,7 +1,9 @@
-<div class="lien_next bouton"><a title="ajouter {{ nom_humain }}" href="{%url 'fichier:object_add' critere_name %}">+ {{ nom_humain }}</a></div>
+<div class="lien_next">
+<div  class="lien_next bouton"><a title="ajouter {{ nom_humain }}" href="{%url 'fichier:object_add' critere_name %}">+ {{ nom_humain }}</a></div>
 {% if elements_second %}
 <div class="lien_next bouton"><a title="ajouter {{ nom_humain_second }}" href="{%url 'fichier:object_add' critere_name_second %}">+ {{ nom_humain_second }}</a></div>
 {% endif %}
+</div>
 
 {% if critere_name == "motcle" or critere_name == "theme" %}
 <div class="lien_next bouton"><a href="{%url 'fichier:merge' critere_name %}">fusionner deux {{ nom_humain_pluriel }}</a></div>
