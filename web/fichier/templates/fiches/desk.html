@@ -44,9 +44,11 @@ Desk
             </thead>
             <tbody>
             {% for entree in entrees %}
-                <td><a href="{% url 'fichier:document' entree.id %}">{{ entree }}</a></td>
-                <td>{{ entree.date_creation }}</td> 
-                <td>{{ entree.date_derniere_modification }}</td>
+                <tr>
+                    <td><a href="{% url 'fichier:document' entree.id %}">{{ entree }}</a></td>
+                    <td>{{ entree.date_creation }}</td> 
+                    <td>{{ entree.date_derniere_modification }}</td>
+                </tr>
             {% endfor %}
             </tbody>
         </table>
