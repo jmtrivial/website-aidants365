@@ -60,6 +60,7 @@ urlpatterns = [
     path('agenda/<int:year>/<int:month>/<int:day>/', views.entree_agenda, name='entree_agenda'),
     path('agenda/entree/<int:id>/', views.entree_agenda_pk, name='entree_agenda_pk'),
     path('agenda/entree/<pk>/delete/', views.DeleteEntreeAgendaView.as_view(), name='entree_agenda_delete'),
+    path('agenda/entree/<pk>/inverser/', views.entree_agenda_invert_with, name='entree_agenda_invert_with'),
     path('agenda/inverser/', views.entree_agenda_invert, name='entree_agenda_invert'),
     path('404/', views.page_not_found_view, name="page_not_found"),
     # pour ajouter et modifier les objets, on utilise un formulaire

@@ -8,7 +8,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm, EntetePageForm, EntreeAgendaInvertForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm, EntetePageForm, EntreeAgendaInvertForm, EntreeAgendaInvertWithForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -913,6 +913,36 @@ def rest_api(request, classname):
             return render(request, 'fiches/json.html', json_context({"error": "L'entrée existe déjà. Veuillez choisir cette entrée dans la liste des entrées existantes."}))
 
         return render(request, 'fiches/json.html', json_context({"id": b.id, "nom": b.nom}))
+
+
+@login_required
+def entree_agenda_invert_with(request, pk):
+    element1 = get_object_or_404(EntreeAgenda, pk=pk)
+
+    if request.method == 'POST':
+        if "annuler" in request.POST:
+            messages.info(request, "Inversion annulée")
+            return HttpResponseRedirect(reverse("fichier:entree_agenda_pk", args=[pk]))
+        else:
+            form = EntreeAgendaInvertWithForm(data=request.POST, date1=element1)
+            if form.is_valid():
+                element2 = form.cleaned_data["element2"]
+                date1 = element1.date
+                date2 = element2.date
+                element2.date = date1
+                element2.save()
+                element1.date = date2
+                element1.save()
+
+                messages.success(request, mark_safe('Inversion réussie entre les deux dates <a href="' + reverse("fichier:entree_agenda_pk", args=[element1.id]) + '">' + str(element1) + '</a> et <a href="' + reverse("fichier:entree_agenda_pk", args=[element2.id]) + '">' + str(form.cleaned_data["element2"]) + "</a>"))
+                return HttpResponseRedirect(reverse("fichier:entree_agenda_pk", args=[pk]))
+    else:
+        form = EntreeAgendaInvertWithForm(date1=element1)
+
+    return render(request, "fiches/inverser_entree_agenda_avec.html", {
+        'form': form,
+        'entree1': element1
+    })
 
 
 @login_required

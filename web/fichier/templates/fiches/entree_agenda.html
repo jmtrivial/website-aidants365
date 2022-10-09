@@ -51,6 +51,7 @@ Glossaire
             {% endif %}
             <a id="edit_button" class="card_edit" href="{% url 'fichier:object_change' 'agenda' entree.id %}">éditer <small>(ctrl+e)</small></a>
             <a class="card_edit" id="duplicate_button" href="{% url 'fichier:object_duplicate' 'agenda' entree.id %}">dupliquer</a>
+            <a class="card_edit" id="invert_button" href="{% url 'fichier:entree_agenda_invert_with' entree.id %}">inverser avec une autre date</a>
             <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a>
         </h1>
         {% if entree.themes.all %}

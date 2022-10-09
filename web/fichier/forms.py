@@ -245,3 +245,19 @@ class CategorieLibreMergeForm(TwoDifferentElementsForm):
 class EntreeAgendaInvertForm(TwoDifferentElementsForm):
     element1 = forms.ModelChoiceField(queryset=EntreeAgenda.objects.all().order_by("date"), required=True, label="Entrée d'agenda")
     element2 = forms.ModelChoiceField(queryset=EntreeAgenda.objects.all().order_by("date"), required=True, label="Entrée d'agenda")
+
+
+class EntreeAgendaInvertWithForm(forms.Form):
+    element2 = forms.ModelChoiceField(queryset=EntreeAgenda.objects.all().order_by("date"), required=True, label="Entrée d'agenda")
+
+    def __init__(self, *args, **kwargs):
+        self.field1 = kwargs.pop('date1')
+        super(EntreeAgendaInvertWithForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        field2 = self.cleaned_data['element2']
+
+        if self.field1 == field2:
+            self.add_error("element2", "Les deux dates doivent être différentes")
+
+        return self.cleaned_data
