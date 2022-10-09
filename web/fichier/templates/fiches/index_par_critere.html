@@ -93,5 +93,14 @@ avec le mot-clé {{ critere_nom }}
         <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
     {% endfor %}
     {% endif %}
+
+    {% if themesconnexes %}
+    <h2>Thèmes connexes</h2>
+    <ul>
+        {% for tc in themesconnexes %}
+        <li><a href="{{ tc.get_absolute_url }}">{{ tc }}</a></li>
+    {% endfor %}
+    {% endif %}
+
 </div>
 {% endblock %}

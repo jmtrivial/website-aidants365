@@ -288,9 +288,12 @@ def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
     agendas = EntreeAgenda.objects.filter(themes=theme)
+    themes_connexes = Theme.objects.filter(id__in=Fiche.objects.filter(id__in=fiches.values("id")).values("themes")).exclude(id=id)
+
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "theme", "critere": theme,
                                                              "critere_human": "du thème",
                                                              "critere_nom": str(theme), "fiche_list": fiches,
+                                                             "themesconnexes": themes_connexes,
                                                              "entreesagenda": agendas})
 
 

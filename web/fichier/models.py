@@ -243,6 +243,9 @@ class Theme(models.Model):
 
         return result
 
+    def get_absolute_url(self):
+        return reverse('fichier:index_theme', kwargs={'id': self.pk})
+
 
 class Fiche(models.Model):
     # entête
