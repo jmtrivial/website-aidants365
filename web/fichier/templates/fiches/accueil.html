@@ -61,7 +61,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 <div style="clear: both"></div>
 {% endblock %}
 
-{% block droite1 %}
+{% block gauche1 %}
 <h2>Les {{ nbfiches }} dernières fiches modifiées</h2>
 {% if fiche_list %}
     <ul>
@@ -102,7 +102,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% endblock %}
 
 
-{% block droite2 %}
+{% block gauche2 %}
 {% if categories %}
 <h2>Les {{ nbcategories }} principales catégories générales</h2>
 <ul class="cols4">
@@ -137,7 +137,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
     <div class="suite">Voir <a href="{% url 'fichier:categories_alpha' %}">toutes les catégories ▸</a></div>
 {% endblock %}
 
-{% block gauche1 %}
+{% block droite1 %}
 <h2>Nuage de mots-clés</h2>
 {% if motcles %}
     {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" %}    
@@ -148,7 +148,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% endif %}
 {% endblock %}
 
-{% block droite3 %}
+{% block gauche3 %}
 <h2>Les {{ nbthemes }} principaux thèmes</h2>
 {% if themes %}
     <ul class="cols3">
