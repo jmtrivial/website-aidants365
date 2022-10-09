@@ -637,7 +637,7 @@ def edit_object(request, classname, id=None):
         if object:
             complements["not_available_dates"] = EntreeAgenda.objects.exclude(id=object.id)
         else:
-                complements["not_available_dates"] = EntreeAgenda.objects
+            complements["not_available_dates"] = EntreeAgenda.objects
 
     # Check user permissions
     if not request.user.is_authenticated or not request.user.has_perm(required_permission):
