@@ -485,7 +485,7 @@ class EntreeAgenda(models.Model):
         verbose_name = "Entrée de l'agenda"
         verbose_name_plural = "Entrées de l'agenda"
 
-    date = models.DateField()
+    date = models.DateField(blank=True, null=True)
 
     marque = models.BooleanField(verbose_name="Entrée de qualité", default=False)
 

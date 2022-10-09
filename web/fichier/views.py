@@ -8,7 +8,7 @@ from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm, EntetePageForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm, EntetePageForm, EntreeAgendaInvertForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -19,6 +19,7 @@ from .utils import message_glossaire, message_sortable, to_iso
 from django.db.models.functions import Ceil, Cast, Lower
 from django.core.paginator import Paginator
 from itertools import chain
+from django.utils.safestring import mark_safe
 
 from django.views.generic import DetailView
 
@@ -915,6 +916,34 @@ def rest_api(request, classname):
 
 
 @login_required
+def entree_agenda_invert(request):
+    if request.method == 'POST':
+        if "annuler" in request.POST:
+            messages.info(request, "Inversion annulée")
+            return HttpResponseRedirect(reverse("fichier:agenda"))
+        else:
+            form = EntreeAgendaInvertForm(data=request.POST)
+            if form.is_valid():
+                element1 = form.cleaned_data["element1"]
+                element2 = form.cleaned_data["element2"]
+                date1 = element1.date
+                date2 = element2.date
+                element2.date = date1
+                element2.save()
+                element1.date = date2
+                element1.save()
+
+                messages.success(request, mark_safe('Inversion réussie entre les deux dates <a href="' + reverse("fichier:entree_agenda_pk", args=[element1.id]) + '">' + str(form.cleaned_data["element1"]) + '</a> et <a href="' + reverse("fichier:entree_agenda_pk", args=[element2.id]) + '">' + str(form.cleaned_data["element2"]) + "</a>"))
+                return HttpResponseRedirect(reverse("fichier:agenda"))
+    else:
+        form = EntreeAgendaInvertForm()
+
+    return render(request, "fiches/inverser_entree_agenda.html", {
+        'form': form,
+    })
+
+
+@login_required
 def merge(request, classname):
     if classname == "categorie_libre":
         pluriel = "catégories libres"
@@ -937,7 +966,6 @@ def merge(request, classname):
         return Http404("Impossible de lancer la fusion")
 
     if request.method == 'POST':
-        logger.warning(request.POST)
         if "annuler" in request.POST:
             messages.info(request, "Fusion annulée")
             return HttpResponseRedirect(reverse(reverse_url_main))

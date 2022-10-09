@@ -392,7 +392,6 @@ a:hover {
     background: #719cc5;
 } 
 
-
 .messagelist .error {
     color: #a30d0d;
 
@@ -412,9 +411,10 @@ a:hover {
     color: #fff;
 }
 
-.messagelist li a, .info_form_header li a {
-    color: #122b43;
-}
+.messagelist li a, .info_form_header li a  {
+    color: #fff;
+    text-decoration: underline;
+} 
 
 .boutons_edition {
     margin: 1em;

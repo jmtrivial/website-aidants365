@@ -216,7 +216,7 @@ class NiveauForm(WithUserForm):
         fields = '__all__'
 
 
-class MergeForm(forms.Form):
+class TwoDifferentElementsForm(forms.Form):
     def clean(self):
         field1 = self.cleaned_data['element1']
         field2 = self.cleaned_data['element2']
@@ -227,16 +227,21 @@ class MergeForm(forms.Form):
         return self.cleaned_data
 
 
-class ThemeMergeForm(MergeForm):
+class ThemeMergeForm(TwoDifferentElementsForm):
     element1 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom__unaccent"), required=True, label="Thème principal")
     element2 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom__unaccent"), required=True, label="Thème à intégrer dans le principal")
 
 
-class MotCleMergeForm(MergeForm):
+class MotCleMergeForm(TwoDifferentElementsForm):
     element1 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé principal")
     element2 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé à intégrer dans le principal")
 
 
-class CategorieLibreMergeForm(MergeForm):
+class CategorieLibreMergeForm(TwoDifferentElementsForm):
     element1 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom__unaccent"), required=True, label="Catégorie libre principal")
     element2 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom__unaccent"), required=True, label="Catégorie libre à intégrer dans le principal")
+
+
+class EntreeAgendaInvertForm(TwoDifferentElementsForm):
+    element1 = forms.ModelChoiceField(queryset=EntreeAgenda.objects.all().order_by("date"), required=True, label="Entrée d'agenda")
+    element2 = forms.ModelChoiceField(queryset=EntreeAgenda.objects.all().order_by("date"), required=True, label="Entrée d'agenda")

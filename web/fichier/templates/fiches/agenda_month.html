@@ -20,7 +20,9 @@ Le fichier Aidants365 — Agenda
 
 
 <div class="block" id="entete">
+    <div class="lien_next bouton"><a id="inverse_button" href="{% url 'fichier:entree_agenda_invert' %}">inverser deux dates</a></div>
     <h1>Calendrier du mois de {{ month|nom_mois }} <a href="{% url 'fichier:agenda_year' year %}">{{year}}</a></h1>
+
 
     {% include "fiches/entete.html" %}
 
