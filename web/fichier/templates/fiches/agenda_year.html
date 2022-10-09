@@ -28,6 +28,7 @@ Le fichier Aidants365 — Agenda
             <div class="right">{% lien_annee_suivante year %}</div>
             <div style="clear: both"></div>
         </div>
+        <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a></div>
     </div>
     <div class="block">
         {% show_year agenda year %}

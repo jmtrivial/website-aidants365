@@ -28,6 +28,7 @@ Le fichier Aidants365 — Agenda
         <div style="clear: both"></div>
         <p>Voir <a href="{% url 'fichier:agenda_month' year month %}">la vue synthétique</a> du mois.</p>
     </div>
+    <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a></div>
 
 </div>
     {% for entree in entrees %}

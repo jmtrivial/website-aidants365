@@ -31,6 +31,8 @@ Glossaire
         {% include "fiches/entete.html" %}
         
         {% index_alpha key "fichier:glossaire_page" %}
+
+        <div class="suite"><a href="{% url 'fichier:simple_modifications' 'glossaire' %}">dernières modifications ▸</a></div>
     </div>
     <div class="block">
         {% if entrees %}

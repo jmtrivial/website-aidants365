@@ -70,4 +70,6 @@ urlpatterns = [
     path('<str:classname>/merge/', views.merge, name='merge'),
     path('modifications/', views.modifications, name='modifications'),
     path('modifications/page/<int:key>', views.modifications_page, name='modifications_page'),
+    path('<str:classname>/modifications/', views.simple_modifications, name='simple_modifications'),
+    path('<str:classname>/modifications/page/<int:key>', views.simple_modifications_page, name='simple_modifications_page'),
 ]

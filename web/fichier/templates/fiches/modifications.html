@@ -3,7 +3,7 @@
 {% load fichier_extras %}
 
 {% block entete_menu %}
-{% with critere_name_pluriel as active_page %}
+{% with classname as active_page %}
     {{ block.super }}
 {% endwith %}
 {% endblock %}
@@ -17,15 +17,37 @@ Aidants 365 — dernières modifications
 {% block content %}
     {% load fichier_extras %}
     <div class="block" id="entete">
-
+        {% if classname == "fiches" %}
+        <h1>Dernières modifications des fiches</h1>
+        <p>
+            Sont listées ci-dessous par ordre de dernière modification les fiches.
+        </p>
+        <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
+        {% elif classname == "agenda" %}
+        <h1>Dernières modifications de l'agenda</h1>
+        <p>
+            Sont listées ci-dessous par ordre de dernière modification les entrées de l'agenda.
+        </p>
+        <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
+        {% elif classname == "glossaire" %}
+        <h1>Dernières modifications du glossaire</h1>
+        <p>
+            Sont listées ci-dessous par ordre de dernière modification les entrées du glossaire.
+        </p>
+        <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
+        {% else %}
         <h1>Dernières modifications</h1>
         <p>
-            On trouve listées ci-dessous, par ordre de dernière modification, les différentes entrées du fichier aidants365&nbsp;: 
-            <a href="{% url 'fichier:index' %}">fiches</a>, <a href="{% url 'fichier:agenda' %}">entrées d'agenda</a>
-            et <a href="{% url 'fichier:glossaire' %}">entrées de glossaire</a>.
+            Sont listées ci-dessous par ordre de dernière modification les différentes entrées du fichier aidants365.
         </p>
+        <p>Consulter spécifiquement les modifications  
+            des <a href="{% url 'fichier:simple_modifications' 'glossaire' %}">fiches</a>,
+            de l'<a href="{% url 'fichier:simple_modifications' 'glossaire' %}">agenda</a>
+            et du <a href="{% url 'fichier:simple_modifications' 'glossaire' %}">glossaire</a>.</p>
+        {% endif %}
+
         {% if paginator %}
-            {% index_paginator paginator p_id url_key_paginator %}
+            {% index_paginator paginator p_id url_key_paginator classname %}
         {% endif %}
     </div>
     <div class="block">

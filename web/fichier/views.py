@@ -950,23 +950,39 @@ def merge(request, classname):
 
 
 @login_required
-def modifications(request):
-    return modifications_page(request, 1)
+def simple_modifications_page(request, classname, key):
 
+    liste_entrees = []
+    if classname in ["agenda", ""]:
+        liste_entrees.append(EntreeAgenda.objects.all())
+    if classname in ["glossaire", ""]:
+        liste_entrees.append(EntreeGlossaire.objects.all())
+    if classname in ["fiches", ""]:
+        liste_entrees.append(Fiche.objects.all())
 
-@login_required
-def modifications_page(request, key):
-
-    agendas = EntreeAgenda.objects.all()
-    glossaires = EntreeGlossaire.objects.all()
-    fiches = Fiche.objects.all()
-    entrees = sorted(chain(agendas, glossaires, fiches),
+    entrees = sorted(chain(*liste_entrees),
                      key=lambda entree: entree.date_derniere_modification, reverse=True)
     step = 20
     es = Paginator(entrees, step)
 
     return render(request, "fiches/modifications.html", {
                   "elements": es.page(key).object_list,
-                  "url_key_paginator": "fichier:modifications_page",
+                  "url_key_paginator": "fichier:modifications_page" if classname == "" else "fichier:simple_modifications_page",
                   "p_id": key,
+                  "classname": classname,
                   "paginator": es})
+
+
+@login_required
+def modifications(request):
+    return modifications_page(request, 1)
+
+
+@login_required
+def modifications_page(request, key):
+    return simple_modifications_page(request, "", key)
+
+
+@login_required
+def simple_modifications(request, classname):
+    return simple_modifications_page(request, classname, 1)

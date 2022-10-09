@@ -342,15 +342,17 @@ def index_alpha(key_alpha, url_key_alpha):
 
 
 @register.simple_tag
-def index_paginator(paginator, p_id, url_key_paginator):
+def index_paginator(paginator, p_id, url_key_paginator, classname=""):
     result = '<div class="index_menu_large">Page : '
 
     for id in range(1, paginator.num_pages + 1):
         sid = str(id)
         if id == p_id:
             result += '<div><span class="active_visu">' + sid + "</span></div>"
-        else:
+        elif classname == "":
             result += '<div><a class="visu" href="' + reverse(url_key_paginator, kwargs={"key": id}) + '">' + sid + "</a></div>"
+        else:
+            result += '<div><a class="visu" href="' + reverse(url_key_paginator, kwargs={"key": id, "classname": classname}) + '">' + sid + "</a></div>"
 
     result += "</div>"
     return mark_safe(result)

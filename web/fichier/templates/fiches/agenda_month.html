@@ -24,13 +24,14 @@ Le fichier Aidants365 — Agenda
 
     {% include "fiches/entete.html" %}
 
-
     <div>
         <div class="left">{% lien_mois_precedent year month 0 %}</div>
         <div class="right">{% lien_mois_suivant year month 0 %}</div>
         <div style="clear: both"></div>
         <p>Voir <a href="{% url 'fichier:agenda_month_details' year month %}">le détail des entrées</a> du mois.</p>
     </div>
+
+    <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a></div>
 
 </div>
 <div class="block tableau_agenda">
