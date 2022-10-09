@@ -509,13 +509,19 @@ def document(request, id):
 
 
 @login_required
-def edit_object(request, classname, id=None):
+def duplicate_object(request, classname, id):
+    return edit_object(request, classname, id, True)
+
+
+@login_required
+def edit_object(request, classname, id=None, clone=False):
     single_reverse = False
 
     if classname == "document":
         nom_classe = "document"
         titre_add = "Création d\'un document du desk"
         titre_edition = "Édition du document du desk"
+        titre_clone = "Duplication du document du desk"
         message_add_success = 'Le document du desk "%s" a été ajouté avec succès.'
         message_edit_success = 'Le document du desk "%s" a été modifié avec succès.'
         classe = Document
@@ -526,6 +532,7 @@ def edit_object(request, classname, id=None):
         nom_classe = "entreeglossaire"
         titre_add = "Création d\'entrée de glossaire"
         titre_edition = "Édition de l\'entrée de glossaire"
+        titre_clone = "Duplication de l'entrée de glossaire"
         message_add_success = 'L\'entrée de glossaire "%s" a été ajoutée avec succès.'
         message_edit_success = 'L\'entrée de glossaire "%s" a été modifiée avec succès.'
         classe = EntreeGlossaire
@@ -536,6 +543,7 @@ def edit_object(request, classname, id=None):
         nom_classe = "entreeagenda"
         titre_add = "Création d\'une entrée d'agenda"
         titre_edition = "Édition de l\'entrée d'agenda"
+        titre_clone = "Duplication de l'entrée d'agenda"
         message_add_success = 'L\'entrée d\'agenda "%s" a été ajoutée avec succès.'
         message_edit_success = 'L\'entrée d\'agenda "%s" a été modifiée avec succès.'
         classe = EntreeAgenda
@@ -546,6 +554,7 @@ def edit_object(request, classname, id=None):
         nom_classe = "fiche"
         titre_add = "Création d\'une fiche"
         titre_edition = "Édition de la fiche"
+        titre_clone = "Duplication de la fiche"
         message_add_success = 'La fiche "%s" a été ajoutée avec succès.'
         message_edit_success = 'La fiche "%s" a été modifiée avec succès.'
         classe = Fiche
@@ -556,6 +565,7 @@ def edit_object(request, classname, id=None):
         nom_classe = "categorie"
         titre_add = "Création d\'une catégorie"
         titre_edition = "Édition de la catégorie"
+        titre_clone = "Duplication de la catégorie"
         message_add_success = 'La catégorie "%s" a été ajoutée avec succès.'
         message_edit_success = 'La catégorie "%s" a été modifiée avec succès.'
         classe = Categorie
@@ -566,6 +576,7 @@ def edit_object(request, classname, id=None):
         nom_classe = "theme"
         titre_add = "Création d\'un thème"
         titre_edition = "Édition du thème"
+        titre_clone = "Duplication du thème"
         message_add_success = 'Le thème "%s" a été ajouté avec succès.'
         message_edit_success = 'Le thème "%s" a été modifié avec succès.'
         classe = Theme
@@ -577,6 +588,7 @@ def edit_object(request, classname, id=None):
         nom_classe = "motcle"
         titre_add = "Création d\'un mot-clé"
         titre_edition = "Édition du mot-clé"
+        titre_clone = "Duplication du mot-clé"
         message_add_success = 'Le mot-clé "%s" a été ajouté avec succès.'
         message_edit_success = 'Le mot-clé "%s" a été modifié avec succès.'
         classe = MotCle
@@ -587,7 +599,8 @@ def edit_object(request, classname, id=None):
     elif classname == "categorie_libre":
         nom_classe = "categorie_libre"
         titre_add = "Création d\'une catégorie libre"
-        titre_edition = "Édition d'une catégorie libre"
+        titre_edition = "Édition de la catégorie libre"
+        titre_clone = "Duplication d\'une catégorie libre"
         message_add_success = 'La catégorie libre "%s" a été ajoutée avec succès.'
         message_edit_success = 'La catégorie libre "%s" a été modifiée avec succès.'
         classe = CategorieLibre
@@ -597,7 +610,8 @@ def edit_object(request, classname, id=None):
     elif classname == "niveau":
         nom_classe = "niveau"
         titre_add = "Création d\'un niveau"
-        titre_edition = "Édition d'un niveau"
+        titre_edition = "Édition du niveau"
+        titre_clone = "Duplication du niveau"
         message_add_success = 'Le niveau "%s" a été ajouté avec succès.'
         message_edit_success = 'Le niveau "%s" a été modifié avec succès.'
         classe = Niveau
@@ -606,10 +620,11 @@ def edit_object(request, classname, id=None):
         reverse_url_cancel = 'fichier:index'
     elif classname == "entete_page":
         nom_classe = "niveau"
-        titre_add = "Création de l'entête"
+        titre_add = "Création d'une entête"
         if request.method == 'GET' and "page" in request.GET:
             titre_add += " de la page " + EntetePage.nom_page(request.GET["page"])
         titre_edition = "Édition de l'entête"
+        titre_clone = "Duplication de l'entête"
         message_add_success = 'L\'entête de "%s" a été ajoutée avec succès.'
         message_edit_success = 'L\'entête de "%s" a été modifiée avec succès.'
         classe = EntetePage
@@ -630,14 +645,21 @@ def edit_object(request, classname, id=None):
     else:
         # Change mode
         object = get_object_or_404(classe, pk=id)
-        required_permission = 'fichier.change_' + nom_classe
-        titre = titre_edition + " " + str(object)
+        if clone:
+            object.id = None
+            titre = titre_clone + " " + str(object)
+            required_permission = 'fichier.add_' + nom_classe
+            if classname == "agenda":
+                object.date = None
+        else:
+            titre = titre_edition + " " + str(object)
+            required_permission = 'fichier.change_' + nom_classe
 
     if classname == "agenda":
-        if object:
+        if object and object.id is not None:
             complements["not_available_dates"] = EntreeAgenda.objects.exclude(id=object.id)
         else:
-            complements["not_available_dates"] = EntreeAgenda.objects
+            complements["not_available_dates"] = EntreeAgenda.objects.all()
 
     # Check user permissions
     if not request.user.is_authenticated or not request.user.has_perm(required_permission):
@@ -659,7 +681,7 @@ def edit_object(request, classname, id=None):
             messages.info(request, "Édition annulée")
             if object:
                 if not simple_reverse:
-                    return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+                    return HttpResponseRedirect(reverse(reverse_url, args=[id]))
                 else:
                     return HttpResponseRedirect(reverse(reverse_url))
             else:
@@ -669,7 +691,7 @@ def edit_object(request, classname, id=None):
             form = classeform(instance=object, data=request.POST, user=request.user)
             if form.is_valid():
                 object = form.save()
-                if id is None:
+                if id is None or clone:
                     message = message_add_success % object
                 else:
                     message = message_edit_success % object
@@ -677,7 +699,7 @@ def edit_object(request, classname, id=None):
                 if single_reverse or simple_reverse:
                     return HttpResponseRedirect(reverse(reverse_url))
                 else:
-                    return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
+                    return HttpResponseRedirect(reverse(reverse_url, args=[id]))
             else:
                 if classname == "glossaire" and "entree" in form.errors and form.data["entree"] != "":
                     entree = EntreeGlossaire.objects.filter(entree=form.data["entree"])[0]
@@ -699,7 +721,7 @@ def edit_object(request, classname, id=None):
         'object': object,
         'form': form,
         'validation': not bool(request.GET),
-        'add': id is None,
+        'add': not object or object.id is None,
         'nom_classe': nom_classe,
         'footer': footer,
         'header': header

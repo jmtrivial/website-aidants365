@@ -64,6 +64,7 @@ urlpatterns = [
     # pour ajouter et modifier les objets, on utilise un formulaire
     path('<str:classname>/add/', views.edit_object, name='object_add'),
     path('<str:classname>/<int:id>/change/', views.edit_object, name='object_change'),
+    path('<str:classname>/<int:id>/duplicate/', views.duplicate_object, name='object_duplicate'),
     # pour ajouter des objets simples, on utilise une API (uniquement POST implémenté)
     path('<str:classname>/api/', views.rest_api, name='rest_api'),
     # pour les catégories simples, on propose la fusion

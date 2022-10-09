@@ -5,8 +5,9 @@
         <a href="{{ entree.get_absolute_url }}">{{ entree.entree }}</a>
     {% endif %}
      <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' 'glossaire' entree.id %}">éditer{% if shortcut %} <small>(ctrl+e){% endif %}</small></a>
-    <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_glossaire_delete' entree.id %}">supprimer</a>
-</{{ niveau }}>
+     <a class="card_edit" id="duplicate_button" href="{% url 'fichier:object_duplicate' 'glossaire' entree.id %}">dupliquer</a>
+     <a class="card_edit" id="delete_button" href="{% url 'fichier:entree_glossaire_delete' entree.id %}">supprimer</a>
+    </{{ niveau }}>
     {% if entree.formes_alternatives %} 
 <p><strong>{% if entree.formes_alternatives|length > 1 %}Formes alternatives{% else %}Forme alternative{% endif %}&nbsp;:</strong> 
     {% for fa in entree.formes_alternatives %}{% if not forloop.first %}, {% endif %}{{ fa }}{% endfor %}
