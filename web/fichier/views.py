@@ -701,7 +701,7 @@ def edit_object(request, classname, id=None, clone=False):
                 if single_reverse or simple_reverse:
                     return HttpResponseRedirect(reverse(reverse_url))
                 else:
-                    return HttpResponseRedirect(reverse(reverse_url, args=[id]))
+                    return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
             else:
                 if classname == "glossaire" and "entree" in form.errors and form.data["entree"] != "":
                     entree = EntreeGlossaire.objects.filter(entree=form.data["entree"])[0]
