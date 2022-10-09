@@ -288,7 +288,9 @@ def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
     agendas = EntreeAgenda.objects.filter(themes=theme)
-    themes_connexes = Theme.objects.filter(id__in=Fiche.objects.filter(id__in=fiches.values("id")).values("themes")).exclude(id=id)
+    themes_connexes = Theme.objects.filter(id__in=Fiche.objects.filter(id__in=fiches.values("id")).values("themes")
+                                           .union(Fiche.objects.filter(id__in=fiches.values("id")).values("themes"))
+                                           ).exclude(id=id)
 
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "theme", "critere": theme,
                                                              "critere_human": "du thème",
@@ -344,7 +346,9 @@ def index_motcle(request, id):
     fiches = Fiche.objects.filter(mots_cles=motcle)
     agendas = EntreeAgenda.objects.filter(motscles=motcle)
     glossaires = EntreeGlossaire.objects.filter(Q(entree=motcle.nom) | Q(formes_alternatives__contains=[motcle.nom]))
-    motscles_connexes = MotCle.objects.filter(id__in=Fiche.objects.filter(id__in=fiches.values("id")).values("mots_cles")).exclude(id=id)
+    motscles_connexes = MotCle.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("motscles")
+                                              .union(Fiche.objects.filter(id__in=fiches.values("id")).values("mots_cles"))
+                                              ).exclude(id=id)
 
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
                                                              "critere_human": "du mot-clé", "critere_nom": str(motcle),

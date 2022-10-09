@@ -88,6 +88,7 @@ avec le mot-clé {{ critere_nom }}
 
     {% if motsclesconnexes %}
     <h2>Mots-clés connexes</h2>
+    <p>Deux mots-clés sont considérés connexes s'ils apparaissent en même temps dans une même fiche, ou dans une même entrée d'agenda.</p>
     <ul>
         {% for mc in motsclesconnexes %}
         <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
@@ -96,6 +97,7 @@ avec le mot-clé {{ critere_nom }}
 
     {% if themesconnexes %}
     <h2>Thèmes connexes</h2>
+    <p>Deux thèmes sont considérés connexes s'ils apparaissent en même temps dans une même fiche, ou dans une même entrée d'agenda.</p>
     <ul>
         {% for tc in themesconnexes %}
         <li><a href="{{ tc.get_absolute_url }}">{{ tc }}</a></li>
