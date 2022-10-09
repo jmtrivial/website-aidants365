@@ -18,19 +18,19 @@ Aidants 365 — dernières modifications
     {% load fichier_extras %}
     <div class="block" id="entete">
         {% if classname == "fiches" %}
-        <h1>Dernières modifications des fiches</h1>
+        <h1>Dernières modifications des <a href="{% url 'fichier:index' %}">fiches</a></h1>
         <p>
             Sont listées ci-dessous par ordre de dernière modification les fiches.
         </p>
         <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
         {% elif classname == "agenda" %}
-        <h1>Dernières modifications de l'agenda</h1>
+        <h1>Dernières modifications de l'<a href="{% url 'fichier:agenda' %}">agenda</a></h1>
         <p>
             Sont listées ci-dessous par ordre de dernière modification les entrées de l'agenda.
         </p>
         <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
         {% elif classname == "glossaire" %}
-        <h1>Dernières modifications du glossaire</h1>
+        <h1>Dernières modifications du <a href="{% url 'fichier:glossaire' %}">glossaire</a></h1>
         <p>
             Sont listées ci-dessous par ordre de dernière modification les entrées du glossaire.
         </p>
@@ -41,8 +41,8 @@ Aidants 365 — dernières modifications
             Sont listées ci-dessous par ordre de dernière modification les différentes entrées du fichier aidants365.
         </p>
         <p>Consulter spécifiquement les modifications  
-            des <a href="{% url 'fichier:simple_modifications' 'glossaire' %}">fiches</a>,
-            de l'<a href="{% url 'fichier:simple_modifications' 'glossaire' %}">agenda</a>
+            des <a href="{% url 'fichier:simple_modifications' 'fiches' %}">fiches</a>,
+            de l'<a href="{% url 'fichier:simple_modifications' 'agenda' %}">agenda</a>
             et du <a href="{% url 'fichier:simple_modifications' 'glossaire' %}">glossaire</a>.</p>
         {% endif %}
 
