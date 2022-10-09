@@ -35,6 +35,7 @@ Desk
     <page size="A4">
         <div id="actions">
             <a href="{% url 'fichier:object_change' 'document' entree.id %}" id="edit_button"><button>éditer (ctrl-e)</button></a>
+            <a href="{% url 'fichier:object_duplicate' 'document' entree.id %}" id="duplicate_button"><button>dupliquer</button></a>
             <a href="{% url 'fichier:document_delete' entree.id %}" id="delete_button"><button>supprimer</button></a>
         </div>
         <div id="contenu_page">
@@ -48,7 +49,9 @@ Desk
     <div class="block" id="entete">
         <p><a href="{% url 'fichier:desk' %}">◂ desk</a></p>
         
-        <h1>Document&nbsp;: {{ entree.titre }} <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' 'document' entree.id %}">éditer <small>(ctrl+e)</small></a>
+        <h1>Document&nbsp;: {{ entree.titre }} 
+            <a class="card_edit" id="edit_button" href="{% url 'fichier:object_change' 'document' entree.id %}">éditer <small>(ctrl+e)</small></a>
+            <a class="card_edit" id="duplicate_button" href="{% url 'fichier:object_duplicate' 'document' entree.id %}">dupliquer</a>
             <a class="card_edit" id="delete_button" href="{% url 'fichier:document_delete' entree.id %}">supprimer</a>
         </h1>
     </div>

@@ -651,6 +651,8 @@ def edit_object(request, classname, id=None, clone=False):
             required_permission = 'fichier.add_' + nom_classe
             if classname == "agenda":
                 object.date = None
+            if classname == "document":
+                object.titre += " (copie)"
         else:
             titre = titre_edition + " " + str(object)
             required_permission = 'fichier.change_' + nom_classe
