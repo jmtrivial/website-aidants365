@@ -3,7 +3,7 @@ from django.urls import reverse, reverse_lazy
 from django.template import loader
 from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document, EntetePage
 from django.shortcuts import get_object_or_404, render
-from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField
+from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField, Subquery
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
@@ -341,10 +341,13 @@ def index_motcle(request, id):
     fiches = Fiche.objects.filter(mots_cles=motcle)
     agendas = EntreeAgenda.objects.filter(motscles=motcle)
     glossaires = EntreeGlossaire.objects.filter(Q(entree=motcle.nom) | Q(formes_alternatives__contains=[motcle.nom]))
+    motscles_connexes = MotCle.objects.filter(id__in=Fiche.objects.filter(id__in=fiches.values("id")).values("mots_cles")).exclude(id=id)
+
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
                                                              "critere_human": "du mot-clé", "critere_nom": str(motcle),
                                                              "fiche_list": fiches, "entreesagenda": agendas,
                                                              "entreesglossaire": glossaires,
+                                                             "motsclesconnexes": motscles_connexes,
                                                              'entete': get_entete("themes")})
 
 

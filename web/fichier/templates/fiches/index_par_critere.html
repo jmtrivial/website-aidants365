@@ -78,11 +78,19 @@ avec le mot-clé {{ critere_nom }}
         {% endif %}
     {% endif %}
 
-    {% if entreesglossaire.count != 0 %}
+    {% if entreesglossaire %}
     <h2>Entrée{% if entreesglossaire.all.count > 1%}s{% endif %} du glossaire similaire{% if motscles.all.count > 1%}s{% endif %} à ce mot-clé</h2>
     <ul>
         {% for eg in entreesglossaire %}
         <li><a href="{{ eg.get_absolute_url }}">{{ eg }}</a></li>
+    {% endfor %}
+    {% endif %}
+
+    {% if motsclesconnexes %}
+    <h2>Mots-clés connexes</h2>
+    <ul>
+        {% for mc in motsclesconnexes %}
+        <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
     {% endfor %}
     {% endif %}
 </div>
