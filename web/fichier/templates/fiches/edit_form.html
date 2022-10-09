@@ -189,7 +189,30 @@ Le fichier Aidants365 — édition
         fill_input_m2m(element_class);
     }
 
-    $( 'input[name="date"]' ).datepicker();
+    {% if not_available_dates.count != 0 %}
+    var unavailableDates = [
+        {% for adate in not_available_dates %}
+        {% if not forloop.first %}, {% endif %}"{{ adate.iso }}"
+        {% endfor %}
+    ];
+    {% else %}
+    var unavailableDates = [];
+    {% endif %}
+
+    function available_date(date) {
+        var dmy = date.getFullYear() + "-" + ("0" + (date.getMonth() + 1)).slice(-2) + "-" + ("0" + date.getDate()).slice(-2);
+        
+
+        if ($.inArray(dmy, unavailableDates) == -1) {
+            console.log("disponible", dmy);
+            return [true, "", "Available"];
+        } else {
+            console.log("non disponible");
+            return [false, "", "unAvailable"];
+        }
+     }
+
+    $( 'input[name="date"]' ).datepicker({beforeShowDay: available_date});
     $( 'input[name="date_creation"]' ).datepicker();
 
 

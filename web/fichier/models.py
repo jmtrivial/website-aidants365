@@ -508,6 +508,9 @@ class EntreeAgenda(models.Model):
         else:
             return texte
 
+    def iso(self):
+        return self.date.strftime("%Y-%m-%d")
+
     def ephemeride(self):
         e = Ephemeride(self.date, self.get_absolute_url(), False)
         return e.ephemeride()

@@ -15,7 +15,7 @@ from django.views.generic.edit import DeleteView
 import json
 from datetime import datetime, date, timedelta
 from django.db import IntegrityError
-from .utils import message_glossaire, message_sortable
+from .utils import message_glossaire, message_sortable, to_iso
 from django.db.models.functions import Ceil, Cast, Lower
 from django.core.paginator import Paginator
 from itertools import chain
@@ -619,6 +619,8 @@ def edit_object(request, classname, id=None):
     else:
         raise Http404("Donnée inconnue")
 
+    complements = {}
+
     # Retrieve object
     if id is None:
         # "Add" mode
@@ -630,6 +632,16 @@ def edit_object(request, classname, id=None):
         object = get_object_or_404(classe, pk=id)
         required_permission = 'fichier.change_' + nom_classe
         titre = titre_edition + " " + str(object)
+
+    if classname == "agenda":
+        if object:
+            complements["not_available_dates"] = EntreeAgenda.objects.exclude(id=object.id)
+        else:
+            if classname == "agenda" and "date" in request.GET and request.GET["date"]:
+                d = to_iso(request.GET["date"])
+                complements["not_available_dates"] = EntreeAgenda.objects.exclude(date=d)
+            else:
+                complements["not_available_dates"] = EntreeAgenda.objects
 
     # Check user permissions
     if not request.user.is_authenticated or not request.user.has_perm(required_permission):
@@ -686,7 +698,7 @@ def edit_object(request, classname, id=None):
 
     footer = "<ul><li>Les champs dont les noms sont en gras sont des champs requis.</li><li>* : " + message_sortable + "</i><li>** : " + message_glossaire + "</li></ul>"
 
-    return render(request, template_name, {
+    params = {
         'titre': titre,
         'object': object,
         'form': form,
@@ -695,7 +707,8 @@ def edit_object(request, classname, id=None):
         'nom_classe': nom_classe,
         'footer': footer,
         'header': header
-    })
+    }
+    return render(request, template_name, {**params, **complements})
 
 
 @login_required

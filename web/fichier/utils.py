@@ -142,3 +142,8 @@ class Agenda(LocaleHTMLCalendar):
         a('</table>')
         a('\n')
         return ''.join(v)
+
+
+def to_iso(d):
+    e = d.split("/")
+    return e[2] + "-" + e[1] + "-" + e[0]
