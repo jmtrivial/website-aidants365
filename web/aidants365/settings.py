@@ -168,6 +168,7 @@ CKEDITOR_CONFIGS = {
         'language': 'fr',
         'entities_latin': False,
         'entities': False,
+        'toolbar': 'full',
         'width': 'auto',
         "extraPlugins": 'autolink',
         "removePlugins": "exportpdf"
