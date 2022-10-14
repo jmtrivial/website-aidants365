@@ -84,6 +84,7 @@ avec le mot-clé {{ critere_nom }}
         {% for eg in entreesglossaire %}
         <li><a href="{{ eg.get_absolute_url }}">{{ eg }}</a></li>
     {% endfor %}
+    </ul>
     {% endif %}
 
     {% if motsclesconnexes %}
@@ -93,6 +94,7 @@ avec le mot-clé {{ critere_nom }}
         {% for mc in motsclesconnexes %}
         <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
     {% endfor %}
+    </ul>
     {% endif %}
 
     {% if themesconnexes %}
@@ -102,6 +104,7 @@ avec le mot-clé {{ critere_nom }}
         {% for tc in themesconnexes %}
         <li><a href="{{ tc.get_absolute_url }}">{{ tc }}</a></li>
     {% endfor %}
+    </ul>
     {% endif %}
 
 </div>
