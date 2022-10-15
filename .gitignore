@@ -5,3 +5,5 @@ warning.log
 .env.prod.db
 backups
 update-dev.sh
+pense-bete.md
+web/static/

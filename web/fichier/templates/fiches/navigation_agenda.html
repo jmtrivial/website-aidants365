@@ -1,0 +1,12 @@
+{% if un_an_prev %}
+{% load fichier_extras %}
+<div>
+    <div class="left">{% lien_jour_un_an_avant un_an_prev %}</div>
+    <div class="right">{% lien_jour_un_an_apres un_an_next %}</div>
+    <div style="clear: both"></div>
+<div class="large">
+    <div class="left">{% lien_jour_precedent prev %}</div>
+    <div class="right">{% lien_jour_suivant next %}</div>
+    <div style="clear: both"></div>
+</div>
+{% endif %}

@@ -714,6 +714,8 @@ def edit_object(request, classname, id=None, clone=False):
             form = classeform(instance=object, data=request.GET, user=request.user)
             if classname == "agenda" and "date" in request.GET and request.GET["date"]:
                 titre = titre_edition + " " + request.GET["date"]
+                prev_next = _get_pred_next_dates(date.fromisoformat(to_iso(request.GET["date"])))
+                complements = {**complements, **prev_next}
         else:
             form = classeform(instance=object, user=request.user)
 
@@ -762,7 +764,7 @@ def agenda_month_details(request, year, month):
     return render(request, 'fiches/agenda_month_details.html', context)
 
 
-def _entree_agenda(request, entree, d):
+def _get_pred_next_dates(d):
     prev_date = d - timedelta(days=1)
     prev_entree = EntreeAgenda.objects.filter(date=prev_date)
     if len(prev_entree) == 0:
@@ -791,9 +793,14 @@ def _entree_agenda(request, entree, d):
     else:
         un_an_apres_entree = un_an_apres_entree[0]
 
-    context = {'entree': entree, 'prev': prev_entree, 'next': next_entree,
-               'un_an_prev': un_an_avant_entree, 'un_an_next': un_an_apres_entree, }
-    return render(request, 'fiches/entree_agenda.html', context)
+    return {'prev': prev_entree, 'next': next_entree,
+            'un_an_prev': un_an_avant_entree, 'un_an_next': un_an_apres_entree}
+
+
+def _entree_agenda(request, entree, d):
+    context = {'entree': entree}
+    prev_next = _get_pred_next_dates(d)
+    return render(request, 'fiches/entree_agenda.html', {**context, **prev_next})
 
 
 @login_required

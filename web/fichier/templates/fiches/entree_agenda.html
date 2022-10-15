@@ -36,15 +36,7 @@ Glossaire
 
 
     <div class="block" id="entete">
-        <div>
-            <div class="left">{% lien_jour_un_an_avant un_an_prev %}</div>
-            <div class="right">{% lien_jour_un_an_apres un_an_next %}</div>
-            <div style="clear: both"></div>
-        <div class="large">
-            <div class="left">{% lien_jour_precedent prev %}</div>
-            <div class="right">{% lien_jour_suivant next %}</div>
-            <div style="clear: both"></div>
-        </div>
+        {% include "fiches/navigation_agenda.html" %}
         <h1>Entrée du {{ entree.date.day }} <a href="{% url 'fichier:agenda_month' entree.date.year entree.date.month %}">{{ entree.date|date:'F' }}</a> <a href="{% url 'fichier:agenda_year' entree.date.year %}">{{ entree.date.year }}</a> 
             {% if entree.marque %}
             ☑
