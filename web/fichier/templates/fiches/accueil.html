@@ -7,6 +7,7 @@
     {{ block.super }}
 {% endwith %}
 {% endblock %}
+{% load cache %}
 
 {% block classe_principale %}accueil_page{% endblock %}
 
@@ -19,6 +20,8 @@ Le fichier Aidants365
 <div class="column">
     {% include "fiches/entete.html" %}
 </div>
+{% cache 120 frontpage_top %}
+
 <div class="column" style="float: right">
     <div class="ephemeride_large">
         <div class="block entete">
@@ -31,6 +34,7 @@ Le fichier Aidants365
         {% endif %}
     </div>
 </div>
+
 <div class="column">
 <p>Nous sommes aujourd'hui le <strong>{{ entree_agenda.date_complete }}</strong>. Sur ce tableau de bord, vous trouverez
     l'éphéméride du jour, ainsi qu'un
@@ -74,9 +78,13 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
     </div>
 </div>
 <div style="clear: both"></div>
+{% endcache %}
+
 {% endblock %}
 
 {% block gauche1 %}
+{% cache 60 frontpage_gauche1 %}
+
 <h2>Les {{ nbfiches }} dernières fiches modifiées</h2>
 {% if fiche_list %}
     <ul>
@@ -114,10 +122,13 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% endif %}
 <div class="suite"><a href="{% url 'fichier:modifications' %}">dernières modifications ▸</a></div>
 
+{% endcache %}
 {% endblock %}
 
 
 {% block gauche2 %}
+{% cache 500 frontpage_gauche2 %}
+
 {% if categories %}
 <h2>Les {{ nbcategories }} principales catégories générales</h2>
 <ul class="cols4">
@@ -150,9 +161,11 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
         </ul>
 {% endif %}
     <div class="suite">Voir <a href="{% url 'fichier:categories_alpha' %}">toutes les catégories ▸</a></div>
+{% endcache %}
 {% endblock %}
 
 {% block droite1 %}
+{% cache 500 frontpage_droite1 %}
 <h2>Nuage de mots-clés</h2>
 {% if motcles %}
     {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" %}    
@@ -161,9 +174,12 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% else %}
     <p>Pas de mot-clé disponible.</p>
 {% endif %}
+{% endcache %}
 {% endblock %}
 
 {% block gauche3 %}
+{% cache 500 frontpage_gauche3 %}
+
 <h2>Les {{ nbthemes }} principaux thèmes</h2>
 {% if themes %}
     <ul class="cols3">
@@ -181,4 +197,5 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% else %}
     <p>Pas de thème disponible.</p>
 {% endif %}
+{% endcache %}
 {% endblock %}
