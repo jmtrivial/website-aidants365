@@ -102,8 +102,10 @@ class Agenda(LocaleHTMLCalendar):
         """
         Return a formatted month as a table.
         """
-
-        events = self.events.filter(date__year=theyear, date__month=themonth)
+        if self.events is None:
+            events = self.events.filter(date__year=theyear, date__month=themonth)
+        else:
+            events = self.events
 
         v = []
         a = v.append
