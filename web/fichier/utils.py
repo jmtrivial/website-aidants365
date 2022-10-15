@@ -58,7 +58,8 @@ class Ephemeride:
 
 
 class Agenda(LocaleHTMLCalendar):
-    month_name = ["", "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"]
+    month_name = ["", "janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
+    day_name = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
 
     def __init__(self, events=None, *args):
         super(Agenda, self).__init__(*args)

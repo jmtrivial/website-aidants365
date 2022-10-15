@@ -93,7 +93,7 @@ def accueil(request):
         context_suppl = {}
     else:
         entree_agenda = entrees_agenda[0]
-        year_next_month = entree_agenda.date.year + 1
+        year_next_month = entree_agenda.date.year
         month_next_month = entree_agenda.date.month + 1
         if month_next_month == 12:
             month_next_month = 1

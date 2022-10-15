@@ -49,7 +49,7 @@ def show_year(agenda, year):
 
 
 @register.simple_tag
-def show_month(agenda, year, month, simple):
+def show_month(agenda, year, month, simple=False):
     return mark_safe(agenda.month(year, month, simple))
 
 

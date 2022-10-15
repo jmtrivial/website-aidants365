@@ -11,10 +11,11 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 import re
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
-from .utils import Ephemeride, table, arrayToString
+from .utils import Ephemeride, table, arrayToString, Agenda
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from sortedm2m.fields import SortedManyToManyField
 from .utils import message_glossaire, message_sortable
+import locale
 
 import logging
 logger = logging.getLogger(__name__)
@@ -514,6 +515,9 @@ class EntreeAgenda(models.Model):
     def ephemeride(self):
         e = Ephemeride(self.date, self.get_absolute_url(), False)
         return e.ephemeride()
+
+    def date_complete(self):
+        return Agenda.day_name[self.date.weekday()] + " " + str(self.date.day) + " " + Agenda.month_name[self.date.month] + " " + str(self.date.year)
 
     def rechercher(search_text):
         from django.contrib.postgres.search import SearchVector
