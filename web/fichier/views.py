@@ -112,7 +112,7 @@ def accueil(request):
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
                "nbentreesglossairetotal": nbentreesglossairetotal,
-               "entree_agenda": entree_agenda, **context_suppl}
+               "entree_agenda": entree_agenda, **context_suppl, 'entete': get_entete("accueil")}
     return render(request, 'fiches/accueil.html', context)
 
 
