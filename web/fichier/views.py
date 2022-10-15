@@ -90,8 +90,17 @@ def accueil(request):
     entrees_agenda = EntreeAgenda.objects.filter(date=timezone.now())
     if entrees_agenda.count() == 0:
         entree_agenda = Ephemeride(timezone.now())
+        context_suppl = {}
     else:
         entree_agenda = entrees_agenda[0]
+        year_next_month = entree_agenda.date.year + 1
+        month_next_month = entree_agenda.date.month + 1
+        if month_next_month == 12:
+            month_next_month = 1
+            year_next_month += 1
+        entrees = EntreeAgenda.objects.filter((Q(date__year=entree_agenda.date.year) & Q(date__month=entree_agenda.date.month)) | (Q(date__year=year_next_month) & Q(date__month=month_next_month)))
+        aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
+        context_suppl = {'agenda': aa, "year_next_month": year_next_month, "month_next_month": month_next_month}
 
     context = {'fiche_list': latest_fiche_list, 'nbfiches': nbfiches,
                'entrees_glossaire_list': latest_entrees_glossaire_list, 'nbentreesglossaire': nbentreesglossaire,
@@ -103,7 +112,7 @@ def accueil(request):
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
                "nbentreesglossairetotal": nbentreesglossairetotal,
-               "entree_agenda": entree_agenda}
+               "entree_agenda": entree_agenda, **context_suppl}
     return render(request, 'fiches/accueil.html', context)
 
 

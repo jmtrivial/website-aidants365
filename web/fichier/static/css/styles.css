@@ -339,6 +339,9 @@ a:hover {
     padding: 0 0.5em;
 }
 
+.accueil_page #entete>div:nth-child(1) p {
+    padding-right: 1em;
+}
 
 #full_content {
     margin: auto;
@@ -676,8 +679,127 @@ a.missing-day {
     margin: 0.1em;
 }
 
+.ephemeride_large {
+    box-shadow: 0 0 1em rgba(0,0,0,0.3);
+    padding: 1em;
+}
+
+.ephemeride_large div {
+    box-shadow: none;
+}
+
+.ephemeride_large .cal_mois {
+    width: 37%;
+}
+
+.ephemeride_large .mois_left {
+    float: left;
+}
+
+.ephemeride_large .mois_right {
+    float: right;
+}
+
+.ephemeride_large .ephemeride a {
+    box-shadow: none;
+    padding: .8em 2em;
+    border-radius: 0;
+}
+
+.ephemeride_large .block {
+    padding: 0;
+}
+
+.ephemeride_large .cal_mois table.month {
+    width: auto;
+    font-size: 70%;
+    height: 14.5em;
+}
+
+.ephemeride_large .cal_mois table.month {
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 0.2em 0;
+}
+
+
+.ephemeride_large .cal_mois table.month th.month {
+    font-size: 120%;
+}
+
+.ephemeride_large .cal_mois table.month th,
+.ephemeride_large .cal_mois table.month td {
+    padding: 0;
+    background-color: transparent;
+}
+
+.ephemeride_large .cal_mois table.month td a {
+    padding: 0.2em 0.8em;
+    color: #000;
+    background: transparent;
+}
+
+.ephemeride_large .cal_mois table.month tbody th {
+    border-bottom: 1px solid #ccc;
+}
+
+.ephemeride {
+    display: block;
+    width: 10em;
+    margin: auto;
+}
+.ephemeride a {
+    padding: 1em 0;
+    display: block;
+    box-shadow: 0 0 0.2em rgba(0,0,0,0.3);
+    border-radius: 0.2em;
+}
+
+.ephemeride a:hover {
+    text-decoration: none;
+    color: #000;
+    background: #fdfdfd;
+    box-shadow: 0 0 0.1em rgba(0,0,0,0.3);
+}
+
+.ephemeride div {
+    width: 100%;
+    text-align: center;
+}
+.ephemeride .jour_semaine {
+    color: #222;
+    font-size: 130%;
+}
+.ephemeride .jour {
+    color: #c44;
+    font-weight: bold;
+    font-size: 400%;
+}
+.ephemeride:hover .jour {
+    color: #c00;
+}
+.ephemeride .mois {
+    color: #222;
+    font-variant: small-caps;    
+    font-size: 130%;
+}
+
+.month td a {
+    padding: 1em;
+}
+.month td a:hover {
+    background: #89b3d2;
+    text-decoration: none;
+}
+
+
 
 @media only screen and (max-width: 1200px) {
+
+
+    .ephemeride_large {
+        font-size: 90%;
+    }
 
     #menubar .espace-gauche {
         margin-left: 1em;
@@ -707,10 +829,18 @@ a.missing-day {
 }
 
 @media only screen and (max-width: 1000px) {
+    .ephemeride_large {
+        font-size: 110%;
+    }
+
     #content > .column {
         width: 100%;
     }
     #content .column_large, #content  .column_small {
+        width: 100%;
+    }
+
+    #entete > .column {
         width: 100%;
     }
 
@@ -765,7 +895,69 @@ a.missing-day {
     }
 }
 
+@media 
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+    .ephemeride_large {
+        font-size: 80%;
+    }
+
+	/* Force table to not be like tables anymore */
+	table:not(.ephemeride_large table), thead:not(.ephemeride_large thead), 
+    tbody:not(.ephemeride_large tbody), 
+    th:not(.ephemeride_large th), 
+    td:not(.ephemeride_large td), 
+    tr:not(.ephemeride_large tr) { 
+		display: block; 
+	}
+	
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr:not(.ephemeride_large thead tr) { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+
+    .tableau_agenda tbody :nth-child(2) {
+        display: none;
+    }
+	
+	tr:not(.ephemeride_large tr) { 
+        border: 1px solid #ccc;
+    }
+	
+	td :not(.ephemeride_large td) { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	td:not(.ephemeride_large td):before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+
+    
+	.distribution td:nth-of-type(1):before { content: "théorique"; }
+	.distribution td:nth-of-type(2):before { content: "pratique"; }
+	.distribution td:nth-of-type(3):before { content: "opérationnel"; }
+	.distribution td:nth-of-type(4):before { content: "total"; }
+}
+
 @media only screen and (max-width: 600px) {
+    .ephemeride_large {
+        font-size: 80%;
+    }
+
     .cols3 {
         columns: 1;
     }
@@ -827,7 +1019,17 @@ a.missing-day {
 
 }
 
+@media only screen and (max-width: 480px) {
+    .ephemeride_large {
+        font-size: 70%;
+    }
+
+
 @media only screen and (max-width: 400px) {
+    .ephemeride_large {
+        font-size: 60%;
+    }
+
     .cols4 {
         columns: 1;
     }
@@ -840,99 +1042,9 @@ a.missing-day {
     }
 }
 
-.ephemeride {
-    display: block;
-    width: 10em;
-    margin: auto;
-}
-.ephemeride a {
-    padding: 1em 0;
-    display: block;
-    box-shadow: 0 0 0.2em rgba(0,0,0,0.3);
-    border-radius: 0.2em;
-}
 
-.ephemeride a:hover {
-    text-decoration: none;
-    color: #000;
-    background: #fdfdfd;
-    box-shadow: 0 0 0.1em rgba(0,0,0,0.3);
-}
-
-.ephemeride div {
-    width: 100%;
-    text-align: center;
-}
-.ephemeride .jour_semaine {
-    color: #222;
-    font-size: 130%;
-}
-.ephemeride .jour {
-    color: #c44;
-    font-weight: bold;
-    font-size: 400%;
-}
-.ephemeride:hover .jour {
-    color: #c00;
-}
-.ephemeride .mois {
-    color: #222;
-    font-variant: small-caps;    
-    font-size: 130%;
-}
-
-.month td a {
-    padding: 1em;
-}
-.month td a:hover {
-    background: #89b3d2;
-    text-decoration: none;
-}
-
-@media 
-only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px)  {
-
-	/* Force table to not be like tables anymore */
-	table, thead, tbody, th, td, tr { 
-		display: block; 
-	}
-	
-	/* Hide table headers (but not display: none;, for accessibility) */
-	thead tr { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
-	}
-
-    .tableau_agenda tbody :nth-child(2) {
-        display: none;
+@media only screen and (max-width: 360px) {
+    .ephemeride_large {
+        font-size: 50%;
     }
-	
-	tr { border: 1px solid #ccc; }
-	
-	td { 
-		/* Behave  like a "row" */
-		border: none;
-		border-bottom: 1px solid #eee; 
-		position: relative;
-		padding-left: 50%; 
-	}
-	
-	td:before { 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-	}
 
-    
-	.distribution td:nth-of-type(1):before { content: "théorique"; }
-	.distribution td:nth-of-type(2):before { content: "pratique"; }
-	.distribution td:nth-of-type(3):before { content: "opérationnel"; }
-	.distribution td:nth-of-type(4):before { content: "total"; }
-}

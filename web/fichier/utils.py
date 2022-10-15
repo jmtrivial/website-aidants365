@@ -67,8 +67,8 @@ class Agenda(LocaleHTMLCalendar):
     def year(self, year):
         return self.formatyear(year, 1)
 
-    def month(self, year, month):
-        return self.formatmonth(year, month)
+    def month(self, year, month, simple):
+        return self.formatmonth(year, month, simple=simple)
 
     def formatmonthname(self, theyear, themonth, withyear=True):
         """
@@ -94,7 +94,7 @@ class Agenda(LocaleHTMLCalendar):
         return '<th class="%s">%s</th>' % (
             self.cssclasses_weekday_head[day], day_abbr[day])
 
-    def formatday(self, theyear, themonth, day, weekday, events):
+    def formatday(self, theyear, themonth, day, weekday, events, simple):
         """
         Return a day as a table cell.
         """
@@ -104,7 +104,7 @@ class Agenda(LocaleHTMLCalendar):
             events_from_day = events.filter(date__day=day)
             if events_from_day.count() != 0:
                 event_html = '<a class="day existing-day" href="' + events_from_day[0].get_absolute_url() + '">' + str(day)
-                if events_from_day[0].marque:
+                if not simple and events_from_day[0].marque:
                     event_html += " ☑"
                 event_html += "</a>"
             else:
@@ -114,14 +114,14 @@ class Agenda(LocaleHTMLCalendar):
 
             return '<td class="%s">%s</td>' % (self.cssclasses[weekday], event_html)
 
-    def formatweek(self, theyear, themonth, theweek, events):
+    def formatweek(self, theyear, themonth, theweek, events, simple):
         """
         Return a complete week as a table row.
         """
-        s = ''.join(self.formatday(theyear, themonth, d, wd, events) for (d, wd) in theweek)
+        s = ''.join(self.formatday(theyear, themonth, d, wd, events, simple) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
 
-    def formatmonth(self, theyear, themonth, withyear=True):
+    def formatmonth(self, theyear, themonth, withyear=True, simple=False):
         """
         Return a formatted month as a table.
         """
@@ -137,7 +137,7 @@ class Agenda(LocaleHTMLCalendar):
         a(self.formatweekheader())
         a('\n')
         for week in self.monthdays2calendar(theyear, themonth):
-            a(self.formatweek(theyear, themonth, week, events))
+            a(self.formatweek(theyear, themonth, week, events, simple))
             a('\n')
         a('</table>')
         a('\n')

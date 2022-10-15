@@ -8,6 +8,7 @@ from datetime import datetime, date
 from sortedm2m.fields import SortedMultipleChoiceField
 from ckeditor.fields import RichTextFormField
 from string import ascii_uppercase
+from ..utils import Ephemeride
 
 import html.entities
 
@@ -48,8 +49,8 @@ def show_year(agenda, year):
 
 
 @register.simple_tag
-def show_month(agenda, year, month):
-    return mark_safe(agenda.month(year, month))
+def show_month(agenda, year, month, simple):
+    return mark_safe(agenda.month(year, month, simple))
 
 
 def get_url_jour_missing(d):
@@ -387,3 +388,8 @@ def niveau_suivant(niveau):
 @register.filter
 def is_recent_entry(d):
     return d > datetime.fromisoformat('2022-10-08T19:15+02:00')
+
+
+@register.filter
+def is_ephemeride(obj):
+    return isinstance(obj, Ephemeride)

@@ -19,11 +19,6 @@ Le fichier Aidants365
 <p>Vous retrouvez sur ce tableau de bord un accès aux <a href="{% url 'fichier:index' %}">{{ nbfichestotal }} fiches</a> via leurs différents niveaux, catégories, thèmes ou mots-clés.
 Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossairetotal }} entrées</a>.</p>
 <p>Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
-</div>
-<div class="column4 cright">
-    {{ entree_agenda.ephemeride | safe }}
-</div>
-<div class="column4 cmiddle">
     <div class="column long">
         <h2 class="resserre">Niveaux</h2>
         <ul>
@@ -57,6 +52,19 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
         <p>Pas de fiche disponible.</p>
     {% endif %}
     </div>
+</div>
+<div class="column">
+    {% if entree_agenda|is_ephemeride %}
+        {{ entree_agenda.ephemeride | safe }}
+        <p style="text-align: center">il n'y a pas d'entrée d'agenda pour ce jour. Cliquer sur l'éphéméride pour l'éditer.</p>
+    {% else %}
+    <div class="ephemeride_large">
+        <div class="block" id="entete">
+            {% include "fiches/titre_agenda.html" with ephemeride="1" entree=entree_agenda direct_link="1" %}
+        </div>
+        {% include "fiches/contenu_agenda.html" with hx="h3" entree=entree_agenda %}
+    </div>
+    {% endif %}
 </div>
 <div style="clear: both"></div>
 {% endblock %}
