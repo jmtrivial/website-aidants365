@@ -1,6 +1,6 @@
 from django import template
 from django.utils.safestring import mark_safe
-from fichier.models import Categorie, Niveau, EntreeGlossaire, EntreeAgenda, EntetePage
+from fichier.models import Categorie, Niveau, EntreeGlossaire, EntreeAgenda, EntetePage, Ephemeride
 import re
 from fichier.utils import Agenda
 from django.urls import reverse
@@ -8,7 +8,6 @@ from datetime import datetime, date
 from sortedm2m.fields import SortedMultipleChoiceField
 from ckeditor.fields import RichTextFormField
 from string import ascii_uppercase
-from ..utils import Ephemeride
 
 import html.entities
 
@@ -49,8 +48,8 @@ def show_year(agenda, year):
 
 
 @register.simple_tag
-def show_month(agenda, year, month, simple=False):
-    return mark_safe(agenda.month(year, month, simple))
+def show_month(agenda, year, month, simple=False, current=None):
+    return mark_safe(agenda.month(year, month, simple, current))
 
 
 def get_url_jour_missing(d):

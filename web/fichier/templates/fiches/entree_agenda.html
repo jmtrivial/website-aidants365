@@ -23,7 +23,7 @@
 Le fichier Aidants365 — Agenda {{ entree.date }}
 {% endblock %}
 
-
+{% block classe_principale %}page_agenda{% endblock %}
 
 
 {% block entete %}
@@ -33,12 +33,13 @@ Glossaire
 {% block content %}
 
 
-    <div class="block" id="entete">
-        {% include "fiches/navigation_agenda.html" %}
+<div class="ephemeride_large">
+    <div class="block entete" id="entete">
 
         {% include "fiches/titre_agenda.html" with hx="h1" %}
 
     </div>
+
     {% include "fiches/contenu_agenda.html" with hx="h2" %}
 </div>
 {% endblock %}

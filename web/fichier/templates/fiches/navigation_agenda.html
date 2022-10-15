@@ -1,12 +1,13 @@
-{% if un_an_prev %}
+{% if ephemeride.un_an_avant_entree %}
 {% load fichier_extras %}
-<div>
-    <div class="left">{% lien_jour_un_an_avant un_an_prev %}</div>
-    <div class="right">{% lien_jour_un_an_apres un_an_next %}</div>
+<div class="navigation_agenda">
+    <div class="left">{% lien_jour_un_an_avant ephemeride.un_an_avant_entree %}</div>
+    <div class="right">{% lien_jour_un_an_apres ephemeride.un_an_apres_entree %}</div>
     <div style="clear: both"></div>
-<div class="large">
-    <div class="left">{% lien_jour_precedent prev %}</div>
-    <div class="right">{% lien_jour_suivant next %}</div>
+
+    <div class="left">{% lien_jour_precedent ephemeride.prev_entree %}</div>
+    <div class="right">{% lien_jour_suivant ephemeride.next_entree %}</div>
     <div style="clear: both"></div>
 </div>
+
 {% endif %}

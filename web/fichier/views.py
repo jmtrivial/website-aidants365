@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document, EntetePage
+from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document, EntetePage, Ephemeride
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField, Subquery
 from decimal import Decimal
@@ -13,7 +13,7 @@ from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
 import json
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 from django.db import IntegrityError
 from .utils import message_glossaire, message_sortable, to_iso
 from django.db.models.functions import Ceil, Cast, Lower
@@ -30,7 +30,7 @@ from django.contrib.auth.decorators import login_required
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .utils import Agenda, Ephemeride, table, arrayToString
+from .utils import Agenda, table, arrayToString
 
 import logging
 logger = logging.getLogger(__name__)
@@ -89,18 +89,11 @@ def accueil(request):
 
     entrees_agenda = EntreeAgenda.objects.filter(date=timezone.now())
     if entrees_agenda.count() == 0:
-        entree_agenda = Ephemeride(timezone.now())
-        context_suppl = {}
+        ephemeride = Ephemeride(timezone.now())
+        entree_agenda = None
     else:
         entree_agenda = entrees_agenda[0]
-        year_next_month = entree_agenda.date.year
-        month_next_month = entree_agenda.date.month + 1
-        if month_next_month == 12:
-            month_next_month = 1
-            year_next_month += 1
-        entrees = EntreeAgenda.objects.filter((Q(date__year=entree_agenda.date.year) & Q(date__month=entree_agenda.date.month)) | (Q(date__year=year_next_month) & Q(date__month=month_next_month)))
-        aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
-        context_suppl = {'agenda': aa, "year_next_month": year_next_month, "month_next_month": month_next_month}
+        ephemeride = Ephemeride(entree_agenda)
 
     context = {'fiche_list': latest_fiche_list, 'nbfiches': nbfiches,
                'entrees_glossaire_list': latest_entrees_glossaire_list, 'nbentreesglossaire': nbentreesglossaire,
@@ -112,7 +105,7 @@ def accueil(request):
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
                "nbentreesglossairetotal": nbentreesglossairetotal,
-               "entree_agenda": entree_agenda, **context_suppl, 'entete': get_entete("accueil")}
+               "entree_agenda": entree_agenda, "ephemeride": ephemeride, 'entete': get_entete("accueil")}
     return render(request, 'fiches/accueil.html', context)
 
 
@@ -723,8 +716,8 @@ def edit_object(request, classname, id=None, clone=False):
             form = classeform(instance=object, data=request.GET, user=request.user)
             if classname == "agenda" and "date" in request.GET and request.GET["date"]:
                 titre = titre_edition + " " + request.GET["date"]
-                prev_next = _get_pred_next_dates(date.fromisoformat(to_iso(request.GET["date"])))
-                complements = {**complements, **prev_next}
+                ephemeride = Ephemeride(date.fromisoformat(to_iso(request.GET["date"])))
+                complements = {**complements, "ephemeride": ephemeride}
         else:
             form = classeform(instance=object, user=request.user)
 
@@ -773,49 +766,15 @@ def agenda_month_details(request, year, month):
     return render(request, 'fiches/agenda_month_details.html', context)
 
 
-def _get_pred_next_dates(d):
-    prev_date = d - timedelta(days=1)
-    prev_entree = EntreeAgenda.objects.filter(date=prev_date)
-    if len(prev_entree) == 0:
-        prev_entree = prev_date
-    else:
-        prev_entree = prev_entree[0]
-
-    next_date = d + timedelta(days=1)
-    next_entree = EntreeAgenda.objects.filter(date=next_date)
-    if len(next_entree) == 0:
-        next_entree = next_date
-    else:
-        next_entree = next_entree[0]
-
-    un_an_avant_date = date(d.year - 1, d.month, d.day)
-    un_an_avant_entree = EntreeAgenda.objects.filter(date=un_an_avant_date)
-    if len(un_an_avant_entree) == 0:
-        un_an_avant_entree = un_an_avant_date
-    else:
-        un_an_avant_entree = un_an_avant_entree[0]
-
-    un_an_apres_date = date(d.year + 1, d.month, d.day)
-    un_an_apres_entree = EntreeAgenda.objects.filter(date=un_an_apres_date)
-    if len(un_an_apres_entree) == 0:
-        un_an_apres_entree = un_an_apres_date
-    else:
-        un_an_apres_entree = un_an_apres_entree[0]
-
-    return {'prev': prev_entree, 'next': next_entree,
-            'un_an_prev': un_an_avant_entree, 'un_an_next': un_an_apres_entree}
-
-
-def _entree_agenda(request, entree, d):
-    context = {'entree': entree}
-    prev_next = _get_pred_next_dates(d)
-    return render(request, 'fiches/entree_agenda.html', {**context, **prev_next})
+def _entree_agenda(request, entree):
+    context = {'entree': entree, "ephemeride": Ephemeride(entree)}
+    return render(request, 'fiches/entree_agenda.html', context)
 
 
 @login_required
 def entree_agenda_pk(request, id):
     entree = get_object_or_404(EntreeAgenda, pk=id)
-    return _entree_agenda(request, entree, entree.date)
+    return _entree_agenda(request, entree)
 
 
 @login_required
@@ -823,7 +782,7 @@ def entree_agenda(request, year, month, day):
     d = datetime(year, month, day)
     entree = EntreeAgenda.objects.filter(date=d)
     if entree:
-        return _entree_agenda(request, entree[0], d)
+        return _entree_agenda(request, entree[0])
     else:
         return HttpResponseRedirect(reverse("fichier:object_add", args=["agenda"]) + "?date=" + "/".join(map(str, [year, month, day])))
 

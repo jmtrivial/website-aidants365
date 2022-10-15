@@ -227,6 +227,25 @@ a:hover {
     color: #fff;
 }
 
+.lien_next.slim {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.navigation_agenda a {
+    color: #444;
+    font-size: 80%;
+}
+
+.navigation_agenda {
+    margin-bottom: 1em;
+}
+
+.checked {
+    font-size: 140%;
+    float: left;
+}
+
 .lien_next.bouton {
     padding: 0.1em 0.8em;
     background: #122b43;
@@ -636,6 +655,11 @@ a.missing-day {
     opacity: 0.5;
 }
 
+a.today {
+    background: #89b3d2;
+    font-weight: bold;
+}
+
 .month a.missing-day:hover {
     opacity: 1;
     background: #fee;
@@ -679,10 +703,24 @@ a.missing-day {
     margin: 0.1em;
 }
 
+.page_agenda  .ephemeride_large {
+    margin: 0;
+    max-width: 800px;
+    margin: auto;
+}
+
 .ephemeride_large {
     box-shadow: 0 0 1em rgba(0,0,0,0.3);
     padding: 1em;
+    background: #fff;
     margin-left: 1em;
+}
+.ephemeride_large .cal_mois table.month a.today {
+    background: #eee;
+}
+
+.ephemeride_large .cal_mois table.month a.current {
+    border: 1px solid #ccc;
 }
 
 .ephemeride_large div {

@@ -15,21 +15,21 @@ Le fichier Aidants365
 {% endblock %}
 
 {% block entete %}
-<div class="column"><h1>Le fichier Aidants 365</h1>
+<h1>Le fichier Aidants 365</h1>
+<div class="column">
     {% include "fiches/entete.html" %}
 </div>
 <div class="column" style="float: right">
-    {% if entree_agenda|is_ephemeride %}
-        {{ entree_agenda.ephemeride | safe }}
-        <p style="text-align: center">il n'y a pas d'entrée d'agenda pour ce jour. Cliquer sur l'éphéméride pour l'éditer.</p>
-    {% else %}
     <div class="ephemeride_large">
         <div class="block entete">
-            {% include "fiches/titre_agenda.html" with ephemeride="1" entree=entree_agenda direct_link="1" %}
+            {% include "fiches/titre_agenda.html" with hx="h2" simple="1" entree=entree_agenda %}
         </div>
+        {% if not entree_agenda %}
+        <p style="text-align: center">il n'y a pas d'entrée d'agenda pour ce jour. Cliquer sur l'éphéméride pour l'éditer.</p>
+        {% else %}
         {% include "fiches/contenu_agenda.html" with hx="h3" entree=entree_agenda %}
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 <div class="column">
 <p>Nous sommes aujourd'hui le <strong>{{ entree_agenda.date_complete }}</strong>. Sur ce tableau de bord, vous trouverez

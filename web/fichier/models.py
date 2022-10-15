@@ -11,11 +11,14 @@ from django_better_admin_arrayfield.models.fields import ArrayField
 import re
 from django.utils.html import strip_tags
 from django.utils.text import Truncator
-from .utils import Ephemeride, table, arrayToString, Agenda
+from .utils import table, arrayToString, Agenda
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from sortedm2m.fields import SortedManyToManyField
 from .utils import message_glossaire, message_sortable
 import locale
+from datetime import date, timedelta
+from django.utils.translation import gettext as _
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -535,6 +538,109 @@ class EntreeAgenda(models.Model):
                      stop_sel="</span>",
                      max_fragments=50,
                      config='french'))
+
+    def annee_du_mois_precedent(self):
+        return self.date.year
+
+    def mois_du_mois_precedent(self):
+        return self.date.month
+
+    def annee_du_mois_suivant(self):
+        return self.date.year
+
+    def mois_du_mois_suivant(self):
+        return self.date.month
+
+
+class Ephemeride:
+
+    def __init__(self, d=None, url="", empty=True):
+        if isinstance(d, date):
+            self.date = d
+            self.empty = empty
+            self.url = url
+        else:
+            self.entree = d
+            self.date = d.date
+            self.empty = False
+            self.url = self.entree.get_absolute_url()
+
+        self._compute_pred_next_dates()
+        self._build_agenda_for_ephemeride()
+
+    def day(self):
+        return self.date.day
+
+    def month(self):
+        return self.date.month
+
+    def year(self):
+        return self.date.year
+
+    def _ephemeride(self, url):
+        return "<div class=\"ephemeride\"><a href=\"" + url + "\"> \
+            <div class=\"jour_semaine\">" + _(self.date.strftime("%A")) + "</div> \
+            <div class=\"jour\">" + str(self.date.day) + "</div> \
+            <div class=\"mois\">" + _(self.date.strftime("%B")) + "</div> \
+            </a></div>"
+
+    def _build_agenda_for_ephemeride(self):
+
+        if self.date.day > 10:
+            self.year_pred_month = self.date.year
+            self.month_pred_month = self.date.month
+            self.month_next_month = self.date.month + 1
+            if self.month_next_month > 12:
+                self.month_next_month = 1
+                self.year_next_month = self.date.year + 1
+            else:
+                self.year_next_month = self.date.year
+        else:
+            self.year_next_month = self.date.year
+            self.month_next_month = self.date.month
+            self.month_pred_month = self.date.month - 1
+            if self.month_pred_month == 0:
+                self.month_pred_month = 12
+                self.year_pred_month = self.date.year - 1
+            else:
+                self.year_pred_month = self.date.year
+        entrees = EntreeAgenda.objects.filter((Q(date__year=self.year_pred_month) & Q(date__month=self.month_pred_month)) | (Q(date__year=self.year_next_month) & Q(date__month=self.month_next_month)))
+        self.agenda = Agenda(entrees, 0, 'fr_FR.UTF-8')
+
+    def ephemeride(self):
+        if self.empty:
+            return self._ephemeride(url="/fichier/agenda/add/?date=" + str(self.day()) + '/' + "{0:02d}".format(self.month()) + '/' + str(self.year()))
+        else:
+            return self._ephemeride(url=self.url)
+
+    def _compute_pred_next_dates(self):
+        prev_date = self.date - timedelta(days=1)
+        self.prev_entree = EntreeAgenda.objects.filter(date=prev_date)
+        if len(self.prev_entree) == 0:
+            self.prev_entree = prev_date
+        else:
+            self.prev_entree = self.prev_entree[0]
+
+        next_date = self.date + timedelta(days=1)
+        self.next_entree = EntreeAgenda.objects.filter(date=next_date)
+        if len(self.next_entree) == 0:
+            self.next_entree = next_date
+        else:
+            self.next_entree = self.next_entree[0]
+
+        un_an_avant_date = date(self.date.year - 1, self.date.month, self.date.day)
+        self.un_an_avant_entree = EntreeAgenda.objects.filter(date=un_an_avant_date)
+        if len(self.un_an_avant_entree) == 0:
+            self.un_an_avant_entree = un_an_avant_date
+        else:
+            self.un_an_avant_entree = self.un_an_avant_entree[0]
+
+        un_an_apres_date = date(self.date.year + 1, self.date.month, self.date.day)
+        self.un_an_apres_entree = EntreeAgenda.objects.filter(date=un_an_apres_date)
+        if len(self.un_an_apres_entree) == 0:
+            self.un_an_apres_entree = un_an_apres_date
+        else:
+            self.un_an_apres_entree = self.un_an_apres_entree[0]
 
 
 class Document(models.Model):

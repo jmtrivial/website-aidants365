@@ -1,13 +1,13 @@
 # -*- coding: UTF-8 -*-
 
 from calendar import LocaleHTMLCalendar
-from datetime import datetime as dtime, date, time
+from datetime import datetime as dtime, date, time, timedelta
 import datetime
-from django.utils.translation import gettext as _
 import locale
 from django.db.models import Func, F, Value
 from django.db import models
 from django.urls import reverse
+from django.utils import timezone
 
 import html.entities
 
@@ -27,36 +27,6 @@ def arrayToString(field: str):
     )
 
 
-class Ephemeride:
-
-    def __init__(self, d=None, url="", empty=True):
-        self.date = d
-        self.empty = empty
-        self.url = url
-
-    def day(self):
-        return self.date.day
-
-    def month(self):
-        return self.date.month
-
-    def year(self):
-        return self.date.year
-
-    def _ephemeride(self, url):
-        return "<div class=\"ephemeride\"><a href=\"" + url + "\"> \
-            <div class=\"jour_semaine\">" + _(self.date.strftime("%A")) + "</div> \
-            <div class=\"jour\">" + str(self.date.day) + "</div> \
-            <div class=\"mois\">" + _(self.date.strftime("%B")) + "</div> \
-            </a></div>"
-
-    def ephemeride(self):
-        if self.empty:
-            return self._ephemeride(url="/fichier/agenda/add/?date=" + str(self.day()) + '/' + "{0:02d}".format(self.month()) + '/' + str(self.year()))
-        else:
-            return self._ephemeride(url=self.url)
-
-
 class Agenda(LocaleHTMLCalendar):
     month_name = ["", "janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"]
     day_name = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
@@ -64,12 +34,13 @@ class Agenda(LocaleHTMLCalendar):
     def __init__(self, events=None, *args):
         super(Agenda, self).__init__(*args)
         self.events = events
+        self.today = timezone.now()
 
     def year(self, year):
         return self.formatyear(year, 1)
 
-    def month(self, year, month, simple):
-        return self.formatmonth(year, month, simple=simple)
+    def month(self, year, month, simple, current):
+        return self.formatmonth(year, month, simple=simple, current=current)
 
     def formatmonthname(self, theyear, themonth, withyear=True):
         """
@@ -95,7 +66,7 @@ class Agenda(LocaleHTMLCalendar):
         return '<th class="%s">%s</th>' % (
             self.cssclasses_weekday_head[day], day_abbr[day])
 
-    def formatday(self, theyear, themonth, day, weekday, events, simple):
+    def formatday(self, theyear, themonth, day, weekday, events, simple, current):
         """
         Return a day as a table cell.
         """
@@ -104,7 +75,12 @@ class Agenda(LocaleHTMLCalendar):
         else:
             events_from_day = events.filter(date__day=day)
             if events_from_day.count() != 0:
-                event_html = '<a class="day existing-day" href="' + events_from_day[0].get_absolute_url() + '">' + str(day)
+                event_html = '<a class="day existing-day'
+                if self.today.year == theyear and self.today.month == themonth and self.today.day == day:
+                    event_html += ' today'
+                if current is not None and theyear == current.year and themonth == current.month and day == current.day:
+                    event_html += ' current'
+                event_html += '" href="' + events_from_day[0].get_absolute_url() + '">' + str(day)
                 if not simple and events_from_day[0].marque:
                     event_html += " ☑"
                 event_html += "</a>"
@@ -115,14 +91,14 @@ class Agenda(LocaleHTMLCalendar):
 
             return '<td class="%s">%s</td>' % (self.cssclasses[weekday], event_html)
 
-    def formatweek(self, theyear, themonth, theweek, events, simple):
+    def formatweek(self, theyear, themonth, theweek, events, simple, current):
         """
         Return a complete week as a table row.
         """
-        s = ''.join(self.formatday(theyear, themonth, d, wd, events, simple) for (d, wd) in theweek)
+        s = ''.join(self.formatday(theyear, themonth, d, wd, events, simple, current) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
 
-    def formatmonth(self, theyear, themonth, withyear=True, simple=False):
+    def formatmonth(self, theyear, themonth, withyear=True, simple=False, current=None):
         """
         Return a formatted month as a table.
         """
@@ -138,7 +114,7 @@ class Agenda(LocaleHTMLCalendar):
         a(self.formatweekheader())
         a('\n')
         for week in self.monthdays2calendar(theyear, themonth):
-            a(self.formatweek(theyear, themonth, week, events, simple))
+            a(self.formatweek(theyear, themonth, week, events, simple, current))
             a('\n')
         a('</table>')
         a('\n')
