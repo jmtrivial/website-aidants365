@@ -1011,11 +1011,11 @@ only screen and (max-width: 760px),
 
     #legende {
         font-size: 80%;
-        position: relative;
+        position: static;
+        clear: both;
         width: auto;
-        top: auto;
         right: auto;
-        z-index: 1;
+        z-index: -1;
         margin: 0.5em;
         padding: 1em;
         border-radius: 0.2em;

@@ -58,24 +58,24 @@
       {% endif %}
 
       {% load fichier_extras %}
-      <div id="legende">
-        <div class="legende"><span class="avant">▴</span>Légende<span class="apres">▴</span></div>
-        <div class="entrees">
-          <div>{% get_carre_colore_A %}<span class="titre">Niveau {% get_nom_niveau_A %}</span>
-            <span class="liste">{% liste_niveaux "A" %}</span>
-          </div>
-          <div>{% get_carre_colore_B %}<span class="titre">Niveau {% get_nom_niveau_B %}</span>
-            <span class="liste">{% liste_niveaux "B" %}</span>
-          </div>
-          <div>{% get_carre_colore_C %}<span class="titre">Niveau {% get_nom_niveau_C %}</span>
-            <span class="liste">{% liste_niveaux "C" %}</span>
-          </div>
-        </div>
-        <div class="fin"></div>
-      </div>  
+        
     {% block content %}{% endblock %}
 
-
+    <div id="legende">
+      <div class="legende"><span class="avant">▴</span>Légende<span class="apres">▴</span></div>
+      <div class="entrees">
+        <div>{% get_carre_colore_A %}<span class="titre">Niveau {% get_nom_niveau_A %}</span>
+          <span class="liste">{% liste_niveaux "A" %}</span>
+        </div>
+        <div>{% get_carre_colore_B %}<span class="titre">Niveau {% get_nom_niveau_B %}</span>
+          <span class="liste">{% liste_niveaux "B" %}</span>
+        </div>
+        <div>{% get_carre_colore_C %}<span class="titre">Niveau {% get_nom_niveau_C %}</span>
+          <span class="liste">{% liste_niveaux "C" %}</span>
+        </div>
+      </div>
+      <div class="fin"></div>
+    </div>
 
   </div>
   </div>
