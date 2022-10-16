@@ -1,5 +1,5 @@
 <a class="card_edit" href="{% url 'fichier:object_change' critere_name critere.id %}">éditer</a>
-{% if not critere_name == "niveau" %}
+{% if not critere_name == "niveau"  and not critere_name == "auteur" %}
     {% with 'fichier:'|add:critere_name|add:'_delete' as url_address %}
     <a class="card_edit" id="delete_button" href="{% url url_address critere.id %}">supprimer</a>
     {% endwith %}
