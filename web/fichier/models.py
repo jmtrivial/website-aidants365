@@ -48,7 +48,16 @@ class EntetePage(models.Model):
     texte = RichTextField(verbose_name="Texte de l'entête", config_name='main_ckeditor', blank=True)
 
     def page_url_name(page_name):
-        return "fichier:" + page_name
+        if page_name.startswith("agenda/"):
+            return "fichier:agenda_month"
+        else:
+            return "fichier:" + page_name
+
+    def page_url_parameters(page_name):
+        if page_name.startswith("agenda/"):
+            return [int(x) for x in page_name.split("/")[1:3]]
+        else:
+            return []
 
     def edit_url(self):
         return reverse("fichier:object_change", kwargs={'classname': 'entete_page', 'id': self.pk})
@@ -57,11 +66,20 @@ class EntetePage(models.Model):
         return reverse("fichier:object_add", kwargs={'classname': 'entete_page'}) + "?page=" + page_name
 
     def nom_page(page):
-        nom_page = {"index": "des fiches", "desk": "du desk", "categories": "des catégories",
-                    "glossaire": "du glossaire", "accueil": "de l'accueil",
-                    "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda",
-                    "liens_sortants": "des liens sortants"}
-        return nom_page[page]
+        if page.startswith("agenda/"):
+            elements = page.split("/")
+            mois = Agenda.month_name[int(elements[2])]
+            annee = elements[1]
+            if mois[0] in ['a', 'e', 'i', 'o', 'u']:
+                return "du mois d'" + mois + " " + annee
+            else:
+                return "du mois de " + mois + " " + annee
+        else:
+            nom_page = {"index": "des fiches", "desk": "du desk", "categories": "des catégories",
+                        "glossaire": "du glossaire", "accueil": "de l'accueil",
+                        "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda",
+                        "liens_sortants": "des liens sortants"}
+            return nom_page[page]
 
     def __str__(self):
         return "la page " + EntetePage.nom_page(self.page)

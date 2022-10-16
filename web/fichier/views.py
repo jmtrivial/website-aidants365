@@ -675,10 +675,12 @@ def edit_object(request, classname, id=None, clone=False):
 
     if request.method == 'POST':
 
+        params_reverse_url = []
         simple_reverse = False
         if reverse_url == "^":
             simple_reverse = True
             reverse_url = EntetePage.page_url_name(request.POST["page"])
+            params_reverse_url = EntetePage.page_url_parameters(request.POST["page"])
         if reverse_url_cancel == "^":
             reverse_url_cancel = EntetePage.page_url_name(request.POST["page"])
 
@@ -688,9 +690,9 @@ def edit_object(request, classname, id=None, clone=False):
                 if not simple_reverse:
                     return HttpResponseRedirect(reverse(reverse_url, args=[id]))
                 else:
-                    return HttpResponseRedirect(reverse(reverse_url))
+                    return HttpResponseRedirect(reverse(reverse_url, args=params_reverse_url))
             else:
-                return HttpResponseRedirect(reverse(reverse_url_cancel))
+                return HttpResponseRedirect(reverse(reverse_url_cancel, args=params_reverse_url))
         else:
             logger.warning(request.POST)
             form = classeform(instance=object, data=request.POST, user=request.user)
@@ -702,7 +704,7 @@ def edit_object(request, classname, id=None, clone=False):
                     message = message_edit_success % object
                 messages.success(request, message)
                 if single_reverse or simple_reverse:
-                    return HttpResponseRedirect(reverse(reverse_url))
+                    return HttpResponseRedirect(reverse(reverse_url, args=params_reverse_url))
                 else:
                     return HttpResponseRedirect(reverse(reverse_url, args=[object.id]))
             else:
@@ -738,7 +740,7 @@ def edit_object(request, classname, id=None, clone=False):
 
 @login_required
 def agenda_current_month(request):
-    return agenda_month(request, timezone.now().year, timezone.now().month, entete=True)
+    return agenda_month(request, timezone.now().year, timezone.now().month)
 
 
 @login_required
@@ -750,19 +752,17 @@ def agenda_year(request, year):
 
 
 @login_required
-def agenda_month(request, year, month, entete=False):
+def agenda_month(request, year, month):
     entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month)
     aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
-    context = {'agenda': aa, "year": year, "month": month}
-    if entete:
-        context["entete"] = get_entete("agenda")
+    context = {'agenda': aa, "year": year, "month": month, "entete": get_entete("agenda/" + str(year) + "/" + str(month) + "/")}
     return render(request, 'fiches/agenda_month.html', context)
 
 
 @login_required
 def agenda_month_details(request, year, month):
     entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month).order_by("date")
-    context = {'entrees': entrees, "year": year, "month": month}
+    context = {'entrees': entrees, "year": year, "month": month, "entete": get_entete("agenda/" + str(year) + "/" + str(month) + "/")}
     return render(request, 'fiches/agenda_month_details.html', context)
 
 
