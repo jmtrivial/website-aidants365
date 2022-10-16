@@ -73,7 +73,7 @@ class Agenda(LocaleHTMLCalendar):
         if day == 0:
             return '<td class="noday">&nbsp;</td>'  # day outside month
         else:
-            events_from_day = events.filter(date__day=day)
+            events_from_day = events.filter(date__day=day, date__month=themonth, date__year=theyear)
             if events_from_day.count() != 0:
                 event_html = '<a class="day existing-day'
                 if self.today.year == theyear and self.today.month == themonth and self.today.day == day:
