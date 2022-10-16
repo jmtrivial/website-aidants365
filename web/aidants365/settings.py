@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'django_better_admin_arrayfield',
     "django.contrib.postgres",
     'sortedm2m',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

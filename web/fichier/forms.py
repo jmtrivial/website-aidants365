@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 from django.utils.safestring import mark_safe
 from django.utils.html import conditional_escape
 from django_better_admin_arrayfield.forms.widgets import DynamicArrayWidget
+import re
 
 import logging
 logger = logging.getLogger(__name__)
@@ -74,7 +75,7 @@ class FicheForm(forms.ModelForm):
 
         localized_fields = ('date_creation', 'date_derniere_modification',)
 
-        fields = '__all__'
+        exclude = ('urls', )
 
         widgets = {
             "categories_libres": MySortedCheckboxSelectMultiple,
@@ -127,7 +128,7 @@ class EntreeGlossaireForm(WithUserForm):
     class Meta:
         model = EntreeGlossaire
 
-        exclude = ('date_derniere_modification', )
+        exclude = ('date_derniere_modification', 'urls', )
 
         widgets = {
             "formes_alternatives": MyDynamicArrayWidget
@@ -151,7 +152,7 @@ class EntreeAgendaForm(WithUserForm):
     class Meta:
         model = EntreeAgenda
 
-        exclude = ('date_derniere_modification', )
+        exclude = ('date_derniere_modification', "urls")
 
         widgets = {
             "themes": MySortedCheckboxSelectMultiple,

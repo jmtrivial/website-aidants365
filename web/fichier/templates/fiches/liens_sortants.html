@@ -1,0 +1,71 @@
+{% extends "fiches/page.html" %}
+
+
+{% block entete_menu %}
+{% with "liens_sortants" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Le fichier Aidants365 - liens sortants
+{% endblock %}
+
+{% block entete %}
+Toutes les fiches
+{% endblock %}
+
+{% block content %}
+{% load fichier_extras %}
+
+<div class="block" id="entete">
+    <h1>Liens sortants</h1>
+    {% include "fiches/entete.html" %}
+</div>
+
+<div class="block">
+    <h2>Liens dans les fiches</h2>
+    <ul>
+        {% for element in fiches %}
+        <li><a href="{{ element.get_absolute_url }}">{{ element }}</a>&nbsp;: 
+            <ul>
+                {% for url in element.urls %}
+                    <li><a href="{{ url }}">{{ url }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </li>
+    {% endfor %}
+    </ul>
+    <h2>Liens dans les entrées d'agenda</h2>
+    <ul>
+        {% for element in entrees_agenda %}
+        <li><a href="{{ element.get_absolute_url }}">{{ element }}</a>&nbsp;: 
+            <ul>
+                {% for url in element.urls %}
+                    <li><a href="{{ url }}">{{ url }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </li>
+    {% endfor %}
+    </ul>
+
+    <h2>Liens dans les entrées du glossaire</h2>
+    <ul>
+    {% for element in entrees_glossaire %}
+    <li><a href="{{ element.get_absolute_url }}">{{ element }}</a>&nbsp;: 
+        <ul>
+                {% for url in element.urls %}
+                    <li><a href="{{ url }}">{{ url }}</a></li>
+                {% endfor %}
+            </ul>
+
+        </li>
+    {% endfor %}
+    </ul>
+</div>
+
+{% endblock %}

@@ -1052,3 +1052,13 @@ def modifications_page(request, key):
 @login_required
 def simple_modifications(request, classname):
     return simple_modifications_page(request, classname, 1)
+
+
+@login_required
+def liens_sortants(request):
+    entrees_agenda = EntreeAgenda.objects.filter(urls__len__gt=0)
+    entrees_glossaire = EntreeGlossaire.objects.filter(urls__len__gt=0)
+    fiches = Fiche.objects.filter(urls__len__gt=0)
+
+    return render(request, "fiches/liens_sortants.html", {"entrees_agenda": entrees_agenda,
+                  "entrees_glossaire": entrees_glossaire, "fiches": fiches, "entete": get_entete("liens_sortants")})

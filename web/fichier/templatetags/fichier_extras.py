@@ -258,7 +258,7 @@ def ajouter_glossaire(texte, liens):
 @register.filter
 def ajouter_liens(texte):
     # on ajoute les liens des urls si elles existent
-    pat1 = re.compile(r"(^|[\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)", re.IGNORECASE | re.DOTALL)
+    pat1 = re.compile(r"(^|\<p\>|[\n ])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)", re.IGNORECASE | re.DOTALL)
     return pat1.sub(r'\1<a href="\2">\2</a>', texte)
 
 

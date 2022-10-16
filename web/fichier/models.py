@@ -59,7 +59,8 @@ class EntetePage(models.Model):
     def nom_page(page):
         nom_page = {"index": "des fiches", "desk": "du desk", "categories": "des catégories",
                     "glossaire": "du glossaire", "accueil": "de l'accueil",
-                    "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda"}
+                    "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda",
+                    "liens_sortants": "des liens sortants"}
         return nom_page[page]
 
     def __str__(self):
@@ -316,6 +317,9 @@ class Fiche(models.Model):
     en_savoir_plus = RichTextField(verbose_name="En savoir plus", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
     fiches_connexes = SortedManyToManyField("self", verbose_name="Fiches connexes", blank=True, help_text=message_sortable)
 
+    # url (extraites automatiquement au moment de publier)
+    urls = ArrayField(models.URLField(verbose_name="Adresse", max_length=1024, blank=True), blank=True, null=True)
+
     class Meta:
         verbose_name = "Fiche"
         verbose_name_plural = "Fiches"
@@ -402,6 +406,9 @@ class EntreeGlossaire(models.Model):
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     definition = RichTextField(verbose_name="Définition", config_name='main_ckeditor', blank=True)
+
+    # url (extraites automatiquement au moment de publier)
+    urls = ArrayField(models.URLField(verbose_name="Adresse", max_length=1024, blank=True), blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
@@ -501,6 +508,9 @@ class EntreeAgenda(models.Model):
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True, help_text=message_sortable)
+
+    # url (extraites automatiquement au moment de publier)
+    urls = ArrayField(models.URLField(verbose_name="Adresse", max_length=1024, blank=True), blank=True, null=True)
 
     def get_absolute_url(self):
         return reverse('fichier:entree_agenda', kwargs={'year': self.date.year, 'month': self.date.month, 'day': self.date.day})
@@ -686,6 +696,21 @@ class Document(models.Model):
 def my_callback_pre_save(sender, instance, **kwargs):
     if instance.date_derniere_modification == instance.__original_date_derniere_modification:
         instance.date_derniere_modification = timezone.now()
+    instance.urls = build_list_urls(instance.url + " " + instance.presentation + " " + instance.problematique + " " + instance.quatrieme_de_couverture + " " + instance.plan_du_site + " " + instance.focus + " " + instance.reserves + " " + instance.lesplus + " " + instance.en_savoir_plus)
+
+
+def build_list_urls(txt):
+    return sorted(list(set([x[1] for x in re.findall(r"(^|\<p\>|[\n \"])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)", txt)])))
+
+
+@receiver(pre_save, sender=EntreeAgenda)
+def my_callback_pre_save_urls_agenda(sender, instance, **kwargs):
+    instance.urls = build_list_urls(instance.notes)
+
+
+@receiver(pre_save, sender=EntreeGlossaire)
+def my_callback_pre_save_urls_glossaire(sender, instance, **kwargs):
+    instance.urls = build_list_urls(instance.definition)
 
 
 @receiver(post_init, sender=Fiche)

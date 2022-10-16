@@ -42,7 +42,7 @@ Le fichier Aidants365
     <a href="{% url 'fichier:agenda' %}"> toutes les entrées de l'agenda</a>, ainsi 
      qu'aux <a href="{% url 'fichier:index' %}">{{ nbfichestotal }} fiches</a> via leurs différents niveaux, catégories, thèmes ou mots-clés.
 Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossairetotal }} entrées</a>.</p>
-<p style="font-size: 80%">Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
+<p>Retrouvez tous les liens sortants documentés sur la page <a href="{% url 'fichier:liens_sortants' %}">liens sortants</a>.</p>
     <div class="column long">
         <h2 class="resserre">Niveaux</h2>
         <ul>
@@ -77,6 +77,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
     {% endif %}
     </div>
 </div>
+<p style="font-size: 80%">Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
 <div style="clear: both"></div>
 {% endcache %}
 
