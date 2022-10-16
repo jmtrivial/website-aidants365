@@ -954,6 +954,9 @@ a.today {
 }
 
 @media only screen and (max-width: 800px) {
+    .date_entete {
+        font-size: 90%;
+    }
     .cols3 {
         columns: 2;
     }
