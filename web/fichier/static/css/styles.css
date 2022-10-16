@@ -270,11 +270,9 @@ a:hover {
 }
 
 .entete_page {
-    margin: 1.5em 0.5em;
+    margin: 0.5em 0.2em;
     clear: both;
     padding: 0.5em;
-    background: #f5f5f5;
-    border-radius: .5em;
 }
 
 .messagelist .lien_next.bouton {
@@ -713,12 +711,39 @@ a.today {
     margin: auto;
 }
 
-.ephemeride_large {
+.ephemeride_large, .entete_mois {
     box-shadow: 0 0 1em rgba(0,0,0,0.3);
     padding: 1em;
     background: #fff;
     margin-left: 1em;
 }
+.entete_mois {
+    margin-left: 0;
+    margin-bottom: 0.5em;
+}
+
+.date_entete {
+    width: 8em;
+    float: left;
+    height: 4em;
+    padding: 1em 0;
+    margin-right: 1em;
+}
+.date_entete div {
+    text-align: center;
+}
+.mois_entete {
+    color: #222;
+    font-variant: small-caps;
+    font-size: 120%;
+}
+.annee_entete {
+    color: #cc4444;
+    font-size: 160%;
+    font-weight: bold;
+    margin-top: 0.2em;
+}
+
 .ephemeride_large .cal_mois table.month a.today {
     background: #eee;
 }

@@ -1,0 +1,14 @@
+{% load fichier_extras %}
+{% if entete_mois %}
+<div class="entete_mois">
+    {% if entete_mois_edit %}
+    <div class="lien_next bouton"><a title="éditer" href="{% url_entete_edit entete_mois %}">éditer </a></div>
+    {% endif %}
+    <div class="date_entete">
+        <div class="mois_entete">{{ entete_mois_mois }}</div>    
+        <div class="annee_entete">{{ entete_mois_annee }}</div>
+    </div>
+    <div class="contenu_entete">{% entete_texte entete_mois %}</div>
+    <div style="clear: both"></div>
+</div>
+{% endif %}

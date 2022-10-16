@@ -87,7 +87,8 @@ def accueil(request):
     categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom__unaccent")[:nbcategorieslibres]
     nbcategorieslibres = categories_libres.count()
 
-    entrees_agenda = EntreeAgenda.objects.filter(date=timezone.now())
+    aujourdhui = timezone.now()
+    entrees_agenda = EntreeAgenda.objects.filter(date=aujourdhui)
     if entrees_agenda.count() == 0:
         ephemeride = Ephemeride(timezone.now())
         entree_agenda = None
@@ -105,7 +106,9 @@ def accueil(request):
                "motcles": motcles,
                "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
                "nbentreesglossairetotal": nbentreesglossairetotal,
-               "entree_agenda": entree_agenda, "ephemeride": ephemeride, 'entete': get_entete("accueil")}
+               "entree_agenda": entree_agenda, "ephemeride": ephemeride, 'entete': get_entete("accueil"),
+               "entete_mois": get_entete("agenda/" + str(aujourdhui.year) + "/" + ("0" + str(aujourdhui.month))[-2:] + "/"),
+               "entete_mois_annee": aujourdhui.year, "entete_mois_mois": Agenda.month_name[aujourdhui.month]}
     return render(request, 'fiches/accueil.html', context)
 
 
@@ -755,7 +758,9 @@ def agenda_year(request, year):
 def agenda_month(request, year, month):
     entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month)
     aa = Agenda(entrees, 0, 'fr_FR.UTF-8')
-    context = {'agenda': aa, "year": year, "month": month, "entete": get_entete("agenda/" + str(year) + "/" + str(month) + "/")}
+    context = {'agenda': aa, "year": year, "month": month,
+               "entete_mois": get_entete("agenda/" + str(year) + "/" + str(month) + "/"),
+               "entete_mois_annee": year, "entete_mois_mois": Agenda.month_name[int(month)]}
     return render(request, 'fiches/agenda_month.html', context)
 
 
