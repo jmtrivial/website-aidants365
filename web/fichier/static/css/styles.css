@@ -703,6 +703,10 @@ a.today {
     margin: 0.1em;
 }
 
+.page_agenda  #content {
+    padding: 1em;
+}
+
 .page_agenda  .ephemeride_large {
     margin: 0;
     max-width: 800px;
