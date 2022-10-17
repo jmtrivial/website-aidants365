@@ -454,6 +454,7 @@ def rechercher(request):
             results_categories_libres = CategorieLibre.rechercher(recherche)
             results_categories = Categorie.rechercher(recherche)
             results_documents = Document.rechercher(recherche)
+            results_entetes = EntetePage.rechercher(recherche)
 
     return render(request, 'fiches/rechercher.html', {'results_fiches': results_fiches,
                                                       'results_glossaire': results_glossaire,
@@ -463,6 +464,7 @@ def rechercher(request):
                                                       'results_categories': results_categories,
                                                       'results_categories_libres': results_categories_libres,
                                                       'results_documents': results_documents,
+                                                      'results_entetes': results_entetes,
                                                       'recherche': recherche,
                                                       "entete": get_entete("motscles")})
 

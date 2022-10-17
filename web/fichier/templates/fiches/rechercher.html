@@ -144,7 +144,25 @@ Toutes les fiches
         </ol>
     {% endif %}
 
-{% endif %}
+
+    {% if results_entetes|length > 0 %}
+        <h2>{{ results_entetes.count }} 
+            {% if results_entetes|length > 1 %}
+                entêtes
+            {% else %}
+                entête
+            {% endif %}
+            correspondant à « {{ recherche }} »</h2>
+        <ol>
+        {% for entree in results_entetes %}
+            <li><strong><a href="{{ entree.url }}?search={{ recherche }}">Entête {{ entree.get_nom_page }}</a></strong>
+                <p class="preview_highlight">{{ entree.texte_hl | safe }}</p>
+            </li>
+        {% endfor %}
+        </ol>
+    {% endif %}
+
+    {% endif %}
 
     </div>
 </div>

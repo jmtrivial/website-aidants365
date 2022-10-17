@@ -47,6 +47,15 @@ class EntetePage(models.Model):
     page = models.CharField(unique=True, max_length=32)
     texte = RichTextField(verbose_name="Texte de l'entête", config_name='main_ckeditor', blank=True)
 
+    def url_name(self):
+        return EntetePage.page_url_name(self.page)
+
+    def url_parameters(self):
+        return EntetePage.page_url_parameters(self.page)
+
+    def url(self):
+        return reverse(self.url_name(), args=self.url_parameters())
+
     def page_url_name(page_name):
         if page_name.startswith("agenda/"):
             return "fichier:agenda_month"
@@ -64,6 +73,9 @@ class EntetePage(models.Model):
 
     def create_url(page_name):
         return reverse("fichier:object_add", kwargs={'classname': 'entete_page'}) + "?page=" + page_name
+
+    def get_nom_page(self):
+        return EntetePage.nom_page(self.page)
 
     def nom_page(page):
         if page.startswith("agenda/"):
@@ -83,6 +95,23 @@ class EntetePage(models.Model):
 
     def __str__(self):
         return "la page " + EntetePage.nom_page(self.page)
+
+    def rechercher(search_text):
+        from django.contrib.postgres.search import SearchVector
+        from django.contrib.postgres.search import SearchQuery
+
+        if not search_text:
+            return None
+
+        search_vectors = SearchVector('texte', weight='A', config='french')
+        search_query = SearchQuery(search_text, config='french')
+        return EntetePage.objects.annotate(search=search_vectors).filter(search=search_query). \
+            annotate(texte_hl=SearchHeadline("texte",
+                     search_query,
+                     start_sel="<span class=\"highlight\">",
+                     stop_sel="</span>",
+                     max_fragments=50,
+                     config='french'))
 
 
 class Niveau(models.Model):
