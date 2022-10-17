@@ -804,7 +804,7 @@ class FichesViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, ListView):
     def get_pdf_filename(self):
         from django.utils import timezone
         return 'fiches 365 {at}.pdf'.format(
-            at=str(timezone.now().strftime("%d-%m-%Y %H:%M:%S")),
+            at=str(timezone.now().strftime("%d-%m-%Y %H:%M")),
         )
 
 

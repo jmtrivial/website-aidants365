@@ -76,9 +76,10 @@ Toutes les fiches
             a.href = file;
             a.download = filename;
             a.click();
-            document.getElementById("dl_message").className = "";
             window.URL.revokeObjectURL(file);
         }
+        // TODO: show an error message if not ok
+        document.getElementById("dl_message").className = "";
     }
     
     document.getElementById("dl_pdf").addEventListener('click', event => {
