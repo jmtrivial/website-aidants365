@@ -21,10 +21,12 @@ from django.core.paginator import Paginator
 from itertools import chain
 from django.utils.safestring import mark_safe
 
-from django.views.generic import DetailView
+
+from django.views.generic import DetailView, ListView
 
 from django_weasyprint import WeasyTemplateResponseMixin
 from django_weasyprint.views import WeasyTemplateResponse
+from weasyprint import HTML
 
 from django.contrib.auth.decorators import login_required
 
@@ -790,6 +792,18 @@ def entree_agenda(request, year, month, day):
         return _entree_agenda(request, entree[0])
     else:
         return HttpResponseRedirect(reverse("fichier:object_add", args=["agenda"]) + "?date=" + "/".join(map(str, [year, month, day])))
+
+
+class FichesViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, ListView):
+    template_name = 'fiches/fiches_pdf.html'
+
+    model = Fiche
+
+    def get_pdf_filename(self):
+        from django.utils import timezone
+        return 'fiches 365 {at}.pdf'.format(
+            at=str(timezone.now().strftime("%d-%m-%Y %H:%M:%S")),
+        )
 
 
 class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
