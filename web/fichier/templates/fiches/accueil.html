@@ -17,8 +17,8 @@ Le fichier Aidants365
 
 {% block entete %}
 <h1>Le fichier Aidants 365</h1>
+<div class="soustitre">{% include "fiches/entete.html" %}</div>
 <div class="column">
-    {% include "fiches/entete.html" %}
 
     {% include "fiches/entete_mois.html" %}
 </div>
@@ -80,8 +80,8 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
     {% endif %}
     </div>
 </div>
-<p style="font-size: 80%">Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
 <div style="clear: both"></div>
+<p style="font-size: 80%">Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
 {% endcache %}
 
 {% endblock %}
@@ -172,7 +172,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% cache 500 frontpage_droite1 %}
 <h2>Nuage de mots-clés</h2>
 {% if motcles %}
-    {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" %}    
+    {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" uniquement_actifs="1" %}    
 
     <div class="suite">Voir <a href="{% url 'fichier:motscles_nuage' %}">tous les mots-clés ▸</a></div>
 {% else %}
