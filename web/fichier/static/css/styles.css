@@ -181,18 +181,47 @@ a:hover {
     padding: 0;
 }
 
-#menubar ul>li {
+#menubar ul>li, #menubar .sousmenu span.entete {
     display: block;
     height: 100%;
     float: left;
 }
 
-#menubar ul>li:hover, #menubar .bouton:hover,
-#menubar ul>li.actif {
+#menubar ul>li:hover:not(.sousmenu), #menubar .bouton:hover:not(.sousmenu),
+#menubar ul>li.actif:not(.sousmenu), #menubar .sousmenu.actif span {
     background: #2a6098;
 }
 
-#menubar ul>li>a {
+#menubar .sousmenu:hover ul {
+    display: block;
+    width: auto;
+    position: fixed;
+    top: 2.5em;
+    z-index: 1000;
+    background: #122b43;
+    border-bottom: 3px solid #2a6098;
+    transition: height 0.1s ease;
+    height: 2.5em;
+}
+
+#menubar .sousmenu ul li {
+    display: none;
+}
+
+
+#menubar .sousmenu:hover ul li {
+    display: inline-block;
+    height: 2.5em;
+    margin-top: 3px;
+}
+
+#menubar .sousmenu ul {
+    height: 0px;
+    width: 0;
+    transition: height 0.1s ease;
+}
+
+#menubar ul>li>a, #menubar .sousmenu span.entete {
     text-decoration: none;
     color: inherit;
     display: block;
@@ -201,6 +230,14 @@ a:hover {
     padding: 0 1em;
     line-height: 2.5em;
     cursor: pointer;
+}
+
+#menubar .sousmenu span.entete {
+    cursor: default;
+}
+
+#menubar .prive {
+    float: right;
 }
 
 #menubar .espace-gauche {
@@ -998,7 +1035,6 @@ a.today {
         display: block;
     }
 
-
     #ajouter_fiche span {
         display: none;
     }
@@ -1061,9 +1097,7 @@ only screen and (max-width: 760px),
 	
 	/* Hide table headers (but not display: none;, for accessibility) */
 	thead tr:not(.ephemeride_large thead tr) { 
-		position: absolute;
-		top: -9999px;
-		left: -9999px;
+        display: none;
 	}
 
     .tableau_agenda tbody :nth-child(2) {
@@ -1082,22 +1116,16 @@ only screen and (max-width: 760px),
 		padding-left: 50%; 
 	}
 	
-	td:not(.ephemeride_large td):before { 
-		/* Now like a table header */
-		position: absolute;
-		/* Top/left values mimic padding */
-		top: 6px;
-		left: 6px;
-		width: 45%; 
-		padding-right: 10px; 
-		white-space: nowrap;
-	}
+	/*td:not(.ephemeride_large td):before { 
+        display: none;
+	}*/
 
     
-	.distribution td:nth-of-type(1):before { content: "théorique"; }
-	.distribution td:nth-of-type(2):before { content: "pratique"; }
-	.distribution td:nth-of-type(3):before { content: "opérationnel"; }
-	.distribution td:nth-of-type(4):before { content: "total"; }
+	.distribution td:nth-of-type(1):before { content: "théorique: "; }
+	.distribution td:nth-of-type(2):before { content: "pratique: "; }
+	.distribution td:nth-of-type(3):before { content: "opérationnel: "; }
+	.distribution td:nth-of-type(4):before { content: "total: "; }
+    .distribution td:nth-of-type(5):before { content: "agenda: "; }
 }
 
 @media only screen and (max-width: 600px) {

@@ -13,6 +13,41 @@
     background: #122b43;
 }
 
+#menubar.responsive .sousmenu,
+#menubar.responsive .sousmenu:hover {
+    position: static;
+    display: block;
+    height: fit-content;
+    float: none;
+}
+
+#menubar.responsive .sousmenu ul, 
+#menubar.responsive .sousmenu:hover ul,
+#menubar.responsive .sousmenu span {
+    height: auto;
+    text-align: left;
+    position: static;
+    display: block;
+    width: 100%;
+    transition: none;
+    padding-top: 0;
+    clear: both;
+    border: 0;
+}
+
+#menubar.responsive .sousmenu span {
+    padding-left: 0.5em;
+}
+
+#menubar.responsive .sousmenu ul li, 
+#menubar.responsive .sousmenu:hover ul li {
+    display: block;
+    margin-top: 0;
+    width: auto;
+    height: 100%;
+    padding-left: 1.5em;
+}
+
   
 @media screen and (max-width: 850px) {
     #menubar.responsive {
@@ -39,6 +74,5 @@
     #menubar.responsive li.bouton {
         display: inline-block;
         margin: 0.5em;
-        
     }
 }
