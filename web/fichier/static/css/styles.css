@@ -755,16 +755,28 @@ a.today {
 }
 .date_entete:hover {
     box-shadow: 0 0 0.1em rgba(0,0,0,0.3);
+    background: #fdfdfd;
 }
+
+.date_entete:hover .annee_entete {
+    color: #c00;
+}
+
+.date_entete:hover .mois_entete {
+    color: #000;
+}
+
 
 .date_entete div {
     text-align: center;
 }
+
 .mois_entete {
     color: #222;
     font-variant: small-caps;
     font-size: 120%;
 }
+
 .annee_entete {
     color: #cc4444;
     font-size: 160%;
