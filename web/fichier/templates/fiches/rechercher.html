@@ -71,6 +71,10 @@ Toutes les fiches
     {% if results_document|length == 0 %}
     <p>Aucun document du <a href="{% url 'fichier:desk' %}">desk</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
     {% endif %} 
+
+    {% if results_entetes|length == 0 %}
+    <p>Aucune entête ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %}
     
     {% if results_fiches|length > 0 %}
         <h2>{{ results_fiches.count }} 
@@ -155,7 +159,7 @@ Toutes les fiches
             correspondant à « {{ recherche }} »</h2>
         <ol>
         {% for entree in results_entetes %}
-            <li><strong><a href="{{ entree.url }}?search={{ recherche }}">Entête {{ entree.get_nom_page }}</a></strong>
+            <li><strong><a href="{{ entree.get_absolute_url }}?search={{ recherche }}">Entête {{ entree.get_nom_page }}</a></strong>
                 <p class="preview_highlight">{{ entree.texte_hl | safe }}</p>
             </li>
         {% endfor %}

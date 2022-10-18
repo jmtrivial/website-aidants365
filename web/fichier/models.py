@@ -53,7 +53,7 @@ class EntetePage(models.Model):
     def url_parameters(self):
         return EntetePage.page_url_parameters(self.page)
 
-    def url(self):
+    def get_absolute_url(self):
         return reverse(self.url_name(), args=self.url_parameters())
 
     def page_url_name(page_name):
