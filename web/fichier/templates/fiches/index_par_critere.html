@@ -51,7 +51,7 @@ avec le mot-clé {{ critere_nom }}
 
         {% for niveau in niveau_list %}
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
-            <ul>
+            <ul class="no_puces">
             {% for fiche in niveau.list %}
                 {% with "fichier:index_"|add:critere_name|add:"_detail" as template_name %}
                 <li id="fiche{{ fiche.id }}">{{ fiche.niveau.couleur | carre_colore }} <a href="{% url template_name critere.id fiche.id %}">{{ fiche }}</a></li>

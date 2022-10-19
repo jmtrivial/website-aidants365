@@ -41,7 +41,7 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 
         {% for niveau in niveau_list %}
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
-            <ul>
+            <ul class="no_puces">
             {% for fiche_local in niveau.list %}
                 {% if fiche_local.id == fiche.id %}
                     {% with "fichier:index_"|add:critere_name as template_name %}

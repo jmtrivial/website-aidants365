@@ -78,7 +78,7 @@ Le fichier Aidants365
 
 <h3>Fiches</h3>
 {% if fiche_list %}
-    <ul>
+    <ul class="no_puces">
     {% for fiche in fiche_list %}
         <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a>
         </li>

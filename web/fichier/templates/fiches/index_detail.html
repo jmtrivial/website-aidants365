@@ -34,7 +34,7 @@ Le fichier Aidants365 — les fiches
 
         {% for niveau in niveau_list %}
             <h2>Fiches de niveau {{ niveau.grouper }}</h2>
-            <ul>{{ fichier_local.id }} {{ fichier.id }}
+            <ul class="no_puces">{{ fichier_local.id }} {{ fichier.id }}
             {% for fiche_local in niveau.list %}
                 {% if fiche_local.id == fiche.id %}
                     <li id="fiche{{ fiche_local.id }}">{{ fiche_local.niveau.couleur | carre_colore }} <a href="{% url 'fichier:index' %}#fiche{{ fiche_local.id }}" style="font-weight: bold">{{ fiche_local }}</a></li>

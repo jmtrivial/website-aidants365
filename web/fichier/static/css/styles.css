@@ -411,9 +411,9 @@ a:hover {
     box-shadow: 0 0 0.1em rgba(0,0,0,0.1);
 }
 
-.accueil_page .block ul, .detail_page  .block ul {
+ul.no_puces {
     list-style: none;
-    padding: 0 0.5em;
+    padding: 0 1.2em;
 }
 
 .accueil_page #entete>div:nth-child(1) p {
