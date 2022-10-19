@@ -121,6 +121,22 @@ class Niveau(models.Model):
         B = 'B', "pratique"
         C = 'C', "opérationnel"
 
+        def couleur(appl):
+            if appl == Niveau.Applicabilite.A:
+                return Niveau.couleur_A
+            elif appl == Niveau.Applicabilite.B:
+                return Niveau.couleur_B
+            else:
+                return Niveau.couleur_C
+
+        def nom(appl):
+            if appl == Niveau.Applicabilite.A:
+                return Niveau.Applicabilite.A.label
+            elif appl == Niveau.Applicabilite.B:
+                return Niveau.Applicabilite.B.label
+            else:
+                return Niveau.Applicabilite.C.label
+
     couleur_A = "#fdfbe9"
     couleur_B = "#ea841d"
     couleur_C = "#67b43f"
@@ -132,12 +148,7 @@ class Niveau(models.Model):
     applicable = models.CharField(max_length=1, choices=Applicabilite.choices, default=Applicabilite.B)
 
     def couleur(self):
-        if self.applicable == Niveau.Applicabilite.A:
-            return Niveau.couleur_A
-        elif self.applicable == Niveau.Applicabilite.B:
-            return Niveau.couleur_B
-        else:
-            return Niveau.couleur_C
+        return Niveau.Applicabilite.couleur(self.applicable)
 
     class Meta:
         verbose_name = "Niveau"

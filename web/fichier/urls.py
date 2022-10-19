@@ -77,4 +77,5 @@ urlpatterns = [
     path('<str:classname>/modifications/', views.simple_modifications, name='simple_modifications'),
     path('<str:classname>/modifications/page/<int:key>', views.simple_modifications_page, name='simple_modifications_page'),
     path('liens-sortants/', views.liens_sortants, name='liens_sortants'),
+    path('a-propos/', views.a_propos, name='a_propos'),
 ]

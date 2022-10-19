@@ -33,6 +33,17 @@ def carre_colore(value):
 
 
 @register.filter
+def carre_colore_from_applicablilite(app):
+    value = Niveau.Applicabilite.couleur(app)
+    return mark_safe("<div class=\"carre\" style=\"background-color: " + value + "\"> </div>")
+
+
+@register.filter
+def nom_from_applicablilite(app):
+    return Niveau.Applicabilite.nom(app)
+
+
+@register.filter
 def number_xxxx(value):
     return "{:04d}".format(value)
 

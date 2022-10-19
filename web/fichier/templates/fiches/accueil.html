@@ -39,46 +39,18 @@ Le fichier Aidants365
 </div>
 
 <div class="column">
-<p>Nous sommes aujourd'hui le <strong>{{ entree_agenda.date_complete }}</strong>. Sur ce tableau de bord, vous trouverez
-    l'éphéméride du jour, ainsi qu'un
-    accès facilité à
-    <a href="{% url 'fichier:agenda' %}"> toutes les entrées de l'agenda</a>, ainsi 
-     qu'aux <a href="{% url 'fichier:index' %}">{{ nbfichestotal }} fiches</a> via leurs différents niveaux, catégories, thèmes ou mots-clés.
-Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossairetotal }} entrées</a>.</p>
-<p>Retrouvez tous les liens sortants documentés sur la page <a href="{% url 'fichier:liens_sortants' %}">liens sortants</a>.</p>
-    <div class="column long">
-        <h2 class="resserre">Niveaux</h2>
-        <ul>
-            {% for niveau in niveaux %}
-                <li>
-                    {{ niveau.couleur | carre_colore }}
-                    {% if niveau.fiche_count %}
-                    <a href="{% url 'fichier:index_niveau' niveau.id %}">{{ niveau }}</a> <span class="fiche_count">{{ niveau.fiche_count }}</span>
-                    {% else %}
-                    <span class="not_available">{{ niveau }}</span>
-                    {% endif %}
-                </li>
+    <h2>Contenu</h2>
+    <p>Les entrées d'agendas et fiches du 365 sont classées par niveau.</p>
+    {% regroup niveaux by applicable as niveaux_liste %}
+    {% for appl in niveaux_liste %}
+        <h3>{{ appl.grouper | carre_colore_from_applicablilite }} Niveau {{ appl.grouper | nom_from_applicablilite }}</h3>
+            <ul>
+            {% for niveau in appl.list %}
+                <li><a href="">{{ niveau }}</a>&nbsp;: {{ niveau.nom }}</li>
             {% endfor %}
             </ul>
-    </div>
-    <div class="column long">
-        <h2 class="resserre">Auteurs</h2>
-        {% if auteurs %}
-    <ul>
-    {% for auteur in auteurs %}
-        <li>
-            {% if auteur.fiche_count %}    
-            <a href="{% url 'fichier:index_auteur' auteur.id %}">{{ auteur }}</a> <span class="fiche_count">{{ auteur.fiche_count }}</span>
-            {% else %}
-            <span class="not_available">{{ auteur }}</span>
-            {% endif %}
         </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>Pas de fiche disponible.</p>
-    {% endif %}
-    </div>
+    {% endfor %}
 </div>
 <div style="clear: both"></div>
 <p style="font-size: 80%">Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
@@ -86,44 +58,48 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 
 {% endblock %}
 
-{% block gauche1 %}
+{% block gauche3 %}
 {% cache 60 frontpage_gauche1 %}
 
-<h2>Les {{ nbfiches }} dernières fiches modifiées</h2>
+<h2>Modifications récentes</h2>
+
+<h3>Agenda</h3>
+{% if entrees_agenda_list %}
+    <ol>
+    {% for entree_agenda in entrees_agenda_list %}
+        <li><a href="{{ entree_agenda.get_absolute_url }}">{{ entree_agenda }}</a> 
+            {% if entree_agenda.date_derniere_modification|is_recent_entry %}
+            — {{entree_agenda.date_derniere_modification}}</li>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
+<h3>Fiches</h3>
 {% if fiche_list %}
     <ul>
     {% for fiche in fiche_list %}
-        <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a></li>
+        <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a>
+        </li>
     {% endfor %}
     </ul>
 {% else %}
     <p>Pas de fiche disponible.</p>
 {% endif %}
 
-<h2>Les {{ nbentreesglossaire }} dernières entrées de glossaire modifiées</h2>
+<h3>Glossaire</h3>
 {% if entrees_glossaire_list %}
     <ol>
     {% for entree_glossaire in entrees_glossaire_list %}
         <li><a href="{{ entree_glossaire.get_absolute_url }}">{{ entree_glossaire }}</a> 
             {% if entree_glossaire.date_derniere_modification|is_recent_entry %}
-                — dernière modification&nbsp;: {{entree_glossaire.date_derniere_modification}}</li>
+                — {{entree_glossaire.date_derniere_modification}}</li>
             {% endif %}
     {% endfor %}
     </ol>
 {% endif %}
 
-<h2>Les {{ nbentreesagenda }} dernières entrées d'agenda modifiées</h2>
-{% if entrees_agenda_list %}
-    <ol>
-    {% for entree_agenda in entrees_agenda_list %}
-        <li><a href="{{ entree_agenda.get_absolute_url }}">{{ entree_agenda }}</a> 
-            {% if entree_agenda.date_derniere_modification|is_recent_entry %}
-            — dernière modification&nbsp;: {{entree_agenda.date_derniere_modification}}</li>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ol>
-{% endif %}
 <div class="suite"><a href="{% url 'fichier:modifications' %}">dernières modifications ▸</a></div>
 
 {% endcache %}
@@ -134,7 +110,7 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% cache 500 frontpage_gauche2 %}
 
 {% if categories %}
-<h2>Les {{ nbcategories }} principales catégories générales</h2>
+<h2>Les catégories</h2>
 <ul class="cols4">
     {% for categorie in categories %}
         <li>
@@ -150,54 +126,30 @@ Le glossaire contient actuellement <a href="{% url 'fichier:glossaire' %}">{{ nb
 {% else %}
     <p>Pas de catégorie disponible.</p>
 {% endif %}
-{% if categories_libres %}
-    <h2>Les {{ nbcategorieslibres }} principales catégories libres</h2>
-    <ul class="cols3">
-        {% for cl in categories_libres %}
-            <li>
-                {% if cl.fiche_count %}    
-                <a href="{% url 'fichier:index_categorie_libre' cl.id %}">{{ cl }}</a> <span class="fiche_count">{{ cl.fiche_count }}</span>
-                {% else %}
-                <span class="not_available">{{ cl }}</span>
-                {% endif %}
-            </li>
-        {% endfor %}
-        </ul>
-{% endif %}
-    <div class="suite">Voir <a href="{% url 'fichier:categories_alpha' %}">toutes les catégories ▸</a></div>
+    <div class="suite"><a href="{% url 'fichier:categories_alpha' %}">détail des catégories ▸</a></div>
 {% endcache %}
 {% endblock %}
 
 {% block droite1 %}
 {% cache 500 frontpage_droite1 %}
-<h2>Nuage de mots-clés</h2>
+<h2>Les mots-clés</h2>
 {% if motcles %}
     {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" uniquement_actifs="1" %}    
 
-    <div class="suite">Voir <a href="{% url 'fichier:motscles_nuage' %}">tous les mots-clés ▸</a></div>
+    <div class="suite"><a href="{% url 'fichier:motscles_nuage' %}">détail des mots-clés ▸</a></div>
 {% else %}
     <p>Pas de mot-clé disponible.</p>
 {% endif %}
 {% endcache %}
 {% endblock %}
 
-{% block gauche3 %}
+{% block gauche1 %}
 {% cache 500 frontpage_gauche3 %}
 
-<h2>Les {{ nbthemes }} principaux thèmes</h2>
+<h2>Les thèmes</h2>
 {% if themes %}
-    <ul class="cols3">
-    {% for theme in themes %}
-        <li>
-            {% if theme.fiche_count %}    
-            <a href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a> <span class="fiche_count">{{ theme.fiche_count }}</span>
-            {% else %}
-            <span class="not_available">{{ theme }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-    <div class="suite">Voir <a href="{% url 'fichier:themes_alpha' %}">tous les thèmes ▸</a></div>
+{% include "fiches/nuage.html" with elements=themes critere_name="theme" uniquement_actifs="1" %} 
+    <div class="suite"><a href="{% url 'fichier:themes_alpha' %}">détail des thèmes ▸</a></div>
 {% else %}
     <p>Pas de thème disponible.</p>
 {% endif %}

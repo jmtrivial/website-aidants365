@@ -19,6 +19,7 @@
     display: block;
     height: fit-content;
     float: none;
+    width: 100%;
 }
 
 #menubar.responsive .sousmenu ul, 

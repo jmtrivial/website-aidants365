@@ -55,39 +55,34 @@ def annoter_class_nuage(objects):
 
 
 @login_required
+def a_propos(request):
+    aujourdhui = timezone.now()
+    aujourdhui = Agenda.day_name[aujourdhui.weekday()] + " " + str(aujourdhui.day) + " " + Agenda.month_name[aujourdhui.month] + " " + str(aujourdhui.year)
+    auteurs = Auteur.objects.annotate(fiche_count=Count('fiche'))
+
+    context = {"nbfichestotal": Fiche.objects.count(),
+               "auteurs": auteurs,
+               "aujourdhui": aujourdhui,
+               "nbentreesglossairetotal": EntreeGlossaire.objects.count(),
+               'entete': get_entete("a_propos")}
+    return render(request, 'fiches/a_propos.html', context)
+
+
+@login_required
 def accueil(request):
-    nbfiches = 5
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')[:5]
-    nbfiches = latest_fiche_list.count()
-
-    nbentreesglossaire = 5
     latest_entrees_glossaire_list = EntreeGlossaire.objects.order_by('-date_derniere_modification')[:5]
-    nbentreesglossaire = latest_entrees_glossaire_list.count()
-
-    nbentreesagenda = 5
     latest_entrees_agenda_list = EntreeAgenda.objects.order_by('-date_derniere_modification')[:5]
-    nbentreesagenda = latest_entrees_agenda_list.count()
-
-    nbentreesglossairetotal = EntreeGlossaire.objects.count()
 
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
 
-    nbcategories = 9
-    categories = annotate_categories_par_niveau()[:nbcategories]
-    nbcategories = categories.count()
+    categories = annotate_categories_par_niveau().filter(entry_count__gt=0)
 
-    auteurs = Auteur.objects.annotate(fiche_count=Count('fiche'))
-
-    nbthemes = 15
-    themes = Theme.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom__unaccent")[:nbthemes]
-    nbthemes = themes.count()
+    themes = Theme.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
+    themes = annoter_class_nuage(themes)
 
     motcles = MotCle.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
     motcles = annoter_class_nuage(motcles)
-
-    nbcategorieslibres = 9
-    categories_libres = CategorieLibre.objects.annotate(fiche_count=Count('fiche')).order_by("-fiche_count", "nom__unaccent")[:nbcategorieslibres]
-    nbcategorieslibres = categories_libres.count()
 
     aujourdhui = timezone.now()
     entrees_agenda = EntreeAgenda.objects.filter(date=aujourdhui)
@@ -98,16 +93,13 @@ def accueil(request):
         entree_agenda = entrees_agenda[0]
         ephemeride = Ephemeride(entree_agenda)
 
-    context = {'fiche_list': latest_fiche_list, 'nbfiches': nbfiches,
-               'entrees_glossaire_list': latest_entrees_glossaire_list, 'nbentreesglossaire': nbentreesglossaire,
-               'entrees_agenda_list': latest_entrees_agenda_list, 'nbentreesagenda': nbentreesagenda,
-               "nbfichestotal": Fiche.objects.count(), "niveaux": niveaux,
-               "categories": categories, "nbcategories": nbcategories,
-               "auteurs": auteurs,
-               "themes": themes, "nbthemes": nbthemes,
+    context = {'fiche_list': latest_fiche_list,
+               'entrees_glossaire_list': latest_entrees_glossaire_list,
+               'entrees_agenda_list': latest_entrees_agenda_list,
+               "niveaux": niveaux,
+               "categories": categories,
+               "themes": themes,
                "motcles": motcles,
-               "categories_libres": categories_libres, "nbcategorieslibres": nbcategorieslibres,
-               "nbentreesglossairetotal": nbentreesglossairetotal,
                "entree_agenda": entree_agenda, "ephemeride": ephemeride, 'entete': get_entete("accueil"),
                "entete_mois": get_entete("agenda/" + str(aujourdhui.year) + "/" + ("0" + str(aujourdhui.month))[-2:] + "/"),
                "entete_mois_annee": aujourdhui.year, "entete_mois_mois": Agenda.month_name[aujourdhui.month]}

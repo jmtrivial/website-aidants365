@@ -1,0 +1,55 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "a_propos" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+{% load cache %}
+
+{% block classe_principale %}a_propos{% endblock %}
+
+{% block title %}
+Le fichier Aidants365 — À propos
+{% endblock %}
+
+{% block content %}
+<div class="block">
+<h1>À propos</h1>
+<div>{% include "fiches/entete.html" %}</div>
+
+</div>
+<div class="block">
+    <p><em>Contenu à développer...</em></p>
+   <h2>Les auteurs du 365</h2>
+   <p></p>
+    {% if auteurs %}
+<ul>
+{% for auteur in auteurs %}
+    <li>
+        {% if auteur.fiche_count %}    
+        {{ auteur.prenom}} {{ auteur.nom }}&nbsp;: <a href="{% url 'fichier:index_auteur' auteur.id %}">{{ auteur }}</a> <span class="fiche_count">{{ auteur.fiche_count }}</span>
+        {% else %}
+        <span class="not_available">{{ auteur.prenom}} {{ auteur.nom }} ({{auteur}})</span>
+        {% endif %}
+    </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Pas de fiche disponible.</p>
+{% endif %}
+
+<h2>Volumétrie</h2>
+
+<p>Nous sommes aujourd'hui le <strong>{{ aujourdhui }}</strong>. Il y a actuellement dans 
+     <a href="{% url 'fichier:index' %}">{{ nbfichestotal }} fiches</a>,
+ <a href="{% url 'fichier:glossaire' %}">{{ nbentreesglossairetotal }} entrées de glossaire</a>.</p>
+<p>Retrouvez tous les liens sortants documentés sur la page <a href="{% url 'fichier:liens_sortants' %}">liens sortants</a>.</p>
+</div>
+
+
+
+</div>
+{% endblock %}
