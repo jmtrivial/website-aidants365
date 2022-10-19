@@ -46,7 +46,7 @@ Le fichier Aidants365
         <h3>{{ appl.grouper | carre_colore_from_applicablilite }} Niveau {{ appl.grouper | nom_from_applicablilite }}</h3>
             <ul>
             {% for niveau in appl.list %}
-                <li><a href="">{{ niveau }}</a>&nbsp;: {{ niveau.nom }}</li>
+                <li><a href="{% url 'fichier:index_niveau' niveau.id %}">{{ niveau }}</a>&nbsp;: {{ niveau.nom }}</li>
             {% endfor %}
             </ul>
         </li>
