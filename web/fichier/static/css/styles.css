@@ -782,6 +782,11 @@ a.today {
     margin-bottom: 0.5em;
 }
 
+.entete_mois>div, .entete_mois>a {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 .date_entete {
     width: 8em;
     float: left;
