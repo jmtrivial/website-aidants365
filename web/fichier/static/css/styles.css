@@ -970,6 +970,10 @@ a.today {
     margin: O;
 }
 
+.intro-title {
+    color: #888;
+}
+
 @media only screen and (max-width: 1200px) {
 
 
