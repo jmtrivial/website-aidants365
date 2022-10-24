@@ -1119,12 +1119,9 @@ only screen and (max-width: 760px),
         display: none;
 	}*/
 
-    
-	.distribution td:nth-of-type(1):before { content: "informatif: "; }
-	.distribution td:nth-of-type(2):before { content: "pratique: "; }
-	.distribution td:nth-of-type(3):before { content: "opérationnel: "; }
-	.distribution td:nth-of-type(4):before { content: "total: "; }
-    .distribution td:nth-of-type(5):before { content: "agenda: "; }
+    .distribution td:not(.ephemeride_large td) {
+        display: none;
+    }
 }
 
 @media only screen and (max-width: 600px) {
