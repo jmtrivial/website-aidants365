@@ -106,8 +106,9 @@ def accueil(request):
 @login_required
 def index(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')
-    categories = annotate_categories_par_niveau().filter(entry_count__gt=0)
-    context = {'fiche_list': latest_fiche_list, 'entete': get_entete("index"), "categories": categories}
+    categories = annotate_categories_par_niveau().order_by("code__unaccent")
+    categories = annoter_class_nuage(categories)
+    context = {'fiche_list': latest_fiche_list, 'entete': get_entete("index"), "elements": categories, "critere_name_pluriel": "categories", "critere_name": "categorie"}
     return render(request, 'fiches/index.html', context)
 
 
