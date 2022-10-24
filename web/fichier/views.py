@@ -287,7 +287,7 @@ def annotate_categories_par_niveau_simple(objects, agenda=False):
 def index_theme(request, id):
     theme = get_object_or_404(Theme, pk=id)
     fiches = Fiche.objects.filter(themes=theme)
-    agendas = EntreeAgenda.objects.filter(themes=theme)
+    agendas = EntreeAgenda.objects.filter(themes=theme).order_by("date")
     themes_connexes = Theme.objects.filter(id__in=Fiche.objects.filter(id__in=fiches.values("id")).values("themes")
                                            .union(Fiche.objects.filter(id__in=fiches.values("id")).values("themes"))
                                            ).exclude(id=id)
@@ -344,7 +344,7 @@ def themes_nuage(request):
 def index_motcle(request, id):
     motcle = get_object_or_404(MotCle, pk=id)
     fiches = Fiche.objects.filter(mots_cles=motcle)
-    agendas = EntreeAgenda.objects.filter(motscles=motcle)
+    agendas = EntreeAgenda.objects.filter(motscles=motcle).order_by("date")
     glossaires = EntreeGlossaire.objects.filter(Q(entree=motcle.nom) | Q(formes_alternatives__contains=[motcle.nom]))
     motscles_connexes = MotCle.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("motscles")
                                               .union(Fiche.objects.filter(id__in=fiches.values("id")).values("mots_cles"))
