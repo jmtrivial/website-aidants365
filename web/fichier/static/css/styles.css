@@ -1125,6 +1125,13 @@ only screen and (max-width: 760px),
 }
 
 @media only screen and (max-width: 600px) {
+    #content>.block, #content>.column>.block{
+        margin: .2em 0;
+        padding: 0.2em;
+    }
+    .ephemeride_large {
+        padding: 0.4em;
+    } 
     .ephemeride_large  .entete>div {
         font-size: 80%;
     }
@@ -1215,7 +1222,7 @@ only screen and (max-width: 760px),
 
 
 @media only screen and (max-width: 360px) {
-    .ephemeride_large  #entete>div {
+    .ephemeride_large  .entete>div {
         font-size: 50%;
     }
 
