@@ -28,7 +28,7 @@
           <li {% if active_page == "fiches" %}class="actif"{% endif %}><a href="{% url 'fichier:index' %}">Fiches</a></li>
           <li class="sousmenu{% if active_page == 'categories' or active_page == 'themes' or active_page == 'motscles' %} actif{% endif %}"><span class="entete">Thématiques ▾</span>
             <ul>
-              <li {% if active_page == "motscles" %}class="actif"{% endif %}><a href="{% url 'fichier:motscles_alpha' %}">Mots-clés</a></li>              
+              <li {% if active_page == "motscles" %}class="actif"{% endif %}><a href="{% url 'fichier:motscles_alpha' %}">Étiquettes</a></li>              
               <li {% if active_page == "themes" %}class="actif"{% endif %}><a href="{% url 'fichier:themes_alpha' %}">Thèmes</a></li>
               <li {% if active_page == "categories" %}class="actif"{% endif %}><a href="{% url 'fichier:categories_alpha' %}">Catégories</a></li>
             </ul>

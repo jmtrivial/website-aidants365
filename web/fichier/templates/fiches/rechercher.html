@@ -53,7 +53,7 @@ Toutes les fiches
     {% endif %}
 
     {% if results_motscles|length > 0 %}
-       <p><strong>{% if results_motscles|length > 1 %}Mots-clés{% else %}Mot-clé{% endif %}&nbsp;:</strong>
+       <p><strong>{% if results_motscles|length > 1 %}Étiquettes{% else %}Étiquette{% endif %}&nbsp;:</strong>
         {% for motcle in results_motscles %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle.nom_hl | safe }}</a>{% endfor %}
         </p>
     {% endif %}

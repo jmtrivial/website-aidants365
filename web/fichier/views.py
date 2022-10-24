@@ -350,7 +350,7 @@ def index_motcle(request, id):
                                               ).exclude(id=id)
 
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
-                                                             "critere_human": "du mot-clé", "critere_nom": str(motcle),
+                                                             "critere_human": "de l'étiquette", "critere_nom": str(motcle),
                                                              "fiche_list": fiches, "entreesagenda": agendas,
                                                              "entreesglossaire": glossaires,
                                                              "motsclesconnexes": motscles_connexes,
@@ -363,7 +363,7 @@ def index_motcle_detail(request, id1, id2):
     fiche = get_object_or_404(Fiche, pk=id2)
     fiches = Fiche.objects.filter(mots_cles=motcle)
     return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "motcle", "critere": motcle,
-                                                                    "critere_human": "du mot-clé", "critere_nom": str(motcle),
+                                                                    "critere_human": "de l'étiquette", "critere_nom": str(motcle),
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
@@ -386,8 +386,8 @@ def motscles_page(request, key):
                                                    "p_id": key,
                                                    "url_key_paginator": "fichier:motscles_page",
                                                    "paginator": mc,
-                                                   "titre": "Mots-clés",
-                                                   "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
+                                                   "titre": "Étiquettes",
+                                                   "nom_humain": "étiquette", "nom_humain_pluriel": "étiquettes",
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches",
                                                    'entete': get_entete("motscles")})
 
@@ -410,8 +410,8 @@ def motscles_alpha_page(request, key):
                                                    "nb_elements": nb_motscles, "key_alpha": key,
                                                    "extension_titre": extension_titre,
                                                    "url_key_alpha": "fichier:motscles_alpha_page",
-                                                   "elements": motscles, "titre": "Mots-clés",
-                                                   "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
+                                                   "elements": motscles, "titre": "Étiquettes",
+                                                   "nom_humain": "étiquette", "nom_humain_pluriel": "étiquettes",
                                                    "visu_code": "alpha", "visu": "",
                                                    "entete": get_entete("motscles")})
 
@@ -421,8 +421,8 @@ def motscles_nuage(request):
     motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by(Lower("nom__unaccent"))
     motscles = annoter_class_nuage(motscles)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                         "elements": motscles, "titre": "Tous les mots-clés",
-                                                         "nom_humain": "mot-clé", "nom_humain_pluriel": "mots-clés",
+                                                         "elements": motscles, "titre": "Toutes les étiquettes",
+                                                         "nom_humain": "étiquette", "nom_humain_pluriel": "étiquettes",
                                                          "entete": get_entete("motscles")})
 
 
@@ -587,11 +587,11 @@ def edit_object(request, classname, id=None, clone=False):
         single_reverse = True
     elif classname == "motcle":
         nom_classe = "motcle"
-        titre_add = "Création d\'un mot-clé"
-        titre_edition = "Édition du mot-clé"
-        titre_clone = "Duplication du mot-clé"
-        message_add_success = 'Le mot-clé "%s" a été ajouté avec succès.'
-        message_edit_success = 'Le mot-clé "%s" a été modifié avec succès.'
+        titre_add = "Création d\'une étiquette"
+        titre_edition = "Édition de l'étiquette"
+        titre_clone = "Duplication de l'étiquette"
+        message_add_success = 'L\'étiquette "%s" a été ajoutée avec succès.'
+        message_edit_success = 'L\'étiquette "%s" a été modifiée avec succès.'
         classe = MotCle
         classeform = MotCleForm
         reverse_url = 'fichier:motscles_alpha'
@@ -974,7 +974,7 @@ def merge(request, classname):
         field_fiche = "themes"
         field_agenda = "themes"
     elif classname == "motcle":
-        pluriel = "mots-clés"
+        pluriel = "étiqettes"
         classform = MotCleMergeForm
         reverse_url_main = "fichier:motscles"
         field_fiche = "mots_cles"

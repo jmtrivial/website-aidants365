@@ -15,12 +15,12 @@ function show_add_dynamique(node, select2) {
         document.select_popup = "#id_themes_m2m";
     }
     else if (node.prev().attr("id") == "select2-id_mots_cles_m2m-results") {
-        titre = "un mot-clé";
+        titre = "une étiquette";
         document.classe_popup = "motcle";
         document.select_popup = "#id_mots_cles_m2m";
     }
     else if (node.prev().attr("id") == "select2-id_motscles_m2m-results") {
-        titre = "un mot-clé";
+        titre = "une étiquette";
         document.classe_popup = "motcle";
         document.select_popup = "#id_motscles_m2m";
     }

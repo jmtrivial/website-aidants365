@@ -89,7 +89,7 @@ class EntetePage(models.Model):
         else:
             nom_page = {"index": "des fiches", "desk": "du desk", "categories": "des catégories",
                         "glossaire": "du glossaire", "accueil": "de l'accueil",
-                        "themes": "des thèmes", "motscles": "des mots-clés", "agenda": "de l'agenda",
+                        "themes": "des thèmes", "motscles": "des étiquettes", "agenda": "de l'agenda",
                         "liens_sortants": "des liens sortants"}
             return nom_page[page]
 
@@ -251,11 +251,11 @@ class CategorieLibre(models.Model):
 
 
 class MotCle(models.Model):
-    nom = models.CharField(verbose_name="Mot-clé", max_length=64, unique=True, blank=False)
+    nom = models.CharField(verbose_name="Étiquette", max_length=64, unique=True, blank=False)
 
     class Meta:
-        verbose_name = "Mot-clé"
-        verbose_name_plural = "Mot-clés"
+        verbose_name = "Étiquette"
+        verbose_name_plural = "Étiquettes"
 
     def __str__(self):
         return self.nom
@@ -352,7 +352,7 @@ class Fiche(models.Model):
     partenaires = models.CharField(verbose_name="Partenaires", max_length=1024, blank=True, null=True)
 
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes", blank=True, help_text=message_sortable)
-    mots_cles = SortedManyToManyField(MotCle, verbose_name="Mots-clés", blank=True, help_text=message_sortable)
+    mots_cles = SortedManyToManyField(MotCle, verbose_name="Étiquettes", blank=True, help_text=message_sortable)
 
     # corps
     presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
@@ -559,7 +559,7 @@ class EntreeAgenda(models.Model):
     marque = models.BooleanField(verbose_name="Entrée de qualité", default=False)
 
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True, help_text=message_sortable)
-    motscles = SortedManyToManyField(MotCle, verbose_name="Mots-clés associés", blank=True, help_text=message_sortable)
+    motscles = SortedManyToManyField(MotCle, verbose_name="Étiquettes associées", blank=True, help_text=message_sortable)
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 

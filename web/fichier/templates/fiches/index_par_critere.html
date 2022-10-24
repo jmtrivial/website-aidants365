@@ -25,7 +25,7 @@ dans la catégorie libre {{ critere_nom }}
 {% elif critere_name == "theme" %}
 dans le thème {{ critere_nom }}
 {% elif critere_name == "motcle" %}
-avec le mot-clé {{ critere_nom }}
+avec l'étiquette {{ critere_nom }}
 {% endif %}
 {% endspaceless %}{% endblock %}
 
@@ -79,7 +79,7 @@ avec le mot-clé {{ critere_nom }}
     {% endif %}
 
     {% if entreesglossaire %}
-    <h2>Entrée{% if entreesglossaire.all.count > 1%}s{% endif %} du glossaire similaire{% if motscles.all.count > 1%}s{% endif %} à ce mot-clé</h2>
+    <h2>Entrée{% if entreesglossaire.all.count > 1%}s{% endif %} du glossaire similaire{% if motscles.all.count > 1%}s{% endif %} à cette étiquette</h2>
     <ul>
         {% for eg in entreesglossaire %}
         <li><a href="{{ eg.get_absolute_url }}">{{ eg }}</a></li>
@@ -88,8 +88,8 @@ avec le mot-clé {{ critere_nom }}
     {% endif %}
 
     {% if motsclesconnexes %}
-    <h2>Mots-clés connexes</h2>
-    <p>Deux mots-clés sont considérés connexes s'ils apparaissent en même temps dans une même fiche, ou dans une même entrée d'agenda.</p>
+    <h2>Étiquettes connexes</h2>
+    <p>Deux étiquettes sont considérées connexes s'ils apparaissent en même temps dans une même fiche, ou dans une même entrée d'agenda.</p>
     <ul>
         {% for mc in motsclesconnexes %}
         <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>

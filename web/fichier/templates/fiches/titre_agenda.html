@@ -44,7 +44,7 @@
         <strong>Thème{% if entree.themes.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
         {% endif %}
         {% if entree.motscles.all %}
-        <strong>Mot{% if entree.motscles.all.count > 1%}s{% endif %}-clé{% if entree.motscles.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
+        <strong>Étiquette{% if entree.motscles.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
         {% endif %}
 
         {% if entree.date_derniere_modification and not simple %}

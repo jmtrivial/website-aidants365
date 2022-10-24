@@ -56,7 +56,7 @@
                     </li>
                     {% endif %}
                     {% if fiche.mots_cles.all %}
-                    <li><strong>Mots-clés&nbsp;:</strong>
+                    <li><strong>Étiquettes&nbsp;:</strong>
                     {% for motcle in fiche.mots_cles.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:index_motcle_detail' motcle.id fiche.id %}">{% endif %}{{ motcle.nom }}{% if liens %}</a>{% endif %}{% endfor %}
                     </li>
                     {% endif %}
