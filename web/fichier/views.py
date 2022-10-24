@@ -348,7 +348,7 @@ def index_motcle(request, id):
     glossaires = EntreeGlossaire.objects.filter(Q(entree=motcle.nom) | Q(formes_alternatives__contains=[motcle.nom]))
     motscles_connexes = MotCle.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("motscles")
                                               .union(Fiche.objects.filter(id__in=fiches.values("id")).values("mots_cles"))
-                                              ).exclude(id=id)
+                                              ).exclude(id=id).order_by(Lower("nom__unaccent"))
 
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
                                                              "critere_human": "de l'étiquette", "critere_nom": str(motcle),
