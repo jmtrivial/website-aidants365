@@ -53,6 +53,15 @@ def nom_mois(value):
     return Agenda.month_name[value].lower()
 
 
+@register.filter
+def nom_mois_particule(value):
+    n = Agenda.month_name[value].lower()
+    if n[0] in ['a', 'e', 'i', 'o', 'u']:
+        return "d'" + n
+    else:
+        return "de " + n
+
+
 @register.simple_tag
 def show_year(agenda, year):
     return mark_safe(agenda.year(year))
