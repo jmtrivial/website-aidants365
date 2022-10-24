@@ -1,8 +1,10 @@
 {% load fichier_extras %}
 {% if entete_mois %}
 <div class="entete_mois">
+    {% if perms.fichier.can_edit_entete %}
     {% if entete_mois_edit %}
     <div class="lien_next bouton"><a title="éditer" href="{% url_entete_edit entete_mois %}">éditer </a></div>
+    {% endif %}
     {% endif %}
     <a href="{{ entete_mois.get_absolute_url }}">
     <div class="date_entete">

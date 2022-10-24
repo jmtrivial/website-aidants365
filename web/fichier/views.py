@@ -20,7 +20,7 @@ from django.db.models.functions import Ceil, Cast, Lower
 from django.core.paginator import Paginator
 from itertools import chain
 from django.utils.safestring import mark_safe
-
+from django.conf import settings
 
 from django.views.generic import DetailView, ListView
 
@@ -28,7 +28,8 @@ from django_weasyprint import WeasyTemplateResponseMixin
 from django_weasyprint.views import WeasyTemplateResponse
 from weasyprint import HTML
 
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.utils.decorators import method_decorator
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
@@ -496,6 +497,7 @@ def entree_glossaire(request, id):
 
 
 @login_required
+@permission_required("fichier.view_document")
 def desk(request):
     entrees = Document.objects.order_by('titre__unaccent')
     context = {'entrees': entrees, 'entete': get_entete("desk")}
@@ -503,6 +505,7 @@ def desk(request):
 
 
 @login_required
+@permission_required("fichier.view_document")
 def document(request, id):
     entree = get_object_or_404(Document, pk=id)
     context = {'entree': entree}
@@ -511,12 +514,17 @@ def document(request, id):
 
 @login_required
 def duplicate_object(request, classname, id):
+    if not request.user.has_perm("fichier.add_" + classname, request.path):
+        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     return edit_object(request, classname, id, True)
 
 
 @login_required
 def edit_object(request, classname, id=None, clone=False):
     single_reverse = False
+
+    if not request.user.has_perm("fichier.edit_" + classname, request.path):
+        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     if classname == "document":
         nom_classe = "document"
@@ -824,48 +832,56 @@ class DeleteObjectView(LoginRequiredMixin, DeleteView):
             return super(DeleteObjectView, self).post(request, *args, **kwargs)
 
 
+@method_decorator(permission_required("fichier.delete_categorie_libre"), name='dispatch')
 class DeleteCategorieLibreView(DeleteObjectView):
     model = CategorieLibre
     success_url = reverse_lazy("fichier:categories")
     cancel_url = "fichier:index_categorie_libre"
 
 
+@method_decorator(permission_required("fichier.delete_theme"), name='dispatch')
 class DeleteThemeView(DeleteObjectView):
     model = Theme
     success_url = reverse_lazy("fichier:themes")
     cancel_url = "fichier:entree_theme"
 
 
+@method_decorator(permission_required("fichier.delete_motcle"), name='dispatch')
 class DeleteMotCleView(DeleteObjectView):
     model = MotCle
     success_url = reverse_lazy("fichier:motscles")
     cancel_url = "fichier:index_motcle"
 
 
+@method_decorator(permission_required("fichier.delete_fiche"), name='dispatch')
 class DeleteFicheView(DeleteObjectView):
     model = Fiche
     success_url = reverse_lazy("fichier:index")
     cancel_url = "fichier:detail"
 
 
+@method_decorator(permission_required("fichier.delete_entree_glossaire"), name='dispatch')
 class DeleteEntreeGlossaireView(DeleteObjectView):
     model = EntreeGlossaire
     success_url = reverse_lazy("fichier:glossaire")
     cancel_url = "fichier:entree_glossaire"
 
 
+@method_decorator(permission_required("fichier.delete_entree_agenda"), name='dispatch')
 class DeleteEntreeAgendaView(DeleteObjectView):
     model = EntreeAgenda
     success_url = reverse_lazy("fichier:agenda")
     cancel_url = "fichier:entree_agenda_pk"
 
 
+@method_decorator(permission_required("fichier.delete_categorie"), name='dispatch')
 class DeleteCategorieView(DeleteObjectView):
     model = Categorie
     success_url = reverse_lazy("fichier:categories")
     cancel_url = "fichier:index_categorie"
 
 
+@method_decorator(permission_required("fichier.delete_document"), name='dispatch')
 class DeleteDocumentView(DeleteObjectView):
     model = Document
     success_url = reverse_lazy("fichier:desk")
@@ -881,6 +897,9 @@ def rest_api(request, classname):
 
     def json_context(dictionary):
         return {"json": json.dumps(dictionary)}
+
+    if not request.user.has_perm("fichier.add_" + classname, request.path):
+        return render(request, 'fiches/json.html', json_context({"error": "Vous n'avez pas l'autorisation de réaliser cette opération."}))
 
     if classname not in classes:
         return render(request, 'fiches/json.html', json_context({"error": "class not found"}))
@@ -903,6 +922,7 @@ def rest_api(request, classname):
 
 
 @login_required
+@permission_required("fichier.edit_entree_agenda")
 def entree_agenda_invert_with(request, pk):
     element1 = get_object_or_404(EntreeAgenda, pk=pk)
 
@@ -933,6 +953,7 @@ def entree_agenda_invert_with(request, pk):
 
 
 @login_required
+@permission_required("fichier.edit_entree_agenda")
 def entree_agenda_invert(request):
     if request.method == 'POST':
         if "annuler" in request.POST:
@@ -962,6 +983,9 @@ def entree_agenda_invert(request):
 
 @login_required
 def merge(request, classname):
+    if not request.user.has_perm("fichier.edit_" + classname, request.path):
+        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
+
     if classname == "categorie_libre":
         pluriel = "catégories libres"
         classform = CategorieLibreMergeForm

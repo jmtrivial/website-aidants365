@@ -39,7 +39,9 @@
           <li class="icon"><a href="javascript:void(0);" onclick="switchMenuBar()">
             &#9776;
           </a></li>
+          {% if perms.fichier.view_document %} 
           <li class="prive {% if active_page == 'desk' %} actif{% endif %}"><a href="{% url 'fichier:desk' %}">Desk</a></li>
+          {% endif %}
         </ul>{% endblock %}
         <script>
           function switchMenuBar() {
@@ -94,6 +96,7 @@
         <li><a href="{% url 'admin:index' %}">administration</a></li>
         {% if user.is_authenticated %}
         <li><a href="{% url 'logout' %}?next=/">déconnexion</a></li>
+        <li>vous êtes connecté(e) en tant que {{ user }}</li>
       {% endif %}
     </ul>
   </div>

@@ -28,7 +28,9 @@ Toutes les fiches
 
 
     <div class="block" id="entete">
+        {% if perms.fichier.add_fiche %}
         <div class="lien_next bouton"><a title="ajouter une fiche" href="{%url 'fichier:object_add' 'fiche' %}">+ fiche</a></div>
+        {% endif %}
         <h1>Toutes les fiches</h1>
         {% include "fiches/entete.html" %}
         <p>Vous pouvez <button class="bouton_inline" id="dl_pdf">télécharger</button> un pdf contenant toutes les fiches. Attention, sa fabrication prend du temps.</p>

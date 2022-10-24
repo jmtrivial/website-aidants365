@@ -8,6 +8,7 @@
     {% endif %}
     </div>
 
+    {% if perms.fichier.can_edit_entree_agenda %}
     {% if ephemeride.entree %} 
         {% with entree=ephemeride.entree %}
             <div class="lien_next slim">
@@ -17,6 +18,7 @@
                 <div class="lien_next bouton slim"><a id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a></div>
             </div>
         {% endwith %}
+    {% endif %}
     {% endif %}
     <div style="clear: both;margin-bottom: 1em"></div>
 </div>

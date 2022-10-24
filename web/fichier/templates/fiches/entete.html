@@ -1,7 +1,9 @@
 {% load fichier_extras %}
 {% if entete %}
 <div class="entete_page">    
+    {% if perms.fichier.can_edit_entete %}
     <div class="lien_next bouton"><a title="éditer l'entête" href="{% url_entete_edit entete %}">éditer l'entête</a></div>
+    {% endif %}
     {% entete_texte entete %}
     <div style="clear: both"></div>
 </div>
