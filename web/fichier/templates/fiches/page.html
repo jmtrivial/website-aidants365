@@ -7,7 +7,11 @@
     <title>{% block title %}{% endblock %}</title>
     
     {% load static %}
+    {% if debug %}
+    <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon-dev.svg' %}">
+    {% else %}
     <link rel="icon" type="image/svg+xml" href="{% static 'images/favicon.svg' %}">
+    {% endif %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="{% static 'css/contenu.css' %}">
     {% block entete_header %}
