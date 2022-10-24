@@ -1116,15 +1116,20 @@ only screen and (max-width: 760px),
 		border: none;
 		border-bottom: 1px solid #eee; 
 		position: relative;
-		padding-left: 50%; 
+		/*padding-left: 50%;*/
 	}
 	
-	/*td:not(.ephemeride_large td):before { 
-        display: none;
-	}*/
 
     .distribution td:not(.ephemeride_large td) {
         display: none;
+    }
+
+    .noday:not(.ephemeride_large td) {
+        display: none;
+    }
+    .tableau_agenda td:not(.ephemeride_large td) {
+        width: 8em;
+        margin: auto;
     }
 }
 
@@ -1205,7 +1210,11 @@ only screen and (max-width: 760px),
     .ephemeride_large  .entete>div {
         font-size: 70%;
     }
-
+    .date_entete {
+        margin: 0;
+        font-size: 80%;
+    }
+}
 
 @media only screen and (max-width: 400px) {
     .ephemeride_large  .entete>div {
@@ -1230,3 +1239,4 @@ only screen and (max-width: 760px),
         font-size: 50%;
     }
 
+}
