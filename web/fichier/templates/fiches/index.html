@@ -33,7 +33,23 @@ Toutes les fiches
         {% include "fiches/entete.html" %}
         <p>Vous pouvez <button class="bouton_inline" id="dl_pdf">télécharger</button> un pdf contenant toutes les fiches. Attention, sa fabrication prend du temps.</p>
         <div class="suite"><a href="{% url 'fichier:simple_modifications' 'fiches' %}">dernières modifications ▸</a></div>
-    </div>
+    {% if categories %}
+        <h2>Catégories</h2>
+        <p>Les fiches du 365 sont réparties suivant les catégories suivantes&nbsp;:</p>
+        <ul class="cols4">
+            {% for categorie in categories %}
+                <li>
+                    {% if categorie.fiche_count %}    
+                    <a href="{% url 'fichier:index_categorie' categorie.id %}">{{ categorie }}</a> — {{ categorie.nom }} <span class="fiche_count">{{ categorie.fiche_count }}</span>
+                    {% else %}
+                    <span class="not_available">{{ categorie }}</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+            </ul>
+            <div class="suite"><a href="{% url 'fichier:categories_alpha' %}">détail des catégories ▸</a></div>
+            {% endif %}
+        </div>
     <div class="block">
         {% if fiche_list %}
         {% regroup fiche_list|dictsort:"niveau.applicable" by niveau.get_applicable_display as niveau_list %}

@@ -53,12 +53,12 @@ Le fichier Aidants365
     {% endfor %}
 </div>
 <div style="clear: both"></div>
-<p style="font-size: 80%">Pour des raisons de performance, cette page n'est mise à jour que toutes les 2 minutes.</p>
+<p style="font-size: 80%">Pour des raisons de performance, cette page est mise à jour toutes les 2 minutes.</p>
 {% endcache %}
 
 {% endblock %}
 
-{% block gauche3 %}
+{% block gauche2 %}
 {% cache 60 frontpage_gauche1 %}
 
 <h2>Modifications récentes</h2>
@@ -106,33 +106,10 @@ Le fichier Aidants365
 {% endblock %}
 
 
-{% block gauche2 %}
-{% cache 500 frontpage_gauche2 %}
-
-{% if categories %}
-<h2>Les catégories</h2>
-<ul class="cols4">
-    {% for categorie in categories %}
-        <li>
-            {% if categorie.fiche_count %}    
-            <a href="{% url 'fichier:index_categorie' categorie.id %}">{{ categorie }}</a> <span class="fiche_count">{{ categorie.fiche_count }}</span>
-
-            {% else %}
-            <span class="not_available">{{ categorie }}</span>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Pas de catégorie disponible.</p>
-{% endif %}
-    <div class="suite"><a href="{% url 'fichier:categories_alpha' %}">détail des catégories ▸</a></div>
-{% endcache %}
-{% endblock %}
 
 {% block droite1 %}
 {% cache 500 frontpage_droite1 %}
-<h2>Les mots-clés</h2>
+<h2>Mots-clés</h2>
 {% if motcles %}
     {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" uniquement_actifs="1" %}    
 
@@ -146,7 +123,7 @@ Le fichier Aidants365
 {% block gauche1 %}
 {% cache 500 frontpage_gauche3 %}
 
-<h2>Les thèmes</h2>
+<h2>Thèmes</h2>
 {% if themes %}
 {% include "fiches/nuage.html" with elements=themes critere_name="theme" uniquement_actifs="1" %} 
     <div class="suite"><a href="{% url 'fichier:themes_alpha' %}">détail des thèmes ▸</a></div>

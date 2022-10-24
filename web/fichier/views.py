@@ -76,8 +76,6 @@ def accueil(request):
 
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
 
-    categories = annotate_categories_par_niveau().filter(entry_count__gt=0)
-
     themes = Theme.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
     themes = annoter_class_nuage(themes)
 
@@ -97,7 +95,6 @@ def accueil(request):
                'entrees_glossaire_list': latest_entrees_glossaire_list,
                'entrees_agenda_list': latest_entrees_agenda_list,
                "niveaux": niveaux,
-               "categories": categories,
                "themes": themes,
                "motcles": motcles,
                "entree_agenda": entree_agenda, "ephemeride": ephemeride, 'entete': get_entete("accueil"),
@@ -109,7 +106,8 @@ def accueil(request):
 @login_required
 def index(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')
-    context = {'fiche_list': latest_fiche_list, 'entete': get_entete("index")}
+    categories = annotate_categories_par_niveau().filter(entry_count__gt=0)
+    context = {'fiche_list': latest_fiche_list, 'entete': get_entete("index"), "categories": categories}
     return render(request, 'fiches/index.html', context)
 
 
