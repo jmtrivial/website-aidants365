@@ -8,6 +8,9 @@
 
 {% block entete_header %}
 {% load static %}
+<link rel="stylesheet" href="{% static 'css/page.css' %}">
+<link rel="stylesheet" href="{% static 'css/page_html.css' %}">
+<link rel="stylesheet" href="{% static 'css/pleine_page.css' %}">
 <script src="{% static 'js/shortcut.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
     function save_and_view(){
@@ -32,14 +35,62 @@ Glossaire
 
 {% block content %}
 
+{% include "fiches/navigation_agenda.html" %}
 
-<div class="ephemeride_large">
-    <div class="block entete" id="entete">
-
-        {% include "fiches/titre_agenda.html" with hx="h1" %}
-
-    </div>
-
-    {% include "fiches/contenu_agenda.html" with hx="h2" %}
+<div class="render-mode">
+    Affichage A5
+    <label class="switch">
+        <input type="checkbox" id="render-A5">
+        <span class="slider round"></span>
+      </label>
+      <script>
+        const checkbox = document.getElementById('render-A5');
+            checkbox.addEventListener('change', (event) => {
+                const p = document.getElementById('page-A5');
+                if (event.currentTarget.checked) {
+                    p.classList.remove("web");
+                } else {
+                    p.classList.add("web");
+                }
+            });
+            document.getElementById("render-A5").checked = false;
+      </script>
 </div>
+
+
+{% if perms.fichier.can_edit_entree_agenda %}
+    {% if ephemeride.entree %} 
+        {% with entree=ephemeride.entree %}
+        <div class="menu-21">
+            <div class="lien_next slim">
+                <div class="lien_next bouton slim"><a id="edit_button" href="{% url 'fichier:object_change' 'agenda' entree.id %}">éditer <small>(ctrl+e)</small></a></div>
+                <div class="lien_next bouton slim"><a id="duplicate_button" href="{% url 'fichier:object_duplicate' 'agenda' entree.id %}">dupliquer</a></div>
+                <div class="lien_next bouton slim"><a id="invert_button" href="{% url 'fichier:entree_agenda_invert_with' entree.id %}">inverser avec une autre date</a></div>
+                <div class="lien_next bouton slim"><a id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a></div>
+            </div>
+            <div style="clear: both;margin-bottom: 1em"></div>
+        </div>
+        {% endwith %}
+    {% endif %}
+{% endif %}
+
+
+<page size="A5" class="web" layout="landscape" id="page-A5">
+
+    <div class="container">
+        <div class="colonne ephemeride_large">
+            {% include "fiches/titre_agenda.html" with hx="h1" %}
+
+
+            {% include "fiches/contenu_agenda.html" with hx="h2" %}
+        </div>
+        <div class="colonne">
+            <div class="illustration"><img src="{% static 'images/caregiver.jpg' %}" /></div>
+            <!-- TODO image ici -->
+            <div class="notes-libres">
+                
+            </div>
+        </div>
+    </div>
+    </page>
 {% endblock %}

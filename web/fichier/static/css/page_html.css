@@ -22,25 +22,17 @@ page {
         font-weight: bold;
     }
     
-    page h1 {
-        font-size: calc(95vw / 21 * 22 * 0.0352777778); /* 1 point	= 0.0352777778 cm */
-    }
-    
-    page h1 small { 
-        font-size: calc(95vw / 21 * 16 * 0.0352777778);
-    }
-        
-    page .nomenclature {
-        font-size: calc(95vw / 21 * 16 * 0.0352777778);
-    }
-    
-    
     page #contenu_page {
         width: calc(95vw / 21 * 17);
-        height: calc(95vw / 21 * 26.7); 
+        height: auto;
         margin: calc(95vw / 21 * 1.5) calc(95vw / 21 * 2);
     }
-    
+
+    page .container {
+        width: calc(95vw / 21 * 20);
+        height: auto; 
+        margin: calc(95vw / 21 * 0.5);
+    }
     
     
     page #chapeau, page #pied {
@@ -52,7 +44,7 @@ page {
     }
     
     page p, ul {
-        margin: calc(95vw / 21 * 0.5);
+        margin: calc(95vw / 21 * 0.2);
     }
     
     page #chapeau li, page #pied li {
@@ -66,12 +58,51 @@ page {
     page {
         margin-bottom: calc(95vw / 21 * 0.5);
         box-shadow: 0 0 calc(95vw / 21 * 0.5) rgba(0,0,0,0.5);
-        font-size: calc(95vw / 21 * 12 * 0.0352777778);
-      }
-      page[size="A4"] {  
-        width: 95vW;
-        height: calc(95vw / 21 * 29.7); 
     }
+    page[size=A4], page[size=A5][layout="landscape"]  {  
+        width: 95vW;
+        height:  auto;
+    }
+
     
+    .menu-21 {
+        width: 95vW;
+    }
+
+    page .colonne {
+        width: 100%;
+    }
+
+    page .colonne:nth-child(1) {
+        margin-bottom: 2em;
+    }
 }
 
+/* version web */
+
+page#page-A5.web, page#page-A5.web .container {
+    width: auto;
+    height: auto;
+    margin: 1em;
+    font: inherit;
+}
+
+page#page-A5.web .cal_mois {
+    font-size: inherit;
+}
+
+page#page-A5.web .ephemeride {
+    font-size: inherit;
+}
+
+page#page-A5.web p {
+    font-size: inherit;
+}
+
+page#page-A5 .derniere_modification {
+    display: none;
+}
+
+page#page-A5.web .derniere_modification {
+    display: block;
+}

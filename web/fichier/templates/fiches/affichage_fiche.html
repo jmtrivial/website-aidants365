@@ -1,20 +1,24 @@
 {% load fichier_extras %}
-<page size="A4">
-    {% if liens %}
-    <div id="actions">
-        {% if details %} <a href="{% url 'fichier:detail' fiche.id %}"><button>plein écran</button></a> {% endif %}
+{% if liens %}
+<div class="menu-21">
+    <div class="lien_next slim">
+        {% if details %} <div class="lien_next bouton slim"><a href="{% url 'fichier:detail' fiche.id %}">plein écran</a></div> {% endif %}
         {% if perms.fichier.edit_fiche %}
-        <a href="{% url 'fichier:object_change' 'fiche' fiche.id %}" id="edit_button"><button>éditer (ctrl-e)</button></a>
+        <div class="lien_next bouton slim"><a href="{% url 'fichier:object_change' 'fiche' fiche.id %}" id="edit_button">éditer (ctrl-e)</a></div>
         {% endif %}
         {% if perms.fichier.add_fiche %}
-        <a href="{% url 'fichier:object_duplicate' 'fiche' fiche.id %}" id="duplicate_button"><button>dupliquer</button></a>
+        <div class="lien_next bouton slim"><a href="{% url 'fichier:object_duplicate' 'fiche' fiche.id %}" id="duplicate_button">dupliquer</a></div>
         {% endif %}
         {% if perms.fichier.delete_fiche %}
-        <a href="{% url 'fichier:fiche_delete' fiche.id %}" id="delete_button"><button>supprimer</button></a>
+        <div class="lien_next bouton slim"><a href="{% url 'fichier:fiche_delete' fiche.id %}" id="delete_button">supprimer</a></div>
         {% endif %}
-        <a href="{% url 'fichier:detail_pdf' fiche.id %}"><button>pdf</button></a>
+        <div class="lien_next bouton slim"><a href="{% url 'fichier:detail_pdf' fiche.id %}">pdf</a></div>
     </div>
-    {% endif %}
+</div>
+<div class="vertical-space"></div>
+{% endif %}
+
+<page size="A4">
     <div id="contenu_page">
         <div id="haut">
             <div id="entete">
@@ -92,4 +96,4 @@
         </div>
     </div>
 </page>
-<div id="message_responsive">La présentation des fiches sur petits écrans type smartphone pourrait ne pas être conforme à la <a href="{% url 'fichier:detail_pdf' fiche.id %}">présentation finale en pdf</a>. Affichage à titre informatif.</div>
+<div id="message_responsive">La mise en page des fiches sur petits écrans type smartphone n'être conforme à la <a href="{% url 'fichier:detail_pdf' fiche.id %}">présentation finale en pdf</a>. Affichage à titre informatif.</div>

@@ -1,29 +1,5 @@
 {% load fichier_extras %}
 
-{% if not simple %}
-<div>
-    <div class="checked">
-    {% if entree.marque %}
-        ☑
-    {% endif %}
-    </div>
-
-    {% if perms.fichier.can_edit_entree_agenda %}
-    {% if ephemeride.entree %} 
-        {% with entree=ephemeride.entree %}
-            <div class="lien_next slim">
-                <div class="lien_next bouton slim"><a id="edit_button" href="{% url 'fichier:object_change' 'agenda' entree.id %}">éditer <small>(ctrl+e)</small></a></div>
-                <div class="lien_next bouton slim"><a id="duplicate_button" href="{% url 'fichier:object_duplicate' 'agenda' entree.id %}">dupliquer</a></div>
-                <div class="lien_next bouton slim"><a id="invert_button" href="{% url 'fichier:entree_agenda_invert_with' entree.id %}">inverser avec une autre date</a></div>
-                <div class="lien_next bouton slim"><a id="delete_button" href="{% url 'fichier:entree_agenda_delete' entree.id %}">supprimer</a></div>
-            </div>
-        {% endwith %}
-    {% endif %}
-    {% endif %}
-    <div style="clear: both;margin-bottom: 1em"></div>
-</div>
-{% endif %}
-
 
 
 <div class="cal_mois mois_left">
@@ -33,12 +9,15 @@
     {% show_month ephemeride.agenda ephemeride.year_next_month ephemeride.month_next_month True ephemeride.date %}
 </div>
 {{ ephemeride.ephemeride | safe }}
+
+
 <div style="clear: both; height: 1em"></div>
 
-{% if not simple %}
-{% include "fiches/navigation_agenda.html" %}
-{% endif %}
-
+<div class="checked">
+    {% if entree.marque %}
+        ☑
+    {% endif %}
+</div>
 
 {% if ephemeride.entree %} 
     {% with entree=ephemeride.entree %}
@@ -50,7 +29,7 @@
         {% endif %}
 
         {% if entree.date_derniere_modification and not simple %}
-        <div class="lien_next">
+        <div class="lien_next derniere_modification">
             Dernière modification&nbsp;: {{entree.date_derniere_modification }}
         </div>
         <div style="clear: both"></div>
