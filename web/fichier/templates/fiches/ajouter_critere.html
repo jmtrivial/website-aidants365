@@ -11,6 +11,7 @@
 </div>
 
 {% if critere_name == "motcle" or critere_name == "theme" %}
+{{ "fichier."|add:"edit_"|add:critere_name }}
 {% if "fichier."|add:"edit_"|add:critere_name in perms %}
 <div class="lien_next bouton"><a href="{%url 'fichier:merge' critere_name %}">fusionner deux {{ nom_humain_pluriel }}</a></div>
 {% endif %}
