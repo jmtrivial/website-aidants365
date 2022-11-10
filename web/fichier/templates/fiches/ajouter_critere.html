@@ -3,22 +3,20 @@
 <div  class="lien_next bouton"><a title="ajouter {{ nom_humain }}" href="{%url 'fichier:object_add' critere_name %}">+ {{ nom_humain }}</a></div>
     {% endif %}
 {% if elements_second %}
-{{ "fichier."|add:"add_"|add:critere_name_second }}
-    {% if "fichier."|add:"add_"|add:critere_name_second in perms %}
+    {% if "fichier."|add:"add_"|add:critere_name_second_perms in perms %}
     <div class="lien_next bouton"><a title="ajouter {{ nom_humain_second }}" href="{%url 'fichier:object_add' critere_name_second %}">+ {{ nom_humain_second }}</a></div>
     {% endif %}
 {% endif %}
 </div>
 
 {% if critere_name == "motcle" or critere_name == "theme" %}
-{{ "fichier."|add:"edit_"|add:critere_name }}
-{% if "fichier."|add:"edit_"|add:critere_name in perms %}
+{% if "fichier."|add:"change_"|add:critere_name in perms %}
 <div class="lien_next bouton"><a href="{%url 'fichier:merge' critere_name %}">fusionner deux {{ nom_humain_pluriel }}</a></div>
 {% endif %}
 {% endif %}
 
 {% if elements_second %}
-{% if "fichier."|add:"edit_"|add:critere_name_second in perms %}
+{% if "fichier."|add:"change_"|add:critere_name_second_perms in perms %}
 <div class="lien_next bouton"><a href="{%url 'fichier:merge' critere_name_second %}">fusionner deux {{ nom_humain_second_pluriel }}</a></div>
 {% endif %}
 {% endif %}

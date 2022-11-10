@@ -20,7 +20,7 @@ Le fichier Aidants365 — Agenda
 
 
 <div class="block" id="entete">
-    {% if perms.fichier.add_entree_agenda %}
+    {% if perms.fichier.add_entreeagenda %}
     <div class="lien_next bouton"><a id="inverse_button" href="{% url 'fichier:entree_agenda_invert' %}">inverser deux dates</a></div>
     {% endif %}
     <h1>Calendrier du mois {{ month|nom_mois_particule }} <a href="{% url 'fichier:agenda_year' year %}">{{year}}</a></h1>
@@ -35,7 +35,7 @@ Le fichier Aidants365 — Agenda
         <p>Voir <a href="{% url 'fichier:agenda_month_details' year month %}">le détail des entrées</a> du mois.</p>
     </div>
 
-    {% if perms.fichier.edit_entree_agenda %}
+    {% if perms.fichier.change_entreeagenda %}
     <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a></div>
     {% endif %}
 

@@ -201,6 +201,7 @@ def categories(request):
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
                                                    "nom_humain_second_pluriel": "catégories libres",
                                                    "critere_name_second": "categorie_libre",
+                                                   "critere_name_second_perms": "categorielibre",
                                                    'entete': get_entete("categories")})
 
 
@@ -215,6 +216,7 @@ def categories_alpha(request):
                                                    "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
                                                    "nom_humain_second_pluriel": "catégories libres",
                                                    "critere_name_second": "categorie_libre",
+                                                   "critere_name_second_perms": "categorielibre",
                                                    'entete': get_entete("categories")})
 
 
@@ -230,6 +232,7 @@ def categories_nuage(request):
                                                          "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
                                                          "nom_humain_second_pluriel": "catégories libres",
                                                          "critere_name_second": "categorie_libre",
+                                                         "critere_name_second_perms": "categorielibre",
                                                          'entete': get_entete("categories")})
 
 
@@ -514,7 +517,8 @@ def document(request, id):
 
 @login_required
 def duplicate_object(request, classname, id):
-    if not request.user.has_perm("fichier.add_" + classname, request.path):
+    local_classname = "entreeagenda" if classname == "agenda" else classname
+    if not request.user.has_perm("fichier.add_" + local_classname.replace("_", "")):
         return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
     return edit_object(request, classname, id, True)
 
@@ -522,9 +526,6 @@ def duplicate_object(request, classname, id):
 @login_required
 def edit_object(request, classname, id=None, clone=False):
     single_reverse = False
-
-    if not request.user.has_perm("fichier.edit_" + classname, request.path):
-        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     if classname == "document":
         nom_classe = "document"
@@ -606,7 +607,7 @@ def edit_object(request, classname, id=None, clone=False):
         reverse_url_cancel = 'fichier:motscles_alpha'
         single_reverse = True
     elif classname == "categorie_libre":
-        nom_classe = "categorie_libre"
+        nom_classe = "categorielibre"
         titre_add = "Création d\'une catégorie libre"
         titre_edition = "Édition de la catégorie libre"
         titre_clone = "Duplication d\'une catégorie libre"
@@ -628,7 +629,7 @@ def edit_object(request, classname, id=None, clone=False):
         reverse_url = 'fichier:index_niveau'
         reverse_url_cancel = 'fichier:index'
     elif classname == "entete_page":
-        nom_classe = "niveau"
+        nom_classe = "entetepage"
         titre_add = "Création d'une entête"
         if request.method == 'GET' and "page" in request.GET:
             titre_add += " de la page " + EntetePage.nom_page(request.GET["page"])
@@ -642,6 +643,9 @@ def edit_object(request, classname, id=None, clone=False):
         reverse_url_cancel = '^'
     else:
         raise Http404("Donnée inconnue")
+
+    if not request.user.has_perm("fichier.change_" + nom_classe):
+        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     complements = {}
 
@@ -832,7 +836,7 @@ class DeleteObjectView(LoginRequiredMixin, DeleteView):
             return super(DeleteObjectView, self).post(request, *args, **kwargs)
 
 
-@method_decorator(permission_required("fichier.delete_categorie_libre"), name='dispatch')
+@method_decorator(permission_required("fichier.delete_categorielibre"), name='dispatch')
 class DeleteCategorieLibreView(DeleteObjectView):
     model = CategorieLibre
     success_url = reverse_lazy("fichier:categories")
@@ -860,14 +864,14 @@ class DeleteFicheView(DeleteObjectView):
     cancel_url = "fichier:detail"
 
 
-@method_decorator(permission_required("fichier.delete_entree_glossaire"), name='dispatch')
+@method_decorator(permission_required("fichier.delete_entreeglossaire"), name='dispatch')
 class DeleteEntreeGlossaireView(DeleteObjectView):
     model = EntreeGlossaire
     success_url = reverse_lazy("fichier:glossaire")
     cancel_url = "fichier:entree_glossaire"
 
 
-@method_decorator(permission_required("fichier.delete_entree_agenda"), name='dispatch')
+@method_decorator(permission_required("fichier.delete_entreeagenda"), name='dispatch')
 class DeleteEntreeAgendaView(DeleteObjectView):
     model = EntreeAgenda
     success_url = reverse_lazy("fichier:agenda")
@@ -898,7 +902,7 @@ def rest_api(request, classname):
     def json_context(dictionary):
         return {"json": json.dumps(dictionary)}
 
-    if not request.user.has_perm("fichier.add_" + classname, request.path):
+    if not request.user.has_perm("fichier.add_" + classname):
         return render(request, 'fiches/json.html', json_context({"error": "Vous n'avez pas l'autorisation de réaliser cette opération."}))
 
     if classname not in classes:
@@ -922,7 +926,7 @@ def rest_api(request, classname):
 
 
 @login_required
-@permission_required("fichier.edit_entree_agenda")
+@permission_required("fichier.change_entreeagenda")
 def entree_agenda_invert_with(request, pk):
     element1 = get_object_or_404(EntreeAgenda, pk=pk)
 
@@ -953,7 +957,7 @@ def entree_agenda_invert_with(request, pk):
 
 
 @login_required
-@permission_required("fichier.edit_entree_agenda")
+@permission_required("fichier.change_entreeagenda")
 def entree_agenda_invert(request):
     if request.method == 'POST':
         if "annuler" in request.POST:
@@ -983,28 +987,32 @@ def entree_agenda_invert(request):
 
 @login_required
 def merge(request, classname):
-    if not request.user.has_perm("fichier.edit_" + classname, request.path):
-        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     if classname == "categorie_libre":
         pluriel = "catégories libres"
         classform = CategorieLibreMergeForm
         reverse_url_main = "fichier:categories"
         field_fiche = "categories_libres"
+        nom_classe = "categorielibre"
     elif classname == "theme":
         pluriel = "thèmes"
         classform = ThemeMergeForm
         reverse_url_main = "fichier:themes"
         field_fiche = "themes"
         field_agenda = "themes"
+        nom_classe = "theme"
     elif classname == "motcle":
         pluriel = "étiqettes"
         classform = MotCleMergeForm
         reverse_url_main = "fichier:motscles"
         field_fiche = "mots_cles"
         field_agenda = "motscles"
+        nom_classe = "motcle"
     else:
         return Http404("Impossible de lancer la fusion")
+
+    if not request.user.has_perm("fichier.change_" + nom_classe):
+        return HttpResponseRedirect('%s?next=%s' % (settings.LOGIN_URL, request.path))
 
     if request.method == 'POST':
         if "annuler" in request.POST:

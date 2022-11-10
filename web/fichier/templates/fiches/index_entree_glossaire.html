@@ -25,7 +25,7 @@ Glossaire
 
 
     <div class="block" id="entete">
-        {% if "fichier.edit_entree_glossaire" in perms %}
+        {% if "fichier.change_entreeglossaire" in perms %}
         <div class="lien_next bouton"><a title="ajouter une entrée de glossaire" href="{%url 'fichier:object_add' 'glossaire' %}">+ entrée glossaire</a></div>
         {% endif %}
         <h1>Glossaire <span class="remarque">({{ entrees.all.count }} entrées sur {{ nb_entrees }})</span></h1>
@@ -35,7 +35,7 @@ Glossaire
         {% index_alpha key "fichier:glossaire_page" %}
 
 
-        {% if perms.fichier.edit_entree_glossaire %}
+        {% if perms.fichier.change_entreeglossaire %}
         <div class="suite"><a href="{% url 'fichier:simple_modifications' 'glossaire' %}">dernières modifications ▸</a></div>
         {% endif %}
     </div>

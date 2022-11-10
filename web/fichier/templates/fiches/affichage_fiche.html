@@ -3,7 +3,7 @@
 <div class="menu-21">
     <div class="lien_next slim">
         {% if details %} <div class="lien_next bouton slim"><a href="{% url 'fichier:detail' fiche.id %}">plein écran</a></div> {% endif %}
-        {% if perms.fichier.edit_fiche %}
+        {% if perms.fichier.change_fiche %}
         <div class="lien_next bouton slim"><a href="{% url 'fichier:object_change' 'fiche' fiche.id %}" id="edit_button">éditer (ctrl-e)</a></div>
         {% endif %}
         {% if perms.fichier.add_fiche %}

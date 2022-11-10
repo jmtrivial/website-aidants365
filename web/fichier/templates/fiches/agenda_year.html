@@ -28,7 +28,7 @@ Le fichier Aidants365 — Agenda
             <div class="right">{% lien_annee_suivante year %}</div>
             <div style="clear: both"></div>
         </div>
-        {% if perms.fichier.edit_entree_agenda %}
+        {% if perms.fichier.change_entreeagenda %}
         <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a></div>
         {% endif %}
     </div>
