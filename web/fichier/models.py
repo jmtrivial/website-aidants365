@@ -430,7 +430,7 @@ class Fiche(models.Model):
                                         "categories_libres", Value(" "), "themes__nom", Value(" "), "mots_cles__nom", Value(" "),
                                         "presentation", Value(" "), "problematique", Value(" "), "quatrieme_de_couverture", Value(" "),
                                         "plan_du_site", Value(" Focus "), "detail_focus", Value(" "), "focus", Value(" "), "titre", Value(" "), "editeur", Value(" "), "auteurs", Value(" "), "collection",
-                                        "partenaires", Value(" "), "reserves", Value(" "), "lesplus", Value(" "), "en_savoir_plus", output_field=models.CharField())). \
+                                        "partenaires", Value(" "), "reserves", Value(" "), "lesplus", Value(" "), "en_savoir_plus", output_field=models.CharField())).distinct('id'). \
             annotate(search=search_vectors).filter(search=search_query). \
             annotate(agg_title_hl=SearchHeadline("agg_title", search_query,
                      start_sel="<span class=\"highlight\">",
@@ -604,7 +604,7 @@ class EntreeAgenda(models.Model):
         search_query = SearchQuery(search_text, config='french')
 
         return EntreeAgenda.objects. \
-            annotate(agg_contenu=Concat("themes__nom", Value(" "), "motscles__nom", Value(" "), "notes", output_field=models.CharField())). \
+            annotate(agg_contenu=Concat("themes__nom", Value(" "), "motscles__nom", Value(" "), "notes", output_field=models.CharField())).distinct('id'). \
             annotate(search=search_vectors).filter(search=search_query). \
             annotate(notes_hl=SearchHeadline("agg_contenu",
                      search_query,
