@@ -34,46 +34,66 @@ Toutes les fiches
     {% if recherche != None %}
 
     {% if results_categories|length > 0 %}
-    <p><strong>Catégorie{% if results_categories|length > 1 %}s{% endif %}&nbsp;:</strong>
-        {% for categorie in results_categories %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_categorie' categorie.id %}">{{ categorie.nom_hl | safe }}</a>{% endfor %}
-     </p>
+    <h2>{{ results_categories.count }} 
+        {% if results_categories|length > 1 %}
+            catégories
+        {% else %}
+            catégorie
+        {% endif %}
+        correspondant à « {{ recherche }} »</h2>
+    <ol>
+        {% for categorie in results_categories %}
+        <li><a href="{% url 'fichier:index_categorie' categorie.id %}">{{ categorie.nom_hl | safe }}</a>
+        </li>
+        {% endfor %}
+    </ol>
      {% endif %}
 
      {% if results_categories_libres|length > 0 %}
-     <p><strong>{% if results_categories_libres|length > 1 %}Catégories libres{% else %}Catégorie libre{% endif %}&nbsp;:</strong>
-         {% for categorie in results_categories_libres %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_categorie_libre' categorie.id %}">{{ categorie.nom_hl | safe }}</a>{% endfor %}
+     <h2>{{ results_categories_libres.count }} 
+        {% if results_categories_libres|length > 1 %}
+            catégories libres
+        {% else %}
+            catégorie libre
+        {% endif %}
+        correspondant à « {{ recherche }} »</h2>
+        <ol>
+            {% for categorie in results_categories_libres %}
+            <li><a href="{% url 'fichier:index_categorie_libre' categorie.id %}">{{ categorie.nom_hl | safe }}</a></li>
+            {% endfor %}
+        </ol>
       </p>
       {% endif %}
 
       
      {% if results_themes|length > 0 %}
-       <p><strong>Thème{% if results_themes|length > 1 %}s{% endif %}&nbsp;:</strong>
-        {% for theme in results_themes %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_theme' theme.id %}">{{ theme.nom_hl | safe }}</a>{% endfor %}
-        </p>
+     <h2>{{ results_themes.count }} 
+        {% if results_themes|length > 1 %}
+            thèmes
+        {% else %}
+            thème
+        {% endif %}
+        correspondant à « {{ recherche }} »</h2>
+       <ol>
+        {% for theme in results_themes %}
+            <li><a href="{% url 'fichier:index_theme' theme.id %}">{{ theme.nom_hl | safe }}</a></li>
+        {% endfor %}
+    </ol>
     {% endif %}
 
     {% if results_motscles|length > 0 %}
-       <p><strong>{% if results_motscles|length > 1 %}Étiquettes{% else %}Étiquette{% endif %}&nbsp;:</strong>
-        {% for motcle in results_motscles %}{% if not forloop.first %}, {% endif %}<a href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle.nom_hl | safe }}</a>{% endfor %}
-        </p>
-    {% endif %}
-
-
-    {% if results_fiches|length == 0 %}
-    <p>Aucune <a href="{% url 'fichier:index' %}">fiche</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
-    {% endif %} 
-    {% if results_glossaire|length == 0 %}
-    <p>Aucune entrée du <a href="{% url 'fichier:glossaire' %}">glossaire</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
-    {% endif %} 
-    {% if results_agenda|length == 0 %}
-    <p>Aucune entrée de l'<a href="{% url 'fichier:agenda' %}">agenda</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
-    {% endif %} 
-    {% if results_document|length == 0 %}
-    <p>Aucun document du <a href="{% url 'fichier:desk' %}">desk</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
-    {% endif %} 
-
-    {% if results_entetes|length == 0 %}
-    <p>Aucune entête ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    <h2>{{ results_motscles.count }} 
+        {% if results_motscles|length > 1 %}
+            étiquettes
+        {% else %}
+            étiquette
+        {% endif %}
+        correspondant à « {{ recherche }} »</h2>       
+        <ul>
+        {% for motcle in results_motscles %}
+            <li><a href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle.nom_hl | safe }}</a></li>
+        {% endfor %}
+        </ul>
     {% endif %}
     
     {% if results_fiches|length > 0 %}
@@ -165,6 +185,24 @@ Toutes les fiches
         {% endfor %}
         </ol>
     {% endif %}
+
+    {% if results_fiches|length == 0 %}
+    <p>Aucune <a href="{% url 'fichier:index' %}">fiche</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+    {% if results_glossaire|length == 0 %}
+    <p>Aucune entrée du <a href="{% url 'fichier:glossaire' %}">glossaire</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+    {% if results_agenda|length == 0 %}
+    <p>Aucune entrée de l'<a href="{% url 'fichier:agenda' %}">agenda</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+    {% if results_document|length == 0 %}
+    <p>Aucun document du <a href="{% url 'fichier:desk' %}">desk</a> ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %} 
+
+    {% if results_entetes|length == 0 %}
+    <p>Aucune entête ne correspond à la recherche « <strong>{{ recherche }}</strong> ».</p>
+    {% endif %}
+
 
     {% endif %}
 

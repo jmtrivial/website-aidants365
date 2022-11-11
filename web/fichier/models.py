@@ -13,6 +13,7 @@ from django.utils.html import strip_tags
 from django.utils.text import Truncator
 from .utils import table, arrayToString, Agenda
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
+from django.contrib.postgres.aggregates.general import ArrayAgg
 from sortedm2m.fields import SortedManyToManyField
 from .utils import message_glossaire, message_sortable
 import locale
@@ -425,7 +426,9 @@ class Fiche(models.Model):
         return Fiche.objects.annotate(agg_title=Concat(Right(Concat(Value("00"), "niveau__ordre"), 2), Value(" "), "niveau__code", Value(" "),
                                                        "categorie1__code", Value(" "), "auteur__code", Value(" "),
                                                        Right(Concat(Value("0000"), "numero"), 4), Value(" "), "titre_fiche", output_field=models.CharField())). \
-            annotate(agg_contenu=Concat("sous_titre", Value(" "), "presentation", Value(" "), "problematique", Value(" "), "quatrieme_de_couverture", Value(" "),
+            annotate(agg_contenu=Concat("sous_titre", Value(" "),
+                                        "categories_libres", Value(" "), "themes__nom", Value(" "), "mots_cles__nom", Value(" "),
+                                        "presentation", Value(" "), "problematique", Value(" "), "quatrieme_de_couverture", Value(" "),
                                         "plan_du_site", Value(" Focus "), "detail_focus", Value(" "), "focus", Value(" "), "titre", Value(" "), "editeur", Value(" "), "auteurs", Value(" "), "collection",
                                         "partenaires", Value(" "), "reserves", Value(" "), "lesplus", Value(" "), "en_savoir_plus", output_field=models.CharField())). \
             annotate(search=search_vectors).filter(search=search_query). \
@@ -597,10 +600,13 @@ class EntreeAgenda(models.Model):
         if not search_text:
             return None
 
-        search_vectors = SearchVector('notes', weight='A', config='french')
+        search_vectors = SearchVector('agg_contenu', weight='A', config='french')
         search_query = SearchQuery(search_text, config='french')
-        return EntreeAgenda.objects.annotate(search=search_vectors).filter(search=search_query). \
-            annotate(notes_hl=SearchHeadline("notes",
+
+        return EntreeAgenda.objects. \
+            annotate(agg_contenu=Concat("themes__nom", Value(" "), "motscles__nom", Value(" "), "notes", output_field=models.CharField())). \
+            annotate(search=search_vectors).filter(search=search_query). \
+            annotate(notes_hl=SearchHeadline("agg_contenu",
                      search_query,
                      start_sel="<span class=\"highlight\">",
                      stop_sel="</span>",
