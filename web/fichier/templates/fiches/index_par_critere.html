@@ -89,7 +89,7 @@ avec l'étiquette {{ critere_nom }}
 
     {% if motsclesconnexes %}
     <h2>Étiquettes connexes</h2>
-    <p>Deux étiquettes sont considérées connexes s'ils apparaissent en même temps dans une même fiche, ou dans une même entrée d'agenda.</p>
+    <p>Deux étiquettes sont considérées connexes si elles apparaissent en même temps dans une même fiche, ou dans une même entrée d'agenda.</p>
     <ul>
         {% for mc in motsclesconnexes %}
         <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
