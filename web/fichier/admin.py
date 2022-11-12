@@ -12,7 +12,6 @@ admin.site.register(Categorie)
 admin.site.register(Auteur)
 
 
-
 class ThemeAdmin(admin.ModelAdmin):
     search_fields = ('nom', )
 
