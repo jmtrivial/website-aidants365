@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 
-from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, CategorieLibre, TypeCategorie, EntreeGlossaire, EntreeAgenda
+from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, TypeCategorie, EntreeGlossaire, EntreeAgenda
 from .forms import FicheForm
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
@@ -11,9 +11,6 @@ admin.site.register(TypeCategorie)
 admin.site.register(Categorie)
 admin.site.register(Auteur)
 
-
-class CategorieLibreAdmin(admin.ModelAdmin):
-    search_fields = ('nom', )
 
 
 class ThemeAdmin(admin.ModelAdmin):
@@ -37,7 +34,7 @@ class FicheAdmin(admin.ModelAdmin):
         return mark_safe(f'<a href="{obj.get_absolute_url()}">voir la fiche</a>')
 
     fields = (("niveau", "categorie1"),
-              ("categorie2", "categorie3", "categories_libres"),
+              ("categorie2", "categorie3"),
               ("auteur", "numero", "utiliser_suivant", "date_creation"),
               "titre_fiche",
               "sous_titre",
@@ -70,7 +67,6 @@ class FicheAdmin(admin.ModelAdmin):
 
 admin.site.register(MotCle, MotCleAdmin)
 admin.site.register(Theme, ThemeAdmin)
-admin.site.register(CategorieLibre, CategorieLibreAdmin)
 admin.site.register(Fiche, FicheAdmin)
 
 

@@ -48,23 +48,6 @@ Toutes les fiches
         {% endfor %}
     </ol>
      {% endif %}
-
-     {% if results_categories_libres|length > 0 %}
-     <h2>{{ results_categories_libres.count }} 
-        {% if results_categories_libres|length > 1 %}
-            catégories libres
-        {% else %}
-            catégorie libre
-        {% endif %}
-        correspondant à « {{ recherche }} »</h2>
-        <ol>
-            {% for categorie in results_categories_libres %}
-            <li><a href="{% url 'fichier:index_categorie_libre' categorie.id %}">{{ categorie.nom_hl | safe }}</a></li>
-            {% endfor %}
-        </ol>
-      </p>
-      {% endif %}
-
       
      {% if results_themes|length > 0 %}
      <h2>{{ results_themes.count }} 

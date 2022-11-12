@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, CategorieLibre, Niveau, Document, EntetePage
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, Niveau, Document, EntetePage
 from django.utils import timezone
 from django.db import models
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
@@ -78,7 +78,6 @@ class FicheForm(forms.ModelForm):
         exclude = ('urls', )
 
         widgets = {
-            "categories_libres": MySortedCheckboxSelectMultiple,
             "themes": MySortedCheckboxSelectMultiple,
             "mots_cles": MySortedCheckboxSelectMultiple,
             "fiches_connexes": MySortedCheckboxSelectMultiple,
@@ -91,7 +90,6 @@ class FicheForm(forms.ModelForm):
         if not instance:
             self.fields['utiliser_suivant'].initial = True
             self.fields['auteur'].initial = Auteur.get_connected_auteur(self.user)
-        self.fields["categories_libres"].widget.id_for_label = lambda x: "id_categories_libres"
         self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
         self.fields["mots_cles"].widget.id_for_label = lambda x: "id_mots_cles"
         self.fields["fiches_connexes"].widget.id_for_label = lambda x: "id_fiches_connexes"
@@ -197,16 +195,6 @@ class MotCleForm(WithUserForm):
         fields = '__all__'
 
 
-class CategorieLibreForm(WithUserForm):
-
-    autofocus = "nom"
-
-    class Meta:
-        model = CategorieLibre
-
-        fields = '__all__'
-
-
 class NiveauForm(WithUserForm):
 
     autofocus = "nom"
@@ -236,11 +224,6 @@ class ThemeMergeForm(TwoDifferentElementsForm):
 class MotCleMergeForm(TwoDifferentElementsForm):
     element1 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé principal")
     element2 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé à intégrer dans le principal")
-
-
-class CategorieLibreMergeForm(TwoDifferentElementsForm):
-    element1 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom__unaccent"), required=True, label="Catégorie libre principal")
-    element2 = forms.ModelChoiceField(queryset=CategorieLibre.objects.all().order_by("nom__unaccent"), required=True, label="Catégorie libre à intégrer dans le principal")
 
 
 class EntreeAgendaInvertForm(TwoDifferentElementsForm):

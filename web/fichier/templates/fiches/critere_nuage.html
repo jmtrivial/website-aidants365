@@ -38,8 +38,5 @@ Aidants 365 — {{ titre }} {{ visu }}
     <div class="block">
         {% include "fiches/nuage.html" %}
 
-        {% if elements_second %}
-        {% include "fiches/nuage.html" with elements=elements_second nom_humain=nom_humain_second critere_name=critere_name_second %}
-        {% endif %}
     </div>
 {% endblock %}

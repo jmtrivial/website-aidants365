@@ -226,31 +226,6 @@ class Auteur(models.Model):
         return self.code
 
 
-class CategorieLibre(models.Model):
-    nom = models.CharField(verbose_name="Nom de la catégorie libre", max_length=64, unique=True, blank=False)
-
-    class Meta:
-        verbose_name = "Catégorie libre"
-        verbose_name_plural = "Catégories libres"
-
-    def __str__(self):
-        return self.nom
-
-    def description_longue(self):
-        return self.nom
-
-    def rechercher(search_text):
-        return rechercher_nom_simple(search_text, CategorieLibre)
-
-    def associated_entries(self):
-        result = []
-
-        # Liste des entrées d'agenda associées à cette catégorie
-        result += Fiche.objects.filter(categories_libres=self.id)
-
-        return result
-
-
 class MotCle(models.Model):
     nom = models.CharField(verbose_name="Étiquette", max_length=64, unique=True, blank=False)
 
@@ -318,7 +293,6 @@ class Fiche(models.Model):
     categorie1 = models.ForeignKey(Categorie, verbose_name="Catégorie principale", on_delete=models.RESTRICT, related_name='%(class)s_categorie1')
     categorie2 = models.ForeignKey(Categorie, verbose_name="Deuxième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie2', blank=True, null=True)
     categorie3 = models.ForeignKey(Categorie, verbose_name="Troisième catégorie", on_delete=models.SET_NULL, related_name='%(class)s_categorie3', blank=True, null=True)
-    categories_libres = SortedManyToManyField(CategorieLibre, verbose_name="Catégories libres", blank=True, help_text=message_sortable)
 
     auteur = models.ForeignKey(Auteur, verbose_name="Auteur", on_delete=models.RESTRICT)
     marque = models.BooleanField(verbose_name="Entrée de qualité", default=False)
@@ -427,7 +401,7 @@ class Fiche(models.Model):
                                                        "categorie1__code", Value(" "), "auteur__code", Value(" "),
                                                        Right(Concat(Value("0000"), "numero"), 4), Value(" "), "titre_fiche", output_field=models.CharField())). \
             annotate(agg_contenu=Concat("sous_titre", Value(" "),
-                                        "categories_libres", Value(" "), "themes__nom", Value(" "), "mots_cles__nom", Value(" "),
+                                        "themes__nom", Value(" "), "mots_cles__nom", Value(" "),
                                         "presentation", Value(" "), "problematique", Value(" "), "quatrieme_de_couverture", Value(" "),
                                         "plan_du_site", Value(" Focus "), "detail_focus", Value(" "), "focus", Value(" "), "titre", Value(" "), "editeur", Value(" "), "auteurs", Value(" "), "collection",
                                         "partenaires", Value(" "), "reserves", Value(" "), "lesplus", Value(" "), "en_savoir_plus", output_field=models.CharField())).order_by("id").distinct('id'). \

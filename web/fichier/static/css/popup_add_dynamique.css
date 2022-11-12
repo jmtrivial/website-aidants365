@@ -63,7 +63,7 @@
     text-align: center;
 }
 
-#id_themes_anchor, #id_categories_libres_anchor, #id_mots_cles_anchor {
+#id_themes_anchor, #id_mots_cles_anchor {
     position: absolute;
     transform: translateY(-50vh);
 }

@@ -1,14 +1,14 @@
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, CategorieLibre, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document, EntetePage, Ephemeride
+from .models import Fiche, Niveau, Categorie, Auteur, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document, EntetePage, Ephemeride
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField, Subquery
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, CategorieLibreForm, ThemeMergeForm, MotCleMergeForm, CategorieLibreMergeForm, NiveauForm, DocumentForm, EntetePageForm, EntreeAgendaInvertForm, EntreeAgendaInvertWithForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, ThemeMergeForm, MotCleMergeForm, NiveauForm, DocumentForm, EntetePageForm, EntreeAgendaInvertForm, EntreeAgendaInvertWithForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -193,30 +193,20 @@ def annotate_categories_par_niveau_complet():
 @login_required
 def categories(request):
     categories = annotate_categories_par_niveau_complet().order_by("-fiche_count")
-    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("-fiche_count")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories",
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                    "visu_code": "basic", "visu": "triées par nombre total de fiches",
-                                                   "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
-                                                   "nom_humain_second_pluriel": "catégories libres",
-                                                   "critere_name_second": "categorie_libre",
-                                                   "critere_name_second_perms": "categorielibre",
                                                    'entete': get_entete("categories")})
 
 
 @login_required
 def categories_alpha(request):
     categories = annotate_categories_par_niveau_complet().order_by("-fiche_count").order_by(Lower("code__unaccent"))
-    categories_libres = annotate_categories_par_niveau_simple(CategorieLibre.objects).order_by("nom__unaccent")
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                    "elements": categories, "titre": "Toutes les catégories",
                                                    "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
                                                    "visu_code": "alpha", "visu": "par ordre alphabétique",
-                                                   "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
-                                                   "nom_humain_second_pluriel": "catégories libres",
-                                                   "critere_name_second": "categorie_libre",
-                                                   "critere_name_second_perms": "categorielibre",
                                                    'entete': get_entete("categories")})
 
 
@@ -224,15 +214,9 @@ def categories_alpha(request):
 def categories_nuage(request):
     categories = annotate_categories_par_niveau().order_by("code__unaccent")
     categories = annoter_class_nuage(categories)
-    categories_libres = CategorieLibre.objects.filter().annotate(fiche_count=Count('fiche', distinct=True)).order_by("nom__unaccent")
-    categories_libres = annoter_class_nuage(categories_libres)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "categories", "critere_name": "categorie",
                                                          "elements": categories, "titre": "Toutes les catégories",
                                                          "nom_humain": "catégorie", "nom_humain_pluriel": "catégories",
-                                                         "elements_second": categories_libres, "nom_humain_second": "catégorie libre",
-                                                         "nom_humain_second_pluriel": "catégories libres",
-                                                         "critere_name_second": "categorie_libre",
-                                                         "critere_name_second_perms": "categorielibre",
                                                          'entete': get_entete("categories")})
 
 
@@ -252,25 +236,6 @@ def index_auteur_detail(request, id1, id2):
     fiches = Fiche.objects.filter(auteur=auteur)
     return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "auteur", "critere": auteur,
                                                                     "critere_human": "de l'auteur", "critere_nom": auteur.nom,
-                                                                    "fiche_list": fiches, "fiche": fiche})
-
-
-@login_required
-def index_categorie_libre(request, id):
-    categorie_libre = get_object_or_404(CategorieLibre, pk=id)
-    fiches = Fiche.objects.filter(categories_libres=categorie_libre)
-    return render(request, 'fiches/index_par_critere.html', {"critere_name": "categorie_libre", "critere": categorie_libre,
-                                                             "critere_human": "de la catégorie libre", "critere_nom": str(categorie_libre),
-                                                             "fiche_list": fiches})
-
-
-@login_required
-def index_categorie_libre_detail(request, id1, id2):
-    categorie_libre = get_object_or_404(CategorieLibre, pk=id1)
-    fiche = get_object_or_404(Fiche, pk=id2)
-    fiches = Fiche.objects.filter(categories_libres=categorie_libre)
-    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "categorie_libre", "critere": categorie_libre,
-                                                                    "critere_human": "de la catégorie libre", "critere_nom": str(categorie_libre),
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
@@ -446,7 +411,6 @@ def rechercher(request):
             results_agenda = EntreeAgenda.rechercher(recherche)
             results_motscles = MotCle.rechercher(recherche)
             results_themes = Theme.rechercher(recherche)
-            results_categories_libres = CategorieLibre.rechercher(recherche)
             results_categories = Categorie.rechercher(recherche)
             results_documents = Document.rechercher(recherche)
             results_entetes = EntetePage.rechercher(recherche)
@@ -457,7 +421,6 @@ def rechercher(request):
                                                       'results_motscles': results_motscles,
                                                       'results_themes': results_themes,
                                                       'results_categories': results_categories,
-                                                      'results_categories_libres': results_categories_libres,
                                                       'results_documents': results_documents,
                                                       'results_entetes': results_entetes,
                                                       'recherche': recherche,
@@ -606,17 +569,6 @@ def edit_object(request, classname, id=None, clone=False):
         reverse_url = 'fichier:motscles_alpha'
         reverse_url_cancel = 'fichier:motscles_alpha'
         single_reverse = True
-    elif classname == "categorie_libre":
-        nom_classe = "categorielibre"
-        titre_add = "Création d\'une catégorie libre"
-        titre_edition = "Édition de la catégorie libre"
-        titre_clone = "Duplication d\'une catégorie libre"
-        message_add_success = 'La catégorie libre "%s" a été ajoutée avec succès.'
-        message_edit_success = 'La catégorie libre "%s" a été modifiée avec succès.'
-        classe = CategorieLibre
-        classeform = CategorieLibreForm
-        reverse_url = 'fichier:index_categorie_libre'
-        reverse_url_cancel = 'fichier:categories'
     elif classname == "niveau":
         nom_classe = "niveau"
         titre_add = "Création d\'un niveau"
@@ -836,13 +788,6 @@ class DeleteObjectView(LoginRequiredMixin, DeleteView):
             return super(DeleteObjectView, self).post(request, *args, **kwargs)
 
 
-@method_decorator(permission_required("fichier.delete_categorielibre"), name='dispatch')
-class DeleteCategorieLibreView(DeleteObjectView):
-    model = CategorieLibre
-    success_url = reverse_lazy("fichier:categories")
-    cancel_url = "fichier:index_categorie_libre"
-
-
 @method_decorator(permission_required("fichier.delete_theme"), name='dispatch')
 class DeleteThemeView(DeleteObjectView):
     model = Theme
@@ -897,7 +842,7 @@ def page_not_found_view(request, exception=None):
 
 
 def rest_api(request, classname):
-    classes = {"categorie_libre": CategorieLibre, "theme": Theme, "motcle": MotCle}
+    classes = {"theme": Theme, "motcle": MotCle}
 
     def json_context(dictionary):
         return {"json": json.dumps(dictionary)}
@@ -988,13 +933,7 @@ def entree_agenda_invert(request):
 @login_required
 def merge(request, classname):
 
-    if classname == "categorie_libre":
-        pluriel = "catégories libres"
-        classform = CategorieLibreMergeForm
-        reverse_url_main = "fichier:categories"
-        field_fiche = "categories_libres"
-        nom_classe = "categorielibre"
-    elif classname == "theme":
+    if classname == "theme":
         pluriel = "thèmes"
         classform = ThemeMergeForm
         reverse_url_main = "fichier:themes"
@@ -1028,9 +967,6 @@ def merge(request, classname):
                     elif classname == "motcle":
                         fiche.mots_cles.add(form.cleaned_data["element1"])
                         fiche.mots_cles.remove(form.cleaned_data["element2"])
-                    elif classname == "categorie_libre":
-                        fiche.categories_libres.add(form.cleaned_data["element1"])
-                        fiche.categories_libres.remove(form.cleaned_data["element2"])
                 if classname == "theme" or classname == "motcle":
                     for entree in EntreeAgenda.objects.filter(**{field_agenda: form.cleaned_data["element2"].id}):
                         if classname == "theme":
@@ -1044,8 +980,6 @@ def merge(request, classname):
                     Theme.objects.filter(pk=form.cleaned_data["element2"].id).delete()
                 elif classname == "motcle":
                     MotCle.objects.filter(pk=form.cleaned_data["element2"].id).delete()
-                elif classname == "categorie_libre":
-                    CategorieLibre.objects.filter(pk=form.cleaned_data["element2"].id).delete()
 
                 messages.success(request, "Fusion réussie entre les deux " + pluriel + " " + form.cleaned_data["element1"].nom + " et " + form.cleaned_data["element2"].nom)
                 return HttpResponseRedirect(reverse(reverse_url_main))

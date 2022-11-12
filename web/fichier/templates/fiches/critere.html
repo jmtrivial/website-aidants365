@@ -69,10 +69,6 @@ Aidants 365 — {{ titre }} {{ visu }}
 
         {% include "fiches/table_par_niveau.html" %}
 
-        {% if elements_second %}
-        {% include "fiches/table_par_niveau.html" with elements=elements_second nom_humain=nom_humain_second critere_name=critere_name_second %}
-        {% endif %}
-
     </div>
 
     {% if key_alpha or paginator %}
