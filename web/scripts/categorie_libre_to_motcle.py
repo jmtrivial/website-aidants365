@@ -16,5 +16,3 @@ def run():
         for f in Fiche.objects.filter(categories_libres=c.id):
             f.mots_cles.add(obj.id)
             f.save()
-
-
