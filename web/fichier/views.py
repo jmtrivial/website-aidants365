@@ -132,6 +132,7 @@ def agenda_sans_niveau(request):
     entrees = EntreeAgenda.objects.filter(niveau=None).order_by("date")
     return render(request, 'fiches/agenda_sans_niveau.html', {'entrees': entrees})
 
+
 @login_required
 def index_niveau(request, id):
     niveau = get_object_or_404(Niveau, pk=id)
