@@ -314,9 +314,9 @@ def index_etiquette(request, id):
     fiches = Fiche.objects.filter(etiquettes=etiquette)
     agendas = EntreeAgenda.objects.filter(etiquettes=etiquette).order_by("date")
     glossaires = EntreeGlossaire.objects.filter(Q(entree=etiquette.nom) | Q(formes_alternatives__contains=[etiquette.nom]))
-    etiquette_connexes = Etiquette.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("etiquettes")
-                                              .union(Fiche.objects.filter(id__in=fiches.values("id")).values("etiquettes"))
-                                              ).exclude(id=id).order_by(Lower("nom__unaccent"))
+    etiquettes_connexes = Etiquette.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("etiquettes")
+                                                   .union(Fiche.objects.filter(id__in=fiches.values("id")).values("etiquettes"))
+                                                   ).exclude(id=id).order_by(Lower("nom__unaccent"))
 
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "etiquette", "critere": etiquette,
                                                              "critere_human": "de l'étiquette", "critere_nom": str(etiquette),
