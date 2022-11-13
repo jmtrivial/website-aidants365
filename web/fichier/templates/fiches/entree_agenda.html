@@ -85,10 +85,13 @@ Glossaire
             {% include "fiches/contenu_agenda.html" with hx="h2" %}
         </div>
         <div class="colonne">
-            <div class="illustration"><img src="{%if ephemeride.entree.illustration %}
-                {{ ephemeride.entree.illustration.url }}
+            <div class="illustration">
+                {%if ephemeride.entree.illustration %}
+                <img src="{{ ephemeride.entree.illustration.url }}" alt="{{ ephemeride.entree.illustration_alt }}" />
                 {% else %}
-                {% static 'images/caregiver.jpg' %}{% endif %}" /></div>
+                <img src="{% static 'images/caregiver.jpg' %}" alt="sur un bord de plage, un homme âgé assez maigre pousse le fauteuil roulant d'un homme nettement plus fort et très couvert. Ils portent tous les deux une casquette." />
+                {% endif %}
+            </div>
 
             <div class="notes-libres">
                 

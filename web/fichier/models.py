@@ -541,7 +541,9 @@ class EntreeAgenda(models.Model):
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
-    illustration = models.ImageField(upload_to='illustrations_agenda', blank=True, null=True)
+    illustration = models.ImageField(verbose_name="Illustration", upload_to='illustrations_agenda', blank=True, null=True)
+
+    illustration_alt = models.CharField(verbose_name="Texte alternatif à l'illustration (audiodescription)", max_length=512, default="")
 
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
