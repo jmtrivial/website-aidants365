@@ -128,12 +128,18 @@ def detail(request, id):
 
 
 @login_required
+def agenda_sans_niveau(request):
+    entrees = EntreeAgenda.objects.filter(niveau=None).order_by("date")
+    return render(request, 'fiches/agenda_sans_niveau.html', {'entrees': entrees})
+
+@login_required
 def index_niveau(request, id):
     niveau = get_object_or_404(Niveau, pk=id)
     fiches = Fiche.objects.filter(niveau=niveau)
+    entreesagenda = EntreeAgenda.objects.filter(niveau=niveau)
     return render(request, 'fiches/index_par_critere.html', {"critere_name": "niveau", "critere": niveau,
                                                              "critere_human": "du niveau", "critere_nom": str(niveau),
-                                                             "fiche_list": fiches})
+                                                             "fiche_list": fiches, "entrees_agenda_list": entreesagenda})
 
 
 @login_required
@@ -141,9 +147,10 @@ def index_niveau_detail(request, id1, id2):
     niveau = get_object_or_404(Niveau, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
     fiches = Fiche.objects.filter(niveau=niveau)
+    entreesagenda = EntreeAgenda.objects.filter(niveau=niveau)
     return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "niveau", "critere": niveau,
                                                                     "critere_human": "du niveau", "critere_nom": str(niveau),
-                                                                    "fiche_list": fiches, "fiche": fiche})
+                                                                    "fiche_list": fiches, "entrees_agenda_list": entreesagenda, "fiche": fiche})
 
 
 @login_required

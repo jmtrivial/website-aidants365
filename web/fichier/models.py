@@ -534,6 +534,7 @@ class EntreeAgenda(models.Model):
     date = models.DateField(blank=True, null=True)
 
     marque = models.BooleanField(verbose_name="Entrée de qualité", default=False)
+    niveau = models.ForeignKey(Niveau, verbose_name="Niveau dominant du contenu", on_delete=models.RESTRICT, blank=True, null=True)
 
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True, help_text=message_sortable)
     etiquettes = SortedManyToManyField(Etiquette, verbose_name="Étiquettes associées", blank=True, help_text=message_sortable)

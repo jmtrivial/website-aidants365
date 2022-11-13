@@ -1,0 +1,37 @@
+{% extends "fiches/page.html" %}
+
+{% load fichier_extras %}
+
+{% block entete_menu %}
+{% with "agenda" as active_page %}
+    {{ block.super }}
+{% endwith %}
+{% endblock %}
+
+
+
+{% block title %}
+Le fichier Aidants365 — Entrées d'agenda sans niveau
+{% endblock %}
+
+
+
+{% block content %}
+
+
+<div class="block" id="entete">
+    <h1>Entrées d'agenda sans niveau</h1>
+    <p>Sont listées sur cette page toutes les entrées d'agenda pour lesquelles le niveau de contenu dominant n'a pas été défini.
+</div>
+<div class="block tableau_agenda">
+    {% if not entrees or entrees.all.count == 0 %}
+    <p>Toutes les entrées d'agenda ont un niveau de contenu dominant défini.</p>
+    {% else %}
+        <ul>
+            {% for ea in entrees %}
+            <li><a href="{% url 'fichier:entree_agenda_pk' ea.id %}">{{ ea }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+</div>
+{% endblock %}

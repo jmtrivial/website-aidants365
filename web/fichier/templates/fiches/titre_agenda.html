@@ -11,17 +11,21 @@
 {{ ephemeride.ephemeride | safe }}
 
 
-<div style="clear: both; height: 1em"></div>
+<div style="clear: both; height: 1em;"></div>
 
 <div class="checked">
     {% if entree.marque %}
         ☑
     {% endif %}
 </div>
-<div style="clear: both"></div>
+<div style="clear: both; height: 1em;"></div>
 
 {% if ephemeride.entree %} 
     {% with entree=ephemeride.entree %}
+        {% if entree.niveau %}
+        <strong>Contenu dominant:</strong> {{ entree.niveau.couleur | carre_colore }} <a class="internal" href="{% url 'fichier:index_niveau' entree.niveau.id %}">{{ entree.niveau }}</a><br>
+        {% endif %}
+
         {% if entree.themes.all %}
         <strong>Thème{% if entree.themes.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
         {% endif %}

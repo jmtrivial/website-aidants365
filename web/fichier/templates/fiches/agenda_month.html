@@ -36,7 +36,9 @@ Le fichier Aidants365 — Agenda
     </div>
 
     {% if perms.fichier.change_entreeagenda %}
-    <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a></div>
+    <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a><br />
+        <a href="{% url 'fichier:agenda_sans_niveau' %}">entrées sans niveau de contenu ▸</a>
+    </div>
     {% endif %}
 
 </div>
