@@ -83,6 +83,9 @@ avec l'étiquette {{ critere_nom }}
         <p>Pas d'entrée d'agenda disponible.</p>
         {% endif %}
     {% endif %}
+    {% if not entrees_agenda_list %}
+    <p>Il n'y a pas d'entrées d'agenda correspondant à ce niveau de contenu.</p>
+    {% endif %}
 
     {% if entreesglossaire %}
     <h2>Entrée{% if entreesglossaire.all.count > 1%}s{% endif %} du glossaire similaire{% if entreesglossaire.all.count > 1%}s{% endif %} à cette étiquette</h2>
