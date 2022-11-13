@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     'sortedm2m',
     'django_extensions',
+    'dbbackup',  # django-dbbackup
 ]
 
 MIDDLEWARE = [
@@ -196,3 +197,6 @@ else:
     }
 
 DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
+
+DBBACKUP_STORAGE = 'django.core.files.storage.FileSystemStorage'
+DBBACKUP_STORAGE_OPTIONS = {'location': '/media-backups/'}

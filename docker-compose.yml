@@ -6,6 +6,7 @@ services:
     command: python manage.py runserver 0.0.0.0:8080
     volumes:
       - ./web/:/usr/src/app/
+      - ./media-backups/:/media-backups/
     ports:
       - 8080:8080
     env_file:

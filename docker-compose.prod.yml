@@ -10,6 +10,7 @@ services:
       - 8080
     volumes:
       - static_volume:/home/app/web/static
+      - ./media-backups/:/media-backups/
     env_file:
       - ./.env.prod
     depends_on:
