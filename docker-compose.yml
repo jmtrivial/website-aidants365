@@ -7,6 +7,7 @@ services:
     volumes:
       - ./web/:/usr/src/app/
       - ./media-backups/:/media-backups/
+      - ./media/:/media/
     ports:
       - 8080:8080
     env_file:
