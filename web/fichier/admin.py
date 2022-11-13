@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 from django.http import HttpResponseRedirect
 
-from .models import Niveau, Categorie, Fiche, Auteur, Theme, MotCle, TypeCategorie, EntreeGlossaire, EntreeAgenda
+from .models import Niveau, Categorie, Fiche, Auteur, Theme, Etiquette, TypeCategorie, EntreeGlossaire, EntreeAgenda
 from .forms import FicheForm
 from django_better_admin_arrayfield.admin.mixins import DynamicArrayMixin
 
@@ -16,7 +16,7 @@ class ThemeAdmin(admin.ModelAdmin):
     search_fields = ('nom', )
 
 
-class MotCleAdmin(admin.ModelAdmin):
+class EtiquetteAdmin(admin.ModelAdmin):
     search_fields = ('nom', )
 
 
@@ -51,7 +51,7 @@ class FicheAdmin(admin.ModelAdmin):
               "production",
               "partenaires",
               "themes",
-              "mots_cles",
+              "etiquettes",
               "presentation",
               "problematique",
               "quatrieme_de_couverture",
@@ -64,7 +64,7 @@ class FicheAdmin(admin.ModelAdmin):
               "fiches_connexes", )
 
 
-admin.site.register(MotCle, MotCleAdmin)
+admin.site.register(Etiquette, EtiquetteAdmin)
 admin.site.register(Theme, ThemeAdmin)
 admin.site.register(Fiche, FicheAdmin)
 

@@ -64,17 +64,17 @@ Toutes les fiches
     </ol>
     {% endif %}
 
-    {% if results_motscles|length > 0 %}
-    <h2>{{ results_motscles.count }} 
-        {% if results_motscles|length > 1 %}
+    {% if results_etiquettes|length > 0 %}
+    <h2>{{ results_etiquettes.count }} 
+        {% if results_etiquettes|length > 1 %}
             étiquettes
         {% else %}
             étiquette
         {% endif %}
         correspondant à « {{ recherche }} »</h2>       
         <ul>
-        {% for motcle in results_motscles %}
-            <li><a href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle.nom_hl | safe }}</a></li>
+        {% for etiquette in results_etiquettes %}
+            <li><a href="{% url 'fichier:index_etiquette' etiquette.id %}">{{ etiquette.nom_hl | safe }}</a></li>
         {% endfor %}
         </ul>
     {% endif %}

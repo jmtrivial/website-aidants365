@@ -25,8 +25,8 @@
         {% if entree.themes.all %}
         <strong>Thème{% if entree.themes.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for theme in entree.themes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_theme' theme.id %}">{{ theme }}</a>{% endfor %}<br>
         {% endif %}
-        {% if entree.motscles.all %}
-        <strong>Étiquette{% if entree.motscles.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for motcle in entree.motscles.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_motcle' motcle.id %}">{{ motcle }}</a>{% endfor %}
+        {% if entree.etiquettes.all %}
+        <strong>Étiquette{% if entree.etiquettes.all.count > 1%}s{% endif %}&nbsp;:</strong> {% for etiquette in entree.etiquettes.all %}{% if not forloop.first %}, {% endif %}<a class="internal" href="{% url 'fichier:index_etiquette' etiquette.id %}">{{ etiquette }}</a>{% endfor %}
         {% endif %}
 
         {% if entree.date_derniere_modification and not simple %}

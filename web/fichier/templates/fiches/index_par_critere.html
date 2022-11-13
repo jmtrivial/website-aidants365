@@ -10,8 +10,8 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 ?categorie1={{ critere.id }}
 {% elif critere_name == "theme" %}
 ?themes={{ critere.id }}
-{% elif critere_name == "motcle" %}
-?mots_cles={{ critere.id }}
+{% elif critere_name == "etiquette" %}
+?etiquettes={{ critere.id }}
 {% endif %}
 {% endspaceless %}{% endblock %}
 
@@ -20,7 +20,7 @@ Le fichier Aidants365 — les fiches {{ critere_human }} {{ critere_nom }}
 dans la catégorie {{ critere_nom }}
 {% elif critere_name == "theme" %}
 dans le thème {{ critere_nom }}
-{% elif critere_name == "motcle" %}
+{% elif critere_name == "etiquette" %}
 avec l'étiquette {{ critere_nom }}
 {% endif %}
 {% endspaceless %}{% endblock %}
@@ -61,7 +61,7 @@ avec l'étiquette {{ critere_nom }}
     <h2>Fiches</h2>
     <p>Pas de fiche disponible.</p>
     {% endif %}
-    {% if critere_name == "theme" or critere_name == "motcle" %}
+    {% if critere_name == "theme" or critere_name == "etiquette" %}
         <h2>Entrées de l'agenda</h2>
         {% if entreesagenda %}
         <ul>
@@ -75,7 +75,7 @@ avec l'étiquette {{ critere_nom }}
     {% endif %}
 
     {% if entreesglossaire %}
-    <h2>Entrée{% if entreesglossaire.all.count > 1%}s{% endif %} du glossaire similaire{% if motscles.all.count > 1%}s{% endif %} à cette étiquette</h2>
+    <h2>Entrée{% if entreesglossaire.all.count > 1%}s{% endif %} du glossaire similaire{% if entreesglossaire.all.count > 1%}s{% endif %} à cette étiquette</h2>
     <ul>
         {% for eg in entreesglossaire %}
         <li><a href="{{ eg.get_absolute_url }}">{{ eg }}</a></li>
@@ -83,11 +83,11 @@ avec l'étiquette {{ critere_nom }}
     </ul>
     {% endif %}
 
-    {% if motsclesconnexes %}
+    {% if etiquettesconnexes %}
     <h2>Étiquettes connexes</h2>
     <p>Deux étiquettes sont considérées connexes si elles apparaissent en même temps dans une même fiche, ou dans une même entrée d'agenda.</p>
     <ul>
-        {% for mc in motsclesconnexes %}
+        {% for mc in etiquettesconnexes %}
         <li><a href="{{ mc.get_absolute_url }}">{{ mc }}</a></li>
     {% endfor %}
     </ul>

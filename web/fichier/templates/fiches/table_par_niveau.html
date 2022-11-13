@@ -2,7 +2,7 @@
 <table class="distribution">
     <thead>
         <tr>
-            {% if critere_name == "theme" or critere_name == "motcle" %}
+            {% if critere_name == "theme" or critere_name == "etiquette" %}
             <tr>
                 <td></td>
                 <th colspan="4" scope="colgroup">Fiches</th>
@@ -14,7 +14,7 @@
             <th>{% get_carre_colore_B %} pratique</th>
             <th>{% get_carre_colore_C %} opérationnel</th>
             <th>total fiches</th>
-        {% if critere_name == "theme" or critere_name == "motcle" %}
+        {% if critere_name == "theme" or critere_name == "etiquette" %}
             <th>entrées agenda</th>
         {% endif %}
         </tr>
@@ -34,7 +34,7 @@
         <td>{{element.fiche_count_B}}</td>
         <td>{{element.fiche_count_C}}</td>
         <td {% if element.fiche_count == 0 %}class="missing-entry"{% endif %}>{{element.fiche_count }}</td> 
-        {% if critere_name == "theme" or critere_name == "motcle" %}
+        {% if critere_name == "theme" or critere_name == "etiquette" %}
         <td {% if element.agenda_count == 0 %}class="missing-entry"{% endif %}>{{element.agenda_count }}</td> 
         {% endif %}
     </tr>

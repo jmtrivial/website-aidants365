@@ -4,7 +4,7 @@
     {% endif %}
 </div>
 
-{% if critere_name == "motcle" or critere_name == "theme" %}
+{% if critere_name == "etiquette" or critere_name == "theme" %}
 {% if "fichier."|add:"change_"|add:critere_name in perms %}
 <div class="lien_next bouton"><a href="{%url 'fichier:merge' critere_name %}">fusionner deux {{ nom_humain_pluriel }}</a></div>
 {% endif %}

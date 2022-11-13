@@ -1,14 +1,14 @@
 from django.http import HttpResponse
 from django.urls import reverse, reverse_lazy
 from django.template import loader
-from .models import Fiche, Niveau, Categorie, Auteur, Theme, MotCle, EntreeGlossaire, EntreeAgenda, Document, EntetePage, Ephemeride
+from .models import Fiche, Niveau, Categorie, Auteur, Theme, Etiquette, EntreeGlossaire, EntreeAgenda, Document, EntetePage, Ephemeride
 from django.shortcuts import get_object_or_404, render
 from django.db.models import Count, Q, Case, When, IntegerField, Max, F, ExpressionWrapper, Value, FloatField, Subquery
 from decimal import Decimal
 from django.utils import timezone
 from django.contrib.postgres.search import SearchVector, SearchQuery, SearchHeadline
 from django.http import Http404, HttpResponseRedirect
-from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, MotCleForm, ThemeMergeForm, MotCleMergeForm, NiveauForm, DocumentForm, EntetePageForm, EntreeAgendaInvertForm, EntreeAgendaInvertWithForm
+from .forms import FicheForm, EntreeGlossaireForm, EntreeAgendaForm, CategorieForm, ThemeForm, EtiquetteForm, ThemeMergeForm, EtiquetteMergeForm, NiveauForm, DocumentForm, EntetePageForm, EntreeAgendaInvertForm, EntreeAgendaInvertWithForm
 from django.core.exceptions import PermissionDenied
 from django.contrib import messages
 from django.views.generic.edit import DeleteView
@@ -80,8 +80,8 @@ def accueil(request):
     themes = Theme.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
     themes = annoter_class_nuage(themes)
 
-    motcles = MotCle.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
-    motcles = annoter_class_nuage(motcles)
+    etiquettes = Etiquette.objects.annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by("nom__unaccent")
+    etiquettes = annoter_class_nuage(etiquettes)
 
     aujourdhui = timezone.now()
     entrees_agenda = EntreeAgenda.objects.filter(date=aujourdhui)
@@ -97,7 +97,7 @@ def accueil(request):
                'entrees_agenda_list': latest_entrees_agenda_list,
                "niveaux": niveaux,
                "themes": themes,
-               "motcles": motcles,
+               "etiquettes": etiquettes,
                "entree_agenda": entree_agenda, "ephemeride": ephemeride, 'entete': get_entete("accueil"),
                "entete_mois": get_entete("agenda/" + str(aujourdhui.year) + "/" + ("0" + str(aujourdhui.month))[-2:] + "/"),
                "entete_mois_annee": aujourdhui.year, "entete_mois_mois": Agenda.month_name[aujourdhui.month]}
@@ -309,90 +309,90 @@ def themes_nuage(request):
 
 
 @login_required
-def index_motcle(request, id):
-    motcle = get_object_or_404(MotCle, pk=id)
-    fiches = Fiche.objects.filter(mots_cles=motcle)
-    agendas = EntreeAgenda.objects.filter(motscles=motcle).order_by("date")
-    glossaires = EntreeGlossaire.objects.filter(Q(entree=motcle.nom) | Q(formes_alternatives__contains=[motcle.nom]))
-    motscles_connexes = MotCle.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("motscles")
-                                              .union(Fiche.objects.filter(id__in=fiches.values("id")).values("mots_cles"))
+def index_etiquette(request, id):
+    etiquette = get_object_or_404(Etiquette, pk=id)
+    fiches = Fiche.objects.filter(etiquettes=etiquette)
+    agendas = EntreeAgenda.objects.filter(etiquettes=etiquette).order_by("date")
+    glossaires = EntreeGlossaire.objects.filter(Q(entree=etiquette.nom) | Q(formes_alternatives__contains=[etiquette.nom]))
+    etiquette_connexes = Etiquette.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("etiquettes")
+                                              .union(Fiche.objects.filter(id__in=fiches.values("id")).values("etiquettes"))
                                               ).exclude(id=id).order_by(Lower("nom__unaccent"))
 
-    return render(request, 'fiches/index_par_critere.html', {"critere_name": "motcle", "critere": motcle,
-                                                             "critere_human": "de l'étiquette", "critere_nom": str(motcle),
+    return render(request, 'fiches/index_par_critere.html', {"critere_name": "etiquette", "critere": etiquette,
+                                                             "critere_human": "de l'étiquette", "critere_nom": str(etiquette),
                                                              "fiche_list": fiches, "entreesagenda": agendas,
                                                              "entreesglossaire": glossaires,
-                                                             "motsclesconnexes": motscles_connexes,
+                                                             "etiquettesconnexes": etiquettes_connexes,
                                                              'entete': get_entete("themes")})
 
 
 @login_required
-def index_motcle_detail(request, id1, id2):
-    motcle = get_object_or_404(MotCle, pk=id1)
+def index_etiquette_detail(request, id1, id2):
+    etiquette = get_object_or_404(Etiquette, pk=id1)
     fiche = get_object_or_404(Fiche, pk=id2)
-    fiches = Fiche.objects.filter(mots_cles=motcle)
-    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "motcle", "critere": motcle,
-                                                                    "critere_human": "de l'étiquette", "critere_nom": str(motcle),
+    fiches = Fiche.objects.filter(etiquettes=etiquette)
+    return render(request, 'fiches/index_par_critere_detail.html', {"critere_name": "etiquette", "critere": etiquette,
+                                                                    "critere_human": "de l'étiquette", "critere_nom": str(etiquette),
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
 @login_required
-def motscles(request):
-    return motscles_page(request, 1)
+def etiquettes(request):
+    return etiquettes_page(request, 1)
 
 
 @login_required
-def motscles_page(request, key):
-    motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by("-fiche_count")
+def etiquettes_page(request, key):
+    etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True).order_by("-fiche_count")
     step = 20
-    mc = Paginator(motscles, step)
-    nb_motscles = MotCle.objects.count()
+    mc = Paginator(etiquettes, step)
+    nb_etiquettes = Etiquette.objects.count()
     extension_titre = "de " + str(step * (key - 1) + 1) + " à " + str(step * key)
-    return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
+    return render(request, 'fiches/critere.html', {"critere_name_pluriel": "etiquettes", "critere_name": "etiquette",
                                                    "elements": mc.page(key).object_list,
-                                                   "nb_elements": nb_motscles,
+                                                   "nb_elements": nb_etiquettes,
                                                    "extension_titre": extension_titre,
                                                    "p_id": key,
-                                                   "url_key_paginator": "fichier:motscles_page",
+                                                   "url_key_paginator": "fichier:etiquettes_page",
                                                    "paginator": mc,
                                                    "titre": "Étiquettes",
                                                    "nom_humain": "étiquette", "nom_humain_pluriel": "étiquettes",
                                                    "visu_code": "basic", "visu": "triées par nombre de fiches",
-                                                   'entete': get_entete("motscles")})
+                                                   'entete': get_entete("etiquettes")})
 
 
 @login_required
-def motscles_alpha(request):
-    return motscles_alpha_page(request, "A")
+def etiquettes_alpha(request):
+    return etiquettes_alpha_page(request, "A")
 
 
 @login_required
-def motscles_alpha_page(request, key):
+def etiquettes_alpha_page(request, key):
     if key >= "A" and key <= "Z":
-        motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by(Lower("nom__unaccent")).filter(nom__istartswith=key)
+        etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True).order_by(Lower("nom__unaccent")).filter(nom__istartswith=key)
         extension_titre = "commençant par " + key
     else:
-        motscles = annotate_categories_par_niveau_simple(MotCle.objects, True).order_by(Lower("nom__unaccent")).exclude(nom__unaccent__iregex=r'^[a-zA-Z].*$')
+        etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True).order_by(Lower("nom__unaccent")).exclude(nom__unaccent__iregex=r'^[a-zA-Z].*$')
         extension_titre = "ne commençant pas par une lettre"
-    nb_motscles = MotCle.objects.count()
-    return render(request, 'fiches/critere.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                   "nb_elements": nb_motscles, "key_alpha": key,
+    nb_etiquettes = Etiquette.objects.count()
+    return render(request, 'fiches/critere.html', {"critere_name_pluriel": "etiquettes", "critere_name": "etiquette",
+                                                   "nb_elements": nb_etiquettes, "key_alpha": key,
                                                    "extension_titre": extension_titre,
-                                                   "url_key_alpha": "fichier:motscles_alpha_page",
-                                                   "elements": motscles, "titre": "Étiquettes",
+                                                   "url_key_alpha": "fichier:etiquettes_alpha_page",
+                                                   "elements": etiquettes, "titre": "Étiquettes",
                                                    "nom_humain": "étiquette", "nom_humain_pluriel": "étiquettes",
                                                    "visu_code": "alpha", "visu": "",
-                                                   "entete": get_entete("motscles")})
+                                                   "entete": get_entete("etiquettes")})
 
 
 @login_required
-def motscles_nuage(request):
-    motscles = MotCle.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by(Lower("nom__unaccent"))
-    motscles = annoter_class_nuage(motscles)
-    return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "motscles", "critere_name": "motcle",
-                                                         "elements": motscles, "titre": "Toutes les étiquettes",
+def etiquettes_nuage(request):
+    etiquettes = Etiquette.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by(Lower("nom__unaccent"))
+    etiquettes = annoter_class_nuage(etiquettes)
+    return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "etiquettes", "critere_name": "etiquette",
+                                                         "elements": etiquettes, "titre": "Toutes les étiquettes",
                                                          "nom_humain": "étiquette", "nom_humain_pluriel": "étiquettes",
-                                                         "entete": get_entete("motscles")})
+                                                         "entete": get_entete("etiquettes")})
 
 
 @login_required
@@ -409,7 +409,7 @@ def rechercher(request):
             results_fiches = Fiche.rechercher(recherche)
             results_glossaire = EntreeGlossaire.rechercher(recherche)
             results_agenda = EntreeAgenda.rechercher(recherche)
-            results_motscles = MotCle.rechercher(recherche)
+            results_etiquettes = Etiquette.rechercher(recherche)
             results_themes = Theme.rechercher(recherche)
             results_categories = Categorie.rechercher(recherche)
             results_documents = Document.rechercher(recherche)
@@ -418,13 +418,13 @@ def rechercher(request):
     return render(request, 'fiches/rechercher.html', {'results_fiches': results_fiches,
                                                       'results_glossaire': results_glossaire,
                                                       'results_agenda': results_agenda,
-                                                      'results_motscles': results_motscles,
+                                                      'results_etiquettes': results_etiquettes,
                                                       'results_themes': results_themes,
                                                       'results_categories': results_categories,
                                                       'results_documents': results_documents,
                                                       'results_entetes': results_entetes,
                                                       'recherche': recherche,
-                                                      "entete": get_entete("motscles")})
+                                                      "entete": get_entete("recherche")})
 
 
 @login_required
@@ -457,8 +457,8 @@ def recherche_glossaire(request, txt):
 @login_required
 def entree_glossaire(request, id):
     entree = get_object_or_404(EntreeGlossaire, pk=id)
-    motscles = MotCle.objects.filter(Q(nom=entree.entree) | Q(nom=entree.formes_alternatives))
-    context = {'entree': entree, 'motscles': motscles}
+    etiquettes = Etiquette.objects.filter(Q(nom=entree.entree) | Q(nom=entree.formes_alternatives))
+    context = {'entree': entree, 'etiquettes': etiquettes}
     return render(request, 'fiches/entree_glossaire.html', context)
 
 
@@ -557,17 +557,17 @@ def edit_object(request, classname, id=None, clone=False):
         reverse_url = 'fichier:themes_alpha'
         reverse_url_cancel = 'fichier:themes_alpha'
         single_reverse = True
-    elif classname == "motcle":
-        nom_classe = "motcle"
+    elif classname == "etiquette":
+        nom_classe = "etiquette"
         titre_add = "Création d\'une étiquette"
         titre_edition = "Édition de l'étiquette"
         titre_clone = "Duplication de l'étiquette"
         message_add_success = 'L\'étiquette "%s" a été ajoutée avec succès.'
         message_edit_success = 'L\'étiquette "%s" a été modifiée avec succès.'
-        classe = MotCle
-        classeform = MotCleForm
-        reverse_url = 'fichier:motscles_alpha'
-        reverse_url_cancel = 'fichier:motscles_alpha'
+        classe = Etiquette
+        classeform = EtiquetteForm
+        reverse_url = 'fichier:etiquettes_alpha'
+        reverse_url_cancel = 'fichier:etiquettes_alpha'
         single_reverse = True
     elif classname == "niveau":
         nom_classe = "niveau"
@@ -795,11 +795,11 @@ class DeleteThemeView(DeleteObjectView):
     cancel_url = "fichier:entree_theme"
 
 
-@method_decorator(permission_required("fichier.delete_motcle"), name='dispatch')
-class DeleteMotCleView(DeleteObjectView):
-    model = MotCle
-    success_url = reverse_lazy("fichier:motscles")
-    cancel_url = "fichier:index_motcle"
+@method_decorator(permission_required("fichier.delete_etiquette"), name='dispatch')
+class DeleteEtiquetteView(DeleteObjectView):
+    model = Etiquette
+    success_url = reverse_lazy("fichier:etiquettes")
+    cancel_url = "fichier:index_etiquette"
 
 
 @method_decorator(permission_required("fichier.delete_fiche"), name='dispatch')
@@ -842,7 +842,7 @@ def page_not_found_view(request, exception=None):
 
 
 def rest_api(request, classname):
-    classes = {"theme": Theme, "motcle": MotCle}
+    classes = {"theme": Theme, "etiquette": Etiquette}
 
     def json_context(dictionary):
         return {"json": json.dumps(dictionary)}
@@ -940,13 +940,13 @@ def merge(request, classname):
         field_fiche = "themes"
         field_agenda = "themes"
         nom_classe = "theme"
-    elif classname == "motcle":
-        pluriel = "étiqettes"
-        classform = MotCleMergeForm
-        reverse_url_main = "fichier:motscles"
-        field_fiche = "mots_cles"
-        field_agenda = "motscles"
-        nom_classe = "motcle"
+    elif classname == "etiquette":
+        pluriel = "étiquettes"
+        classform = EtiquetteMergeForm
+        reverse_url_main = "fichier:etiquettes"
+        field_fiche = "etiquettes"
+        field_agenda = "etiquettes"
+        nom_classe = "etiquette"
     else:
         return Http404("Impossible de lancer la fusion")
 
@@ -964,22 +964,22 @@ def merge(request, classname):
                     if classname == "theme":
                         fiche.themes.add(form.cleaned_data["element1"])
                         fiche.themes.remove(form.cleaned_data["element2"])
-                    elif classname == "motcle":
-                        fiche.mots_cles.add(form.cleaned_data["element1"])
-                        fiche.mots_cles.remove(form.cleaned_data["element2"])
-                if classname == "theme" or classname == "motcle":
+                    elif classname == "etiquette":
+                        fiche.etiquettes.add(form.cleaned_data["element1"])
+                        fiche.etiquettes.remove(form.cleaned_data["element2"])
+                if classname == "theme" or classname == "etiquette":
                     for entree in EntreeAgenda.objects.filter(**{field_agenda: form.cleaned_data["element2"].id}):
                         if classname == "theme":
                             entree.themes.add(form.cleaned_data["element1"])
                             entree.themes.remove(form.cleaned_data["element2"])
-                        elif classname == "motcle":
-                            entree.motscles.add(form.cleaned_data["element1"])
-                            entree.motscles.remove(form.cleaned_data["element2"])
+                        elif classname == "etiquette":
+                            entree.etiquettes.add(form.cleaned_data["element1"])
+                            entree.etiquettes.remove(form.cleaned_data["element2"])
 
                 if classname == "theme":
                     Theme.objects.filter(pk=form.cleaned_data["element2"].id).delete()
-                elif classname == "motcle":
-                    MotCle.objects.filter(pk=form.cleaned_data["element2"].id).delete()
+                elif classname == "etiquette":
+                    Etiquette.objects.filter(pk=form.cleaned_data["element2"].id).delete()
 
                 messages.success(request, "Fusion réussie entre les deux " + pluriel + " " + form.cleaned_data["element1"].nom + " et " + form.cleaned_data["element2"].nom)
                 return HttpResponseRedirect(reverse(reverse_url_main))

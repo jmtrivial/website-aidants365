@@ -1,5 +1,5 @@
 from django import forms
-from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, MotCle, Niveau, Document, EntetePage
+from .models import Fiche, EntreeGlossaire, EntreeAgenda, Categorie, Auteur, Theme, Etiquette, Niveau, Document, EntetePage
 from django.utils import timezone
 from django.db import models
 from django.contrib.admin.widgets import AutocompleteSelectMultiple
@@ -79,7 +79,7 @@ class FicheForm(forms.ModelForm):
 
         widgets = {
             "themes": MySortedCheckboxSelectMultiple,
-            "mots_cles": MySortedCheckboxSelectMultiple,
+            "etiquettes": MySortedCheckboxSelectMultiple,
             "fiches_connexes": MySortedCheckboxSelectMultiple,
         }
 
@@ -91,7 +91,7 @@ class FicheForm(forms.ModelForm):
             self.fields['utiliser_suivant'].initial = True
             self.fields['auteur'].initial = Auteur.get_connected_auteur(self.user)
         self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
-        self.fields["mots_cles"].widget.id_for_label = lambda x: "id_mots_cles"
+        self.fields["etiquettes"].widget.id_for_label = lambda x: "id_etiquettes"
         self.fields["fiches_connexes"].widget.id_for_label = lambda x: "id_fiches_connexes"
 
     def clean_numero(self):
@@ -154,14 +154,14 @@ class EntreeAgendaForm(WithUserForm):
 
         widgets = {
             "themes": MySortedCheckboxSelectMultiple,
-            "motscles": MySortedCheckboxSelectMultiple,
+            "etiquettes": MySortedCheckboxSelectMultiple,
             "fiches_associees": MySortedCheckboxSelectMultiple,
         }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
-        self.fields["motscles"].widget.id_for_label = lambda x: "id_motscles"
+        self.fields["etiquettes"].widget.id_for_label = lambda x: "id_etiquettes"
         self.fields["fiches_associees"].widget.id_for_label = lambda x: "id_fiches_associees"
 
 
@@ -185,12 +185,12 @@ class ThemeForm(WithUserForm):
         fields = '__all__'
 
 
-class MotCleForm(WithUserForm):
+class EtiquetteForm(WithUserForm):
 
     autofocus = "nom"
 
     class Meta:
-        model = MotCle
+        model = Etiquette
 
         fields = '__all__'
 
@@ -221,9 +221,9 @@ class ThemeMergeForm(TwoDifferentElementsForm):
     element2 = forms.ModelChoiceField(queryset=Theme.objects.all().order_by("nom__unaccent"), required=True, label="Thème à intégrer dans le principal")
 
 
-class MotCleMergeForm(TwoDifferentElementsForm):
-    element1 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé principal")
-    element2 = forms.ModelChoiceField(queryset=MotCle.objects.all().order_by("nom__unaccent"), required=True, label="Mot-clé à intégrer dans le principal")
+class EtiquetteMergeForm(TwoDifferentElementsForm):
+    element1 = forms.ModelChoiceField(queryset=Etiquette.objects.all().order_by("nom__unaccent"), required=True, label="Étiquette principal")
+    element2 = forms.ModelChoiceField(queryset=Etiquette.objects.all().order_by("nom__unaccent"), required=True, label="Étiquette à intégrer dans le principal")
 
 
 class EntreeAgendaInvertForm(TwoDifferentElementsForm):

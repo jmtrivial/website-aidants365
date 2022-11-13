@@ -110,10 +110,10 @@ Le fichier Aidants365
 {% block droite1 %}
 {% cache 500 frontpage_droite1 %}
 <h2>Étiquettes</h2>
-{% if motcles %}
-    {% include "fiches/nuage.html" with elements=motcles critere_name="motcle" uniquement_actifs="1" %}    
+{% if etiquettes %}
+    {% include "fiches/nuage.html" with elements=etiquettes critere_name="etiquette" uniquement_actifs="1" %}    
 
-    <div class="suite"><a href="{% url 'fichier:motscles_nuage' %}">détail des étiquettes ▸</a></div>
+    <div class="suite"><a href="{% url 'fichier:etiquettes_nuage' %}">détail des étiquettes ▸</a></div>
 {% else %}
     <p>Pas d'étiquette disponible.</p>
 {% endif %}

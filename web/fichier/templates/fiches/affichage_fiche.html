@@ -36,7 +36,7 @@
                 </div>
                 <div class="droite">
                     <strong>Catégorie</strong><br />
-                    {% if liens %}<a class="internal" href="{% url 'fichier:index_niveau_detail' fiche.niveau.id fiche.id %}">{% endif %}{{ fiche.niveau.code }}{% if liens %}</a>{% endif %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{% endif %}{{ fiche.categorie1 }}{% if liens %}</a>{% endif %}{% if fiche.categorie2 %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie2.id fiche.id %}">{% endif %}{{ fiche.categorie2 }}{% if liens %}</a>{% endif %}{% endif %}{% if fiche.categorie3 %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie3.id fiche.id %}">{% endif %}{{ fiche.categorie3 }}{% if liens %}</a>{% endif %}{% endif %}{% endfor %}<br />
+                    {% if liens %}<a class="internal" href="{% url 'fichier:index_niveau_detail' fiche.niveau.id fiche.id %}">{% endif %}{{ fiche.niveau.code }}{% if liens %}</a>{% endif %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie1.id fiche.id %}">{% endif %}{{ fiche.categorie1 }}{% if liens %}</a>{% endif %}{% if fiche.categorie2 %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie2.id fiche.id %}">{% endif %}{{ fiche.categorie2 }}{% if liens %}</a>{% endif %}{% endif %}{% if fiche.categorie3 %}, {% if liens %}<a class="internal" href="{% url 'fichier:index_categorie_detail' fiche.categorie3.id fiche.id %}">{% endif %}{{ fiche.categorie3 }}{% if liens %}</a>{% endif %}{% endif %}<br />
                     <strong>Auteur</strong><br />
                     {% if liens %}<a class="internal" href="{% url 'fichier:index_auteur_detail' fiche.auteur.id fiche.id %}">{% endif %}{{ fiche.auteur.nom }}{% if liens %}</a>{% endif %}<br />
                     <strong>Date création</strong><br />
@@ -65,9 +65,9 @@
                     {% for theme in fiche.themes.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:index_theme_detail' theme.id fiche.id %}">{% endif %}{{ theme.nom }}{% if liens %}</a>{% endif %}{% endfor %}
                     </li>
                     {% endif %}
-                    {% if fiche.mots_cles.all %}
+                    {% if fiche.etiquettes.all %}
                     <li><strong>Étiquettes&nbsp;:</strong>
-                    {% for motcle in fiche.mots_cles.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:index_motcle_detail' motcle.id fiche.id %}">{% endif %}{{ motcle.nom }}{% if liens %}</a>{% endif %}{% endfor %}
+                    {% for etiquette in fiche.etiquettes.all %}{% if not forloop.first %}, {% endif %}{% if liens %}<a class="internal" href="{% url 'fichier:index_etiquette_detail' etiquette.id fiche.id %}">{% endif %}{{ etiquette.nom }}{% if liens %}</a>{% endif %}{% endfor %}
                     </li>
                     {% endif %}
                 </ul>

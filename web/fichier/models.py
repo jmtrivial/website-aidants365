@@ -90,7 +90,7 @@ class EntetePage(models.Model):
         else:
             nom_page = {"index": "des fiches", "desk": "du desk", "categories": "des catégories",
                         "glossaire": "du glossaire", "accueil": "de l'accueil",
-                        "themes": "des thèmes", "motscles": "des étiquettes", "agenda": "de l'agenda",
+                        "themes": "des thèmes", "etiquettes": "des étiquettes", "agenda": "de l'agenda",
                         "liens_sortants": "des liens sortants"}
             return nom_page[page]
 
@@ -226,7 +226,7 @@ class Auteur(models.Model):
         return self.code
 
 
-class MotCle(models.Model):
+class Etiquette(models.Model):
     nom = models.CharField(verbose_name="Étiquette", max_length=64, unique=True, blank=False)
 
     class Meta:
@@ -240,20 +240,20 @@ class MotCle(models.Model):
         return self.nom
 
     def rechercher(search_text):
-        return rechercher_nom_simple(search_text, MotCle)
+        return rechercher_nom_simple(search_text, Etiquette)
 
     def associated_entries(self):
         result = []
-        # Liste des fiches ayant ce mot-clé
-        result += Fiche.objects.filter(mots_cles=self.id)
+        # Liste des fiches ayant cette étiquette
+        result += Fiche.objects.filter(etiquettes=self.id)
 
-        # Liste des entrées d'agenda ayant ce mot-clé
-        result += EntreeAgenda.objects.filter(motscles=self.id)
+        # Liste des entrées d'agenda ayant cette étiquette
+        result += EntreeAgenda.objects.filter(etiquettes=self.id)
 
         return result
 
     def get_absolute_url(self):
-        return reverse('fichier:index_motcle', kwargs={'id': self.pk})
+        return reverse('fichier:index_etiquette', kwargs={'id': self.pk})
 
 
 class Theme(models.Model):
@@ -327,7 +327,7 @@ class Fiche(models.Model):
     partenaires = models.CharField(verbose_name="Partenaires", max_length=1024, blank=True, null=True)
 
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes", blank=True, help_text=message_sortable)
-    mots_cles = SortedManyToManyField(MotCle, verbose_name="Étiquettes", blank=True, help_text=message_sortable)
+    etiquettes = SortedManyToManyField(Etiquette, verbose_name="Étiquettes", blank=True, help_text=message_sortable)
 
     # corps
     presentation = RichTextField(verbose_name="Présentation", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
@@ -401,7 +401,7 @@ class Fiche(models.Model):
                                                        "categorie1__code", Value(" "), "auteur__code", Value(" "),
                                                        Right(Concat(Value("0000"), "numero"), 4), Value(" "), "titre_fiche", output_field=models.CharField())). \
             annotate(agg_contenu=Concat("sous_titre", Value(" "),
-                                        "themes__nom", Value(" "), "mots_cles__nom", Value(" "),
+                                        "themes__nom", Value(" "), "etiquettes__nom", Value(" "),
                                         "presentation", Value(" "), "problematique", Value(" "), "quatrieme_de_couverture", Value(" "),
                                         "plan_du_site", Value(" Focus "), "detail_focus", Value(" "), "focus", Value(" "), "titre", Value(" "), "editeur", Value(" "), "auteurs", Value(" "), "collection",
                                         "partenaires", Value(" "), "reserves", Value(" "), "lesplus", Value(" "), "en_savoir_plus", output_field=models.CharField())).order_by("id").distinct('id'). \
@@ -536,7 +536,7 @@ class EntreeAgenda(models.Model):
     marque = models.BooleanField(verbose_name="Entrée de qualité", default=False)
 
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True, help_text=message_sortable)
-    motscles = SortedManyToManyField(MotCle, verbose_name="Étiquettes associées", blank=True, help_text=message_sortable)
+    etiquettes = SortedManyToManyField(Etiquette, verbose_name="Étiquettes associées", blank=True, help_text=message_sortable)
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
@@ -578,7 +578,7 @@ class EntreeAgenda(models.Model):
         search_query = SearchQuery(search_text, config='french')
 
         return EntreeAgenda.objects. \
-            annotate(agg_contenu=Concat("themes__nom", Value(" "), "motscles__nom", Value(" "), "notes", output_field=models.CharField())).order_by("id").distinct('id'). \
+            annotate(agg_contenu=Concat("themes__nom", Value(" "), "etiquettes__nom", Value(" "), "notes", output_field=models.CharField())).order_by("id").distinct('id'). \
             annotate(search=search_vectors).filter(search=search_query). \
             annotate(notes_hl=SearchHeadline("agg_contenu",
                      search_query,
