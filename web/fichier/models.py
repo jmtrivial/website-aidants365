@@ -545,6 +545,8 @@ class EntreeAgenda(models.Model):
 
     illustration_alt = models.CharField(verbose_name="Texte alternatif à l'illustration (audiodescription)", max_length=512, default="")
 
+    illustration_source = models.CharField(verbose_name="Source de l'illustration.", max_length=512, default="")
+
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True, help_text=message_sortable)
