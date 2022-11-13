@@ -664,8 +664,7 @@ def edit_object(request, classname, id=None, clone=False):
             else:
                 return HttpResponseRedirect(reverse(reverse_url_cancel, args=params_reverse_url))
         else:
-            logger.warning(request.POST)
-            form = classeform(instance=object, data=request.POST, user=request.user)
+            form = classeform(request.POST, request.FILES, instance=object, user=request.user)
             if form.is_valid():
                 object = form.save()
                 if id is None or clone:

@@ -541,6 +541,8 @@ class EntreeAgenda(models.Model):
 
     notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
+    illustration = models.ImageField(upload_to='illustrations_agenda', blank=True, null=True)
+
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True, help_text=message_sortable)

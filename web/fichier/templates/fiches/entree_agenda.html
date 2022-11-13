@@ -85,8 +85,11 @@ Glossaire
             {% include "fiches/contenu_agenda.html" with hx="h2" %}
         </div>
         <div class="colonne">
-            <div class="illustration"><img src="{% static 'images/caregiver.jpg' %}" /></div>
-            <!-- TODO image ici -->
+            <div class="illustration"><img src="{%if ephemeride.entree.illustration %}
+                {{ ephemeride.entree.illustration.url }}
+                {% else %}
+                {% static 'images/caregiver.jpg' %}{% endif %}" /></div>
+
             <div class="notes-libres">
                 
             </div>

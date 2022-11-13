@@ -36,7 +36,7 @@ Le fichier Aidants365 — édition
     <h1>{{ titre }}</h1>
 </div>
 <div class="block">
-    <form method="post">
+    <form method="post" enctype="multipart/form-data">
         <div class="boutons_edition">
             <input class="button_round" type="submit" value="Enregistrer (ctrl-s)">
             <input class="button_round" type="submit" name="annuler" value="Annuler">
@@ -129,10 +129,10 @@ Le fichier Aidants365 — édition
     $(document).ready(function() {
 
     {% if nom_classe == "fiche" %}
-    var with_popups_add = [ "id_themes", "id_mots_cles" ]
+    var with_popups_add = [ "id_themes", "id_etiquettes" ]
     var with_popups = [ "id_fiches_connexes" ]
     {% elif nom_classe == "entreeagenda" %}
-    var with_popups_add = [ "id_themes", "id_motscles" ]
+    var with_popups_add = [ "id_themes", "id_etiquettes" ]
     var with_popups = [ "id_fiches_associees" ]
     {% else %}
     var with_popups_add = []
