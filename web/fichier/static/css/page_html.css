@@ -5,6 +5,35 @@ page {
 
 }
 
+/* version web */
+
+page#page-A5.web, page#page-A5.web .container {
+    width: auto;
+    height: auto;
+    margin: 1em;
+    font: inherit;
+}
+
+page#page-A5.web .cal_mois {
+    font-size: inherit;
+}
+
+page#page-A5.web .ephemeride {
+    font-size: inherit;
+}
+
+page#page-A5.web p {
+    font-size: inherit;
+}
+
+page#page-A5 .derniere_modification {
+    display: none;
+}
+
+page#page-A5.web .derniere_modification {
+    display: block;
+}
+
 /* responsive */
   @media only screen and (max-width: 21cm) {
     #message_responsive {
@@ -78,31 +107,3 @@ page {
     }
 }
 
-/* version web */
-
-page#page-A5.web, page#page-A5.web .container {
-    width: auto;
-    height: auto;
-    margin: 1em;
-    font: inherit;
-}
-
-page#page-A5.web .cal_mois {
-    font-size: inherit;
-}
-
-page#page-A5.web .ephemeride {
-    font-size: inherit;
-}
-
-page#page-A5.web p {
-    font-size: inherit;
-}
-
-page#page-A5 .derniere_modification {
-    display: none;
-}
-
-page#page-A5.web .derniere_modification {
-    display: block;
-}

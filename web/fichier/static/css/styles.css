@@ -409,6 +409,7 @@ a:hover {
 }
 
 .block {
+    overflow: hidden;
     margin: 0.5em;
     background: #fff;
     padding: 1em;
@@ -999,7 +1000,8 @@ a.today {
 }
 
 .render-mode {
-    margin: 1em auto;
+    padding: 1em;
+    margin: auto;
     width: 21cm;
 }
 
@@ -1069,7 +1071,9 @@ a.today {
 
 
 @media only screen and (max-width: 1200px) {
-
+    .render-mode {
+        width: auto;
+    }
 
     .ephemeride_large .entete>div {
         font-size: 90%;
@@ -1235,7 +1239,9 @@ only screen and (max-width: 760px),
     .ephemeride_large {
         padding: 0.4em;
     } 
-    .ephemeride_large  .entete>div {
+    .ephemeride_large  .entete>div, 
+    page#page-A5.web .container .cal_mois,
+    page#page-A5.web .container .ephemeride {
         font-size: 80%;
     }
 
@@ -1301,7 +1307,9 @@ only screen and (max-width: 760px),
 }
 
 @media only screen and (max-width: 480px) {
-    .ephemeride_large  .entete>div {
+    .ephemeride_large  .entete>div, 
+    page#page-A5.web .container .cal_mois,
+    page#page-A5.web .container .ephemeride {
         font-size: 70%;
     }
     .date_entete {
@@ -1311,7 +1319,9 @@ only screen and (max-width: 760px),
 }
 
 @media only screen and (max-width: 400px) {
-    .ephemeride_large  .entete>div {
+    .ephemeride_large  .entete>div, 
+    page#page-A5.web .container .cal_mois,
+    page#page-A5.web .container .ephemeride {
         font-size: 60%;
     }
 
@@ -1329,7 +1339,9 @@ only screen and (max-width: 760px),
 
 
 @media only screen and (max-width: 360px) {
-    .ephemeride_large  .entete>div {
+    .ephemeride_large  .entete>div, 
+    page#page-A5.web .container .cal_mois,
+    page#page-A5.web .container .ephemeride {
         font-size: 50%;
     }
 
