@@ -543,9 +543,9 @@ class EntreeAgenda(models.Model):
 
     illustration = models.ImageField(verbose_name="Illustration", upload_to='illustrations_agenda', blank=True, null=True)
 
-    illustration_alt = models.CharField(verbose_name="Texte alternatif à l'illustration (audiodescription)", max_length=512, default="")
+    illustration_alt = models.CharField(verbose_name="Texte alternatif à l'illustration (audiodescription)", max_length=512, default="", blank=True, null=True)
 
-    illustration_source = models.CharField(verbose_name="Source de l'illustration.", max_length=512, default="")
+    illustration_source = models.CharField(verbose_name="Source de l'illustration", max_length=512, default="", blank=True, null=True)
 
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
