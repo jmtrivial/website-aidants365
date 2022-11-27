@@ -9,13 +9,13 @@ page {
 
 page .internal {
     font-weight: inherit;
-    text-decoration: none;
+    text-decoration: underline;
     color: inherit;
 }
 
 page .internal:hover {
     color: #2a6098;
-    text-decoration: underline;
+    text-decoration: none;
 }
 
 page h1 {

@@ -10,10 +10,10 @@
 
 {% if entree.fiches_associees.all %}
 <div class="block bottom-cal">
-    <{{ hx }}>Pour prolonger la lecture</{{ hx }}>
+    <{{ hx }}>Pour prolonger la lecture&nbsp;:</{{ hx }}>
 <ul>
 {% for associee in entree.fiches_associees.all %}
-    <li><a class="internal" href="{% url 'fichier:detail' associee.id %}">{{ associee }}</a></li>
+    <li>Consulter <a class="internal" href="{% url 'fichier:detail' associee.id %}">la fiche {{ associee.titre_fiche }} {{ associee.sous_titre }}</a></li>
 {% endfor %}
 </ul>
 </div>

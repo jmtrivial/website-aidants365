@@ -23,7 +23,7 @@
 {% if ephemeride.entree %} 
     {% with entree=ephemeride.entree %}
         {% if entree.niveau %}
-        <strong>Contenu dominant:</strong> {{ entree.niveau.couleur | carre_colore }} <a class="internal" href="{% url 'fichier:index_niveau' entree.niveau.id %}">{{ entree.niveau }}</a><br>
+        <strong>Contenu dominant&nbsp;:</strong> {{ entree.niveau.couleur | carre_colore }} <a class="internal" href="{% url 'fichier:index_niveau' entree.niveau.id %}">{{ entree.niveau }}</a><br>
         {% endif %}
 
         {% if entree.themes.all %}
