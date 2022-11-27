@@ -33,7 +33,7 @@ Toutes les fiches
         {% endif %}
         <h1>Toutes les fiches</h1>
         {% include "fiches/entete.html" %}
-        <p>Vous pouvez <button class="bouton_inline" id="dl_pdf">télécharger</button> un pdf contenant toutes les fiches. Attention, sa fabrication prend du temps.</p>
+        <p>Vous pouvez <button class="bouton_inline" id="dl_pdf">télécharger</button> un pdf contenant toutes les fiches. Ce document n'est assemblé qu'une fois par jour.</p>
         {% if perms.fichier.change_fiche %}
         <div class="suite"><a href="{% url 'fichier:simple_modifications' 'fiches' %}">dernières modifications ▸</a></div>
         {% endif %}
