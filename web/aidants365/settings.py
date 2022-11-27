@@ -195,6 +195,7 @@ else:
             'LOCATION': 'cache:11211',
         }
     }
+    WEASYPRINT_BASEURL = "http://nginx:80/"
 
 DJANGO_CPROFILE_MIDDLEWARE_REQUIRE_STAFF = False
 
