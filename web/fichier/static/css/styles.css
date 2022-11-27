@@ -298,6 +298,11 @@ a:hover {
     clear: both;
 }
 
+a.bouton_inline, a.bouton_inline:hover {
+    color: #fff;
+    text-decoration: none;
+}
+
 .lien_next .lien_next.bouton {
     float: none;
 }

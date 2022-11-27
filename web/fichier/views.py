@@ -758,7 +758,7 @@ def entree_agenda(request, year, month, day):
         return HttpResponseRedirect(reverse("fichier:object_add", args=["agenda"]) + "?date=" + "/".join(map(str, [year, month, day])))
 
 
-class FichesViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, ListView):
+class FichesViewPDF(WeasyTemplateResponseMixin, ListView):
     template_name = 'fiches/fiches_pdf.html'
 
     model = Fiche

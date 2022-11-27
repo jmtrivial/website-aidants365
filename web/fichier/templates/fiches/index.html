@@ -33,7 +33,7 @@ Toutes les fiches
         {% endif %}
         <h1>Toutes les fiches</h1>
         {% include "fiches/entete.html" %}
-        <p>Vous pouvez <button class="bouton_inline" id="dl_pdf">télécharger</button> un pdf contenant toutes les fiches. Ce document n'est assemblé qu'une fois par jour.</p>
+        <p>Vous pouvez <a class="bouton_inline" id="dl_pdf" href="/media/fiches.pdf">télécharger</a> un pdf contenant toutes les fiches. Ce document n'est assemblé qu'une fois par jour.</p>
         {% if perms.fichier.change_fiche %}
         <div class="suite"><a href="{% url 'fichier:simple_modifications' 'fiches' %}">dernières modifications ▸</a></div>
         {% endif %}
@@ -67,34 +67,4 @@ Toutes les fiches
 <div id="dl_message">
     <div><p>Veuillez patienter pendant la fabrication du document...</p></div>
 </div>
-<script>
-    var a = document.createElement("a");
-    document.body.appendChild(a);
-    a.style = "display: none";
-
-    const dl = async function() {
-        var a = document.createElement("a");
-        document.body.appendChild(a);
-        a.style = "display: none";
-        url = "{% url 'fichier:fiches_pdf' %}";
-        document.getElementById("dl_message").className = "visible";
-        let response = await fetch(url);
-
-        if (response.ok) { // if HTTP-status is 200-299
-            filename = response.headers.get('content-disposition').split('=')[1];
-            pdf = await response.blob();
-            var file = window.URL.createObjectURL(pdf);
-            a.href = file;
-            a.download = filename;
-            a.click();
-            window.URL.revokeObjectURL(file);
-        }
-        // TODO: show an error message if not ok
-        document.getElementById("dl_message").className = "";
-    }
-    
-    document.getElementById("dl_pdf").addEventListener('click', event => {
-        dl() });
-
-    </script>
 {% endblock %}

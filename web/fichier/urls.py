@@ -18,7 +18,6 @@ urlpatterns = [
     path('desk/<int:id>/', views.document, name='document'),
     path('desk/<pk>/delete/', views.DeleteDocumentView.as_view(), name='document_delete'),
     path('fiches/', views.index, name='index'),
-    path('fiches/pdf', cache_page(oneday)(views.FichesViewPDF.as_view()), name='fiches_pdf'),
     path('fiches/<int:id>/', views.index_detail, name='index_detail'),
     path('fiche/<int:id>/', views.detail, name='detail'),
     path('fiche/<pk>/pdf/', views.FicheViewPDF.as_view(), name='detail_pdf'),
