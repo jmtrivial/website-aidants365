@@ -58,7 +58,7 @@ a:hover {
     border-top: 3px solid #2a6098;
     z-index: 1;
     font-size: 80%;
-    color: #ccc;
+    color: #eee;
 }
 #footer p, #footer ul {
     margin: auto;
@@ -67,7 +67,7 @@ a:hover {
     padding: 1em;
 }
 #footer a {
-    color: #3d8ac6;
+    color: #7fa3c3;
 }
 #footer ul {
     list-style-type: none;
@@ -771,7 +771,6 @@ a.today {
 .page_agenda  .ephemeride_large {
     margin: 0;
     max-width: 800px;
-    margin: auto;
 }
 
 .ephemeride_large, .entete_mois {
@@ -900,9 +899,35 @@ a.today {
     font-size: 10pt;
 }
 
-.colonne.ephemeride_large p {
-    text-align: justify;
+.colonne.ephemeride_large {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
+
+.colonne.ephemeride_large ul {
+    padding: 0.2em 1em;
+}
+
+.colonne.ephemeride_large h2 {
+    font-size: 100%;
+    font-weight: bold;
+}
+
+.colonne.ephemeride_large .top-cal,
+.colonne.ephemeride_large .bottom-cal {  
+    flex: auto;
+}
+
+.colonne.ephemeride_large .center-cal {
+    flex-grow: 100;
+    align-self: stretch;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
 
 .colonne.ephemeride_large .cal_mois {
     font-size: 2.5mm;

@@ -1,15 +1,16 @@
 {% load fichier_extras %}
 
-<div class="block">
 
-    <{{ hx }}>Notes</{{ hx }}>
+<div class="block center-cal">
+    <div class="centered">
     {{ entree.notes | ajouter_glossaire:True | safe }}
-    
+    </div>
 </div>
 
+
 {% if entree.fiches_associees.all %}
-<div class="block">
-    <{{ hx }}>Fiches associées</{{ hx }}>
+<div class="block bottom-cal">
+    <{{ hx }}>Pour prolonger la lecture</{{ hx }}>
 <ul>
 {% for associee in entree.fiches_associees.all %}
     <li><a class="internal" href="{% url 'fichier:detail' associee.id %}">{{ associee }}</a></li>

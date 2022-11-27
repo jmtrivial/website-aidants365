@@ -142,12 +142,17 @@ page .container {
     height: 14cm; 
     margin: 0.5cm;
     overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
 }
 
 page .colonne {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
     width: 50%;
     box-sizing: border-box;
-    float: left;
     margin: 0;
     padding: 1mm;
     overflow: hidden;
