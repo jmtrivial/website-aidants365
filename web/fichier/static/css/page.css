@@ -224,7 +224,7 @@ page .illustration img {
     }
   }
 
-  #message_responsive {
+  .message_responsive {
     display: none;
   }
 
