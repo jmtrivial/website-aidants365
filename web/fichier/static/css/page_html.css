@@ -61,7 +61,9 @@ page#page-A5.web .derniere_modification {
         width: calc(95vw / 21 * 20);
         height: auto; 
         margin: calc(95vw / 21 * 0.5);
+        flex-direction: column;
     }
+    
     
     
     page #chapeau, page #pied {

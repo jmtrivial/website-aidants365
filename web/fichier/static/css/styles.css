@@ -1100,7 +1100,9 @@ a.today {
         width: auto;
     }
 
-    .ephemeride_large .entete>div {
+    .ephemeride_large .entete>div,
+    page#page-A5.web .container .cal_mois,
+    page#page-A5.web .container .ephemeride  {
         font-size: 90%;
     }
 
@@ -1136,7 +1138,9 @@ a.today {
 }
 
 @media only screen and (max-width: 1000px) {
-    .ephemeride_large  .entete>div {
+    .ephemeride_large  .entete>div,
+    page#page-A5.web .container .cal_mois,
+    page#page-A5.web .container .ephemeride {
         font-size: 110%;
     }
 
@@ -1208,7 +1212,9 @@ a.today {
 only screen and (max-width: 760px),
 (min-device-width: 768px) and (max-device-width: 1024px)  {
 
-    .ephemeride_large  .entete>div {
+    .ephemeride_large  .entete>div,
+    page#page-A5.web .container .cal_mois,
+    page#page-A5.web .container .ephemeride {
         font-size: 80%;
     }
 
