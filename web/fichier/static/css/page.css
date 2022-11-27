@@ -41,7 +41,7 @@ page .nomenclature {
     margin: 0;
 }
 
-page #contenu_page {
+page .contenu_page {
     width: 17cm;
     height: 26.7cm; 
     margin: 1.5cm 2cm;
@@ -49,36 +49,36 @@ page #contenu_page {
     position: relative;
 }
 
-page #entete {
+page .entete {
     display: flex;
     flex-grow: 0;
     margin-bottom: 0.2em;
 }
 
-page #entete .gauche {
+page .entete .gauche {
     width: 67.9%;
     float: left;
     font-style: italic;
     border: 0;
     padding-right: 0.2em;
 }
-page #entete .droite {
+page .entete .droite {
     width: 32%;
     float: right;
 }
 
-page #principal {
+page .principal {
     clear: both;
 }
 
 
-page #chapeau, page #pied {
+page .chapeau, page .pied {
     background: #c5ccd4;
     border: 0.1cm solid #2a6098;
     border-radius: 0.05cm;
     padding: 0;
 }
-page #chapeau ul, page #pied ul {
+page .chapeau ul, page .pied ul {
     padding: 0;
     margin: 0.2cm;
 }
@@ -87,7 +87,7 @@ page p, ul {
     margin: 0.2em;
 }
 
-page #chapeau li, page #pied li {
+page .chapeau li, page .pied li {
     margin-left: 0.7em;
 }
 
@@ -96,7 +96,7 @@ page li>p {
 }
 
 
-page #contenu_page {
+page .contenu_page {
     display: flex;
 	flex-direction: column;
     justify-content: space-between;

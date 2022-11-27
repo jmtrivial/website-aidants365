@@ -19,9 +19,9 @@
 {% endif %}
 
 <page size="A4">
-    <div id="contenu_page">
-        <div id="haut">
-            <div id="entete">
+    <div class="contenu_page">
+        <div class="haut">
+            <div class="entete">
                 <div class="gauche">
                     <p class="nomenclature">
                         {{ fiche.niveau.couleur | carre_colore }}
@@ -46,7 +46,7 @@
                 </div>
             </div>
             {% autoescape off %}                
-            <div id="chapeau">
+            <div class="chapeau">
                 <ul>
                     {{ fiche.url | cliquable | affiche_si_existe:"Adresse" | inside_si_existe:"li" }}
                     {{ fiche.titre | affiche_si_existe:"Titre" | inside_si_existe:"li" }}
@@ -73,14 +73,14 @@
                 </ul>
             </div>
         </div>
-        <div id="corps">
+        <div class="corps">
             {{ fiche.presentation | safe | ajouter_glossaire:liens | ajouter_liens | affiche_si_existe:"Présentation" | inside_si_existe:"p" }}
             {{ fiche.problematique | ajouter_glossaire:liens | safe | ajouter_liens | affiche_si_existe:"Problématique" | inside_si_existe:"p" | safe }}
             {{ fiche.quatrieme_de_couverture | ajouter_glossaire:liens | ajouter_liens | safe | affiche_si_existe:"Quatrième de couverture" | inside_si_existe:"p" | safe }}
             {{ fiche.plan_du_site | ajouter_glossaire:liens | safe | ajouter_liens | affiche_si_existe:"Plan du site" | inside_si_existe:"p" | safe }}
             {% affiche_bloc_si_existe fiche.focus|safe|ajouter_glossaire:liens|ajouter_liens "Focus" fiche.detail_focus%}
         </div>
-        <div id="pied">
+        <div class="pied">
             <ul>
                 {{ fiche.reserves | ajouter_glossaire:liens | ajouter_liens | affiche_si_existe:"Réserves" | inside_si_existe:"li" | safe }}
                 {{ fiche.lesplus | ajouter_glossaire:liens | ajouter_liens | affiche_si_existe:"Les plus" | inside_si_existe:"li" | safe }}
