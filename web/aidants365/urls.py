@@ -7,7 +7,6 @@ from django.conf import settings
 from django.shortcuts import redirect
 from django.contrib.auth import views as auth_views
 from django.views.static import serve
-from django.views.static import serve
 from . import views
 
 
