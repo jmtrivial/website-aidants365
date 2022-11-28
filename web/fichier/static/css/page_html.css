@@ -4,8 +4,15 @@ page {
     box-shadow: 0 0 0.5cm rgba(0,0,0,0.5);
 
 }
+.ephemeride_large .ephemeride a {
+    padding: 0;
+}
+
 
 /* version web */
+page#page-A5.web .ephemeride_large .ephemeride a {
+    padding: .8em 2em;
+}
 
 page#page-A5.web, page#page-A5.web .container {
     width: auto;

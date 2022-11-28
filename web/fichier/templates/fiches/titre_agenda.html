@@ -1,15 +1,15 @@
 {% load fichier_extras %}
 
 <div class="top-cal">
-
-<div class="cal_mois mois_left">
-    {% show_month ephemeride.agenda ephemeride.year_pred_month ephemeride.month_pred_month True ephemeride.date %}
-</div>
-<div class="cal_mois mois_right">
-    {% show_month ephemeride.agenda ephemeride.year_next_month ephemeride.month_next_month True ephemeride.date %}
-</div>
-{{ ephemeride.ephemeride | safe }}
-
+    <div class="top-cal-row">
+    <div class="cal_mois mois_left">
+        {% show_month ephemeride.agenda ephemeride.year_pred_month ephemeride.month_pred_month True ephemeride.date %}
+    </div>
+    {{ ephemeride.ephemeride | safe }}
+    <div class="cal_mois mois_right">
+        {% show_month ephemeride.agenda ephemeride.year_next_month ephemeride.month_next_month True ephemeride.date %}
+    </div>
+    </div>
 
 <div style="clear: both; height: 1em;"></div>
 

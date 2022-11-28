@@ -7,3 +7,246 @@
     box-shadow: 0 0 0.1em rgba(0,0,0,0.2);
     border: 1px solid rgba(0,0,0,0.2);
 }
+
+.page_agenda  .ephemeride_large {
+    margin: 0;
+    max-width: 800px;
+}
+
+.ephemeride_large, .entete_mois {
+    box-shadow: 0 0 1em rgba(0,0,0,0.3);
+    padding: 1em;
+    background: #fff;
+    margin-left: 1em;
+}
+.entete_mois {
+    margin-left: 0;
+    margin-bottom: 0.5em;
+}
+
+.entete_mois>div, .entete_mois>a {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.date_entete {
+    width: 8em;
+    float: left;
+    height: 4em;
+    padding: 1.5em 0;
+    margin-right: 1em;
+}
+.date_entete:hover {
+    box-shadow: 0 0 0.1em rgba(0,0,0,0.3);
+    background: #fdfdfd;
+}
+
+.date_entete:hover .annee_entete {
+    color: #c00;
+}
+
+.date_entete:hover .mois_entete {
+    color: #000;
+}
+
+
+.date_entete div {
+    text-align: center;
+}
+
+.mois_entete {
+    color: #222;
+    font-variant: small-caps;
+    font-size: 120%;
+}
+
+.annee_entete {
+    color: #cc4444;
+    font-size: 160%;
+    font-weight: bold;
+    margin-top: 0.2em;
+}
+
+.ephemeride_large .cal_mois table.month a.today {
+    background: #eee;
+}
+
+.ephemeride_large .cal_mois table.month a.current {
+    border: 1px solid #ccc;
+}
+
+.ephemeride_large div {
+    box-shadow: none;
+}
+
+.ephemeride_large .top-cal-row {
+    display: flex;
+    flex-direction: row;
+    align-content: space-between;
+}
+
+.ephemeride_large .cal_mois {
+    width: 37%;
+}
+
+.ephemeride_large .ephemeride a {
+    box-shadow: none;
+    padding: 0;
+    border-radius: 0;
+}
+
+.ephemeride_large .block {
+    padding: 0;
+}
+
+.ephemeride_large .cal_mois table.month {
+    width: auto;
+    font-size: 0.18cm;
+    height: 14.5em;
+}
+
+.ephemeride_large .cal_mois table.month {
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+    padding: 0.2em 0;
+}
+
+
+.ephemeride_large .cal_mois table.month th.month {
+    font-size: 0.2cm;
+}
+
+.ephemeride_large .cal_mois table.month th,
+.ephemeride_large .cal_mois table.month td {
+    padding: 0;
+    margin: 0;
+    background-color: transparent;
+}
+
+.ephemeride_large .cal_mois table.month td a {
+    padding: 0.2em 0.8em;
+    color: #000;
+    background: transparent;
+}
+
+.ephemeride_large .cal_mois table.month tbody th {
+    border-bottom: 1px solid #ccc;
+}
+
+
+.colonne.ephemeride_large {
+    box-shadow: none;
+    font-size: 10pt;
+}
+
+.colonne.ephemeride_large {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    align-content: space-between;
+}
+
+.colonne.ephemeride_large ul {
+    padding: 0.2em 1em;
+}
+
+.colonne.ephemeride_large h2 {
+    font-size: 100%;
+    font-weight: bold;
+}
+
+.colonne.ephemeride_large .top-cal,
+.colonne.ephemeride_large .bottom-cal {
+    flex: auto;  
+    align-self: stretch;
+}
+
+.colonne.ephemeride_large .center-cal {
+    flex-grow: 100;
+    align-self: stretch;
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+.ephemeride {
+    display: block;
+    width: 10em;
+    margin: auto;
+}
+.ephemeride a {
+    padding: 1em 0;
+    display: block;
+    box-shadow: 0 0 0.2em rgba(0,0,0,0.3);
+    border-radius: 0.2em;
+}
+
+.ephemeride a:hover {
+    text-decoration: none;
+    color: #000;
+    background: #fdfdfd;
+    box-shadow: 0 0 0.1em rgba(0,0,0,0.3);
+}
+
+.ephemeride div {
+    width: 100%;
+    text-align: center;
+}
+.ephemeride .jour_semaine {
+    color: #222;
+    font-size: 130%;
+}
+.ephemeride .jour {
+    color: #c44;
+    font-weight: bold;
+    font-size: 400%;
+}
+.ephemeride:hover .jour {
+    color: #c00;
+}
+.ephemeride .mois {
+    color: #222;
+    text-transform: uppercase;
+    font-size: 110%;
+}
+
+.month td a {
+    padding: 1em;
+}
+.month td a:hover {
+    background: #89b3d2;
+    text-decoration: none;
+}
+
+a.day {
+    display: block;
+    background: #c9dceb;
+    font-weight: bold;
+}
+
+a.missing-day {
+    background: transparent;
+    font-weight: normal;
+    color: red;
+    opacity: 0.5;
+}
+
+a.today {
+    background: #89b3d2;
+    font-weight: bold;
+}
+
+.month a.missing-day:hover {
+    opacity: 1;
+    background: #fee;
+}
+
+table {
+    text-align: center;
+}
+
+table th:first-child {
+    text-align: left;
+  }

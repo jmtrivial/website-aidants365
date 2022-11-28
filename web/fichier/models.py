@@ -571,6 +571,9 @@ class EntreeAgenda(models.Model):
         e = Ephemeride(self.date, self.get_absolute_url(), False)
         return e.ephemeride()
 
+    def to_ephemeride(self):
+        return Ephemeride(self)
+
     def date_complete(self):
         return Agenda.day_name[self.date.weekday()] + " " + str(self.date.day) + " " + Agenda.month_name[self.date.month] + " " + str(self.date.year)
 

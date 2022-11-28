@@ -41,7 +41,7 @@ LOGGING = {
     # A logger for WARNING which has a handler called 'file'. A logger can have multiple handler
     'loggers': {
         # notice the blank '', Usually you would put built in loggers like django or root here based on your needs
-        '': {
+        'django_weasyprint': {
             'handlers': ['file'],  # notice how file variable is called in handler which has been defined above
             'level': 'WARNING',
             'propagate': True,

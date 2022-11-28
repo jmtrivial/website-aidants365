@@ -748,6 +748,11 @@ def entree_agenda_pk(request, id):
     return _entree_agenda(request, entree)
 
 
+def entree_agenda_pdf_test(request, pk):
+    entree = get_object_or_404(EntreeAgenda, pk=pk)
+    context = {'entreeagenda': entree }
+    return render(request, 'fiches/entree_agenda_pdf.html', context)
+
 @login_required
 def entree_agenda(request, year, month, day):
     d = datetime(year, month, day)
@@ -780,6 +785,20 @@ class FicheViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
         from django.utils import timezone
         return '{nom} {at}.pdf'.format(
             nom=str(self.get_object().get_simple_name()).replace('\'', '\\\''),
+            at=str(self.get_object().date_derniere_modification.strftime("%d-%m-%Y %H:%M:%S")),
+        )
+
+
+class EntreeAgendaViewPDF(LoginRequiredMixin, WeasyTemplateResponseMixin, DetailView):
+
+    template_name = 'fiches/entree_agenda_pdf.html'
+
+    model = EntreeAgenda
+
+    def get_pdf_filename(self):
+        from django.utils import timezone
+        return 'Entrée agenda {nom} version du {at}.pdf'.format(
+            nom=str(self.get_object().__str__()).replace('\'', '\\\''),
             at=str(self.get_object().date_derniere_modification.strftime("%d-%m-%Y %H:%M:%S")),
         )
 

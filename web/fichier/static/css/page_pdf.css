@@ -2,8 +2,30 @@ body {
     width: 21cm;
 }
 
-#message_responsive {
+.message_responsive {
     display: none;
 }
 
 @page { size: A4; margin: 0 }
+
+/* tricks for agenda rendering */
+
+/*.top-cal {
+    width: 9.85cm;
+}*/
+
+.ephemeride_large .ephemeride a {
+    padding: 0;
+}
+
+page .internal {
+    text-decoration: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+.ephemeride {
+    width: 6.2em;
+}
