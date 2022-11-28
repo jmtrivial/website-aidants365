@@ -748,11 +748,6 @@ def entree_agenda_pk(request, id):
     return _entree_agenda(request, entree)
 
 
-def entree_agenda_pdf_test(request, pk):
-    entree = get_object_or_404(EntreeAgenda, pk=pk)
-    context = {'entreeagenda': entree }
-    return render(request, 'fiches/entree_agenda_pdf.html', context)
-
 @login_required
 def entree_agenda(request, year, month, day):
     d = datetime(year, month, day)
