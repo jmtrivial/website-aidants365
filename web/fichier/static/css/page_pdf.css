@@ -29,3 +29,7 @@ a {
 .ephemeride {
     width: 6.2em;
 }
+
+.A4_A5 page[size=A5] {
+    border-bottom: 0.2mm solid grey;
+}

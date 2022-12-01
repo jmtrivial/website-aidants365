@@ -101,7 +101,7 @@
 
 .ephemeride_large .cal_mois table.month {
     width: auto;
-    font-size: 0.18cm;
+    font-size: 5pt;
     height: 14.5em;
 }
 
@@ -113,7 +113,7 @@
 
 
 .ephemeride_large .cal_mois table.month th.month {
-    font-size: 0.2cm;
+    font-size: 6pt;
 }
 
 .ephemeride_large .cal_mois table.month th,
@@ -136,7 +136,7 @@
 
 .colonne.ephemeride_large {
     box-shadow: none;
-    font-size: 10pt;
+    font-size: 9pt;
 }
 
 .colonne.ephemeride_large {
@@ -250,3 +250,13 @@ table {
 table th:first-child {
     text-align: left;
   }
+
+.premier_titre {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.titre_large {
+    font-size: 150%;
+}

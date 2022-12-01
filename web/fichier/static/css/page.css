@@ -155,8 +155,6 @@ page .colonne {
     box-sizing: border-box;
     margin: 0;
     padding: 1mm;
-    overflow: hidden;
-
 }
 
 page .notes-libres {

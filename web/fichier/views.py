@@ -730,6 +730,34 @@ def agenda_month(request, year, month):
     return render(request, 'fiches/agenda_month.html', context)
 
 
+class AgendaMonthViewPDF(WeasyTemplateResponseMixin, ListView):
+    template_name = 'fiches/agenda_month_pdf.html'
+
+    model = EntreeAgenda
+
+    def get_context_data(self, **kwargs):
+        context = super(AgendaMonthViewPDF, self).get_context_data(**kwargs)
+        context['agenda'] = Agenda(context["object_list"], 0, 'fr_FR.UTF-8')
+        year = self.kwargs['year']
+        month = self.kwargs['month']
+        context['year'] = year
+        context['month'] = month
+        context['entete_mois'] = get_entete("agenda/" + str(year) + "/" + str(month) + "/")
+        context['entete_mois_annee'] = year
+        context['entete_mois_mois'] = Agenda.month_name[int(month)]
+        return context
+
+    def get_queryset(self):
+        return EntreeAgenda.objects.filter(date__year=self.kwargs['year'], date__month=self.kwargs['month']).order_by("date")
+
+    def get_pdf_filename(self):
+        from django.utils import timezone
+        return 'agenda 365 {m} {y}.pdf'.format(
+            m=str(self.kwargs['month']),
+            y=str(self.kwargs['year']),
+        )
+
+
 @login_required
 def agenda_month_details(request, year, month):
     entrees = EntreeAgenda.objects.filter(date__year=year, date__month=month).order_by("date")

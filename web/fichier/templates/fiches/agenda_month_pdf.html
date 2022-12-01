@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    {% load fichier_extras %}
+    <title>Agenda 365 - {{ month|nom_mois_particule }} {{ year }}</title>
+    
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/page.css' %}">
+    <link rel="stylesheet" href="{% static 'css/page_pdf.css' %}">
+    <link rel="stylesheet" href="{% static 'css/contenu.css' %}">
+</head>
+<body class="A4_A5">
+    <page size="A5" class="web premier_titre" layout="landscape">
+        <div class="titre_large">
+        {% include "fiches/entete_mois.html" with entete_mois_edit=0 %}
+        </div>
+    </page>
+    {% for entree in object_list %}
+        {% include "fiches/affichage_entree_agenda.html" with liens="" ephemeride=entree.to_ephemeride not_alone=1 %}
+    {% endfor %}
+</body>
