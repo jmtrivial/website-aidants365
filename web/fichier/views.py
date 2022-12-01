@@ -1013,17 +1013,21 @@ def merge(request, classname):
                     if classname == "theme":
                         fiche.themes.add(form.cleaned_data["element1"])
                         fiche.themes.remove(form.cleaned_data["element2"])
+                        fiche.save()
                     elif classname == "etiquette":
                         fiche.etiquettes.add(form.cleaned_data["element1"])
                         fiche.etiquettes.remove(form.cleaned_data["element2"])
+                        fiche.save()
                 if classname == "theme" or classname == "etiquette":
                     for entree in EntreeAgenda.objects.filter(**{field_agenda: form.cleaned_data["element2"].id}):
                         if classname == "theme":
                             entree.themes.add(form.cleaned_data["element1"])
                             entree.themes.remove(form.cleaned_data["element2"])
+                            entree.save()
                         elif classname == "etiquette":
                             entree.etiquettes.add(form.cleaned_data["element1"])
                             entree.etiquettes.remove(form.cleaned_data["element2"])
+                            entree.save()
 
                 if classname == "theme":
                     Theme.objects.filter(pk=form.cleaned_data["element2"].id).delete()
