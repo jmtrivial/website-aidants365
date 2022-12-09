@@ -73,9 +73,9 @@ class FicheForm(forms.ModelForm):
     class Meta:
         model = Fiche
 
-        localized_fields = ('date_creation', 'date_derniere_modification',)
+        localized_fields = ('date_creation', )
 
-        exclude = ('urls', )
+        exclude = ('urls', 'date_demande_mise_a_jour', 'date_derniere_modification',)
 
         widgets = {
             "themes": MySortedCheckboxSelectMultiple,
@@ -150,7 +150,7 @@ class EntreeAgendaForm(WithUserForm):
     class Meta:
         model = EntreeAgenda
 
-        exclude = ('date_derniere_modification', "urls")
+        exclude = ('date_derniere_modification', "urls", 'date_demande_mise_a_jour')
 
         widgets = {
             "themes": MySortedCheckboxSelectMultiple,

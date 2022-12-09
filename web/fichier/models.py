@@ -163,8 +163,14 @@ class Niveau(models.Model):
     applicable = models.CharField(max_length=1, choices=Applicabilite.choices, default=Applicabilite.B)
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
+
+    def delete(self, *args, **kwargs):
+        self.update_associated_entries()
+        super().save(*args, **kwargs)
+
     def save(self, *args, **kwargs):
-        # TODO: update associated fiches
+        # update associated entries
+        self.update_associated_entries()
         self.date_derniere_modification = timezone.now()
         super().save(*args, **kwargs)
 
@@ -180,6 +186,19 @@ class Niveau(models.Model):
 
     def rechercher(search_text):
         return rechercher_nom_simple(search_text, Niveau)
+
+    def associated_entries(self):
+        result = []
+
+        # Liste des entrées d'agenda associées à cette catégorie
+        result += Fiche.objects.filter(themes=self.id)
+
+        return result
+
+    def update_associated_entries(self):
+        for e in self.associated_entries():
+            e.date_demande_mise_a_jour = timezone.now()
+            e.save()
 
 
 class TypeCategorie(models.Model):
@@ -222,11 +241,13 @@ class Categorie(models.Model):
         return rechercher_nom_simple(search_text, Categorie)
 
     def delete(self, *args, **kwargs):
-        # TODO: update associated fiches
+        # update associated entries
+        self.update_associated_entries()
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        # TODO: update associated fiches
+        # update associated entries
+        self.update_associated_entries()
         self.date_derniere_modification = timezone.now()
         super().save(*args, **kwargs)
 
@@ -238,6 +259,10 @@ class Categorie(models.Model):
 
         return result
 
+    def update_associated_entries(self):
+        for e in self.associated_entries():
+            e.date_demande_mise_a_jour = timezone.now()
+            e.save()
 
 class Auteur(models.Model):
     code = models.CharField(verbose_name="Code auteur", max_length=3)
@@ -271,11 +296,14 @@ class Etiquette(models.Model):
         return self.nom
 
     def delete(self, *args, **kwargs):
-        # TODO: update associated fiches
+        # update associated entries
+        self.update_associated_entries()
+
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        # TODO: mettre à jour les étiquettes associées
+        # update associated entries
+        self.update_associated_entries()
         self.date_derniere_modification = timezone.now()
         super().save(*args, **kwargs)
 
@@ -295,6 +323,11 @@ class Etiquette(models.Model):
 
         return result
 
+    def update_associated_entries(self):
+        for e in self.associated_entries():
+            e.date_demande_mise_a_jour = timezone.now()
+            e.save()
+
     def get_absolute_url(self):
         return reverse('fichier:index_etiquette', kwargs={'id': self.pk})
 
@@ -310,7 +343,16 @@ class Theme(models.Model):
     def __str__(self):
         return self.nom
 
+    def delete(self, *args, **kwargs):
+        # update associated entries
+        self.update_associated_entries()
+
+        super().delete(*args, **kwargs)
+
     def save(self, *args, **kwargs):
+        # update associated entries
+        self.update_associated_entries()
+
         self.date_derniere_modification = timezone.now()
         super().save(*args, **kwargs)
 
@@ -329,6 +371,11 @@ class Theme(models.Model):
         result += EntreeAgenda.objects.filter(themes=self.id)
 
         return result
+
+    def update_associated_entries(self):
+        for e in self.associated_entries():
+            e.date_demande_mise_a_jour = timezone.now()
+            e.save()
 
     def get_absolute_url(self):
         return reverse('fichier:index_theme', kwargs={'id': self.pk})
@@ -351,6 +398,7 @@ class Fiche(models.Model):
 
     date_creation = models.DateField(verbose_name="Date de création", default=timezone.now)
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
+    date_demande_mise_a_jour = models.DateTimeField(verbose_name="Demande de mise à jour", auto_now=True)
 
     # chapeau
     url = models.URLField(verbose_name="Adresse", max_length=1024, blank=True)
@@ -422,10 +470,14 @@ class Fiche(models.Model):
         return name
 
     def delete(self, *args, **kwargs):
-        # TODO: update associated fiches
+        # update associated entries
+        self.update_associated_entries()
+
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
+        # update associated entries
+        self.update_associated_entries()
         self.date_derniere_modification = timezone.now()
         self.urls = build_list_urls(self.url + " " + self.presentation + " " + self.problematique + " " + self.quatrieme_de_couverture + " " + self.plan_du_site + " " + self.focus + " " + self.reserves + " " + self.lesplus + " " + self.en_savoir_plus)
         super().save(*args, **kwargs)
@@ -482,6 +534,12 @@ class Fiche(models.Model):
 
         return result
 
+    def update_associated_entries(self):
+        for e in self.associated_entries():
+            e.date_demande_mise_a_jour = timezone.now()
+            e.save()
+
+
 
 class EntreeGlossaire(models.Model):
 
@@ -506,11 +564,9 @@ class EntreeGlossaire(models.Model):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
 
     def delete(self, *args, **kwargs):
-        # TODO: update associated fiches
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
-        # TODO: update associated fiches
         self.date_derniere_modification = timezone.now()
         self.urls = build_list_urls(self.definition)
         super().save(*args, **kwargs)
@@ -615,6 +671,7 @@ class EntreeAgenda(models.Model):
     illustration_source = models.CharField(verbose_name="Source de l'illustration", max_length=512, default="", blank=True, null=True)
 
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
+    date_demande_mise_a_jour = models.DateTimeField(verbose_name="Demande de mise à jour", auto_now=True)
 
     fiches_associees = SortedManyToManyField(Fiche, verbose_name="Fiches associées", blank=True, help_text=message_sortable)
 
