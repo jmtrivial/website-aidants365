@@ -50,7 +50,6 @@ def get_entete(page):
 def annoter_class_nuage(objects):
     nb_max = 5
     nb = objects.aggregate(Max("fiche_count"))["fiche_count__max"]
-    logger.warning("count max " + str(nb))
     return objects.annotate(classe_nuage=Cast(Ceil(Cast(Value(nb_max) * F('fiche_count'), FloatField()) / Value(nb)), IntegerField())). \
         annotate(max_classe_nuage=Value(nb_max))
 
@@ -74,6 +73,10 @@ def accueil(request):
     latest_fiche_list = Fiche.objects.order_by('-date_derniere_modification')[:5]
     latest_entrees_glossaire_list = EntreeGlossaire.objects.order_by('-date_derniere_modification')[:5]
     latest_entrees_agenda_list = EntreeAgenda.objects.order_by('-date_derniere_modification')[:5]
+    latest_etiquettes_list = Etiquette.objects.order_by('-date_derniere_modification')[:5]
+    latest_themes_list = Theme.objects.order_by('-date_derniere_modification')[:5]
+    latest_categories_list = Categorie.objects.order_by('-date_derniere_modification')[:5]
+    latest_entetes_page_list = EntetePage.objects.order_by('-date_derniere_modification')[:5]
 
     niveaux = Niveau.objects.annotate(fiche_count=Count('fiche')).order_by("ordre")
 
@@ -95,6 +98,10 @@ def accueil(request):
     context = {'fiche_list': latest_fiche_list,
                'entrees_glossaire_list': latest_entrees_glossaire_list,
                'entrees_agenda_list': latest_entrees_agenda_list,
+               'latest_themes_list': latest_themes_list,
+               'latest_categories_list': latest_categories_list,
+               'latest_etiquettes_list': latest_etiquettes_list,
+               'latest_entetes_page_list': latest_entetes_page_list,
                "niveaux": niveaux,
                "themes": themes,
                "etiquettes": etiquettes,
@@ -667,6 +674,8 @@ def edit_object(request, classname, id=None, clone=False):
             form = classeform(request.POST, request.FILES, instance=object, user=request.user)
             if form.is_valid():
                 object = form.save()
+
+                # TODO: update the associated objects (if the current class is theme, categorie or etiquette)
                 if id is None or clone:
                     message = message_add_success % object
                 else:
@@ -841,7 +850,23 @@ class DeleteObjectView(LoginRequiredMixin, DeleteView):
 class DeleteThemeView(DeleteObjectView):
     model = Theme
     success_url = reverse_lazy("fichier:themes")
-    cancel_url = "fichier:entree_theme"
+    cancel_url = "fichier:index_theme"
+
+    def delete(self, request, *args, **kwargs):
+        # https://groups.google.com/g/django-updates/c/3r6yxMFApqg
+        # n'existe plus. Un trigger sur le delete serait sans doute mieux
+        self.object = self.get_object()
+        logger.warning("delete " + self.object.id)
+        nom = self.object.nom
+        # update associated objects (last modified)
+        for entree in EntreeAgenda.objects.filter(themes=self.object):
+            entree.themes.remove(self.object)
+            entree.save()
+        for fiche in Fiche.objects.filter(themes=self.object):
+            fiche.themes.remove(self.object)
+            fiche.save()
+        messages.success(request, mark_safe('Suppression du thème ' + nom + ' réussi'))
+        return super(DeleteThemeView, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(permission_required("fichier.delete_etiquette"), name='dispatch')
@@ -849,6 +874,11 @@ class DeleteEtiquetteView(DeleteObjectView):
     model = Etiquette
     success_url = reverse_lazy("fichier:etiquettes")
     cancel_url = "fichier:index_etiquette"
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # TODO: update associated objects (last modified)
+        return super(DeleteThemeView, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(permission_required("fichier.delete_fiche"), name='dispatch')
@@ -877,6 +907,11 @@ class DeleteCategorieView(DeleteObjectView):
     model = Categorie
     success_url = reverse_lazy("fichier:categories")
     cancel_url = "fichier:index_categorie"
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        # TODO: update associated objects (last modified)
+        return super(DeleteThemeView, self).delete(request, *args, **kwargs)
 
 
 @method_decorator(permission_required("fichier.delete_document"), name='dispatch')
@@ -1056,6 +1091,14 @@ def simple_modifications_page(request, classname, key):
         liste_entrees.append(EntreeGlossaire.objects.all())
     if classname in ["fiches", ""]:
         liste_entrees.append(Fiche.objects.all())
+    if classname in ["themes", ""]:
+        liste_entrees.append(Theme.objects.all())
+    if classname in ["etiquettes", ""]:
+        liste_entrees.append(Etiquette.objects.all())
+    if classname in ["entetes", ""]:
+        liste_entrees.append(EntetePage.objects.all())
+    if classname in ["categories", ""]:
+        liste_entrees.append(Categorie.objects.all())
 
     entrees = sorted(chain(*liste_entrees),
                      key=lambda entree: entree.date_derniere_modification, reverse=True)

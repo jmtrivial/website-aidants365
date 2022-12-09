@@ -17,24 +17,44 @@ Aidants 365 — dernières modifications
 {% block content %}
     {% load fichier_extras %}
     <div class="block" id="entete">
-        {% if classname == "fiches" %}
-        <h1>Dernières modifications des <a href="{% url 'fichier:index' %}">fiches</a></h1>
-        <p>
-            Sont listées ci-dessous par ordre de dernière modification les fiches.
-        </p>
-        <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
-        {% elif classname == "agenda" %}
-        <h1>Dernières modifications de l'<a href="{% url 'fichier:agenda' %}">agenda</a></h1>
-        <p>
-            Sont listées ci-dessous par ordre de dernière modification les entrées de l'agenda.
-        </p>
-        <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
-        {% elif classname == "glossaire" %}
-        <h1>Dernières modifications du <a href="{% url 'fichier:glossaire' %}">glossaire</a></h1>
-        <p>
-            Sont listées ci-dessous par ordre de dernière modification les entrées du glossaire.
-        </p>
-        <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
+        {% if classname != "" %}
+            {% if classname == "fiches" %}
+            <h1>Dernières modifications des <a href="{% url 'fichier:index' %}">fiches</a></h1>
+            <p>
+                Sont listées ci-dessous par ordre de dernière modification les fiches.
+            </p>
+            {% elif classname == "agenda" %}
+            <h1>Dernières modifications de l'<a href="{% url 'fichier:agenda' %}">agenda</a></h1>
+            <p>
+                Sont listées ci-dessous par ordre de dernière modification les entrées de l'agenda.
+            </p>
+            {% elif classname == "glossaire" %}
+            <h1>Dernières modifications du <a href="{% url 'fichier:glossaire' %}">glossaire</a></h1>
+            <p>
+                Sont listées ci-dessous par ordre de dernière modification les entrées du glossaire.
+            </p>
+            {% elif classname == "categories" %}
+            <h1>Dernières modifications des <a href="{% url 'fichier:categories' %}">catégories</a></h1>
+            <p>
+                Sont listées ci-dessous par ordre de dernière modification des catégories.
+            </p>
+            {% elif classname == "themes" %}
+            <h1>Dernières modifications des <a href="{% url 'fichier:themes' %}">thèmes</a></h1>
+            <p>
+                Sont listées ci-dessous par ordre de dernière modification des thèmes.
+            </p>
+            {% elif classname == "etiquettes" %}
+            <h1>Dernières modifications des <a href="{% url 'fichier:etiquettes' %}">étiquettes</a></h1>
+            <p>
+                Sont listées ci-dessous par ordre de dernière modification des étiquettes.
+            </p>
+            {% elif classname == "entetes" %}
+            <h1>Dernières modifications des entêtes de pages</h1>
+            <p>
+                Sont listées ci-dessous par ordre de dernière modification les entêtes de page.
+            </p>
+            {% endif %}
+            <p>Voir aussi les modifications de <a href="{% url 'fichier:modifications' %}">tous les documents</a>.</p>
         {% else %}
         <h1>Dernières modifications</h1>
         <p>
@@ -42,8 +62,12 @@ Aidants 365 — dernières modifications
         </p>
         <p>Consulter spécifiquement les modifications  
             des <a href="{% url 'fichier:simple_modifications' 'fiches' %}">fiches</a>,
-            de l'<a href="{% url 'fichier:simple_modifications' 'agenda' %}">agenda</a>
-            et du <a href="{% url 'fichier:simple_modifications' 'glossaire' %}">glossaire</a>.</p>
+            de l'<a href="{% url 'fichier:simple_modifications' 'agenda' %}">agenda</a>,
+            du <a href="{% url 'fichier:simple_modifications' 'glossaire' %}">glossaire</a>,
+            des <a href="{% url 'fichier:simple_modifications' 'themes' %}">thèmes</a>,
+            des <a href="{% url 'fichier:simple_modifications' 'etiquettes' %}">étiquettes</a>,
+            des <a href="{% url 'fichier:simple_modifications' 'categories' %}">catégories</a> et
+            des <a href="{% url 'fichier:simple_modifications' 'entetes' %}">entêtes de page</a>.</p>
         {% endif %}
 
         {% if paginator %}

@@ -39,6 +39,7 @@ Le fichier Aidants365
 </div>
 
 <div class="column">
+    <div style="font-size: 80%">
     <h2>Contenu</h2>
     <p>Les entrées d'agendas et fiches du 365 sont classées par niveau.</p>
     {% regroup niveaux by applicable as niveaux_liste %}
@@ -51,6 +52,7 @@ Le fichier Aidants365
             </ul>
         </li>
     {% endfor %}
+    </div>
 </div>
 <div style="clear: both"></div>
 <p style="font-size: 80%">Pour des raisons de performance, cette page est mise à jour toutes les 2 minutes.</p>
@@ -94,11 +96,63 @@ Le fichier Aidants365
     {% for entree_glossaire in entrees_glossaire_list %}
         <li><a href="{{ entree_glossaire.get_absolute_url }}">{{ entree_glossaire }}</a> 
             {% if entree_glossaire.date_derniere_modification|is_recent_entry %}
-                — {{entree_glossaire.date_derniere_modification}}</li>
+                — {{entree_glossaire.date_derniere_modification}}
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
+<h3>Étiquettes</h3>
+{% if latest_etiquettes_list %}
+    <ol>
+    {% for etiquette in latest_etiquettes_list %}
+        <li><a href="{{ etiquette.get_absolute_url }}">{{ etiquette }}</a> 
+            {% if etiquette.date_derniere_modification|is_recent_entry_2 %}
+                — {{etiquette.date_derniere_modification}}
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ol>
+{% endif %}
+
+<h3>Thèmes</h3>
+{% if latest_themes_list %}
+    <ol>
+    {% for theme in latest_themes_list %}
+        <li><a href="{{ theme.get_absolute_url }}">{{ theme }}</a> 
+            {% if theme.date_derniere_modification|is_recent_entry_2 %}
+                — {{theme.date_derniere_modification}}
+                {% endif %}
+        </li>    
+    {% endfor %}
+    </ol>
+{% endif %}
+
+<h3>Catégories</h3>
+{% if latest_categories_list %}
+    <ol>
+    {% for categorie in latest_categories_list %}
+        <li><a href="{{ categorie.get_absolute_url }}">{{ categorie }}</a> 
+            {% if categorie.date_derniere_modification|is_recent_entry_2 %}
+                — {{categorie.date_derniere_modification}}</li>
             {% endif %}
     {% endfor %}
     </ol>
 {% endif %}
+
+<h3>Entête de pages</h3>
+{% if latest_entetes_page_list %}
+    <ol>
+    {% for entete in latest_entetes_page_list %}
+        <li><a href="{{ entete.get_absolute_url }}">{{ entete }}</a> 
+            {% if entete.date_derniere_modification|is_recent_entry_2 %}
+                — {{entete.date_derniere_modification}}</li>
+            {% endif %}
+    {% endfor %}
+    </ol>
+{% endif %}
+
 
 <div class="suite"><a href="{% url 'fichier:modifications' %}">dernières modifications ▸</a></div>
 

@@ -25,6 +25,10 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def build_list_urls(txt):
+    return sorted(list(set([x[1] for x in re.findall(r"(^|\<p\>|[\n \"])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)", txt)])))
+
+
 def rechercher_nom_simple(search_text, classname):
     from django.contrib.postgres.search import SearchVector
     from django.contrib.postgres.search import SearchQuery
@@ -48,6 +52,12 @@ class EntetePage(models.Model):
     page = models.CharField(unique=True, max_length=32)
     texte = RichTextField(verbose_name="Texte de l'entête", config_name='main_ckeditor', blank=True)
 
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
+
+    def save(self, *args, **kwargs):
+        self.date_derniere_modification = timezone.now()
+        super().save(*args, **kwargs)
+
     def url_name(self):
         return EntetePage.page_url_name(self.page)
 
@@ -60,6 +70,8 @@ class EntetePage(models.Model):
     def page_url_name(page_name):
         if page_name.startswith("agenda/"):
             return "fichier:agenda_month"
+        elif page_name.startswith("agenda"):
+            return "fichier:agenda"
         else:
             return "fichier:" + page_name
 
@@ -79,8 +91,10 @@ class EntetePage(models.Model):
         return EntetePage.nom_page(self.page)
 
     def nom_page(page):
-        if page.startswith("agenda/"):
+        if page.startswith("agenda/") or page.startswith("agenda:"):
             elements = page.split("/")
+            if len(elements) == 1:
+                elements = page.split(":")
             mois = Agenda.month_name[int(elements[2])]
             annee = elements[1]
             if mois[0] in ['a', 'e', 'i', 'o', 'u']:
@@ -147,6 +161,12 @@ class Niveau(models.Model):
     nom = models.CharField(verbose_name="Nom", max_length=64)
     description = models.CharField(verbose_name="Description", max_length=256, blank=True, null=True)
     applicable = models.CharField(max_length=1, choices=Applicabilite.choices, default=Applicabilite.B)
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
+
+    def save(self, *args, **kwargs):
+        # TODO: update associated fiches
+        self.date_derniere_modification = timezone.now()
+        super().save(*args, **kwargs)
 
     def couleur(self):
         return Niveau.Applicabilite.couleur(self.applicable)
@@ -183,6 +203,7 @@ class Categorie(models.Model):
     is_biblio = models.BooleanField(verbose_name="Nécessite les champs de bibliographie", default=False)
     is_site = models.BooleanField(verbose_name="Nécessite les champs de site internet", default=False)
     is_film = models.BooleanField(verbose_name="Nécessite les champs d'un film", default=False)
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     class Meta:
         verbose_name = "Catégorie"
@@ -191,11 +212,23 @@ class Categorie(models.Model):
     def __str__(self):
         return self.code
 
+    def get_absolute_url(self):
+        return reverse('fichier:index_categorie', kwargs={'id': self.pk})
+
     def description_longue(self):
         return self.code + " — " + self.nom
 
     def rechercher(search_text):
         return rechercher_nom_simple(search_text, Categorie)
+
+    def delete(self, *args, **kwargs):
+        # TODO: update associated fiches
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        # TODO: update associated fiches
+        self.date_derniere_modification = timezone.now()
+        super().save(*args, **kwargs)
 
     def associated_entries(self):
         result = []
@@ -228,6 +261,7 @@ class Auteur(models.Model):
 
 class Etiquette(models.Model):
     nom = models.CharField(verbose_name="Étiquette", max_length=64, unique=True, blank=False)
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     class Meta:
         verbose_name = "Étiquette"
@@ -235,6 +269,15 @@ class Etiquette(models.Model):
 
     def __str__(self):
         return self.nom
+
+    def delete(self, *args, **kwargs):
+        # TODO: update associated fiches
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        # TODO: mettre à jour les étiquettes associées
+        self.date_derniere_modification = timezone.now()
+        super().save(*args, **kwargs)
 
     def description_longue(self):
         return self.nom
@@ -258,6 +301,7 @@ class Etiquette(models.Model):
 
 class Theme(models.Model):
     nom = models.CharField(verbose_name="Thème", max_length=64, unique=True, blank=False)
+    date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
     class Meta:
         verbose_name = "Thème"
@@ -265,6 +309,10 @@ class Theme(models.Model):
 
     def __str__(self):
         return self.nom
+
+    def save(self, *args, **kwargs):
+        self.date_derniere_modification = timezone.now()
+        super().save(*args, **kwargs)
 
     def description_longue(self):
         return self.nom
@@ -373,6 +421,15 @@ class Fiche(models.Model):
             name += " ☑"
         return name
 
+    def delete(self, *args, **kwargs):
+        # TODO: update associated fiches
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.date_derniere_modification = timezone.now()
+        self.urls = build_list_urls(self.url + " " + self.presentation + " " + self.problematique + " " + self.quatrieme_de_couverture + " " + self.plan_du_site + " " + self.focus + " " + self.reserves + " " + self.lesplus + " " + self.en_savoir_plus)
+        super().save(*args, **kwargs)
+
     def get_numero_suivant(auteur):
         if Fiche.objects.all().count() == 0:
             nouveau_numero = 1
@@ -447,6 +504,16 @@ class EntreeGlossaire(models.Model):
 
     def get_absolute_url(self):
         return reverse('fichier:entree_glossaire', kwargs={'id': self.pk})
+
+    def delete(self, *args, **kwargs):
+        # TODO: update associated fiches
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        # TODO: update associated fiches
+        self.date_derniere_modification = timezone.now()
+        self.urls = build_list_urls(self.definition)
+        super().save(*args, **kwargs)
 
     def matching_entrees_agenda(self):
         result = []
@@ -563,6 +630,11 @@ class EntreeAgenda(models.Model):
             return texte + " ☑"
         else:
             return texte
+
+    def save(self, *args, **kwargs):
+        self.date_derniere_modification = timezone.now()
+        self.urls = build_list_urls(self.notes)
+        super().save(*args, **kwargs)
 
     def iso(self):
         return self.date.strftime("%Y-%m-%d")
@@ -713,6 +785,10 @@ class Document(models.Model):
     def __str__(self):
         return self.titre
 
+    def save(self, *args, **kwargs):
+        self.date_derniere_modification = timezone.now()
+        super().save(*args, **kwargs)
+
     def get_absolute_url(self):
         return reverse('fichier:document', kwargs={'id': self.pk})
 
@@ -738,29 +814,3 @@ class Document(models.Model):
                                              stop_sel="</span>",
                                              highlight_all=True,
                                              config='french'))
-
-
-@receiver(pre_save, sender=Fiche)
-def my_callback_pre_save(sender, instance, **kwargs):
-    if instance.date_derniere_modification == instance.__original_date_derniere_modification:
-        instance.date_derniere_modification = timezone.now()
-    instance.urls = build_list_urls(instance.url + " " + instance.presentation + " " + instance.problematique + " " + instance.quatrieme_de_couverture + " " + instance.plan_du_site + " " + instance.focus + " " + instance.reserves + " " + instance.lesplus + " " + instance.en_savoir_plus)
-
-
-def build_list_urls(txt):
-    return sorted(list(set([x[1] for x in re.findall(r"(^|\<p\>|[\n \"])(([\w]+?://[\w\#$%&~.\-;:=,?@\[\]+]*)(/[\w\#$%&~/.\-;:=,?@\[\]+]*)?)", txt)])))
-
-
-@receiver(pre_save, sender=EntreeAgenda)
-def my_callback_pre_save_urls_agenda(sender, instance, **kwargs):
-    instance.urls = build_list_urls(instance.notes)
-
-
-@receiver(pre_save, sender=EntreeGlossaire)
-def my_callback_pre_save_urls_glossaire(sender, instance, **kwargs):
-    instance.urls = build_list_urls(instance.definition)
-
-
-@receiver(post_init, sender=Fiche)
-def my_callback_post_save(sender, instance, *args, **kwargs):
-    instance.__original_date_derniere_modification = instance.date_derniere_modification
