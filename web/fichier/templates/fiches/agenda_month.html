@@ -24,7 +24,9 @@ Le fichier Aidants365 — Agenda
         {% if perms.fichier.add_entreeagenda %}
         <div class="lien_next bouton"><a id="inverse_button" href="{% url 'fichier:entree_agenda_invert' %}">inverser deux dates</a></div>
         {% endif %}
-        <div class="lien_next bouton"><a id="pdf_button" href="{% url 'fichier:agenda_month_pdf' year month %}">pdf</a></div>
+        {% if agenda.events.all.count > 0 %}
+        <div class="lien_next bouton"><a class="bouton_inline" id="dl_pdf" href="/media/agenda-{{ year }}-{{ month|two_chars }}.pdf">pdf</a></div>
+        {% endif %}
     </div>
     <h1>Calendrier du mois {{ month|nom_mois_particule }} <a href="{% url 'fichier:agenda_year' year %}">{{year}}</a></h1>
 

@@ -52,6 +52,12 @@ def number_xxxx(value):
 def nom_mois(value):
     return Agenda.month_name[value].lower()
 
+@register.filter
+def two_chars(nb):
+    if nb < 10:
+        return "0" + str(nb)
+    else:
+        return nb
 
 @register.filter
 def nom_mois_particule(value):

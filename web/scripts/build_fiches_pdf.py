@@ -8,14 +8,17 @@ import zoneinfo
 
 def run():
     filename = '/media/fiches.pdf'
-    m_time = os.path.getmtime(filename)
-    paris_tz = zoneinfo.ZoneInfo("Europe/Paris")
-    dt_m = datetime.datetime.fromtimestamp(m_time).replace(tzinfo=paris_tz)
+    exists = os.path.exists(filename)
+    if exists:
 
-    date_derniere_modification = Fiche.objects.latest("date_derniere_modification").date_derniere_modification
-    date_demande_mise_a_jour = Fiche.objects.latest("date_demande_mise_a_jour").date_demande_mise_a_jour
+        m_time = os.path.getmtime(filename)
+        paris_tz = zoneinfo.ZoneInfo("Europe/Paris")
+        dt_m = datetime.datetime.fromtimestamp(m_time).replace(tzinfo=paris_tz)
 
-    if dt_m > date_derniere_modification and dt_m > date_demande_mise_a_jour:
+        date_derniere_modification = Fiche.objects.latest("date_derniere_modification").date_derniere_modification
+        date_demande_mise_a_jour = Fiche.objects.latest("date_demande_mise_a_jour").date_demande_mise_a_jour
+
+    if exists and dt_m > date_derniere_modification and dt_m > date_demande_mise_a_jour:
         print("Le fichier est assez récent")
     else:
         view = FichesViewPDF.as_view()
