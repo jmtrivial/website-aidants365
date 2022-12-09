@@ -7,6 +7,7 @@ import zoneinfo
 from django.db.models.functions import TruncMonth, TruncYear
 from django.db.models import Count
 
+
 def run():
     entries = EntreeAgenda.objects.annotate(year=TruncYear('date')).annotate(month=TruncMonth('date')).values('year', 'month').annotate(count=Count('pk'))
     for e in entries:

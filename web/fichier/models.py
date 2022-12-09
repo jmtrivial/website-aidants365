@@ -163,7 +163,6 @@ class Niveau(models.Model):
     applicable = models.CharField(max_length=1, choices=Applicabilite.choices, default=Applicabilite.B)
     date_derniere_modification = models.DateTimeField(verbose_name="Dernière modification", auto_now=True)
 
-
     def delete(self, *args, **kwargs):
         self.update_associated_entries()
         super().save(*args, **kwargs)
@@ -263,6 +262,7 @@ class Categorie(models.Model):
         for e in self.associated_entries():
             e.date_demande_mise_a_jour = timezone.now()
             e.save()
+
 
 class Auteur(models.Model):
     code = models.CharField(verbose_name="Code auteur", max_length=3)
@@ -538,7 +538,6 @@ class Fiche(models.Model):
         for e in self.associated_entries():
             e.date_demande_mise_a_jour = timezone.now()
             e.save()
-
 
 
 class EntreeGlossaire(models.Model):
