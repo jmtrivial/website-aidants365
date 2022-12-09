@@ -408,9 +408,11 @@ def niveau_suivant(niveau):
 def is_recent_entry(d):
     return d > datetime.fromisoformat('2022-10-08T19:15+02:00')
 
+
 @register.filter
 def is_recent_entry_2(d):
     return d > datetime.fromisoformat('2022-12-09T18:40+01:00')
+
 
 @register.filter
 def is_ephemeride(obj):
