@@ -1,4 +1,4 @@
-{% if not critere_name == "niveau"  and not critere_name == "auteur" %}
+{% if not critere_name == "auteur" %}
 {% if "fichier."|add:"change_"|add:critere_name in perms %}
 <a class="card_edit" href="{% url 'fichier:object_change' critere_name critere.id %}">éditer</a>
 {% endif %}
