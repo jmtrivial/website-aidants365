@@ -75,17 +75,19 @@ Le fichier Aidants365
             {% endif %}
         </li>
     {% endfor %}
+        <li><a href="{% url 'fichier:simple_modifications' 'agenda' %}">...</a></li>
     </ol>
 {% endif %}
 
 <h3>Fiches</h3>
 {% if fiche_list %}
-    <ul class="no_puces">
+    <ol class="no_puces">
     {% for fiche in fiche_list %}
         <li>{{ fiche.niveau.couleur | carre_colore }} <a href="{% url 'fichier:detail' fiche.id %}">{{ fiche }}</a>
         </li>
     {% endfor %}
-    </ul>
+        <li><a href="{% url 'fichier:simple_modifications' 'fiches' %}">...</a></li>
+    </ol>
 {% else %}
     <p>Pas de fiche disponible.</p>
 {% endif %}
@@ -100,6 +102,7 @@ Le fichier Aidants365
             {% endif %}
         </li>
     {% endfor %}
+    <li><a href="{% url 'fichier:simple_modifications' 'glossaire' %}">...</a></li>
     </ol>
 {% endif %}
 
@@ -113,6 +116,7 @@ Le fichier Aidants365
             {% endif %}
         </li>
     {% endfor %}
+    <li><a href="{% url 'fichier:simple_modifications' 'etiquettes' %}">...</a></li>
     </ol>
 {% endif %}
 
@@ -126,6 +130,7 @@ Le fichier Aidants365
                 {% endif %}
         </li>    
     {% endfor %}
+    <li><a href="{% url 'fichier:simple_modifications' 'themes' %}">...</a></li>
     </ol>
 {% endif %}
 
@@ -138,6 +143,7 @@ Le fichier Aidants365
                 — {{categorie.date_derniere_modification}}</li>
             {% endif %}
     {% endfor %}
+    <li><a href="{% url 'fichier:simple_modifications' 'categories' %}">...</a></li>
     </ol>
 {% endif %}
 
@@ -150,6 +156,7 @@ Le fichier Aidants365
                 — {{entete.date_derniere_modification}}</li>
             {% endif %}
     {% endfor %}
+    <li><a href="{% url 'fichier:simple_modifications' 'entetes' %}">...</a></li>
     </ol>
 {% endif %}
 
