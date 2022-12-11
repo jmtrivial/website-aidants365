@@ -79,10 +79,16 @@ Aidants 365 — dernières modifications
         
         {% for entree in elements %}
         <li><a href="{{ entree.get_absolute_url }}">{{ entree }}</a> 
-            {% if entree.date_derniere_modification|is_recent_entry %}
+            {% if classname == "fiches" or classname == "glossaire" or classname == "agenda" %}
+                {% if entree.date_derniere_modification|is_recent_entry %}
+                    — dernière modification&nbsp;: {{entree.date_derniere_modification}}</li>
+                {% endif %}
+            {% else %}
+                {% if entree.date_derniere_modification|is_recent_entry_2 %}
                 — dernière modification&nbsp;: {{entree.date_derniere_modification}}</li>
+                {% endif %}
             {% endif %}
-        {% endfor %}
+{% endfor %}
         </ul>
 </div>
 {% endblock %}
