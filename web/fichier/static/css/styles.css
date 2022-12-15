@@ -997,9 +997,9 @@ only screen and (max-width: 760px),
         display: none;
 	}
 
-    .tableau_agenda tbody :nth-child(2) {
+    /*.tableau_agenda tbody :nth-child(2) {
         display: none;
-    }
+    }*/
 	
 	tr:not(.ephemeride_large tr) { 
         border: 1px solid #ccc;
