@@ -6,4 +6,3 @@ def run():
     entetes.delete()
     for entete in entetes:
         print(entete.page)
-
