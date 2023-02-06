@@ -106,7 +106,7 @@ def accueil(request):
                "themes": themes,
                "etiquettes": etiquettes,
                "entree_agenda": entree_agenda, "ephemeride": ephemeride, 'entete': get_entete("accueil"),
-               "entete_mois": get_entete("agenda/" + str(aujourdhui.year) + "/" + ("0" + str(aujourdhui.month))[-2:] + "/"),
+               "entete_mois": get_entete("agenda/" + str(aujourdhui.year) + "/" + str(aujourdhui.month) + "/"),
                "entete_mois_annee": aujourdhui.year, "entete_mois_mois": Agenda.month_name[aujourdhui.month]}
     return render(request, 'fiches/accueil.html', context)
 
