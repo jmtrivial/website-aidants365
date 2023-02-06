@@ -22,11 +22,15 @@
 .entete_mois {
     margin-left: 0;
     margin-bottom: 0.5em;
+    display: flex;
+    flex-direction: row;
 }
 
 .entete_mois>div, .entete_mois>a {
-    display: inline-block;
     vertical-align: middle;
+}
+.entete_mois .lien_next {
+    height: 1.5em;
 }
 
 .date_entete {
