@@ -6,7 +6,7 @@
     <div class="lien_next bouton"><a title="éditer" href="{% url_entete_edit entete_mois %}">éditer </a></div>
     {% endif %}
     {% endif %}
-    <a href="{{ entete_mois.get_absolute_url }}">
+    <a href="{{ entete_mois | get_month_absolute_url }}">
     <div class="date_entete">
         <div class="mois_entete">{{ entete_mois_mois }}</div>    
         <div class="annee_entete">{{ entete_mois_annee }}</div>

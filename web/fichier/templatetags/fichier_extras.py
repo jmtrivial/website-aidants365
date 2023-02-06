@@ -425,3 +425,11 @@ def is_recent_entry_2(d):
 @register.filter
 def is_ephemeride(obj):
     return isinstance(obj, Ephemeride)
+
+
+@register.filter
+def get_month_absolute_url(month):
+    if isinstance(month, str):
+        return reverse("fichier:agenda_month", args=[int(x) for x in month.split("/")[1:3]])
+    else:
+        return month.get_absolute_url()
