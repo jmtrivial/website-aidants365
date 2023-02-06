@@ -125,4 +125,4 @@ class Agenda(LocaleHTMLCalendar):
 
 def to_iso(d):
     e = d.split("/")
-    return e[2] + "-" + e[1] + "-" + ("0" + e[0])[-2:]
+    return e[2] + "-" + ("0" + e[1])[-2:] + "-" + ("0" + e[0])[-2:]
