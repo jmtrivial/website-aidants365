@@ -675,7 +675,6 @@ def edit_object(request, classname, id=None, clone=False):
             if form.is_valid():
                 object = form.save()
 
-                # TODO: update the associated objects (if the current class is theme, categorie or etiquette)
                 if id is None or clone:
                     message = message_add_success % object
                 else:
