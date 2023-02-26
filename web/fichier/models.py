@@ -189,8 +189,9 @@ class Niveau(models.Model):
     def associated_entries(self):
         result = []
 
-        # Liste des entrées d'agenda associées à cette catégorie
-        result += Fiche.objects.filter(themes=self.id)
+        if self.id:
+            # Liste des entrées d'agenda associées à cette catégorie
+            result += Fiche.objects.filter(themes=self.id)
 
         return result
 
@@ -253,8 +254,9 @@ class Categorie(models.Model):
     def associated_entries(self):
         result = []
 
-        # Liste des entrées d'agenda associées à cette catégorie
-        result += Fiche.objects.filter(Q(categorie1=self.id) | Q(categorie2=self.id) | Q(categorie3=self.id))
+        if self.id:
+            # Liste des entrées d'agenda associées à cette catégorie
+            result += Fiche.objects.filter(Q(categorie1=self.id) | Q(categorie2=self.id) | Q(categorie3=self.id))
 
         return result
 
@@ -314,12 +316,15 @@ class Etiquette(models.Model):
         return rechercher_nom_simple(search_text, Etiquette)
 
     def associated_entries(self):
-        result = []
-        # Liste des fiches ayant cette étiquette
-        result += Fiche.objects.filter(etiquettes=self.id)
 
-        # Liste des entrées d'agenda ayant cette étiquette
-        result += EntreeAgenda.objects.filter(etiquettes=self.id)
+        result = []
+
+        if self.id:
+            # Liste des fiches ayant cette étiquette
+            result += Fiche.objects.filter(etiquettes=self.id)
+
+            # Liste des entrées d'agenda ayant cette étiquette
+            result += EntreeAgenda.objects.filter(etiquettes=self.id)
 
         return result
 
@@ -364,11 +369,13 @@ class Theme(models.Model):
 
     def associated_entries(self):
         result = []
-        # Liste des fiches ayant ce theme
-        result += Fiche.objects.filter(themes=self.id)
 
-        # Liste des entrées d'agenda ayant ce thème
-        result += EntreeAgenda.objects.filter(themes=self.id)
+        if self.id:
+            # Liste des fiches ayant ce theme
+            result += Fiche.objects.filter(themes=self.id)
+
+            # Liste des entrées d'agenda ayant ce thème
+            result += EntreeAgenda.objects.filter(themes=self.id)
 
         return result
 
@@ -529,8 +536,9 @@ class Fiche(models.Model):
     def associated_entries(self):
         result = []
 
-        # Liste des entrées d'agenda associées à cette fiche
-        result += EntreeAgenda.objects.filter(fiches_associees=self.id)
+        if self.id:
+            # Liste des entrées d'agenda associées à cette fiche
+            result += EntreeAgenda.objects.filter(fiches_associees=self.id)
 
         return result
 
