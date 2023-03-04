@@ -43,7 +43,7 @@ def rechercher_nom_simple(search_text, classname):
                  search_query,
                  start_sel="<span class=\"highlight\">",
                  stop_sel="</span>",
-                 max_fragments=50,
+                 highlight_all=True,
                  config='french'))
 
 
