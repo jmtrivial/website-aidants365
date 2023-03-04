@@ -87,7 +87,7 @@ page .chapeau ul, page .pied ul {
 }
 
 page p, ul {
-    margin: 0.2em;
+    margin: 0.7em 0;
 }
 
 page .chapeau li, page .pied li {
