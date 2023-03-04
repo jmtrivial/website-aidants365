@@ -31,6 +31,9 @@ page h2 {
     padding: 0;
 }
 
+page ol, page ul {
+    padding-left: 2em;
+}
 
 page li {
     margin: 0cm;
