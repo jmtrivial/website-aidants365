@@ -2,10 +2,23 @@
 
 
 <div class="block center-cal">
-    <div class="centered">
-    {{ entree.notes | ajouter_glossaire:True | safe }}
+    <div class="centered texte_court onlyweb">
+        <h2 class="description">Texte court</h2>
+        {% if entree.texte_court %}
+        {{ entree.texte_court | ajouter_glossaire:True | safe }}
+        {% else %}
+         <em>texte à venir</em>
+        {% endif %}
     </div>
-</div>
+    <div class="centered texte_long">
+        <h2 class="description onlyweb">Texte long</h2>
+        {% if entree.texte_long %}
+        {{ entree.texte_long | ajouter_glossaire:True | safe }}
+        {% else %}
+        <em>texte à venir</em>
+        {% endif %}
+        </div>
+    </div>
 
 
 {% if entree.fiches_associees.all %}

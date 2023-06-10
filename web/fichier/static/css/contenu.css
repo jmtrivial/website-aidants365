@@ -128,7 +128,7 @@
 }
 
 .ephemeride_large .cal_mois table.month td a {
-    padding: 0.2em 0.8em;
+    padding: 0.2em 0.7em;
     color: #000;
     background: transparent;
 }
@@ -137,17 +137,15 @@
     border-bottom: 1px solid #ccc;
 }
 
-
 .colonne.ephemeride_large {
+    width: 50%;
+    display: flex;
     box-shadow: none;
     font-size: 9pt;
-}
-
-.colonne.ephemeride_large {
-    display: flex;
     flex-direction: column;
     align-items: stretch;
-    align-content: space-between;
+    align-content: flex-start;
+
 }
 
 .colonne.ephemeride_large ul {
@@ -161,20 +159,20 @@
 
 .colonne.ephemeride_large .top-cal,
 .colonne.ephemeride_large .bottom-cal {
-    flex: auto;  
-    align-self: stretch;
+    flex-direction: column;
 }
 
 .colonne.ephemeride_large .center-cal {
-    flex-grow: 100;
-    align-self: stretch;
     margin: 0;
     display: flex;
-    flex-direction: row;
-    align-items: center;
+    flex-direction: column;
+    align-self: stretch;
 }
 
-
+.ephemeride_large .block>div p {
+    display: inline-block;
+    width: auto;
+}
 .ephemeride {
     display: block;
     width: 10em;

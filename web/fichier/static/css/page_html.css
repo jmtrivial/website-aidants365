@@ -8,6 +8,12 @@ page {
     padding: 0;
 }
 
+page#page-A5 .onlyweb {
+    display: none;
+}
+page#page-A5.web .onlyweb {
+    display: block;
+}
 
 /* version web */
 page#page-A5.web .ephemeride_large .ephemeride a {

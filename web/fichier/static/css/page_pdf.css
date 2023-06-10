@@ -33,3 +33,7 @@ a {
 .A4_A5 page[size=A5] {
     border-bottom: 0.2mm solid grey;
 }
+
+page#page-A5 .onlyweb {
+    display: none;
+}

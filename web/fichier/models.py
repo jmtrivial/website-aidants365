@@ -582,14 +582,14 @@ class EntreeGlossaire(models.Model):
         result = []
 
         for e in EntreeAgenda.objects.filter():
-            if re.search(r'\[%s\]' % self.entree, str(e.notes), flags=re.I):
+            if re.search(r'\[%s\]' % self.entree, str(e.texte_court) + " " + str(e.texte_long), flags=re.I):
                 result.append(e)
                 break
             else:
                 found = False
                 if self.formes_alternatives:
                     for fa in self.formes_alternatives:
-                        if re.search(r'\[%s\]' % fa, str(e.notes), flags=re.I):
+                        if re.search(r'\[%s\]' % fa, str(e.texte_court) + " " + str(e.texte_long), flags=re.I):
                             result.append(e)
                             found = True
                             break
@@ -669,7 +669,8 @@ class EntreeAgenda(models.Model):
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True, help_text=message_sortable)
     etiquettes = SortedManyToManyField(Etiquette, verbose_name="Étiquettes associées", blank=True, help_text=message_sortable)
 
-    notes = RichTextField(verbose_name="Notes", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
+    texte_long = RichTextField(verbose_name="Texte long (web)", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
+    texte_court = RichTextField(verbose_name="Texte court (print)", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
 
     illustration = models.ImageField(verbose_name="Illustration", upload_to='illustrations_agenda', blank=True, null=True)
 
@@ -697,7 +698,7 @@ class EntreeAgenda(models.Model):
 
     def save(self, *args, **kwargs):
         self.date_derniere_modification = timezone.now()
-        self.urls = build_list_urls(self.notes)
+        self.urls = build_list_urls(self.texte_court) + build_list_urls(self.texte_long)
         super().save(*args, **kwargs)
 
     def iso(self):
@@ -724,9 +725,9 @@ class EntreeAgenda(models.Model):
         search_query = SearchQuery(search_text, config='french')
 
         return EntreeAgenda.objects. \
-            annotate(agg_contenu=Concat("themes__nom", Value(" "), "etiquettes__nom", Value(" "), "notes", output_field=models.CharField())).order_by("id").distinct('id'). \
+            annotate(agg_contenu=Concat("themes__nom", Value(" "), "etiquettes__nom", Value(" "), "texte_court", Value(" "), "texte_long", output_field=models.CharField())).order_by("id").distinct('id'). \
             annotate(search=search_vectors).filter(search=search_query). \
-            annotate(notes_hl=SearchHeadline("agg_contenu",
+            annotate(texte_hl=SearchHeadline("agg_contenu",
                      search_query,
                      start_sel="<span class=\"highlight\">",
                      stop_sel="</span>",
