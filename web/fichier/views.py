@@ -327,7 +327,7 @@ def themes_nuage(request):
 def index_etiquette(request, id):
     etiquette = get_object_or_404(Etiquette, pk=id)
     fiches = Fiche.objects.filter(etiquettes=etiquette)
-    agendas = EntreeAgenda.objects.filter(etiquettes=etiquette).order_by("date")
+    agendas = EntreeAgenda.objects.filter(Q(etiquettes=etiquette) | Q(etiquettes_recherche=etiquette)).order_by("date").distinct()
     glossaires = EntreeGlossaire.objects.filter(Q(entree=etiquette.nom) | Q(formes_alternatives__contains=[etiquette.nom]))
     etiquettes_connexes = Etiquette.objects.filter(id__in=EntreeAgenda.objects.filter(id__in=agendas.values("id")).values("etiquettes")
                                                    .union(Fiche.objects.filter(id__in=fiches.values("id")).values("etiquettes"))

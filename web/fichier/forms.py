@@ -155,6 +155,7 @@ class EntreeAgendaForm(WithUserForm):
         widgets = {
             "themes": MySortedCheckboxSelectMultiple,
             "etiquettes": MySortedCheckboxSelectMultiple,
+            "etiquettes_recherche": MySortedCheckboxSelectMultiple,
             "fiches_associees": MySortedCheckboxSelectMultiple,
         }
 
@@ -162,6 +163,7 @@ class EntreeAgendaForm(WithUserForm):
         super().__init__(*args, **kwargs)
         self.fields["themes"].widget.id_for_label = lambda x: "id_themes"
         self.fields["etiquettes"].widget.id_for_label = lambda x: "id_etiquettes"
+        self.fields["etiquettes_recherche"].widget.id_for_label = lambda x: "id_etiquettes_recherche"
         self.fields["fiches_associees"].widget.id_for_label = lambda x: "id_fiches_associees"
 
 
