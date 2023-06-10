@@ -254,13 +254,16 @@ def index_auteur_detail(request, id1, id2):
                                                                     "fiche_list": fiches, "fiche": fiche})
 
 
-def annotate_categories_par_niveau_simple(objects, agenda=False):
+def annotate_categories_par_niveau_simple(objects, agenda=False, agendarecherche=False):
     result = objects.annotate(fiche_count=Count('fiche', distinct=True)). \
         annotate(fiche_count_A=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.A), distinct=True)). \
         annotate(fiche_count_B=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.B), distinct=True)). \
         annotate(fiche_count_C=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.C), distinct=True))
     if agenda:
-        result = result.annotate(agenda_count=Count('entreeagenda', distinct=True)).annotate(entry_count=F("agenda_count") + F("fiche_count"))
+        result = result.annotate(agenda_count=Count('entreeagenda', distinct=True)). \
+        annotate(entry_count=F("agenda_count") + F("fiche_count"))
+        if agendarecherche:
+            result = result.annotate(agenda_recherche_count=Count('entreeagenda_recherche', distinct=True))
     else:
         result = result.annotate(entry_count=F("fiche_count"))
     return result
@@ -358,7 +361,7 @@ def etiquettes(request):
 
 @login_required
 def etiquettes_page(request, key):
-    etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True).order_by("-fiche_count")
+    etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True, True).order_by("-fiche_count")
     step = 20
     mc = Paginator(etiquettes, step)
     nb_etiquettes = Etiquette.objects.count()
@@ -384,10 +387,10 @@ def etiquettes_alpha(request):
 @login_required
 def etiquettes_alpha_page(request, key):
     if key >= "A" and key <= "Z":
-        etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True).order_by(Lower("nom__unaccent")).filter(nom__istartswith=key)
+        etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True, True).order_by(Lower("nom__unaccent")).filter(nom__istartswith=key)
         extension_titre = "commençant par " + key
     else:
-        etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True).order_by(Lower("nom__unaccent")).exclude(nom__unaccent__iregex=r'^[a-zA-Z].*$')
+        etiquettes = annotate_categories_par_niveau_simple(Etiquette.objects, True, True).order_by(Lower("nom__unaccent")).exclude(nom__unaccent__iregex=r'^[a-zA-Z].*$')
         extension_titre = "ne commençant pas par une lettre"
     nb_etiquettes = Etiquette.objects.count()
     return render(request, 'fiches/critere.html', {"critere_name_pluriel": "etiquettes", "critere_name": "etiquette",
@@ -402,7 +405,7 @@ def etiquettes_alpha_page(request, key):
 
 @login_required
 def etiquettes_nuage(request):
-    etiquettes = Etiquette.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True)).order_by(Lower("nom__unaccent"))
+    etiquettes = Etiquette.objects.filter().annotate(fiche_count=Count('fiche', distinct=True) + Count('entreeagenda', distinct=True) + Count('entreeagenda_recherche', distinct=True)).order_by(Lower("nom__unaccent"))
     etiquettes = annoter_class_nuage(etiquettes)
     return render(request, 'fiches/critere_nuage.html', {"critere_name_pluriel": "etiquettes", "critere_name": "etiquette",
                                                          "elements": etiquettes, "titre": "Toutes les étiquettes",

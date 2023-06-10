@@ -6,7 +6,7 @@
             <tr>
                 <td></td>
                 <th colspan="4" scope="colgroup">Fiches</th>
-                <th scope="colgroup">Agenda</th>
+                <th {% if critere_name == "etiquette" %}colspan="2"{% endif %} scope="colgroup">Agenda</th>
               </tr>
               {% endif %}
               <th>{{ nom_humain }}</th>
@@ -16,6 +16,9 @@
             <th>total fiches</th>
         {% if critere_name == "theme" or critere_name == "etiquette" %}
             <th>entrées agenda</th>
+            {% if critere_name == "etiquette" %}
+            <th>pour recherche</th>
+            {% endif %}
         {% endif %}
         </tr>
     </thead>
@@ -36,6 +39,9 @@
         <td {% if element.fiche_count == 0 %}class="missing-entry"{% endif %}>{{element.fiche_count }}</td> 
         {% if critere_name == "theme" or critere_name == "etiquette" %}
         <td {% if element.agenda_count == 0 %}class="missing-entry"{% endif %}>{{element.agenda_count }}</td> 
+            {% if critere_name == "etiquette" %}
+            <td {% if element.agenda_recherche_count == 0 %}class="missing-entry"{% endif %}>{{element.agenda_recherche_count }}</td> 
+            {% endif %}
         {% endif %}
     </tr>
     {% endwith %}

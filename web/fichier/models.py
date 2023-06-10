@@ -669,8 +669,8 @@ class EntreeAgenda(models.Model):
     niveau = models.ForeignKey(Niveau, verbose_name="Niveau dominant du contenu", on_delete=models.RESTRICT, blank=True, null=True)
 
     themes = SortedManyToManyField(Theme, verbose_name="Thèmes associés", blank=True, help_text=message_sortable)
-    etiquettes = SortedManyToManyField(Etiquette, verbose_name="Étiquettes affichées", blank=True, help_text=message_sortable, related_name="etiquettes_affichees")
-    etiquettes_recherche = SortedManyToManyField(Etiquette, verbose_name="Étiquettes de recherche", blank=True, help_text=message_sortable, related_name="etiquettes_recherche")
+    etiquettes = SortedManyToManyField(Etiquette, verbose_name="Étiquettes affichées", blank=True, help_text=message_sortable, related_name="entreeagenda")
+    etiquettes_recherche = SortedManyToManyField(Etiquette, verbose_name="Étiquettes de recherche", blank=True, help_text=message_sortable, related_name="entreeagenda_recherche")
 
     texte_long = RichTextField(verbose_name="Texte long (web)", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
     texte_court = RichTextField(verbose_name="Texte court (print)", config_name='main_ckeditor', blank=True, help_text=message_glossaire)
