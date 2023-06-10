@@ -261,7 +261,7 @@ def annotate_categories_par_niveau_simple(objects, agenda=False, agendarecherche
         annotate(fiche_count_C=Count('fiche', filter=Q(fiche__niveau__applicable=Niveau.Applicabilite.C), distinct=True))
     if agenda:
         result = result.annotate(agenda_count=Count('entreeagenda', distinct=True)). \
-        annotate(entry_count=F("agenda_count") + F("fiche_count"))
+            annotate(entry_count=F("agenda_count") + F("fiche_count"))
         if agendarecherche:
             result = result.annotate(agenda_recherche_count=Count('entreeagenda_recherche', distinct=True))
     else:
