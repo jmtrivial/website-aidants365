@@ -106,6 +106,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'aidants365.wsgi.application'
 
+if DEBUG:
+    DB_PORT = "5432"
+else:
+    DB_PORT = "5433"
 
 DATABASES = {
     "default": {
@@ -114,7 +118,7 @@ DATABASES = {
         "USER": os.environ.get("SQL_USER", "user"),
         "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
         "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+        "PORT": os.environ.get("SQL_PORT", DB_PORT),
     }
 }
 
