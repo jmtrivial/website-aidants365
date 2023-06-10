@@ -417,6 +417,11 @@ def rechercher(request):
     results_agenda = None
     results_glossaire = None
     recherche = None
+    results_etiquettes = None
+    results_themes = None
+    results_categories = None
+    results_documents = None
+    results_entetes = None
 
     if request.method == "GET":
         recherche = request.GET.get('search')
@@ -1019,14 +1024,14 @@ def merge(request, classname):
     if classname == "theme":
         pluriel = "thèmes"
         classform = ThemeMergeForm
-        reverse_url_main = "fichier:themes"
+        reverse_url_main = "fichier:themes_alpha"
         field_fiche = "themes"
         field_agenda = "themes"
         nom_classe = "theme"
     elif classname == "etiquette":
         pluriel = "étiquettes"
         classform = EtiquetteMergeForm
-        reverse_url_main = "fichier:etiquettes"
+        reverse_url_main = "fichier:etiquettes_alpha"
         field_fiche = "etiquettes"
         field_agenda = "etiquettes"
         nom_classe = "etiquette"
