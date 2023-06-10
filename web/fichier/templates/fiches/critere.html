@@ -39,7 +39,11 @@ Aidants 365 — {{ titre }} {{ visu }}
             {% endwith %}
         {% endif %}
             {% with "fichier:"|add:critere_name_pluriel|add:"_nuage"  as template_name %}
-            <a class="visu" href="{% url template_name %}">nuage de {{ nom_humain_pluriel }}</a>
+                {% if nom_humain_pluriel == "étiquettes" %}
+                <a class="visu" href="{% url template_name %}">nuage d'{{ nom_humain_pluriel }}</a>
+                {% else %}
+                <a class="visu" href="{% url template_name %}">nuage de {{ nom_humain_pluriel }}</a>
+                {% endif %}
         {% endwith %}
         </p>
 

@@ -33,7 +33,13 @@ Aidants 365 — {{ titre }} {{ visu }}
             <a class="visu" href="{% url template_name %}">ordre alphabétique</a>
         {% endwith %}
 
+        {% if nom_humain_pluriel == "étiquettes" %}
+        <span class="active_visu">nuage d'{{ nom_humain_pluriel }}</span>
+        {% else %}
         <span class="active_visu">nuage de {{ nom_humain_pluriel }}</span>
+        {% endif %}
+
+        
         </div>
     <div class="block">
         {% include "fiches/nuage.html" %}

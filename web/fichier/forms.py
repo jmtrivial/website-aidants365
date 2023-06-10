@@ -222,8 +222,8 @@ class ThemeMergeForm(TwoDifferentElementsForm):
 
 
 class EtiquetteMergeForm(TwoDifferentElementsForm):
-    element1 = forms.ModelChoiceField(queryset=Etiquette.objects.all().order_by("nom__unaccent"), required=True, label="Étiquette principal")
-    element2 = forms.ModelChoiceField(queryset=Etiquette.objects.all().order_by("nom__unaccent"), required=True, label="Étiquette à intégrer dans le principal")
+    element1 = forms.ModelChoiceField(queryset=Etiquette.objects.all().order_by("nom__unaccent"), required=True, label="Étiquette principale")
+    element2 = forms.ModelChoiceField(queryset=Etiquette.objects.all().order_by("nom__unaccent"), required=True, label="Étiquette à intégrer dans la principale")
 
 
 class EntreeAgendaInvertForm(TwoDifferentElementsForm):
