@@ -3,13 +3,13 @@
 <div class="menu-21">
     <div class="lien_next slim">
         {% if details %} <div class="lien_next bouton slim"><a href="{% url 'fichier:detail' fiche.id %}">plein écran</a></div> {% endif %}
-        {% if perms.fichier.change_fiche %}
+        {% if "fichier.change_fiche" in perms %}
         <div class="lien_next bouton slim"><a href="{% url 'fichier:object_change' 'fiche' fiche.id %}" id="edit_button">éditer (ctrl-e)</a></div>
         {% endif %}
-        {% if perms.fichier.add_fiche %}
+        {% if "fichier.add_fiche" in perms %}
         <div class="lien_next bouton slim"><a href="{% url 'fichier:object_duplicate' 'fiche' fiche.id %}" id="duplicate_button">dupliquer</a></div>
         {% endif %}
-        {% if perms.fichier.delete_fiche %}
+        {% if "fichier.delete_fiche" in perms %}
         <div class="lien_next bouton slim"><a href="{% url 'fichier:fiche_delete' fiche.id %}" id="delete_button">supprimer</a></div>
         {% endif %}
         <div class="lien_next bouton slim"><a href="{% url 'fichier:detail_pdf' fiche.id %}">pdf</a></div>

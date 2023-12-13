@@ -39,7 +39,7 @@
           <li class="icon"><a href="javascript:void(0);" onclick="switchMenuBar()">
             &#9776;
           </a></li>
-          {% if perms.fichier.view_document %} 
+          {% if "fichier.view_document" in perms %}
           <li class="prive {% if active_page == 'desk' %} actif{% endif %}"><a href="{% url 'fichier:desk' %}">Desk</a></li>
           {% endif %}
         </ul>{% endblock %}

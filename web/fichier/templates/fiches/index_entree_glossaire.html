@@ -35,7 +35,7 @@ Glossaire
         {% index_alpha key "fichier:glossaire_page" %}
 
 
-        {% if perms.fichier.change_entreeglossaire %}
+        {% if "fichier.change_entreeglossaire" in perms %}
         <div class="suite"><a href="{% url 'fichier:simple_modifications' 'glossaire' %}">dernières modifications ▸</a></div>
         {% endif %}
     </div>

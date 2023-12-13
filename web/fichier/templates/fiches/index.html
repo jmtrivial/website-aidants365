@@ -28,13 +28,13 @@ Toutes les fiches
 
 
     <div class="block" id="entete">
-        {% if perms.fichier.add_fiche %}
+        {% if "fichier.add_fiche" in perms %}
         <div class="lien_next bouton"><a title="ajouter une fiche" href="{%url 'fichier:object_add' 'fiche' %}">+ fiche</a></div>
         {% endif %}
         <h1>Toutes les fiches</h1>
         {% include "fiches/entete.html" %}
         <p>Vous pouvez <a class="bouton_inline" id="dl_pdf" href="/media/fiches.pdf">télécharger</a> un pdf contenant toutes les fiches. Ce document n'est assemblé qu'une fois par jour.</p>
-        {% if perms.fichier.change_fiche %}
+        {% if "fichier.change_fiche" in perms %}
         <div class="suite"><a href="{% url 'fichier:simple_modifications' 'fiches' %}">dernières modifications ▸</a></div>
         {% endif %}
 

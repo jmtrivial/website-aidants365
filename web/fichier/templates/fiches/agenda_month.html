@@ -21,7 +21,7 @@ Le fichier Aidants365 — Agenda
 
 <div class="block" id="entete">
     <div class="lien_next slim">
-        {% if perms.fichier.add_entreeagenda %}
+        {% if "fichier.add_entreeagenda" in perms %}
         <div class="lien_next bouton"><a id="inverse_button" href="{% url 'fichier:entree_agenda_invert' %}">inverser deux dates</a></div>
         {% endif %}
         {% if agenda.events.all.count > 0 %}
@@ -40,7 +40,7 @@ Le fichier Aidants365 — Agenda
         <p>Voir <a href="{% url 'fichier:agenda_month_details' year month %}">le détail des entrées</a> du mois.</p>
     </div>
 
-    {% if perms.fichier.change_entreeagenda %}
+    {% if "fichier.change_entreeagenda" in perm %}
     <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a><br />
         <a href="{% url 'fichier:agenda_sans_niveau' %}">entrées sans niveau de contenu ▸</a>
     </div>

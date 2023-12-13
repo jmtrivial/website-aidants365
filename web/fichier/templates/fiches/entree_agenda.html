@@ -58,7 +58,7 @@ Glossaire
 </div>
 
 
-{% if perms.fichier.change_entreeagenda %}
+{% if "fichier.change_entreeagenda" in perms %}
     {% if ephemeride.entree %} 
         {% with entree=ephemeride.entree %}
         <div class="menu-21">

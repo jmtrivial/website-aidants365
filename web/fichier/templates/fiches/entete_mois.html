@@ -1,7 +1,7 @@
 {% load fichier_extras %}
 {% if entete_mois %}
 <div class="entete_mois">
-    {% if perms.fichier.change_entete %}
+    {% if "fichier.change_entetepage" in perms %}
     {% if entete_mois_edit %}
     <div class="lien_next bouton"><a title="éditer" href="{% url_entete_edit entete_mois %}">éditer </a></div>
     {% endif %}
