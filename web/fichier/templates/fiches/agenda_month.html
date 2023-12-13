@@ -40,7 +40,7 @@ Le fichier Aidants365 — Agenda
         <p>Voir <a href="{% url 'fichier:agenda_month_details' year month %}">le détail des entrées</a> du mois.</p>
     </div>
 
-    {% if "fichier.change_entreeagenda" in perm %}
+    {% if "fichier.change_entreeagenda" in perms %}
     <div class="suite"><a href="{% url 'fichier:simple_modifications' 'agenda' %}">dernières modifications ▸</a><br />
         <a href="{% url 'fichier:agenda_sans_niveau' %}">entrées sans niveau de contenu ▸</a>
     </div>
